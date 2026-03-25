@@ -16,6 +16,10 @@ function App() {
   const [globalError, setGlobalError] = useState(null)
   
   const [draft, setDraft] = useState({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], analysis: null })
+
+  const [auth, setAuth] = useState(false);
+  const [pass, setPass] = useState("");
+  
   const getCivStyle = (mapName, civStr) => {
     if (!civStr || civStr === '-' || !draft.analysis) return { color: '#e0e0e0', fontWeight: 'normal', textDecoration: 'none' };
     
@@ -267,7 +271,29 @@ const generateLiquipediaUrl = (mapName, civName) => {
   const confPresence = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Picks', key: 'Picks', width: '20%' }, { label: 'Wins', key: 'Wins', width: '20%' }, { label: 'Global WR', key: 'Global WR', format: 'percent', width: '25%' }];
   const confTraps = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '30%' }, { label: 'Picks', key: 'Picks', width: '15%' }, { label: 'WR', key: 'Win Rate', format: 'percent', width: '15%' }, { label: 'Map', key: 'Map', align: 'left', width: '40%' }];
   const confVersatile = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Viable Maps', key: 'Viable_Maps', type: 'mapsTooltip', width: '30%' }, { label: 'Avg CDPS', key: 'Avg_CDPS', format: 'decimal', width: '35%' }];
-
+  if (!auth) {
+    return (
+      <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1c23' }}>
+        <div style={{ padding: '30px', backgroundColor: '#161920', borderRadius: '6px', border: '1px solid #333', textAlign: 'center' }}>
+          <h2 style={{ color: '#ffd700', fontSize: '16px', letterSpacing: '2px', marginBottom: '20px' }}>LEAT11 ENGINE - ACCESO RESTRINGIDO</h2>
+          <input 
+            type="password" 
+            value={pass} 
+            onChange={e => setPass(e.target.value)}
+            onKeyDown={e => { if(e.key === 'Enter' && pass === "Emputors") setAuth(true) }}
+            style={{ backgroundColor: '#1e212b', border: '1px solid #444', color: 'white', padding: '10px', borderRadius: '4px', outline: 'none', textAlign: 'center' }} 
+            placeholder="Introduce la clave"
+          />
+          <br /><br />
+          <button 
+            onClick={() => { if (pass === "Emputors") setAuth(true) }} 
+            style={{ backgroundColor: '#66b2ff', color: '#161920', border: 'none', padding: '8px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginTop: '10px' }}>
+            ENTRAR
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div style={{ backgroundColor: '#161920', color: '#e0e0e0', minHeight: '100vh', padding: '0', fontFamily: 'Segoe UI, sans-serif' }}>
       
