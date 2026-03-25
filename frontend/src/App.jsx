@@ -70,7 +70,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/map/${selectedMap}`)
+    fetch('https://leat11-backend.onrender.com/api/map/${selectedMap}')
       .then(res => res.json())
       .then(data => {
         if (!data.error) { setMapData(data); setMapError(null); } 
@@ -80,7 +80,7 @@ function App() {
   }, [selectedMap])
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/global`)
+    fetchfetch('https://leat11-backend.onrender.com/api/global')
       .then(res => res.json())
       .then(data => {
         if (!data.error) { setGlobalData(data); setGlobalError(null); } 
@@ -91,7 +91,7 @@ function App() {
 
   useEffect(() => {
     if (activeTab === 'draftAssistant') {
-      fetch('http://localhost:8000/api/draft/analyze', { 
+      fetch('https://leat11-backend.onrender.com/api/draft/analyze', { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify(draft) 
