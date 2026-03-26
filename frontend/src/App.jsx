@@ -184,12 +184,25 @@ function App() {
       draft.maps.forEach(m => {
         if (!m) return;
         
-        // Criterio 1: Counter directo
-        draft.p2_picks.forEach(p2_civ => {
-          const counters = draft.analysis.counters_ladder?.[m]?.[p2_civ] || [];
-          const isCounter = counters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-          if (isCounter) {
-            score += 50;
+        // Criterio 1: Counter directo conectado al Matchup Planner
+        const mapIndex = draft.maps.indexOf(m);
+        const plannedOpponent = draft.plan_p2[mapIndex];
+        
+        // Si hay un rival en el Matchup Planner para este mapa, priorizamos aplastarlo. Si no, evaluamos todos sus picks sueltos.
+        const opponentsToCheck = plannedOpponent ? [plannedOpponent] : draft.p2_picks;
+
+        opponentsToCheck.forEach(p2_civ => {
+          if (!p2_civ) return;
+          const oppLow = p2_civ.toLowerCase();
+          const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
+          const prosCounters = draft.analysis.counters_pros?.[m]?.[oppLow] || [];
+          
+          const inLadder = ladderCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+          const inPros = prosCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+          
+          if (inLadder || inPros) {
+            // Si sabemos a qué mapa va (plannedOpponent), es prioridad absoluta (100pts). Si no, solo 40pts.
+            score += plannedOpponent ? 100 : 40;
             reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#ffd700' });
             bestMap = m;
           }
