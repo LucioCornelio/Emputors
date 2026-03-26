@@ -180,50 +180,71 @@ function App() {
       let score = 0;
       const reasons = [];
       let bestMap = '';
+      let bestMapScore = -1;
 
       draft.maps.forEach(m => {
         if (!m) return;
+        let mapScore = 0;
         
-        // Criterio 1: Counter directo conectado al Matchup Planner
         const mapIndex = draft.maps.indexOf(m);
         const plannedOpponent = draft.plan_p2[mapIndex];
-        
-        // Si hay un rival en el Matchup Planner para este mapa, priorizamos aplastarlo. Si no, evaluamos todos sus picks sueltos.
-        const opponentsToCheck = plannedOpponent ? [plannedOpponent] : draft.p2_picks;
+        const unassignedOpponents = draft.p2_picks.filter(c => !draft.plan_p2.includes(c));
 
-        opponentsToCheck.forEach(p2_civ => {
-          if (!p2_civ) return;
+        // CRITERIO 1A: Counter Directo (Rival asignado al mapa en el Matchup Planner)
+        if (plannedOpponent) {
+          const oppLow = plannedOpponent.toLowerCase();
+          const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
+          const prosCounters = draft.analysis.counters_pros?.[m]?.[oppLow] || [];
+          const isCounter = ladderCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix)) ||
+                            prosCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+          if (isCounter) {
+            score += 100;
+            mapScore += 100;
+            reasons.push({ text: `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`, color: '#ff4444', title: `Counter letal contra ${plannedOpponent} (asignado a ${m})` });
+          }
+        }
+
+        // CRITERIO 1B: Counter Potencial (Rival sin mapa asignado, por si la juega aquí)
+        unassignedOpponents.forEach(p2_civ => {
           const oppLow = p2_civ.toLowerCase();
           const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
           const prosCounters = draft.analysis.counters_pros?.[m]?.[oppLow] || [];
-          
-          const inLadder = ladderCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-          const inPros = prosCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-          
-          if (inLadder || inPros) {
-            // Si sabemos a qué mapa va (plannedOpponent), es prioridad absoluta (100pts). Si no, solo 40pts.
-            score += plannedOpponent ? 100 : 40;
-            reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#ffd700' });
-            bestMap = m;
+          const isCounter = ladderCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix)) ||
+                            prosCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+          if (isCounter) {
+            score += 15;
+            mapScore += 15;
+            reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#e69950', title: `Buen counter contra ${p2_civ} en ${m} (si decide jugarla aquí)` });
           }
         });
 
-        // Criterio 2: Top 7 en el mapa
+        // CRITERIO 2: Desglose de Top 7
         const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 7);
         const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 7);
         const inCdps = topCdps.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
         const inWr = topWr.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
         
         if (inCdps && inWr) {
-          score += 30;
-          reasons.push({ text: '⭐ TOP', color: '#66b2ff' });
-          if (!bestMap) bestMap = m;
-        } else if (inCdps || inWr) {
-          score += 10;
+          score += 35;
+          mapScore += 35;
+          reasons.push({ text: '🌟 TOP BOTH', color: '#b266ff', title: `Top 7 en Win Rate y CDPS en ${m}` });
+        } else if (inCdps) {
+          score += 15;
+          mapScore += 15;
+          reasons.push({ text: '📈 TOP CDPS', color: '#66b2ff', title: `Top 7 en CDPS (Meta Pro) en ${m}` });
+        } else if (inWr) {
+          score += 15;
+          mapScore += 15;
+          reasons.push({ text: '🏆 TOP WR', color: '#4caf50', title: `Top 7 en Win Rate (Ladder) en ${m}` });
+        }
+
+        if (mapScore > bestMapScore) {
+          bestMapScore = mapScore;
+          if (mapScore > 0) bestMap = m;
         }
       });
 
-      // Criterio 3: Flex Pick (Top 12 en 2+ mapas)
+      // CRITERIO 3: Flex Pick
       let flexCount = 0;
       draft.maps.forEach(m => {
         if(!m) return;
@@ -236,7 +257,7 @@ function App() {
       });
       if (flexCount >= 2) {
         score += 20;
-        reasons.push({ text: '🔄 FLEX', color: '#cd7f32' });
+        reasons.push({ text: '🔄 FLEX', color: '#cd7f32', title: 'Pick flexible: Top 12 en 2 o más mapas del draft' });
         if (!bestMap) bestMap = 'Global';
       }
 
@@ -635,7 +656,7 @@ const generateLiquipediaUrl = (mapName, civName) => {
                       </div>
                       <div style={{ display: 'flex', gap: '4px' }}>
                         {s.reasons.map((r, idx) => (
-                          <span key={idx} style={{ backgroundColor: `${r.color}22`, color: r.color, border: `1px solid ${r.color}55`, padding: '0 4px', borderRadius: '2px', fontSize: '8px', fontWeight: 'bold', lineHeight: '14px' }}>
+                          <span key={idx} title={r.title} style={{ backgroundColor: `${r.color}22`, color: r.color, border: `1px solid ${r.color}55`, padding: '0 4px', borderRadius: '2px', fontSize: '8px', fontWeight: 'bold', lineHeight: '14px', cursor: 'help' }}>
                             {r.text}
                           </span>
                         ))}
