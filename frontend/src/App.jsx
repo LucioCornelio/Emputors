@@ -116,17 +116,18 @@ function App() {
       let t_tot = 0;
       let w_tot = 0;
       const stats = [];
+      const civPrefix = civ.substring(0, 4).toLowerCase();
 
       draft.maps.forEach((m) => {
         if (!m) { stats.push('-'); return; }
         
         const cdpsList = draft.analysis.top_cdps?.[m] || [];
-        const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim() === civ);
+        const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
         const isT = tIndex >= 0 && tIndex < 12;
 
         let isW = false;
         const wrList = draft.analysis.top_wr?.[m] || [];
-        const wIndex = wrList.findIndex(s => s.split(' ')[0].trim() === civ);
+        const wIndex = wrList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
         
         if (wIndex >= 0) {
            const match = wrList[wIndex].match(/\(([\d,.]+)% \| (\d+)\)/);
@@ -135,7 +136,6 @@ function App() {
               const prVal = parseInt(match[2], 10);
               if (prVal >= 30 && wrVal >= 50) isW = true;
            } else {
-              // Si el backend no manda los números, valida si está en el Top 12
               if (wIndex < 12) isW = true;
            }
         }
