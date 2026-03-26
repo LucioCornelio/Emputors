@@ -105,7 +105,58 @@ function App() {
   const resetDraft = () => {
     setDraft({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], analysis: null });
   }
+  const getFlexPicks = () => {
+    if (!draft.analysis || draft.maps.filter(m => m).length < 2) return [];
+    const flex = [];
+    const excluded = [...draft.bans, ...draft.p1_picks, ...draft.p2_picks];
 
+    civs.forEach(civ => {
+      if (excluded.includes(civ)) return;
+
+      let t_tot = 0;
+      let w_tot = 0;
+      const stats = [];
+
+      draft.maps.forEach((m) => {
+        if (!m) { stats.push('-'); return; }
+        
+        // Comprobar Top 12 en CDPS (is_T)
+        const cdpsList = draft.analysis.top_cdps?.[m] || [];
+        const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim() === civ);
+        const isT = tIndex >= 0 && tIndex < 12;
+
+        // Comprobar WR >= 50% y Partidas >= 30 (is_W)
+        let isW = false;
+        const wrList = draft.analysis.top_wr?.[m] || [];
+        const wrStr = wrList.find(s => s.split(' ')[0].trim() === civ);
+        
+        if (wrStr) {
+           const match = wrStr.match(/\(([\d,.]+)% \| (\d+)\)/);
+           if (match) {
+              const wrVal = parseFloat(match[1].replace(',', '.'));
+              const prVal = parseInt(match[2], 10);
+              if (prVal >= 30 && wrVal >= 50) isW = true;
+           }
+        }
+
+        if (isT) t_tot++;
+        if (isW) w_tot++;
+
+        if (isT && isW) stats.push('Both');
+        else if (isT) stats.push('CDPS');
+        else if (isW) stats.push('WR');
+        else stats.push('-');
+      });
+
+      // Filtro cond_ok: (T_tot >= 2) + (W_tot >= 2) > 0
+      if (t_tot >= 2 || w_tot >= 2) {
+        flex.push({ civ, score: t_tot * 10 + w_tot, stats });
+      }
+    });
+
+    // Ordenar y limitar al top 10
+    return flex.sort((a, b) => b.score - a.score).slice(0, 10);
+  };
 const toggleCiv = (civ, type) => {
     if ((type === 'p1' || type === 'p2') && draft.bans.length < 7) {
       if (!draft.p1_picks.includes(civ) && !draft.p2_picks.includes(civ) && !draft.bans.includes(civ)) {
@@ -630,6 +681,34 @@ const generateLiquipediaUrl = (mapName, civName) => {
                 </table>
               </div>
 
+            </div>
+
+            {/* 7. FLEX PICKS */}
+            <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', marginTop: '10px' }}>
+              <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #444', paddingBottom: '4px' }}>FLEX PICKS (TOP 10)</h3>
+              <table style={{width: '100%', fontSize: '10px', borderCollapse: 'collapse', textAlign: 'center', tableLayout: 'fixed'}}>
+                 <thead>
+                   <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
+                     <th style={{padding: '4px', width: '30px'}}>#</th>
+                     <th style={{padding: '4px', textAlign: 'left', width: '25%'}}>Civ</th>
+                     <th style={{padding: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[0] || 'Map 1'}</th>
+                     <th style={{padding: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[1] || 'Map 2'}</th>
+                     <th style={{padding: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[2] || 'Map 3'}</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {getFlexPicks().map((f, i) => (
+                     <tr key={f.civ} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', height: '22px'}}>
+                       <td style={{color: '#ffd700', fontWeight: 'bold'}}>{i+1}</td>
+                       <td style={{textAlign: 'left', fontWeight: 'bold', color: '#e0e0e0'}}>{f.civ}</td>
+                       <td style={{color: f.stats[0] === 'Both' ? '#b266ff' : f.stats[0] === 'CDPS' ? '#66b2ff' : f.stats[0] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[0] !== '-' ? 'bold' : 'normal'}}>{f.stats[0]}</td>
+                       <td style={{color: f.stats[1] === 'Both' ? '#b266ff' : f.stats[1] === 'CDPS' ? '#66b2ff' : f.stats[1] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[1] !== '-' ? 'bold' : 'normal'}}>{f.stats[1]}</td>
+                       <td style={{color: f.stats[2] === 'Both' ? '#b266ff' : f.stats[2] === 'CDPS' ? '#66b2ff' : f.stats[2] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[2] !== '-' ? 'bold' : 'normal'}}>{f.stats[2]}</td>
+                     </tr>
+                   ))}
+                   {getFlexPicks().length === 0 && <tr><td colSpan={5} style={{padding: '10px', color: '#555', fontStyle: 'italic'}}>Need at least 2 maps to calculate flex picks</td></tr>}
+                 </tbody>
+              </table>
             </div>
 
           </div>
