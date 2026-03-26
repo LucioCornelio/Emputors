@@ -120,22 +120,23 @@ function App() {
       draft.maps.forEach((m) => {
         if (!m) { stats.push('-'); return; }
         
-        // Comprobar Top 12 en CDPS (is_T)
         const cdpsList = draft.analysis.top_cdps?.[m] || [];
         const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim() === civ);
         const isT = tIndex >= 0 && tIndex < 12;
 
-        // Comprobar WR >= 50% y Partidas >= 30 (is_W)
         let isW = false;
         const wrList = draft.analysis.top_wr?.[m] || [];
-        const wrStr = wrList.find(s => s.split(' ')[0].trim() === civ);
+        const wIndex = wrList.findIndex(s => s.split(' ')[0].trim() === civ);
         
-        if (wrStr) {
-           const match = wrStr.match(/\(([\d,.]+)% \| (\d+)\)/);
+        if (wIndex >= 0) {
+           const match = wrList[wIndex].match(/\(([\d,.]+)% \| (\d+)\)/);
            if (match) {
               const wrVal = parseFloat(match[1].replace(',', '.'));
               const prVal = parseInt(match[2], 10);
               if (prVal >= 30 && wrVal >= 50) isW = true;
+           } else {
+              // Si el backend no manda los números, valida si está en el Top 12
+              if (wIndex < 12) isW = true;
            }
         }
 
@@ -148,13 +149,11 @@ function App() {
         else stats.push('-');
       });
 
-      // Filtro cond_ok: (T_tot >= 2) + (W_tot >= 2) > 0
       if (t_tot >= 2 || w_tot >= 2) {
         flex.push({ civ, score: t_tot * 10 + w_tot, stats });
       }
     });
 
-    // Ordenar y limitar al top 10
     return flex.sort((a, b) => b.score - a.score).slice(0, 10);
   };
 const toggleCiv = (civ, type) => {
@@ -706,7 +705,7 @@ const generateLiquipediaUrl = (mapName, civName) => {
                        <td style={{color: f.stats[2] === 'Both' ? '#b266ff' : f.stats[2] === 'CDPS' ? '#66b2ff' : f.stats[2] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[2] !== '-' ? 'bold' : 'normal'}}>{f.stats[2]}</td>
                      </tr>
                    ))}
-                   {getFlexPicks().length === 0 && <tr><td colSpan={5} style={{padding: '10px', color: '#555', fontStyle: 'italic'}}>Need at least 2 maps to calculate flex picks</td></tr>}
+                   {getFlexPicks().length === 0 && <tr><td colSpan={5} style={{padding: '10px', color: '#555', fontStyle: 'italic'}}>{draft.maps.filter(m => m).length < 2 ? 'Need at least 2 maps to calculate flex picks' : 'No flex picks matching the criteria (Top 12) found for these maps'}</td></tr>}
                  </tbody>
               </table>
             </div>
