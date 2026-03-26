@@ -184,13 +184,16 @@ function App() {
 
       draft.maps.forEach(m => {
         if (!m) return;
-        let mapScore = 0;
-        
         const mapIndex = draft.maps.indexOf(m);
+        
+        // ¡CLAVE!: Si ya has asignado tu civilización a este mapa, ignoramos el mapa por completo.
+        if (draft.plan_p1[mapIndex]) return;
+
+        let mapScore = 0;
         const plannedOpponent = draft.plan_p2[mapIndex];
         const unassignedOpponents = draft.p2_picks.filter(c => !draft.plan_p2.includes(c));
 
-        // CRITERIO 1A: Counter Directo (Rival asignado al mapa en el Matchup Planner)
+        // CRITERIO 1A: Counter Directo (Dorado)
         if (plannedOpponent) {
           const oppLow = plannedOpponent.toLowerCase();
           const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
@@ -200,11 +203,11 @@ function App() {
           if (isCounter) {
             score += 100;
             mapScore += 100;
-            reasons.push({ text: `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`, color: '#ff4444', title: `Counter letal contra ${plannedOpponent} (asignado a ${m})` });
+            reasons.push({ text: `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`, color: '#ffd700', points: 100, title: `Counter letal contra ${plannedOpponent} (asignado a ${m})` });
           }
         }
 
-        // CRITERIO 1B: Counter Potencial (Rival sin mapa asignado, por si la juega aquí)
+        // CRITERIO 1B: Counter Potencial (Bronce)
         unassignedOpponents.forEach(p2_civ => {
           const oppLow = p2_civ.toLowerCase();
           const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
@@ -214,7 +217,7 @@ function App() {
           if (isCounter) {
             score += 15;
             mapScore += 15;
-            reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#e69950', title: `Buen counter contra ${p2_civ} en ${m} (si decide jugarla aquí)` });
+            reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#cd7f32', points: 15, title: `Buen counter contra ${p2_civ} en ${m} (si decide jugarla aquí)` });
           }
         });
 
@@ -227,15 +230,15 @@ function App() {
         if (inCdps && inWr) {
           score += 35;
           mapScore += 35;
-          reasons.push({ text: '🌟 TOP BOTH', color: '#b266ff', title: `Top 7 en Win Rate y CDPS en ${m}` });
+          reasons.push({ text: '🌟 TOP BOTH', color: '#ffd700', points: 35, title: `Top 7 en Win Rate y CDPS en ${m}` });
         } else if (inCdps) {
           score += 15;
           mapScore += 15;
-          reasons.push({ text: '📈 TOP CDPS', color: '#66b2ff', title: `Top 7 en CDPS (Meta Pro) en ${m}` });
+          reasons.push({ text: '📈 TOP CDPS', color: '#66b2ff', points: 14, title: `Top 7 en CDPS (Meta Pro) en ${m}` });
         } else if (inWr) {
           score += 15;
           mapScore += 15;
-          reasons.push({ text: '🏆 TOP WR', color: '#4caf50', title: `Top 7 en Win Rate (Ladder) en ${m}` });
+          reasons.push({ text: '🏆 TOP WR', color: '#66b2ff', points: 14, title: `Top 7 en Win Rate (Ladder) en ${m}` });
         }
 
         if (mapScore > bestMapScore) {
@@ -244,7 +247,7 @@ function App() {
         }
       });
 
-      // CRITERIO 3: Flex Pick
+      // CRITERIO 3: Flex Pick (Bronce) - Esto es global, no se ve afectado por el bloqueo de mapas
       let flexCount = 0;
       draft.maps.forEach(m => {
         if(!m) return;
@@ -257,12 +260,16 @@ function App() {
       });
       if (flexCount >= 2) {
         score += 20;
-        reasons.push({ text: '🔄 FLEX', color: '#cd7f32', title: 'Pick flexible: Top 12 en 2 o más mapas del draft' });
+        reasons.push({ text: '🔄 FLEX', color: '#cd7f32', points: 20, title: 'Pick flexible: Top 12 en 2 o más mapas del draft' });
         if (!bestMap) bestMap = 'Global';
       }
 
       if (score > 0) {
-        const uniqueReasons = Array.from(new Set(reasons.map(r => r.text))).map(text => reasons.find(r => r.text === text));
+        // Limpiar duplicados y ordenar las etiquetas de mayor a menor puntuación
+        const uniqueTexts = Array.from(new Set(reasons.map(r => r.text)));
+        const uniqueReasons = uniqueTexts.map(text => reasons.find(r => r.text === text));
+        uniqueReasons.sort((a, b) => b.points - a.points);
+
         suggestions.push({ civ, score, reasons: uniqueReasons, bestMap: bestMap || 'Global' });
       }
     });
