@@ -16,6 +16,9 @@ function App() {
   const [globalError, setGlobalError] = useState(null)
   
   const [draft, setDraft] = useState({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], analysis: null })
+  const [civA, setCivA] = useState('');
+  const [civB, setCivB] = useState('');
+  const [civAnalysis, setCivAnalysis] = useState(null);
 
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
@@ -101,6 +104,19 @@ function App() {
       .catch(err => console.error("Draft error:", err));
     }
   }, [draft.p1_picks, draft.p2_picks, draft.bans, draft.maps, activeTab])
+
+  useEffect(() => {
+    if (activeTab === 'civAnalyzer' && civA) {
+      fetch('https://leat11-backend.onrender.com/api/civ/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ civ_a: civA, civ_b: civB })
+      })
+      .then(res => res.json())
+      .then(data => setCivAnalysis(data))
+      .catch(err => console.error("Analyzer error:", err));
+    }
+  }, [civA, civB, activeTab]);
 
   const resetDraft = () => {
     setDraft({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], analysis: null });
@@ -495,6 +511,7 @@ const generateLiquipediaUrl = (mapName, civName) => {
       
       <div style={{ display: 'flex', borderBottom: '2px solid #2a2d36', backgroundColor: '#1e212b', padding: '0 2rem' }}>
         <div onClick={() => setActiveTab('draftAssistant')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'draftAssistant' ? '#ffd700' : '#888', borderBottom: activeTab === 'draftAssistant' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>PA3 Draft Assistant</div>
+        <div onClick={() => setActiveTab('draftAssistant')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'draftAssistant' ? '#ffd700' : '#888', borderBottom: activeTab === 'draftAssistant' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>PA3 Draft Assistant</div>
         <div onClick={() => setActiveTab('mapAnalysis')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'mapAnalysis' ? '#ffd700' : '#888', borderBottom: activeTab === 'mapAnalysis' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>Map Draft Analysis</div>
         <div onClick={() => setActiveTab('globalMeta')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'globalMeta' ? '#ffd700' : '#888', borderBottom: activeTab === 'globalMeta' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>Global Tournament Meta</div>
       </div>
@@ -882,6 +899,97 @@ const generateLiquipediaUrl = (mapName, civName) => {
               </table>
             </div>
 
+          </div>
+        )}
+
+        {activeTab === 'civAnalyzer' && (
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            {/* CONTROLES */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', backgroundColor: '#1a1c23', padding: '20px', borderRadius: '6px', border: '1px solid #333' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                <select value={civA} onChange={e => setCivA(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#66b2ff', border: '2px solid #66b2ff', padding: '8px 16px', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+                  <option value="" disabled>- Select Civ A (Required) -</option>
+                  {civs.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                {civA && <img src={`/civs/${civA.toLowerCase()}.png`} alt={civA} style={{ width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #66b2ff' }} onError={(e) => e.target.style.display='none'} />}
+              </div>
+
+              <div style={{ color: '#ffd700', fontSize: '24px', fontWeight: 'bold', fontStyle: 'italic' }}>VS</div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                <select value={civB} onChange={e => setCivB(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#ff6666', border: '2px solid #ff6666', padding: '8px 16px', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+                  <option value="">- Select Civ B (Optional) -</option>
+                  {civs.filter(c => c !== civA).map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                {civB && <img src={`/civs/${civB.toLowerCase()}.png`} alt={civB} style={{ width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #ff6666' }} onError={(e) => e.target.style.display='none'} />}
+              </div>
+            </div>
+
+            {/* TABLA DINÁMICA */}
+            {civAnalysis && civA && (
+              <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '13px', tableLayout: 'fixed' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: '#1e212b', color: '#888', borderBottom: '1px solid #444', height: '40px', textTransform: 'uppercase', fontSize: '11px' }}>
+                      <th style={{ width: '16%' }}>Map</th>
+                      <th style={{ width: '14%', color: '#66b2ff' }}>{civA} WR</th>
+                      <th style={{ width: '14%', color: '#66b2ff' }}>{civA} CDPS</th>
+                      {civB && <th style={{ width: '28%', color: '#ffd700' }}>Head to Head (A vs B)</th>}
+                      {civB && <th style={{ width: '14%', color: '#ff6666' }}>{civB} WR</th>}
+                      {civB && <th style={{ width: '14%', color: '#ff6666' }}>{civB} CDPS</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mapPool.map((map, i) => {
+                      const mData = civAnalysis.maps?.[map];
+                      if (!mData) return null;
+
+                      const formatWr = (rank, val) => {
+                        if (!val) return '-';
+                        const isTop = rank !== '-' && parseInt(rank) <= 7;
+                        return <span style={{ color: isTop ? '#ffd700' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({(val*100).toFixed(1).replace('.', ',')}%)</span>;
+                      };
+
+                      const formatCdps = (rank, val) => {
+                        if (!val) return '-';
+                        const isTop = rank !== '-' && parseInt(rank) <= 7;
+                        return <span style={{ color: isTop ? '#66b2ff' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({Number(val).toFixed(1).replace('.', ',')})</span>;
+                      };
+
+                      let h2hBg = 'transparent';
+                      let h2hText = '-';
+                      if (civB && mData.matchup) {
+                        const wrA = mData.matchup.wr_a;
+                        const games = mData.matchup.games;
+                        h2hText = `${(wrA * 100).toFixed(1).replace('.', ',')}% (${games} games)`;
+                        if (games >= 10) { 
+                          if (wrA > 0.55) h2hBg = 'rgba(102, 178, 255, 0.15)'; 
+                          else if (wrA < 0.45) h2hBg = 'rgba(255, 102, 102, 0.15)'; 
+                        }
+                      }
+
+                      return (
+                        <tr key={map} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i % 2 === 0 ? '#161920' : '#1a1c23', height: '36px' }}>
+                          <td style={{ fontWeight: 'bold', color: '#fff', borderRight: '1px solid #2a2d36' }}>{map}</td>
+                          <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.a.rank_wr, mData.a.wr)}</td>
+                          <td style={{ borderRight: civB ? '1px solid #444' : 'none' }}>{formatCdps(mData.a.rank_cdps, mData.a.cdps)}</td>
+                          
+                          {civB && (
+                            <td style={{ backgroundColor: h2hBg, fontWeight: 'bold', color: h2hBg !== 'transparent' ? (mData.matchup.wr_a > 0.5 ? '#66b2ff' : '#ff6666') : '#aaa', borderRight: '1px solid #444' }}>
+                              {h2hText}
+                            </td>
+                          )}
+                          
+                          {civB && <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.b.rank_wr, mData.b.wr)}</td>}
+                          {civB && <td>{formatCdps(mData.b.rank_cdps, mData.b.cdps)}</td>}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
