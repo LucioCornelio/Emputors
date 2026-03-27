@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 function App() {
   const mapPool = ["Skukuza", "Fortified Clearing", "Islands", "Coast to Mountain", "Kawasan", "Thames", "Stranded", "Sardis", "Arabia", "Megarandom"].sort()
   
-  // Tu lista de civilizaciones MASIVA
+  // Massive civilization list
   const civs = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Vietnamese", "Vikings", "Wei", "Wu"].sort()
 
   const [selectedMap, setSelectedMap] = useState(mapPool[0])
@@ -29,10 +29,10 @@ function App() {
     const civ = civStr.split(' ')[0].trim();
     const mapIndex = draft.maps.indexOf(mapName);
     
-    // Condición estricta: miramos exclusivamente a la civilización que el rival tiene asignada a ESTE mapa
+    // Strict condition: exclusively check the civ the opponent has assigned to THIS map
     const oppSelected = draft.plan_p2[mapIndex];
     
-    // Si no hay un rival asignado manualmente a este mapa, no se colorean los counters
+    // If no opponent is manually assigned to this map, don't color counters
     if (!oppSelected) {
       return { color: '#e0e0e0', fontWeight: 'normal', textDecoration: 'none' };
     }
@@ -59,13 +59,13 @@ function App() {
     let fontWeight = 'normal';
 
     if (countTop === 2 && countCounters === 2) {
-      color = '#ffd700'; // Oro
+      color = '#ffd700'; // Gold
       fontWeight = 'bold';
     } else if ((countTop === 2 && countCounters === 1) || (countTop === 1 && countCounters === 2)) {
-      color = '#9abfe6'; // Plata (Azulado metálico)
+      color = '#9abfe6'; // Silver (Metallic Blue)
       fontWeight = 'bold';
     } else if (countTop === 1 && countCounters === 1) {
-      color = '#e69950'; // Bronce
+      color = '#e69950'; // Bronze
       fontWeight = 'bold';
     }
 
@@ -208,14 +208,14 @@ function App() {
         if (!m) return;
         const mapIndex = draft.maps.indexOf(m);
         
-        // El mapa NO se ignora, pero verificamos si está cubierto para aplicar penalizaciones (picks de banquillo)
+        // Map is not ignored, but check if covered to apply penalties (bench picks)
         const isCovered = draft.plan_p1[mapIndex] && draft.p1_picks.includes(draft.plan_p1[mapIndex]);
         let mapScore = 0;
 
         const plannedOpponent = draft.plan_p2[mapIndex];
         const unassignedOpponents = draft.p2_picks.filter(c => !draft.plan_p2.includes(c));
 
-        // CRITERIO 1A: Counter Directo (Rival asignado al mapa)
+        // CRITERION 1A: Direct Counter (Opponent assigned to map)
         if (plannedOpponent) {
           const oppLow = plannedOpponent.toLowerCase();
           const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
@@ -224,14 +224,14 @@ function App() {
                             prosCounters.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
           if (isCounter) {
             const pts = isCovered ? 25 : 40;
-            const col = isCovered ? '#66b2ff' : '#ffd700'; // Azul/Plata si está cubierto (backup), Oro si está libre
+            const col = isCovered ? '#66b2ff' : '#ffd700'; // Blue/Silver if covered (backup), Gold if free
             score += pts;
             mapScore += pts;
-            reasons.push({ text: `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`, color: col, points: pts, title: `Counter letal contra ${plannedOpponent} en ${m} ${isCovered ? '(Opción de backup)' : ''}` });
+            reasons.push({ text: `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`, color: col, points: pts, title: `Lethal counter against ${plannedOpponent} on ${m} ${isCovered ? '(Backup option)' : ''}` });
           }
         }
 
-        // CRITERIO 1B: Counter Potencial (Rival sin asignar)
+        // CRITERION 1B: Potential Counter (Unassigned opponent)
         unassignedOpponents.forEach(p2_civ => {
           const oppLow = p2_civ.toLowerCase();
           const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
@@ -242,11 +242,11 @@ function App() {
             const pts = isCovered ? 5 : 15;
             score += pts;
             mapScore += pts;
-            reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#cd7f32', points: pts, title: `Buen counter contra ${p2_civ} en ${m} (si decide jugarla aquí)` });
+            reasons.push({ text: `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`, color: '#cd7f32', points: pts, title: `Good counter against ${p2_civ} on ${m} (if played here)` });
           }
         });
 
-        // CRITERIO 2: Desglose de Top 7
+        // CRITERION 2: Top 7 Breakdown
         const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 7);
         const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 7);
         const inCdps = topCdps.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
@@ -257,19 +257,19 @@ function App() {
           const col = isCovered ? '#66b2ff' : '#ffd700';
           score += pts;
           mapScore += pts;
-          reasons.push({ text: '🌟 TOP BOTH', color: col, points: pts, title: `Top 7 en Win Rate y CDPS en ${m} ${isCovered ? '(Opción de backup)' : ''}` });
+          reasons.push({ text: '🌟 TOP BOTH', color: col, points: pts, title: `Top 7 in Win Rate and CDPS on ${m} ${isCovered ? '(Backup option)' : ''}` });
         } else if (inCdps) {
           const pts = isCovered ? 10 : 25;
           const col = isCovered ? '#cd7f32' : '#66b2ff';
           score += pts;
           mapScore += pts;
-          reasons.push({ text: '📈 TOP CDPS', color: col, points: pts, title: `Top 7 en CDPS (Meta Pro) en ${m}` });
+          reasons.push({ text: '📈 TOP CDPS', color: col, points: pts, title: `Top 7 in CDPS (Pro Meta) on ${m}` });
         } else if (inWr) {
           const pts = isCovered ? 10 : 25;
           const col = isCovered ? '#cd7f32' : '#66b2ff';
           score += pts;
           mapScore += pts;
-          reasons.push({ text: '🏆 TOP WR', color: col, points: pts, title: `Top 7 en Win Rate (Ladder) en ${m}` });
+          reasons.push({ text: '🏆 TOP WR', color: col, points: pts, title: `Top 7 in Win Rate (Ladder) on ${m}` });
         }
 
         if (mapScore > bestMapScore) {
@@ -278,7 +278,7 @@ function App() {
         }
       });
 
-      // CRITERIO 3: Flex Pick (Bronce, 15 pts)
+      // CRITERION 3: Flex Pick (Bronze, 15 pts)
       let flexMaps = [];
       draft.maps.forEach(m => {
         if(!m) return;
@@ -292,23 +292,23 @@ function App() {
       
       if (flexMaps.length >= 2) {
         score += 15;
-        reasons.push({ text: '🔄 FLEX', color: '#cd7f32', points: 15, title: `Pick flexible: Top 12 en ${flexMaps.join(' y ')}` });
+        reasons.push({ text: '🔄 FLEX', color: '#cd7f32', points: 15, title: `Flexible pick: Top 12 on ${flexMaps.join(' and ')}` });
         
-        // Si sus puntos en un mapa concreto son más débiles que su valor como flex, indicamos los mapas flex
+        // If map points are weaker than flex value, show flex maps
         if (bestMapScore < 15) {
           bestMap = flexMaps.map(m => m.length > 10 ? m.substring(0, 4) + '.' : m).join(' / ');
         }
       }
 
       if (score > 0) {
-        // Limpiar duplicados y quedarse con la etiqueta de mayor puntuación (ej: si es Top en 2 mapas, se queda el Oro si uno está libre)
+        // Remove duplicates and keep highest scoring tag
         const uniqueTexts = Array.from(new Set(reasons.map(r => r.text)));
         const uniqueReasons = uniqueTexts.map(text => {
            const matching = reasons.filter(r => r.text === text);
            return matching.reduce((prev, current) => (prev.points > current.points) ? prev : current);
         });
         
-        // Ordena estrictamente de mayor puntuación a menor (Oro -> Azulito -> Bronce)
+        // Sort strictly by highest score descending
         uniqueReasons.sort((a, b) => b.points - a.points);
 
         suggestions.push({ civ, score, reasons: uniqueReasons, bestMap: bestMap || 'Global' });
@@ -356,7 +356,7 @@ function App() {
         const oppPicks = type === 'p1' ? newD.p2_picks : newD.p1_picks;
 
         if (myPicks.includes(civ)) {
-          // AQUI ESTA LA MAGIA: Si devuelves el pick, lo borra también del Planner
+          // MAGIC HERE: If you return the pick, it also removes it from the Planner
           if (type === 'p1') {
              newD.p1_picks = newD.p1_picks.filter(c => c !== civ);
              newD.plan_p1 = newD.plan_p1.map(c => c === civ ? "" : c);
@@ -489,24 +489,25 @@ const generateLiquipediaUrl = (mapName, civName) => {
   const confPresence = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Picks', key: 'Picks', width: '20%' }, { label: 'Wins', key: 'Wins', width: '20%' }, { label: 'Global WR', key: 'Global WR', format: 'percent', width: '25%' }];
   const confTraps = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '30%' }, { label: 'Picks', key: 'Picks', width: '15%' }, { label: 'WR', key: 'Win Rate', format: 'percent', width: '15%' }, { label: 'Map', key: 'Map', align: 'left', width: '40%' }];
   const confVersatile = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Viable Maps', key: 'Viable_Maps', type: 'mapsTooltip', width: '30%' }, { label: 'Avg CDPS', key: 'Avg_CDPS', format: 'decimal', width: '35%' }];
+  
   if (!auth) {
     return (
       <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1c23' }}>
         <div style={{ padding: '30px', backgroundColor: '#161920', borderRadius: '6px', border: '1px solid #333', textAlign: 'center' }}>
-          <h2 style={{ color: '#ffd700', fontSize: '16px', letterSpacing: '2px', marginBottom: '20px' }}>LEAT11 ENGINE - ACCESO RESTRINGIDO</h2>
+          <h2 style={{ color: '#ffd700', fontSize: '16px', letterSpacing: '2px', marginBottom: '20px' }}>LEAT11 ENGINE - RESTRICTED ACCESS</h2>
           <input 
             type="password" 
             value={pass} 
             onChange={e => setPass(e.target.value)}
             onKeyDown={e => { if(e.key === 'Enter' && pass === "Emputors") setAuth(true) }}
             style={{ backgroundColor: '#1e212b', border: '1px solid #444', color: 'white', padding: '10px', borderRadius: '4px', outline: 'none', textAlign: 'center' }} 
-            placeholder="Introduce la clave"
+            placeholder="Enter password"
           />
           <br /><br />
           <button 
             onClick={() => { if (pass === "Emputors") setAuth(true) }} 
             style={{ backgroundColor: '#66b2ff', color: '#161920', border: 'none', padding: '8px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginTop: '10px' }}>
-            ENTRAR
+            ENTER
           </button>
         </div>
       </div>
@@ -536,8 +537,8 @@ const generateLiquipediaUrl = (mapName, civName) => {
             </div>
             {mapError ? (<div style={{ color: '#ff4444', textAlign: 'center' }}>Error: {mapError}</div>) : !mapData ? (<div style={{ color: '#888', textAlign: 'center' }}>Loading...</div>) : (
               <div style={{ display: 'flex', gap: '30px', maxWidth: '1400px', margin: '0 auto' }}>
-                <RenderTable title="Dataset General (All)" dataset={mapData.dataset_all} totalMatches={mapData.total_matches_all} />
-                <RenderTable title="Dataset Élite (VOD)" dataset={mapData.dataset_elite} totalMatches={mapData.total_matches_elite} isClickable={true} />
+                <RenderTable title="General Dataset (All)" dataset={mapData.dataset_all} totalMatches={mapData.total_matches_all} />
+                <RenderTable title="Elite Dataset (VOD)" dataset={mapData.dataset_elite} totalMatches={mapData.total_matches_elite} isClickable={true} />
               </div>
             )}
           </>
@@ -702,7 +703,7 @@ const generateLiquipediaUrl = (mapName, civName) => {
               <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 4px 0', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #444', paddingBottom: '2px' }}>🔥 SMART SUGGESTIONS (TOP 5)</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 {getSuggestions().length === 0 ? (
-                  <div style={{ color: '#888', fontSize: '10px', fontStyle: 'italic', textAlign: 'center', padding: '4px' }}>Faltan datos o mapas para sugerir.</div>
+                  <div style={{ color: '#888', fontSize: '10px', fontStyle: 'italic', textAlign: 'center', padding: '4px' }}>Not enough data or maps to suggest.</div>
                 ) : (
                   getSuggestions().map((s, i) => (
                     <div key={i} onClick={() => toggleCiv(s.civ, 'p1')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1e212b', padding: '2px 6px', borderRadius: '3px', cursor: 'pointer', borderLeft: `2px solid ${s.reasons[0]?.color || '#555'}`, transition: 'background 0.2s', height: '20px' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2d36'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1e212b'}>
@@ -760,7 +761,9 @@ const generateLiquipediaUrl = (mapName, civName) => {
 
               {/* TABLA TOP 7 PROS */}
               <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>TOP 7 CDPS</h3>
+                <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>
+                  TOP 7 <span title={tooltipCDPS} style={{ cursor: 'help', textDecoration: 'underline dotted #ffd700', textUnderlineOffset: '2px' }}>CDPS</span>
+                </h3>
                 <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>(Score | matches)</div>
                 <table style={{width: '100%', fontSize: '11px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
                   <thead>
@@ -946,14 +949,14 @@ const generateLiquipediaUrl = (mapName, civName) => {
                     <tr style={{ backgroundColor: '#1e212b', color: '#888', borderBottom: '1px solid #444', height: '36px', textTransform: 'uppercase', fontSize: '9px' }}>
                       <th style={{ width: '12%', padding: '0 4px' }}>Map</th>
                       <th style={{ width: '13%', color: '#66b2ff', padding: '0 4px' }}>{civA} WR</th>
-                      <th style={{ width: '13%', color: '#66b2ff', padding: '0 4px' }} title={tooltipCDPS}>
-                        <span style={{ textDecoration: 'underline dotted #66b2ff', textUnderlineOffset: '2px' }}>{civA} CDPS</span>
+                      <th style={{ width: '13%', color: '#66b2ff', padding: '0 4px' }}>
+                        {civA} <span title={tooltipCDPS} style={{ cursor: 'help', textDecoration: 'underline dotted #66b2ff', textUnderlineOffset: '2px' }}>CDPS</span>
                       </th>
                       {civB && <th style={{ width: '18%', color: '#ffd700', padding: '0 4px' }}>H2H WR</th>}
                       {civB && <th style={{ width: '18%', color: '#b266ff', padding: '0 4px' }}>H2H CDPS</th>}
                       {civB && <th style={{ width: '13%', color: '#ff6666', padding: '0 4px' }}>{civB} WR</th>}
-                      {civB && <th style={{ width: '13%', color: '#ff6666', padding: '0 4px' }} title={tooltipCDPS}>
-                        <span style={{ textDecoration: 'underline dotted #ff6666', textUnderlineOffset: '2px' }}>{civB} CDPS</span>
+                      {civB && <th style={{ width: '13%', color: '#ff6666', padding: '0 4px' }}>
+                        {civB} <span title={tooltipCDPS} style={{ cursor: 'help', textDecoration: 'underline dotted #ff6666', textUnderlineOffset: '2px' }}>CDPS</span>
                       </th>}
                     </tr>
                   </thead>
