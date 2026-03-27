@@ -4,15 +4,7 @@ import pandas as pd
 import numpy as np
 import os
 import itertools
-        top_wr = {}
-        top_cdps = {}
-        opp_probs = {}
-        matchups = {}
-        counters_ladder = {}
-        counters_pros = {}
-        all_civ_weights = {}
-
-        def fmt_k(val):
+import glob
 
 app = FastAPI()
 
@@ -183,6 +175,7 @@ async def analyze_draft(data: dict, x_api_key: str = Header(None)):
         matchups = {}
         counters_ladder = {}
         counters_pros = {}
+        all_civ_weights = {}
 
         def fmt_k(val):
             if val >= 1000:
@@ -272,12 +265,6 @@ async def analyze_draft(data: dict, x_api_key: str = Header(None)):
             opp_probs[m_disp] = {p: 0 for p in p2}
 
             matchups[m_disp] = {}
-            
-            opp_probs[m_disp] = {}
-            for p in p2:
-                opp_probs[m_disp][p] = m_probs[p] / total_weight if total_weight > 0 else 0
-
-            matchups[m_disp] = {}
             for p1_civ in p1:
                 for p2_civ in p2:
                     row = df[(df['Mapa'] == m_int) & (df['Mi_Civ'] == p1_civ) & (df['Civ_Rival'] == p2_civ)]
@@ -358,6 +345,7 @@ async def analyze_draft(data: dict, x_api_key: str = Header(None)):
                         pro_counters = temp_pros + ["-"] * (3 - len(temp_pros))
                 
                 counters_pros[m_disp][p2_civ] = pro_counters
+
         valid_maps = [m for m in data.get('maps', []) if m]
         if p2 and valid_maps:
             padded_p2 = p2 + [None] * max(0, len(valid_maps) - len(p2))
@@ -425,7 +413,6 @@ async def analyze_civs(data: dict, x_api_key: str = Header(None)):
             except:
                 return 0
 
-        import glob
         for map_name in map_pool:
             map_data = {
                 "a": {"wr": 0, "rank_wr": "-", "picks_w": 0, "cdps": 0, "rank_cdps": "-", "picks_c": 0},
