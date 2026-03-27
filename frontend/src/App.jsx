@@ -940,10 +940,14 @@ const generateLiquipediaUrl = (mapName, civName) => {
                     <tr style={{ backgroundColor: '#1e212b', color: '#888', borderBottom: '1px solid #444', height: '40px', textTransform: 'uppercase', fontSize: '11px' }}>
                       <th style={{ width: '16%' }}>Map</th>
                       <th style={{ width: '14%', color: '#66b2ff' }}>{civA} WR</th>
-                      <th style={{ width: '14%', color: '#66b2ff' }}>{civA} CDPS</th>
+                      <th style={{ width: '14%', color: '#66b2ff', cursor: 'help' }} title={tooltipCDPS}>
+                        <span style={{ textDecoration: 'underline dotted #66b2ff', textUnderlineOffset: '2px' }}>{civA} CDPS</span>
+                      </th>
                       {civB && <th style={{ width: '28%', color: '#ffd700' }}>Head to Head (A vs B)</th>}
                       {civB && <th style={{ width: '14%', color: '#ff6666' }}>{civB} WR</th>}
-                      {civB && <th style={{ width: '14%', color: '#ff6666' }}>{civB} CDPS</th>}
+                      {civB && <th style={{ width: '14%', color: '#ff6666', cursor: 'help' }} title={tooltipCDPS}>
+                        <span style={{ textDecoration: 'underline dotted #ff6666', textUnderlineOffset: '2px' }}>{civB} CDPS</span>
+                      </th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -952,17 +956,17 @@ const generateLiquipediaUrl = (mapName, civName) => {
                       if (!mData) return null;
 
                       const formatWr = (rank, val, picks) => {
-                        if (!val) return '-';
-                        const isTop = rank !== '-' && parseInt(rank) <= 7;
+                        if (rank === '-' || rank === undefined) return '-';
+                        const isTop = parseInt(rank) <= 7;
                         const pStr = picks >= 1000 ? (picks/1000).toFixed(1).replace('.0', '').replace('.', ',') + 'k' : picks;
-                        return <span style={{ color: isTop ? '#ffd700' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({(val*100).toFixed(1).replace('.', ',')}% | {pStr})</span>;
+                        return <span style={{ color: isTop ? '#ffd700' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({(val*100).toFixed(1).replace('.', ',')}% | {pStr} m)</span>;
                       };
 
                       const formatCdps = (rank, val, picks) => {
-                        if (!val) return '-';
-                        const isTop = rank !== '-' && parseInt(rank) <= 7;
+                        if (rank === '-' || rank === undefined) return '-';
+                        const isTop = parseInt(rank) <= 7;
                         const pStr = picks >= 1000 ? (picks/1000).toFixed(1).replace('.0', '').replace('.', ',') + 'k' : picks;
-                        return <span style={{ color: isTop ? '#66b2ff' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({Number(val).toFixed(1).replace('.', ',')} | {pStr})</span>;
+                        return <span style={{ color: isTop ? '#66b2ff' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({Number(val).toFixed(1).replace('.', ',')} | {pStr} m)</span>;
                       };
 
                       let h2hBg = 'transparent';
@@ -970,7 +974,7 @@ const generateLiquipediaUrl = (mapName, civName) => {
                       if (civB && mData.matchup) {
                         const wrA = mData.matchup.wr_a;
                         const games = mData.matchup.games;
-                        h2hText = `${(wrA * 100).toFixed(1).replace('.', ',')}% | ${games} matches`;
+                        h2hText = `${(wrA * 100).toFixed(1).replace('.', ',')}% | ${games} m`;
                         if (games >= 10) { 
                           if (wrA > 0.55) h2hBg = 'rgba(102, 178, 255, 0.15)'; 
                           else if (wrA < 0.45) h2hBg = 'rgba(255, 102, 102, 0.15)'; 
@@ -980,8 +984,8 @@ const generateLiquipediaUrl = (mapName, civName) => {
                       return (
                         <tr key={map} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i % 2 === 0 ? '#161920' : '#1a1c23', height: '40px' }}>
                           <td style={{ fontWeight: 'bold', color: '#fff', borderRight: '1px solid #2a2d36' }}>{map}</td>
-                          <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.a?.rank_wr, mData.a?.wr, mData.a?.picks)}</td>
-                          <td style={{ borderRight: civB ? '1px solid #444' : 'none' }}>{formatCdps(mData.a?.rank_cdps, mData.a?.cdps, mData.a?.picks)}</td>
+                          <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.a?.rank_wr, mData.a?.wr, mData.a?.picks_w)}</td>
+                          <td style={{ borderRight: civB ? '1px solid #444' : 'none' }}>{formatCdps(mData.a?.rank_cdps, mData.a?.cdps, mData.a?.picks_c)}</td>
                           
                           {civB && (
                             <td style={{ backgroundColor: h2hBg, fontWeight: 'bold', color: h2hBg !== 'transparent' ? (mData.matchup?.wr_a > 0.5 ? '#66b2ff' : '#ff6666') : '#aaa', borderRight: '1px solid #444' }}>
@@ -989,8 +993,8 @@ const generateLiquipediaUrl = (mapName, civName) => {
                             </td>
                           )}
                           
-                          {civB && <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.b?.rank_wr, mData.b?.wr, mData.b?.picks)}</td>}
-                          {civB && <td>{formatCdps(mData.b?.rank_cdps, mData.b?.cdps, mData.b?.picks)}</td>}
+                          {civB && <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.b?.rank_wr, mData.b?.wr, mData.b?.picks_w)}</td>}
+                          {civB && <td>{formatCdps(mData.b?.rank_cdps, mData.b?.cdps, mData.b?.picks_c)}</td>}
                         </tr>
                       );
                     })}
