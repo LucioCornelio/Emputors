@@ -938,14 +938,15 @@ const generateLiquipediaUrl = (mapName, civName) => {
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '13px', tableLayout: 'fixed' }}>
                   <thead>
                     <tr style={{ backgroundColor: '#1e212b', color: '#888', borderBottom: '1px solid #444', height: '40px', textTransform: 'uppercase', fontSize: '11px' }}>
-                      <th style={{ width: '16%' }}>Map</th>
-                      <th style={{ width: '14%', color: '#66b2ff' }}>{civA} WR</th>
-                      <th style={{ width: '14%', color: '#66b2ff', cursor: 'help' }} title={tooltipCDPS}>
+                      <th style={{ width: '12%' }}>Map</th>
+                      <th style={{ width: '12%', color: '#66b2ff' }}>{civA} WR</th>
+                      <th style={{ width: '12%', color: '#66b2ff', cursor: 'help' }} title={tooltipCDPS}>
                         <span style={{ textDecoration: 'underline dotted #66b2ff', textUnderlineOffset: '2px' }}>{civA} CDPS</span>
                       </th>
-                      {civB && <th style={{ width: '28%', color: '#ffd700' }}>Head to Head (A vs B)</th>}
-                      {civB && <th style={{ width: '14%', color: '#ff6666' }}>{civB} WR</th>}
-                      {civB && <th style={{ width: '14%', color: '#ff6666', cursor: 'help' }} title={tooltipCDPS}>
+                      {civB && <th style={{ width: '20%', color: '#ffd700' }}>H2H WR (A vs B)</th>}
+                      {civB && <th style={{ width: '20%', color: '#b266ff' }}>H2H CDPS (A vs B)</th>}
+                      {civB && <th style={{ width: '12%', color: '#ff6666' }}>{civB} WR</th>}
+                      {civB && <th style={{ width: '12%', color: '#ff6666', cursor: 'help' }} title={tooltipCDPS}>
                         <span style={{ textDecoration: 'underline dotted #ff6666', textUnderlineOffset: '2px' }}>{civB} CDPS</span>
                       </th>}
                     </tr>
@@ -981,6 +982,18 @@ const generateLiquipediaUrl = (mapName, civName) => {
                         }
                       }
 
+                      let h2hCdpsBg = 'transparent';
+                      let h2hCdpsText = '-';
+                      if (civB && mData.matchup_cdps) {
+                        const wrACdps = mData.matchup_cdps.wr_a;
+                        const gamesCdps = mData.matchup_cdps.games;
+                        h2hCdpsText = `${(wrACdps * 100).toFixed(1).replace('.', ',')}% | ${gamesCdps} m`;
+                        if (gamesCdps >= 3) { 
+                          if (wrACdps > 0.55) h2hCdpsBg = 'rgba(102, 178, 255, 0.15)'; 
+                          else if (wrACdps < 0.45) h2hCdpsBg = 'rgba(255, 102, 102, 0.15)'; 
+                        }
+                      }
+
                       return (
                         <tr key={map} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i % 2 === 0 ? '#161920' : '#1a1c23', height: '40px' }}>
                           <td style={{ fontWeight: 'bold', color: '#fff', borderRight: '1px solid #2a2d36' }}>{map}</td>
@@ -990,6 +1003,11 @@ const generateLiquipediaUrl = (mapName, civName) => {
                           {civB && (
                             <td style={{ backgroundColor: h2hBg, fontWeight: 'bold', color: h2hBg !== 'transparent' ? (mData.matchup?.wr_a > 0.5 ? '#66b2ff' : '#ff6666') : '#aaa', borderRight: '1px solid #444' }}>
                               {h2hText}
+                            </td>
+                          )}
+                          {civB && (
+                            <td style={{ backgroundColor: h2hCdpsBg, fontWeight: 'bold', color: h2hCdpsBg !== 'transparent' ? (mData.matchup_cdps?.wr_a > 0.5 ? '#b266ff' : '#ff6666') : '#aaa', borderRight: '1px solid #444' }}>
+                              {h2hCdpsText}
                             </td>
                           )}
                           

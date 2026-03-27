@@ -430,9 +430,18 @@ async def analyze_civs(data: dict):
                     if target:
                         row_wr = df_w[df_w['Civ_Lower'].str.startswith(target[:4])]
                         if not row_wr.empty:
-                            map_data[key]["wr"] = row_wr.iloc[0]['Win Rate']
                             map_data[key]["rank_wr"] = int(row_wr.index[0]) + 1
-                            map_data[key]["picks_w"] = int(row_wr.iloc[0]['Picks_Num'])
+                        
+                        # Extraer WR y matches desde la matriz real de draft (como en PA3)
+                        if not df_counters.empty:
+                            m_int = get_clean_map(map_name) if 'get_clean_map' in globals() else map_name.lower().replace(" ", "")
+                            row_counters = df_counters[(df_counters['Mapa'] == m_int) & (df_counters['Mi_Civ'].str.startswith(target[:4]))]
+                            if not row_counters.empty:
+                                games = row_counters['Partidas'].sum()
+                                wins = row_counters['Victorias'].sum()
+                                if games > 0:
+                                    map_data[key]["wr"] = wins / games
+                                    map_data[key]["picks_w"] = int(games)
 
             # Procesar Torneos/Élite (CDPS)
             if not df_elite.empty and 'CDPS Score' in df_elite.columns:
@@ -457,6 +466,34 @@ async def analyze_civs(data: dict):
                     wins = row_matchup['Victorias'].sum()
                     if games > 0:
                         map_data["matchup"] = {"games": int(games), "wr_a": wins / games}
+                        
+            # Nuevo motor: H2H CDPS (Extraído dinámicamente de VOD)
+            if civ_b and not df_elite.empty:
+                games_cdps = 0
+                wins_a_cdps = 0
+                if df_elite.shape[1] >= 3:
+                    for i in range(df_elite.shape[1] - 2):
+                        cA = df_elite.iloc[:, i].astype(str).str.lower().str.strip()
+                        cB = df_elite.iloc[:, i+1].astype(str).str.lower().str.strip()
+                        cW = df_elite.iloc[:, i+2].astype(str).str.lower().str.strip()
+                        
+                        valid_rows = (cW != '') & (cW != 'nan') & (cW != 'none')
+                        if valid_rows.sum() >= 2:
+                            match_pct = ((cW[valid_rows] == cA[valid_rows]) | (cW[valid_rows] == cB[valid_rows])).sum() / valid_rows.sum()
+                            if match_pct >= 0.8:
+                                df_pros = pd.DataFrame({'cA': cA, 'cB': cB, 'cW': cW})
+                                valid = df_pros[(df_pros['cA'] != 'nan') & (df_pros['cB'] != 'nan') & (df_pros['cW'] != 'nan')]
+                                target_a = civ_a[:4]
+                                target_b = civ_b[:4]
+                                mask = ((valid['cA'].str.startswith(target_a)) & (valid['cB'].str.startswith(target_b))) | \
+                                       ((valid['cA'].str.startswith(target_b)) & (valid['cB'].str.startswith(target_a)))
+                                matches = valid[mask]
+                                games_cdps += len(matches)
+                                wins_a_cdps += matches['cW'].str.startswith(target_a).sum()
+                                break
+                
+                if games_cdps > 0:
+                    map_data["matchup_cdps"] = {"games": int(games_cdps), "wr_a": float(wins_a_cdps / games_cdps)}
 
             result["maps"][map_name] = map_data
 
