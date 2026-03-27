@@ -907,23 +907,29 @@ const generateLiquipediaUrl = (mapName, civName) => {
             
             {/* CONTROLES */}
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', backgroundColor: '#1a1c23', padding: '20px', borderRadius: '6px', border: '1px solid #333' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <select value={civA} onChange={e => setCivA(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#66b2ff', border: '2px solid #66b2ff', padding: '8px 16px', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <select value={civA} onChange={e => setCivA(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#66b2ff', border: '2px solid #66b2ff', padding: '8px 16px', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', width: '220px' }}>
                   <option value="" disabled>- Select Civ A (Required) -</option>
                   {civs.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
-                {civA && <img src={`/civs/${civA.toLowerCase()}.png`} alt={civA} style={{ width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #66b2ff' }} onError={(e) => e.target.style.display='none'} />}
+                <div style={{ width: '60px', height: '60px', borderRadius: '4px', border: civA ? '2px solid #66b2ff' : '2px dashed #444', backgroundColor: '#161920', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {civA ? <img src={`/civs/${civA.toLowerCase()}.png`} alt={civA} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display='none'} /> : <span style={{color: '#555', fontSize: '24px'}}>?</span>}
+                </div>
               </div>
 
               <div style={{ color: '#ffd700', fontSize: '24px', fontWeight: 'bold', fontStyle: 'italic' }}>VS</div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <select value={civB} onChange={e => setCivB(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#ff6666', border: '2px solid #ff6666', padding: '8px 16px', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div style={{ width: '60px', height: '60px', borderRadius: '4px', border: civB ? '2px solid #ff6666' : '2px dashed #444', backgroundColor: '#161920', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {civB ? <img src={`/civs/${civB.toLowerCase()}.png`} alt={civB} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display='none'} /> : <span style={{color: '#555', fontSize: '24px'}}>?</span>}
+                </div>
+                <select value={civB} onChange={e => setCivB(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#ff6666', border: '2px solid #ff6666', padding: '8px 16px', borderRadius: '4px', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', width: '220px' }}>
                   <option value="">- Select Civ B (Optional) -</option>
                   {civs.filter(c => c !== civA).map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
-                {civB && <img src={`/civs/${civB.toLowerCase()}.png`} alt={civB} style={{ width: '60px', height: '60px', borderRadius: '4px', border: '1px solid #ff6666' }} onError={(e) => e.target.style.display='none'} />}
               </div>
+
             </div>
 
             {/* TABLA DINÁMICA */}
@@ -945,10 +951,16 @@ const generateLiquipediaUrl = (mapName, civName) => {
                       const mData = civAnalysis.maps?.[map];
                       if (!mData) return null;
 
-                      const formatWr = (rank, val) => {
+                      const formatWr = (rank, val, picks) => {
                         if (!val) return '-';
                         const isTop = rank !== '-' && parseInt(rank) <= 7;
-                        return <span style={{ color: isTop ? '#ffd700' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({(val*100).toFixed(1).replace('.', ',')}%)</span>;
+                        const pStr = picks >= 1000 ? (picks/1000).toFixed(1).replace('.0', '').replace('.', ',') + 'k' : picks;
+                        return (
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                            <span style={{ color: isTop ? '#ffd700' : '#e0e0e0', fontWeight: isTop ? 'bold' : 'normal' }}>{isTop ? `★ #${rank}` : `#${rank}`} ({(val*100).toFixed(1).replace('.', ',')}%)</span>
+                            <span style={{ fontSize: '9px', color: '#888', fontStyle: 'italic' }}>{pStr} matches</span>
+                          </div>
+                        );
                       };
 
                       const formatCdps = (rank, val) => {
@@ -970,19 +982,19 @@ const generateLiquipediaUrl = (mapName, civName) => {
                       }
 
                       return (
-                        <tr key={map} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i % 2 === 0 ? '#161920' : '#1a1c23', height: '36px' }}>
+                        <tr key={map} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i % 2 === 0 ? '#161920' : '#1a1c23', height: '40px' }}>
                           <td style={{ fontWeight: 'bold', color: '#fff', borderRight: '1px solid #2a2d36' }}>{map}</td>
-                          <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.a.rank_wr, mData.a.wr)}</td>
-                          <td style={{ borderRight: civB ? '1px solid #444' : 'none' }}>{formatCdps(mData.a.rank_cdps, mData.a.cdps)}</td>
+                          <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.a?.rank_wr, mData.a?.wr, mData.a?.picks)}</td>
+                          <td style={{ borderRight: civB ? '1px solid #444' : 'none' }}>{formatCdps(mData.a?.rank_cdps, mData.a?.cdps)}</td>
                           
                           {civB && (
-                            <td style={{ backgroundColor: h2hBg, fontWeight: 'bold', color: h2hBg !== 'transparent' ? (mData.matchup.wr_a > 0.5 ? '#66b2ff' : '#ff6666') : '#aaa', borderRight: '1px solid #444' }}>
+                            <td style={{ backgroundColor: h2hBg, fontWeight: 'bold', color: h2hBg !== 'transparent' ? (mData.matchup?.wr_a > 0.5 ? '#66b2ff' : '#ff6666') : '#aaa', borderRight: '1px solid #444' }}>
                               {h2hText}
                             </td>
                           )}
                           
-                          {civB && <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.b.rank_wr, mData.b.wr)}</td>}
-                          {civB && <td>{formatCdps(mData.b.rank_cdps, mData.b.cdps)}</td>}
+                          {civB && <td style={{ borderRight: '1px dotted #333' }}>{formatWr(mData.b?.rank_wr, mData.b?.wr, mData.b?.picks)}</td>}
+                          {civB && <td>{formatCdps(mData.b?.rank_cdps, mData.b?.cdps)}</td>}
                         </tr>
                       );
                     })}
