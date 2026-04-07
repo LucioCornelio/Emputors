@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { io } from 'socket.io-client'
 import { getMapData, getGlobalMeta, analyzeDraft, analyzeCivs } from '../engine'
 
 function Leat11Draft() {
@@ -33,7 +34,7 @@ function Leat11Draft() {
 
   // Limpieza al desmontar para no dejar conexiones fantasma
   useEffect(() => {
-    return () => { if (liveSocket) liveSocket.close(); };
+    return () => { if (liveSocket) liveSocket.disconnect(); };
   }, [liveSocket]);
 
   const syncCaptainMode = async () => {
@@ -45,92 +46,77 @@ function Leat11Draft() {
       const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
       const cleanId = match ? match[1] : cmId.trim();
 
-      // Si ya había una conexión previa, la cerramos
-      if (liveSocket) liveSocket.close();
+      if (liveSocket) liveSocket.disconnect();
 
-      // Nos enchufamos directamente a la arteria de datos de Captain Mode
-      const ws = new WebSocket(`wss://aoe2cm.net/socket.io/?EIO=3&transport=websocket&draftId=${cleanId}`);
+      // Conectamos usando la librería oficial, que esquiva el "Invalid frame header"
+      const socket = io('https://aoe2cm.net', {
+          query: { draftId: cleanId },
+          transports: ['polling', 'websocket'] 
+      });
       
-      ws.onopen = () => {
-          console.log("🔴 Conectado a Captain Mode Live!");
-          // Le enviamos este saludo para que nos pase el historial del draft
-          ws.send('420["set_role",{"name":"LEAT11_Live","role":"SPECTATOR"}]');
+      socket.on('connect', () => {
+          console.log("🔴 Conectado a Captain Mode Live con Socket.IO!");
           setSyncing(false);
-      };
 
-      ws.onmessage = (event) => {
-          const msg = event.data;
-          
-          // Mantener el pulso de la conexión activo (ping/pong)
-          if (msg === '2') { ws.send('3'); return; }
-          if (msg === '3') { ws.send('2'); return; }
-
-          // Interceptar los paquetes de datos (42 = evento, 430 = historial)
-          if (msg.startsWith('42') || msg.startsWith('430')) {
-              try {
-                  // Limpiar los números del protocolo de Socket.IO para leer el JSON puro
-                  const jsonStr = msg.replace(/^\d+/, '');
-                  const data = JSON.parse(jsonStr);
-                  
+          // Al pedir el rol de espectador, el servidor nos devuelve el historial del draft
+          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
+              const data = Array.isArray(response) ? response[0] : response;
+              
+              if (data && data.events) {
                   const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
-
-                  // CASO 1: Recibimos el historial completo al conectar
-                  if (msg.startsWith('430') && data[0] && data[0].events) {
-                      const events = data[0].events;
-                      let newBans = [], newP1 = [], newP2 = [];
-                      
-                      events.forEach(ev => {
-                          const type = (ev.actionType || ev.type || "").toLowerCase();
-                          const player = (ev.player || ev.executingPlayer || "").toUpperCase();
-                          const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
-                          
-                          if (!civ || type === "none" || type === "reveal") return;
-                          
-                          if (type === "ban") newBans.push(formatCiv(civ));
-                          else if (type === "pick") {
-                              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(formatCiv(civ));
-                              else newP2.push(formatCiv(civ));
-                          }
-                      });
-                      setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5) }));
-                  }
-
-                  // CASO 2: Recibimos un clic EN VIVO de un capitán
-                  const eventName = data[0];
-                  const payload = data[1];
-
-                  if (eventName === 'playerEvent') {
-                      const type = (payload.actionType || payload.type || "").toLowerCase();
-                      const player = (payload.player || payload.executingPlayer || "").toUpperCase();
-                      const civ = payload.chosenOptionId || payload.drafted || payload.civ || "";
+                  let newBans = [], newP1 = [], newP2 = [];
+                  
+                  data.events.forEach(ev => {
+                      const type = (ev.actionType || ev.type || "").toLowerCase();
+                      const player = (ev.player || ev.executingPlayer || "").toUpperCase();
+                      const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
                       
                       if (!civ || type === "none" || type === "reveal") return;
-                      const civFormatted = formatCiv(civ);
-
-                      setDraft(prev => {
-                          // Copiamos el estado actual
-                          const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
-                          
-                          if (type === "ban") {
-                              if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
-                          } else if (type === "pick") {
-                              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-                                  if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
-                              } else {
-                                  if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
-                              }
-                          }
-                          return newD;
-                      });
-                  }
-              } catch (e) {
-                  console.error("Error descifrando el WebSocket:", e);
+                      
+                      if (type === "ban") newBans.push(formatCiv(civ));
+                      else if (type === "pick") {
+                          if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(formatCiv(civ));
+                          else newP2.push(formatCiv(civ));
+                      }
+                  });
+                  setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5) }));
               }
-          }
-      };
+          });
+      });
 
-      ws.onclose = () => console.log("⭕ Desconectado de Captain Mode");
-      setLiveSocket(ws);
+      // Escuchamos los clics en directo de los capitanes
+      socket.on('playerEvent', (payload) => {
+          const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+          const type = (payload.actionType || payload.type || "").toLowerCase();
+          const player = (payload.player || payload.executingPlayer || "").toUpperCase();
+          const civ = payload.chosenOptionId || payload.drafted || payload.civ || "";
+          
+          if (!civ || type === "none" || type === "reveal") return;
+          const civFormatted = formatCiv(civ);
+
+          setDraft(prev => {
+              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
+              
+              if (type === "ban") {
+                  if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
+              } else if (type === "pick") {
+                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                      if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
+                  } else {
+                      if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
+                  }
+              }
+              return newD;
+          });
+      });
+
+      socket.on('connect_error', (err) => {
+          console.error("Error de conexión:", err);
+          setSyncError("Fallo de conexión");
+          setSyncing(false);
+      });
+
+      setLiveSocket(socket);
 
     } catch (e) {
       setSyncError("Fallo al iniciar directo");
