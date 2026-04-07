@@ -29,7 +29,7 @@ function Leat11Draft() {
     setSyncing(true);
     setSyncError("");
     try {
-      const match = cmId.match(/draft\/([a-zA-Z0-9]+)/);
+      const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
       const cleanId = match ? match[1] : cmId.trim();
 
       const res = await fetch(`/api/draft?id=${cleanId}`);
