@@ -20,60 +20,123 @@ function Leat11Draft() {
   const [civB, setCivB] = useState('');
   const [civAnalysis, setCivAnalysis] = useState(null);
 
+  // Estados de autenticación
+  const [auth, setAuth] = useState(false);
+  const [pass, setPass] = useState("");
+
+  // Estados de Captain Mode (UNA SOLA VEZ)
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState("");
+  const [liveSocket, setLiveSocket] = useState(null);
+
+  // Limpieza al desmontar para no dejar conexiones fantasma
+  useEffect(() => {
+    return () => { if (liveSocket) liveSocket.close(); };
+  }, [liveSocket]);
+
   const syncCaptainMode = async () => {
     if (!cmId) return;
     setSyncing(true);
     setSyncError("");
+    
     try {
       const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
       const cleanId = match ? match[1] : cmId.trim();
 
-      const res = await fetch(`/api/draft?id=${cleanId}`);
-      if (!res.ok) throw new Error("Draft no encontrado");
-      const data = await res.json();
+      // Si ya había una conexión previa, la cerramos
+      if (liveSocket) liveSocket.close();
+
+      // Nos enchufamos directamente a la arteria de datos de Captain Mode
+      const ws = new WebSocket(`wss://aoe2cm.net/socket.io/?EIO=3&transport=websocket&draftId=${cleanId}`);
       
-      const events = data.events || data.actions || [];
-      let newBans = [];
-      let newP1 = [];
-      let newP2 = [];
-      
-      const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
-      
-      events.forEach(ev => {
-        const type = (ev.actionType || ev.type || "").toLowerCase();
-        const player = (ev.player || ev.executingPlayer || "").toUpperCase();
-        const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
-        
-        if (!civ || type === "none" || type === "reveal") return;
-  
-        if (type === "ban") {
-          newBans.push(formatCiv(civ));
-        } else if (type === "pick") {
-          if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-            newP1.push(formatCiv(civ));
-          } else {
-            newP2.push(formatCiv(civ));
+      ws.onopen = () => {
+          console.log("🔴 Conectado a Captain Mode Live!");
+          // Le enviamos este saludo para que nos pase el historial del draft
+          ws.send('420["set_role",{"name":"LEAT11_Live","role":"SPECTATOR"}]');
+          setSyncing(false);
+      };
+
+      ws.onmessage = (event) => {
+          const msg = event.data;
+          
+          // Mantener el pulso de la conexión activo (ping/pong)
+          if (msg === '2') { ws.send('3'); return; }
+          if (msg === '3') { ws.send('2'); return; }
+
+          // Interceptar los paquetes de datos (42 = evento, 430 = historial)
+          if (msg.startsWith('42') || msg.startsWith('430')) {
+              try {
+                  // Limpiar los números del protocolo de Socket.IO para leer el JSON puro
+                  const jsonStr = msg.replace(/^\d+/, '');
+                  const data = JSON.parse(jsonStr);
+                  
+                  const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+
+                  // CASO 1: Recibimos el historial completo al conectar
+                  if (msg.startsWith('430') && data[0] && data[0].events) {
+                      const events = data[0].events;
+                      let newBans = [], newP1 = [], newP2 = [];
+                      
+                      events.forEach(ev => {
+                          const type = (ev.actionType || ev.type || "").toLowerCase();
+                          const player = (ev.player || ev.executingPlayer || "").toUpperCase();
+                          const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
+                          
+                          if (!civ || type === "none" || type === "reveal") return;
+                          
+                          if (type === "ban") newBans.push(formatCiv(civ));
+                          else if (type === "pick") {
+                              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(formatCiv(civ));
+                              else newP2.push(formatCiv(civ));
+                          }
+                      });
+                      setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5) }));
+                  }
+
+                  // CASO 2: Recibimos un clic EN VIVO de un capitán
+                  const eventName = data[0];
+                  const payload = data[1];
+
+                  if (eventName === 'playerEvent') {
+                      const type = (payload.actionType || payload.type || "").toLowerCase();
+                      const player = (payload.player || payload.executingPlayer || "").toUpperCase();
+                      const civ = payload.chosenOptionId || payload.drafted || payload.civ || "";
+                      
+                      if (!civ || type === "none" || type === "reveal") return;
+                      const civFormatted = formatCiv(civ);
+
+                      setDraft(prev => {
+                          // Copiamos el estado actual
+                          const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
+                          
+                          if (type === "ban") {
+                              if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
+                          } else if (type === "pick") {
+                              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                                  if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
+                              } else {
+                                  if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
+                              }
+                          }
+                          return newD;
+                      });
+                  }
+              } catch (e) {
+                  console.error("Error descifrando el WebSocket:", e);
+              }
           }
-        }
-      });
-      
-      setDraft(prev => ({
-        ...prev,
-        bans: newBans.slice(0, 7),
-        p1_picks: newP1.slice(0, 5),
-        p2_picks: newP2.slice(0, 5)
-      }));
+      };
+
+      ws.onclose = () => console.log("⭕ Desconectado de Captain Mode");
+      setLiveSocket(ws);
+
     } catch (e) {
-      setSyncError("Error de sincronización");
+      setSyncError("Fallo al iniciar directo");
+      setSyncing(false);
     }
-    setSyncing(false);
   };
-  const [auth, setAuth] = useState(false);
-  const [pass, setPass] = useState("");
 
   const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
   
