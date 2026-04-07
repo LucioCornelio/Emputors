@@ -20,6 +20,52 @@ function Leat11Draft() {
   const [civB, setCivB] = useState('');
   const [civAnalysis, setCivAnalysis] = useState(null);
 
+  const [cmId, setCmId] = useState("");
+  const [isHost, setIsHost] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [syncError, setSyncError] = useState("");
+  const syncCaptainMode = async () => {
+    if (!cmId) return;
+    setSyncing(true);
+    setSyncError("");
+    try {
+      const match = cmId.match(/draft\/([a-zA-Z0-9]+)/);
+      const cleanId = match ? match[1] : cmId.trim();
+
+      const res = await fetch(`/api/draft?id=${cleanId}`);
+      if (!res.ok) throw new Error("Draft no encontrado");
+      const data = await res.json();
+      
+      const actions = data.actions || [];
+      let newBans = [];
+      let newP1 = [];
+      let newP2 = [];
+      
+      const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+      
+      actions.forEach(action => {
+        if (action.type === "ban" && action.drafted) {
+          newBans.push(formatCiv(action.drafted));
+        } else if (action.type === "pick" && action.drafted) {
+          if ((action.executingPlayer === "HOST" && isHost) || (action.executingPlayer === "GUEST" && !isHost)) {
+            newP1.push(formatCiv(action.drafted));
+          } else {
+            newP2.push(formatCiv(action.drafted));
+          }
+        }
+      });
+      
+      setDraft(prev => ({
+        ...prev,
+        bans: newBans.slice(0, 7),
+        p1_picks: newP1.slice(0, 5),
+        p2_picks: newP2.slice(0, 5)
+      }));
+    } catch (e) {
+      setSyncError("Error de sincronización");
+    }
+    setSyncing(false);
+  };
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
 
@@ -659,6 +705,7 @@ function Leat11Draft() {
   const confTraps = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '30%' }, { label: 'Picks', key: 'Picks', width: '15%' }, { label: 'WR', key: 'Win Rate', format: 'percent', width: '15%' }, { label: 'Map', key: 'Map', align: 'left', width: '40%' }];
   const confVersatile = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Viable Maps', key: 'Viable_Maps', type: 'mapsTooltip', width: '30%' }, { label: 'Avg CDPS', key: 'Avg_CDPS', format: 'decimal', width: '35%' }];
   
+  
   if (!auth) {
     return (
       <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1c23' }}>
@@ -731,7 +778,31 @@ function Leat11Draft() {
         {activeTab === 'draftAssistant' && (
           <div style={{ maxWidth: '1500px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-            {/* 1. BARRA DE CONTROLES */}
+            {/* BARRA DE SINCRONIZACIÓN CAPTAIN MODE */}
+            <div style={{ backgroundColor: '#1a1c23', padding: '10px 15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '10px' }}>
+              <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold' }}>CAPTAIN MODE:</span>
+              <input 
+                type="text" 
+                placeholder="Pegar ID o URL..." 
+                value={cmId} 
+                onChange={(e) => setCmId(e.target.value)}
+                style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', width: '200px', outline: 'none' }}
+              />
+              <button 
+                onClick={() => setIsHost(!isHost)}
+                style={{ backgroundColor: isHost ? '#66b2ff' : '#ff6666', color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                {isHost ? 'SOY HOST' : 'SOY GUEST'}
+              </button>
+              <button 
+                onClick={syncCaptainMode}
+                disabled={syncing}
+                style={{ backgroundColor: '#4caf50', color: '#161920', border: 'none', padding: '4px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                {syncing ? 'Sincronizando...' : '↻ SYNC'}
+              </button>
+              {syncError && <span style={{ color: '#ff4444', fontSize: '12px' }}>{syncError}</span>}
+            </div>
+
+            {/* 1. BARRA DE CONTROLES */}            
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1c23', padding: '6px 15px', borderRadius: '6px', border: '1px solid #333' }}>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px' }}>MAPS:</span>
