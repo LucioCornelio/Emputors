@@ -67,8 +67,7 @@ const Navbar = () => {
     <nav style={navStyle}>
       {/* Logo y Nombre */}
       <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-        <img src="/logo.jpg" alt="Logo" style={{ height: '45px', borderRadius: '4px' }} 
-             onError={(e) => e.target.src = 'https://via.placeholder.com/45?text=Logo'} />
+        <img src="/logo.jpg" alt="Logo" style={{ height: '45px', borderRadius: '4px' }} />
         <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>Age of Emputors</span>
       </Link>
 
