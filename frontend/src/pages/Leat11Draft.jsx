@@ -36,21 +36,27 @@ function Leat11Draft() {
       if (!res.ok) throw new Error("Draft no encontrado");
       const data = await res.json();
       
-      const actions = data.actions || [];
+      const events = data.events || data.actions || [];
       let newBans = [];
       let newP1 = [];
       let newP2 = [];
       
       const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
       
-      actions.forEach(action => {
-        if (action.type === "ban" && action.drafted) {
-          newBans.push(formatCiv(action.drafted));
-        } else if (action.type === "pick" && action.drafted) {
-          if ((action.executingPlayer === "HOST" && isHost) || (action.executingPlayer === "GUEST" && !isHost)) {
-            newP1.push(formatCiv(action.drafted));
+      events.forEach(ev => {
+        const type = (ev.actionType || ev.type || "").toLowerCase();
+        const player = (ev.player || ev.executingPlayer || "").toUpperCase();
+        const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
+        
+        if (!civ || type === "none" || type === "reveal") return;
+  
+        if (type === "ban") {
+          newBans.push(formatCiv(civ));
+        } else if (type === "pick") {
+          if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+            newP1.push(formatCiv(civ));
           } else {
-            newP2.push(formatCiv(action.drafted));
+            newP2.push(formatCiv(civ));
           }
         }
       });
