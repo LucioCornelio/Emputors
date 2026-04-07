@@ -48,10 +48,10 @@ function Leat11Draft() {
 
       if (liveSocket) liveSocket.disconnect();
 
-      // Conectamos usando la librería oficial, que esquiva el "Invalid frame header"
+      // Conectamos forzando SOLO websocket para saltar el CORS del polling HTTP
       const socket = io('https://aoe2cm.net', {
           query: { draftId: cleanId },
-          transports: ['polling', 'websocket'] 
+          transports: ['websocket'] 
       });
       
       socket.on('connect', () => {
