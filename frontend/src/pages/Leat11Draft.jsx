@@ -885,15 +885,16 @@ function Leat11Draft() {
                 onChange={(e) => setCmId(e.target.value)}
                 style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', width: '200px', outline: 'none' }}
               />
-              <button 
-                onClick={() => { setIsHost(!isHost); setRoleAssigned(true); }}
-                style={{ 
-                    backgroundColor: isHost ? '#66b2ff' : '#ff6666', 
-                    color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold',
-                    animation: !roleAssigned ? 'pulseAlert 1.5s infinite' : 'none'
-                }}>
-                ROLE: {isHost ? 'HOST' : 'GUEST'}
-              </button>
+              
+              {!roleAssigned ? (
+                <div style={{ display: 'flex', gap: '5px' }}>
+                  <button onClick={() => { setIsHost(true); setRoleAssigned(true); }} style={{ backgroundColor: '#66b2ff', color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', animation: 'pulseAlert 1.5s infinite' }}>SOY HOST</button>
+                  <button onClick={() => { setIsHost(false); setRoleAssigned(true); }} style={{ backgroundColor: '#ff6666', color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', animation: 'pulseAlert 1.5s infinite' }}>SOY GUEST</button>
+                </div>
+              ) : (
+                <button onClick={() => setRoleAssigned(false)} style={{ backgroundColor: isHost ? '#66b2ff' : '#ff6666', color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>ROLE: {isHost ? 'HOST' : 'GUEST'} ✎</button>
+              )}
+
               <button 
                 onClick={syncCaptainMode}
                 disabled={syncing || !roleAssigned}
@@ -980,7 +981,7 @@ function Leat11Draft() {
                 <h3 style={{ color: '#ff6666', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #ff6666', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual || (e && (e.ctrlKey || e.metaKey)) ? 'pointer' : 'default' }}>
+                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #ff6666', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
                       {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
@@ -992,26 +993,32 @@ function Leat11Draft() {
             </div>
 
             {/* 3. ROSTER ULTRA COMPACTA */}
-            <div style={{ userSelect: 'none' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2px', borderBottom: '1px solid #333', paddingBottom: '2px' }}>
-                <h4 style={{ color: '#ffd700', fontSize: '11px', textTransform: 'uppercase', margin: 0 }}>CIVILIZATION ROSTER</h4>
-                <span style={{fontSize:'9px', color:'#888', fontStyle: 'italic'}}>Click (P1) | Alt+Click (P2) | Ctrl+Click (Ban)</span>
+            {isManual ? (
+              <div style={{ userSelect: 'none' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2px', borderBottom: '1px solid #333', paddingBottom: '2px' }}>
+                  <h4 style={{ color: '#ffd700', fontSize: '11px', textTransform: 'uppercase', margin: 0 }}>CIVILIZATION ROSTER</h4>
+                  <span style={{fontSize:'9px', color:'#888', fontStyle: 'italic'}}>Click (P1) | Alt+Click (P2) | Ctrl+Click (Ban)</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(18, 1fr)', gap: '3px' }}>
+                  {civs.map(c => { 
+                    const isP1 = draft.p1_picks.includes(c); const isP2 = draft.p2_picks.includes(c); const isB = draft.bans.includes(c); 
+                    return (
+                      <div key={c} onClick={e => toggleCiv(c, (e.ctrlKey || e.metaKey) ? 'ban' : e.altKey ? 'p2' : 'p1', e)} 
+                          style={{ position: 'relative', cursor: 'pointer', transition: 'transform 0.1s', transform: (isP1 || isP2 || isB) ? 'scale(0.90)' : 'scale(1)', border: `1.5px solid ${isP1 ? '#66b2ff' : isP2 ? '#ff6666' : isB ? '#555' : 'transparent'}`, borderRadius: '3px', overflow: 'hidden', aspectRatio: '1/1', backgroundColor: '#1e212b' }}>
+                        <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+                        <div style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: '#888' }}>{c.substring(0,3).toUpperCase()}</div>
+                        <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.75)', color: '#fff', fontSize: '9px', textAlign: 'center', padding: '0.5px 0', lineHeight: '1', fontWeight: 'bold' }}>{c}</div>
+                        {isB && (<div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.4)'}}><span style={{color: '#ff4444', fontSize: '24px', fontWeight: 'bold', textShadow: '1px 1px 2px black'}}>✗</span></div>)}
+                      </div>
+                    ) 
+                  })}
+                </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(18, 1fr)', gap: '3px' }}>
-                {civs.map(c => { 
-                  const isP1 = draft.p1_picks.includes(c); const isP2 = draft.p2_picks.includes(c); const isB = draft.bans.includes(c); 
-                  return (
-                    <div key={c} onClick={e => toggleCiv(c, (e.ctrlKey || e.metaKey) ? 'ban' : e.altKey ? 'p2' : 'p1', e)} 
-                         style={{ position: 'relative', cursor: 'pointer', transition: 'transform 0.1s', transform: (isP1 || isP2 || isB) ? 'scale(0.90)' : 'scale(1)', border: `1.5px solid ${isP1 ? '#66b2ff' : isP2 ? '#ff6666' : isB ? '#555' : 'transparent'}`, borderRadius: '3px', overflow: 'hidden', aspectRatio: '1/1', backgroundColor: '#1e212b' }}>
-                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
-                      <div style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: '#888' }}>{c.substring(0,3).toUpperCase()}</div>
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.75)', color: '#fff', fontSize: '9px', textAlign: 'center', padding: '0.5px 0', lineHeight: '1', fontWeight: 'bold' }}>{c}</div>
-                      {isB && (<div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.4)'}}><span style={{color: '#ff4444', fontSize: '24px', fontWeight: 'bold', textShadow: '1px 1px 2px black'}}>✗</span></div>)}
-                    </div>
-                  ) 
-                })}
+            ) : (
+              <div style={{ padding: '10px', textAlign: 'center', backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px dashed #444', color: '#888', fontSize: '11px', marginTop: '5px' }}>
+                🤖 AUTO MODE ACTIVE - Roster hidden to prevent accidental clicks. Activate MANUAL MODE to edit the draft freely.
               </div>
-            </div>
+            )}
 
             {/* 4. MATCHUP PLANNER */}
             <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333' }}>
