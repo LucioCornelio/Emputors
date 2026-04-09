@@ -644,7 +644,8 @@ function Leat11Draft() {
       const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
       const isDraftFinished = isSnipePhase && draft.p1_snipe !== "" && draft.p2_snipe !== "";
 
-      if (e && (e.ctrlKey || e.metaKey) && isSnipePhaseActive) {
+      // ARREGLADO: Cambio de isSnipePhaseActive a isSnipePhase
+      if (e && (e.ctrlKey || e.metaKey) && isSnipePhase) {
          if (isP1) {
              newD.p2_snipe = newD.p2_snipe === civ ? "" : civ;
              return newD;
@@ -1103,6 +1104,7 @@ function Leat11Draft() {
                 </div>
               </div>
             )}
+
 
             {/* 5. TABLAS TOP 7 */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
