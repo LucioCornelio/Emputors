@@ -28,6 +28,8 @@ function Leat11Draft() {
   // Estados de Captain Mode (UNA SOLA VEZ)
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
+  const [roleAssigned, setRoleAssigned] = useState(false);
+  const [isManual, setIsManual] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState("");
   const [liveSocket, setLiveSocket] = useState(null);
@@ -37,8 +39,41 @@ function Leat11Draft() {
     return () => { if (liveSocket) liveSocket.disconnect(); };
   }, [liveSocket]);
 
+  const processEventsFull = (events) => {
+      const formatCiv = (c) => {
+          if (!c) return "";
+          if (c.toLowerCase() === "hidd") return "Hidden";
+          return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+      };
+      let newBans = [], newP1 = [], newP2 = [];
+      
+      events.forEach(ev => {
+          const type = (ev.actionType || ev.type || "").toLowerCase();
+          const player = (ev.player || ev.executingPlayer || "").toUpperCase();
+          const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
+          
+          if (!civ || type === "none") return;
+          
+          if (type === "ban") newBans.push(formatCiv(civ));
+          else if (type === "pick") {
+              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(formatCiv(civ));
+              else newP2.push(formatCiv(civ));
+          } else if (type === "reveal") {
+              const actualCiv = formatCiv(civ);
+              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                  const idx = newP1.indexOf("Hidden");
+                  if (idx !== -1) newP1[idx] = actualCiv;
+              } else {
+                  const idx = newP2.indexOf("Hidden");
+                  if (idx !== -1) newP2[idx] = actualCiv;
+              }
+          }
+      });
+      setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5) }));
+  };
+
   const syncCaptainMode = async () => {
-    if (!cmId) return;
+    if (!cmId || !roleAssigned) return;
     setSyncing(true);
     setSyncError("");
     
@@ -48,50 +83,43 @@ function Leat11Draft() {
 
       if (liveSocket) liveSocket.disconnect();
 
-      // Conectamos forzando SOLO websocket para saltar el CORS del polling HTTP
+      // 1. Intentar cargar draft terminado por API
+      const apiRes = await fetch(`/api/draft?id=${cleanId}`);
+      if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          const events = apiData.events || apiData.actions || [];
+          if (events.length > 0) {
+              processEventsFull(events);
+              setSyncing(false);
+              return;
+          }
+      }
+
+      // 2. Si falla o está en vivo, conectar WebSocket
       const socket = io('https://aoe2cm.net', {
           query: { draftId: cleanId },
           transports: ['websocket'] 
       });
       
       socket.on('connect', () => {
-          console.log("🔴 Conectado a Captain Mode Live con Socket.IO!");
           setSyncing(false);
-
-          // Al pedir el rol de espectador, el servidor nos devuelve el historial del draft
           socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
               const data = Array.isArray(response) ? response[0] : response;
-              
-              if (data && data.events) {
-                  const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
-                  let newBans = [], newP1 = [], newP2 = [];
-                  
-                  data.events.forEach(ev => {
-                      const type = (ev.actionType || ev.type || "").toLowerCase();
-                      const player = (ev.player || ev.executingPlayer || "").toUpperCase();
-                      const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
-                      
-                      if (!civ || type === "none" || type === "reveal") return;
-                      
-                      if (type === "ban") newBans.push(formatCiv(civ));
-                      else if (type === "pick") {
-                          if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(formatCiv(civ));
-                          else newP2.push(formatCiv(civ));
-                      }
-                  });
-                  setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5) }));
-              }
+              if (data && data.events) processEventsFull(data.events);
           });
       });
 
-      // Escuchamos los clics en directo de los capitanes
       socket.on('playerEvent', (payload) => {
-          const formatCiv = (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
           const type = (payload.actionType || payload.type || "").toLowerCase();
           const player = (payload.player || payload.executingPlayer || "").toUpperCase();
           const civ = payload.chosenOptionId || payload.drafted || payload.civ || "";
           
-          if (!civ || type === "none" || type === "reveal") return;
+          if (!civ || type === "none") return;
+          
+          const formatCiv = (c) => {
+              if (c.toLowerCase() === "hidd") return "Hidden";
+              return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+          };
           const civFormatted = formatCiv(civ);
 
           setDraft(prev => {
@@ -105,13 +133,20 @@ function Leat11Draft() {
                   } else {
                       if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
                   }
+              } else if (type === "reveal") {
+                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                      const idx = newD.p1_picks.indexOf("Hidden");
+                      if (idx !== -1) newD.p1_picks[idx] = civFormatted;
+                  } else {
+                      const idx = newD.p2_picks.indexOf("Hidden");
+                      if (idx !== -1) newD.p2_picks[idx] = civFormatted;
+                  }
               }
               return newD;
           });
       });
 
       socket.on('connect_error', (err) => {
-          console.error("Error de conexión:", err);
           setSyncError("Fallo de conexión");
           setSyncing(false);
       });
@@ -119,7 +154,7 @@ function Leat11Draft() {
       setLiveSocket(socket);
 
     } catch (e) {
-      setSyncError("Fallo al iniciar directo");
+      setSyncError("Error general");
       setSyncing(false);
     }
   };
@@ -833,8 +868,15 @@ function Leat11Draft() {
         {activeTab === 'draftAssistant' && (
           <div style={{ maxWidth: '1500px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
+            <style>{`
+              @keyframes pulseAlert {
+                0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+                70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+              }
+            `}</style>
             {/* BARRA DE SINCRONIZACIÓN CAPTAIN MODE */}
-            <div style={{ backgroundColor: '#1a1c23', padding: '10px 15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '10px' }}>
+            <div style={{ backgroundColor: '#1a1c23', padding: '10px 15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', gap: '15px', alignItems: 'center' }}>
               <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold' }}>CAPTAIN MODE:</span>
               <input 
                 type="text" 
@@ -844,17 +886,48 @@ function Leat11Draft() {
                 style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', width: '200px', outline: 'none' }}
               />
               <button 
-                onClick={() => setIsHost(!isHost)}
-                style={{ backgroundColor: isHost ? '#66b2ff' : '#ff6666', color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
-                {isHost ? 'SOY HOST' : 'SOY GUEST'}
+                onClick={() => { setIsHost(!isHost); setRoleAssigned(true); }}
+                style={{ 
+                    backgroundColor: isHost ? '#66b2ff' : '#ff6666', 
+                    color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold',
+                    animation: !roleAssigned ? 'pulseAlert 1.5s infinite' : 'none'
+                }}>
+                ROLE: {isHost ? 'HOST' : 'GUEST'}
               </button>
               <button 
                 onClick={syncCaptainMode}
-                disabled={syncing}
-                style={{ backgroundColor: '#4caf50', color: '#161920', border: 'none', padding: '4px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
-                {syncing ? 'Sincronizando...' : '↻ SYNC'}
+                disabled={syncing || !roleAssigned}
+                style={{ backgroundColor: (!roleAssigned || syncing) ? '#555' : '#4caf50', color: '#161920', border: 'none', padding: '4px 15px', borderRadius: '4px', cursor: (!roleAssigned || syncing) ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                {syncing ? 'SYNCING...' : '↻ SYNC'}
               </button>
               {syncError && <span style={{ color: '#ff4444', fontSize: '12px' }}>{syncError}</span>}
+              {!roleAssigned && <span style={{ color: '#ffd700', fontSize: '11px', fontStyle: 'italic' }}>← Select your role first!</span>}
+              
+              <div style={{ flex: 1 }}></div>
+              
+              <button 
+                onClick={() => setIsManual(!isManual)}
+                style={{ backgroundColor: isManual ? '#cd7f32' : '#333', color: isManual ? '#161920' : '#888', border: '1px solid #555', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                {isManual ? '⚙️ MANUAL MODE' : '🤖 AUTO MODE'}
+              </button>
+            </div>
+
+            {/* 1. BARRA DE CONTROLES */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1c23', padding: '6px 15px', borderRadius: '6px', border: '1px solid #333' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px' }}>MAPS:</span>
+                {draft.maps.map((m, i) => (
+                  <select key={i} value={m} onChange={e => { const nM = [...draft.maps]; nM[i] = e.target.value; setDraft({...draft, maps: nM}) }} style={{ backgroundColor: '#161920', color: m ? '#e0e0e0' : '#888', border: '1px solid #444', padding: '4px 8px', outline: 'none', borderRadius: '4px', fontSize: '12px' }}>
+                    <option value="">- Select Map -</option>
+                    {mapPool.map(mp => (
+                      <option key={mp} value={mp} disabled={draft.maps.includes(mp) && draft.maps[i] !== mp}>{mp}</option>
+                    ))}
+                  </select>
+                ))}
+              </div>
+              <button onClick={resetDraft} style={{ backgroundColor: '#cc3333', color: 'white', border: 'none', padding: '4px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px', transition: 'background 0.2s' }} onMouseOver={e => e.target.style.backgroundColor='#ff4444'} onMouseOut={e => e.target.style.backgroundColor='#cc3333'}>
+                ↻ RESET DRAFT
+              </button>
             </div>
 
             {/* 1. BARRA DE CONTROLES */}            
@@ -877,12 +950,13 @@ function Leat11Draft() {
 
             {/* 2. HEADER DEL DRAFT COMPRIMIDO */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr', gap: '10px' }}>
-              <div style={{ backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: '3px solid #66b2ff', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: '#66b2ff', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS (P1)</h3>
+              
+              <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: '3px solid #66b2ff', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <h3 style={{ color: '#66b2ff', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p1_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => toggleCiv(c, 'p1', e)} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #66b2ff', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: 'pointer' }}>
-                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p2_snipe === c ? 0.3 : 1 }} onError={(e) => { e.target.style.display='none'; }} />
+                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #66b2ff', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual || (e && (e.ctrlKey || e.metaKey)) ? 'pointer' : 'default' }}>
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p2_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p2_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
                     </div>
@@ -890,30 +964,31 @@ function Leat11Draft() {
                 </div>
               </div>
 
-              <div style={{ backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
                 <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.bans.map((c, i) => (
-                    <div key={i} onClick={(e) => toggleCiv(c, 'ban', e)} style={{ position: 'relative', width: '36px', height: '36px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: 'pointer' }}>
-                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => { e.target.style.display='none'; }} />
+                    <div key={i} onClick={(e) => { if(isManual) toggleCiv(c, 'ban', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
                       <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: '#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div style={{ backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: '3px solid #ff6666', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: '#ff6666', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS (P2)</h3>
+              <div style={{ order: isHost ? 3 : 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: '3px solid #ff6666', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <h3 style={{ color: '#ff6666', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => toggleCiv(c, 'p2', e)} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #ff6666', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: 'pointer' }}>
-                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} onError={(e) => { e.target.style.display='none'; }} />
+                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #ff6666', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual || (e && (e.ctrlKey || e.metaKey)) ? 'pointer' : 'default' }}>
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
                     </div>
                   ))}
                 </div>
               </div>
+              
             </div>
 
             {/* 3. ROSTER ULTRA COMPACTA */}
@@ -956,7 +1031,7 @@ function Leat11Draft() {
                           {mapName || `Map ${i+1}`}
                         </div>
                         
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
+                        <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
                           <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: '#66b2ff', border: '1px solid #3a4b63', borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- My Pick -</option>
                             {draft.p1_picks.map(c => (
@@ -982,7 +1057,7 @@ function Leat11Draft() {
                   })}
                 </div>
 
-                <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', gap: '10px', color: '#66b2ff', fontSize: '11px', fontWeight: 'bold' }}>
                     {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p2_snipe === c ? 'line-through' : 'none', opacity: draft.p2_snipe === c ? 0.5 : 1 }}>{c}</span>)}
                   </div>
