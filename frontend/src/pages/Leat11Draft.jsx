@@ -45,7 +45,7 @@ function Leat11Draft() {
           if (c.toLowerCase() === "hidd") return "Hidden";
           return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
       };
-      let newBans = [], newP1 = [], newP2 = [];
+      let newBans = [], newP1 = [], newP2 = [], newP1Snipe = "", newP2Snipe = "";
       
       events.forEach(ev => {
           const type = (ev.actionType || ev.type || "").toLowerCase();
@@ -67,9 +67,12 @@ function Leat11Draft() {
                   const idx = newP2.indexOf("Hidden");
                   if (idx !== -1) newP2[idx] = actualCiv;
               }
+          } else if (type === "snipe") {
+              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1Snipe = formatCiv(civ);
+              else newP2Snipe = formatCiv(civ);
           }
       });
-      setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5) }));
+      setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5), p1_snipe: newP1Snipe, p2_snipe: newP2Snipe }));
   };
 
   const syncCaptainMode = async () => {
@@ -140,6 +143,12 @@ function Leat11Draft() {
                   } else {
                       const idx = newD.p2_picks.indexOf("Hidden");
                       if (idx !== -1) newD.p2_picks[idx] = civFormatted;
+                  }
+              } else if (type === "snipe") {
+                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                      newD.p1_snipe = civFormatted;
+                  } else {
+                      newD.p2_snipe = civFormatted;
                   }
               }
               return newD;
@@ -794,7 +803,10 @@ function Leat11Draft() {
   const confPresence = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Picks', key: 'Picks', width: '20%' }, { label: 'Wins', key: 'Wins', width: '20%' }, { label: 'Global WR', key: 'Global WR', format: 'percent', width: '25%' }];
   const confTraps = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '30%' }, { label: 'Picks', key: 'Picks', width: '15%' }, { label: 'WR', key: 'Win Rate', format: 'percent', width: '15%' }, { label: 'Map', key: 'Map', align: 'left', width: '40%' }];
   const confVersatile = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Viable Maps', key: 'Viable_Maps', type: 'mapsTooltip', width: '30%' }, { label: 'Avg CDPS', key: 'Avg_CDPS', format: 'decimal', width: '35%' }];
-  
+  const colorHost = '#00c8c8'; // Cyan Captain Mode
+  const colorGuest = '#ffb400'; // Yellow Captain Mode
+  const myColor = isHost ? colorHost : colorGuest;
+  const oppColor = isHost ? colorGuest : colorHost;
   
   if (!auth) {
     return (
@@ -931,32 +943,14 @@ function Leat11Draft() {
               </button>
             </div>
 
-            {/* 1. BARRA DE CONTROLES */}            
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1c23', padding: '6px 15px', borderRadius: '6px', border: '1px solid #333' }}>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px' }}>MAPS:</span>
-                {draft.maps.map((m, i) => (
-                  <select key={i} value={m} onChange={e => { const nM = [...draft.maps]; nM[i] = e.target.value; setDraft({...draft, maps: nM}) }} style={{ backgroundColor: '#161920', color: m ? '#e0e0e0' : '#888', border: '1px solid #444', padding: '4px 8px', outline: 'none', borderRadius: '4px', fontSize: '12px' }}>
-                    <option value="">- Select Map -</option>
-                    {mapPool.map(mp => (
-                      <option key={mp} value={mp} disabled={draft.maps.includes(mp) && draft.maps[i] !== mp}>{mp}</option>
-                    ))}
-                  </select>
-                ))}
-              </div>
-              <button onClick={resetDraft} style={{ backgroundColor: '#cc3333', color: 'white', border: 'none', padding: '4px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px', transition: 'background 0.2s' }} onMouseOver={e => e.target.style.backgroundColor='#ff4444'} onMouseOut={e => e.target.style.backgroundColor='#cc3333'}>
-                ↻ RESET DRAFT
-              </button>
-            </div>
-
             {/* 2. HEADER DEL DRAFT COMPRIMIDO */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr', gap: '10px' }}>
               
-              <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: '3px solid #66b2ff', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: '#66b2ff', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
+              <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p1_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #66b2ff', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
                       {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p2_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p2_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
@@ -977,14 +971,14 @@ function Leat11Draft() {
                 </div>
               </div>
 
-              <div style={{ order: isHost ? 3 : 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: '3px solid #ff6666', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: '#ff6666', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
+              <div style={{ order: isHost ? 3 : 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1.5px solid #ff6666', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
                       {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
-                      {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                      {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>}
                     </div>
                   ))}
                 </div>
