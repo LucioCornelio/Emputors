@@ -169,6 +169,7 @@ function Leat11Draft() {
   };
 
   const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
+  const isDraftFinished = isSnipePhase && draft.p1_snipe !== "" && draft.p2_snipe !== "";
   
   const checkIsCounter = (countersArray, civPrefix) => {
     return countersArray.some(c => typeof c === 'string' && c !== '-' && c.toLowerCase().startsWith(civPrefix));
