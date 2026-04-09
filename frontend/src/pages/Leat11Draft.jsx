@@ -641,7 +641,8 @@ function Leat11Draft() {
       const isBanned = newD.bans.includes(civ);
       const isP1 = newD.p1_picks.includes(civ);
       const isP2 = newD.p2_picks.includes(civ);
-      const isSnipePhaseActive = newD.p1_picks.length === 5 && newD.p2_picks.length === 5;
+      const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
+      const isDraftFinished = isSnipePhase && draft.p1_snipe !== "" && draft.p2_snipe !== "";
 
       if (e && (e.ctrlKey || e.metaKey) && isSnipePhaseActive) {
          if (isP1) {
@@ -1033,7 +1034,7 @@ function Leat11Draft() {
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
-                          <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: '#66b2ff', border: '1px solid #3a4b63', borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
+                          <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: myColor, border: `1px solid ${myColor}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- My Pick -</option>
                             {draft.p1_picks.map(c => (
                               <option key={c} value={c} disabled={draft.plan_p1.includes(c) && draft.plan_p1[i] !== c}>{c.substring(0,4)}</option>
@@ -1044,7 +1045,7 @@ function Leat11Draft() {
                             {m_stats ? `${(m_stats.wr * 100).toFixed(1)}%` : 'VS'}
                           </div>
                           
-                          <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: '#ff6666', border: '1px solid #633a3a', borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
+                          <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: oppColor, border: `1px solid ${oppColor}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- Opp Pick -</option>
                             {draft.p2_picks.map(c => {
                               const prob = draft.analysis?.opp_probs?.[mapName]?.[c.toLowerCase()];
@@ -1059,13 +1060,13 @@ function Leat11Draft() {
                 </div>
 
                 <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', gap: '10px', color: '#66b2ff', fontSize: '11px', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex', gap: '10px', color: myColor, fontSize: '11px', fontWeight: 'bold' }}>
                     {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p2_snipe === c ? 'line-through' : 'none', opacity: draft.p2_snipe === c ? 0.5 : 1 }}>{c}</span>)}
                   </div>
                   <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>
                     UNASSIGNED / BENCH
                   </div>
-                  <div style={{ display: 'flex', gap: '10px', color: '#ff6666', fontSize: '11px', fontWeight: 'bold' }}>
+                  <div style={{ display: 'flex', gap: '10px', color: oppColor, fontSize: '11px', fontWeight: 'bold' }}>
                     {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p1_snipe === c ? 'line-through' : 'none', opacity: draft.p1_snipe === c ? 0.5 : 1 }}>{c}</span>)}
                   </div>
                 </div>
@@ -1073,33 +1074,35 @@ function Leat11Draft() {
             </div>
 
             {/* SUGERENCIAS DEL DRAFT / SNIPE */}
-            <div style={{ backgroundColor: isSnipePhase ? '#2a1616' : '#1a1c23', padding: '6px 8px', borderRadius: '6px', border: `1px solid ${isSnipePhase ? '#ff4444' : '#ffd700'}`, marginTop: '10px', marginBottom: '10px', transition: 'all 0.3s' }}>
-              <h3 style={{ color: isSnipePhase ? '#ff4444' : '#ffd700', fontSize: '11px', margin: '0 0 4px 0', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: `1px solid ${isSnipePhase ? '#662222' : '#444'}`, paddingBottom: '2px' }}>
-                {isSnipePhase ? '🎯 SNIPE EVALUATION (CTRL+CLICK TO BAN)' : '🔥 SMART SUGGESTIONS (TOP 5)'}
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                {getSuggestions().length === 0 ? (
-                  <div style={{ color: '#888', fontSize: '10px', fontStyle: 'italic', textAlign: 'center', padding: '4px' }}>Not enough data or maps to suggest.</div>
-                ) : (
-                  getSuggestions().map((s, i) => (
-                    <div key={i} onClick={(e) => toggleCiv(s.civ, isSnipePhase ? 'p2' : 'p1', e)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1e212b', padding: '2px 6px', borderRadius: '3px', cursor: 'pointer', borderLeft: `2px solid ${s.reasons[0]?.color || '#555'}`, opacity: isSnipePhase && draft.p1_snipe === s.civ ? 0.4 : 1, transition: 'all 0.2s', height: '20px' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2d36'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1e212b'}>
-                      <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: '15px', textAlign: 'left' }}>
-                        <span style={{ fontWeight: 'bold', color: isSnipePhase ? '#ff6666' : '#fff', fontSize: '11px', width: '85px', textAlign: 'left', textDecoration: isSnipePhase && draft.p1_snipe === s.civ ? 'line-through' : 'none' }}>{s.civ}</span>
-                        {!isSnipePhase && <span style={{ color: '#aaa', fontSize: '10px', width: '135px', textAlign: 'left' }}>🗺️ {s.bestMap}</span>}
-                        {!isSnipePhase && s.altMaps?.length > 0 && (<span style={{ color: '#666', fontSize: '9px', fontStyle: 'italic', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textAlign: 'left' }}>Also: {s.altMaps.join(', ')}</span>)}
+            {!isDraftFinished && (
+              <div style={{ backgroundColor: isSnipePhase ? '#2a1616' : '#1a1c23', padding: '6px 8px', borderRadius: '6px', border: `1px solid ${isSnipePhase ? '#ff4444' : '#ffd700'}`, marginTop: '10px', marginBottom: '10px', transition: 'all 0.3s' }}>
+                <h3 style={{ color: isSnipePhase ? '#ff4444' : '#ffd700', fontSize: '11px', margin: '0 0 4px 0', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: `1px solid ${isSnipePhase ? '#662222' : '#444'}`, paddingBottom: '2px' }}>
+                  {isSnipePhase ? `🎯 SNIPE EVALUATION${isManual ? ' (CTRL+CLICK TO BAN)' : ''}` : '🔥 SMART SUGGESTIONS (TOP 5)'}
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  {getSuggestions().length === 0 ? (
+                    <div style={{ color: '#888', fontSize: '10px', fontStyle: 'italic', textAlign: 'center', padding: '4px' }}>Not enough data or maps to suggest.</div>
+                  ) : (
+                    getSuggestions().map((s, i) => (
+                      <div key={i} onClick={(e) => { if(isManual) toggleCiv(s.civ, isSnipePhase ? 'p2' : 'p1', e) }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1e212b', padding: '2px 6px', borderRadius: '3px', cursor: isManual ? 'pointer' : 'default', borderLeft: `2px solid ${s.reasons[0]?.color || '#555'}`, opacity: isSnipePhase && draft.p1_snipe === s.civ ? 0.4 : 1, transition: 'all 0.2s', height: '20px' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2d36'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1e212b'}>
+                        <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: '15px', textAlign: 'left' }}>
+                          <span style={{ fontWeight: 'bold', color: isSnipePhase ? '#ff6666' : '#fff', fontSize: '11px', width: '85px', textAlign: 'left', textDecoration: isSnipePhase && draft.p1_snipe === s.civ ? 'line-through' : 'none' }}>{s.civ}</span>
+                          {!isSnipePhase && <span style={{ color: '#aaa', fontSize: '10px', width: '135px', textAlign: 'left' }}>🗺️ {s.bestMap}</span>}
+                          {!isSnipePhase && s.altMaps?.length > 0 && (<span style={{ color: '#666', fontSize: '9px', fontStyle: 'italic', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textAlign: 'left' }}>Also: {s.altMaps.join(', ')}</span>)}
+                        </div>
+                        <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                          {s.reasons.map((r, idx) => (
+                            <span key={idx} title={r.title} style={{ backgroundColor: `${r.color}22`, color: r.color, border: `1px solid ${r.color}55`, padding: '0 4px', borderRadius: '2px', fontSize: '8px', fontWeight: 'bold', lineHeight: '14px', cursor: 'help' }}>
+                              {r.text}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                        {s.reasons.map((r, idx) => (
-                          <span key={idx} title={r.title} style={{ backgroundColor: `${r.color}22`, color: r.color, border: `1px solid ${r.color}55`, padding: '0 4px', borderRadius: '2px', fontSize: '8px', fontWeight: 'bold', lineHeight: '14px', cursor: 'help' }}>
-                            {r.text}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))
-                )}
+                    ))
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* 5. TABLAS TOP 7 */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
