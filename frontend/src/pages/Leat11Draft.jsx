@@ -442,13 +442,16 @@ function Leat11Draft() {
           let strongCivs = 0;
           myPicks.forEach(c => {
               if (c === "Hidden" || !c) return;
-              const civPrefix = c.trim().substring(0, 4).toLowerCase();
+              
+              // Limpieza brutal: minúsculas y solo 4 letras
+              const myCivClean = c.trim().substring(0, 4).toLowerCase();
               
               const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
               const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
 
-              const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
-                               topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
+              // Comparamos peras con peras: limpiamos también las del Top 12 antes de comparar
+              const isStrong = topCdps.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === myCivClean) ||
+                               topWr.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === myCivClean);
 
               if (isStrong) strongCivs++;
           });
@@ -458,7 +461,6 @@ function Leat11Draft() {
   };
 
   const mapCoverage = getMapCoverage();
-  // Alarma si en tu pick 4 tienes algún mapa en bragas (0 civis Top 12)
   const needsBackup = draft.p1_picks.length === 4 && Object.values(mapCoverage).some(val => val === 0);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
@@ -553,8 +555,9 @@ function Leat11Draft() {
              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
              
-             const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
-                              topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
+             // Limpieza brutal para que la sugerencia reconozca si es Top 12
+             const isStrong = topCdps.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === civPrefix) ||
+                              topWr.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === civPrefix);
              
              if (isStrong) {
                  score += 25; 
