@@ -434,7 +434,7 @@ function Leat11Draft() {
       const coverage = {};
       if (!draft.analysis) return coverage;
 
-      // Usamos tus picks reales SIEMPRE
+      // Evaluamos SIEMPRE tus picks manuales (p1_picks)
       const myPicks = draft.p1_picks;
 
       draft.maps.forEach(m => {
@@ -444,11 +444,9 @@ function Leat11Draft() {
               if (c === "Hidden" || !c) return;
               const civPrefix = c.trim().substring(0, 4).toLowerCase();
               
-              // Recortamos directamente al Top 15
-              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 15);
-              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 15);
+              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
+              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
 
-              // Comprobación infalible: ¿alguna de esas 15 empieza por mis 4 letras?
               const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
                                topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
 
@@ -460,7 +458,7 @@ function Leat11Draft() {
   };
 
   const mapCoverage = getMapCoverage();
-  // Solo activa la alarma si tienes 4 picks Y algún mapa tiene CERO civis en el Top 15
+  // Alarma si en tu pick 4 tienes algún mapa en bragas (0 civis Top 12)
   const needsBackup = draft.p1_picks.length === 4 && Object.values(mapCoverage).some(val => val === 0);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
@@ -552,10 +550,9 @@ function Leat11Draft() {
 
         // --- NUEVA LÓGICA MAP SAVER ---
         if (draft.p1_picks.length === 4 && mapCoverage[m] === 0) {
-             const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 15);
-             const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 15);
+             const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
+             const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
              
-             // Misma comprobación infalible para las sugerencias
              const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
                               topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
              
