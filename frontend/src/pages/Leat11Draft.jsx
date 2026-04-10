@@ -42,16 +42,16 @@ function Leat11Draft() {
   const processEventsFull = (events) => {
       const formatCiv = (c) => {
           if (!c) return "";
-          const clean = c.trim();
+          // Convertimos a texto seguro y quitamos espacios invisibles para que no rompa la URL de la imagen
+          const clean = String(c).trim();
           if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
           return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
       };
       let newBans = [], newP1 = [], newP2 = [], newP1Snipe = "", newP2Snipe = "";
       
       events.forEach(ev => {
-          const type = (ev.actionType || ev.type || "").toLowerCase();
-          const player = (ev.player || ev.executingPlayer || "").toUpperCase();
-          // Ampliamos la búsqueda de la civilización por si CM usa otro nombre de variable
+          const type = String(ev.actionType || ev.type || "").toLowerCase();
+          const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
           const civ = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || "";
           
           if (!civ || type === "none") return;
@@ -64,7 +64,6 @@ function Leat11Draft() {
               if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(actualCiv);
               else newP2.push(actualCiv);
           } else if (type.includes("reveal")) {
-              // Si es un evento de revelar, buscamos el primer "Hidden" libre y lo pisamos
               let p1Idx = newP1.indexOf("Hidden");
               let p2Idx = newP2.indexOf("Hidden");
 
@@ -75,7 +74,6 @@ function Leat11Draft() {
                   if (!isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
                   else if (isHost && p2Idx !== -1) newP2[p2Idx] = actualCiv;
               } else {
-                  // Fallback extremo por si Captain Mode oculta al jugador
                   if (p1Idx !== -1) newP1[p1Idx] = actualCiv;
                   else if (p2Idx !== -1) newP2[p2Idx] = actualCiv;
               }
@@ -125,19 +123,20 @@ function Leat11Draft() {
       });
 
       socket.on('playerEvent', (payload) => {
-          const type = (payload.actionType || payload.type || "").toLowerCase();
-          const player = (payload.player || payload.executingPlayer || "").toUpperCase();
-          const civ = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
+          // PROCESAMIENTO INSTANTÁNEO
+          const type = String(payload.actionType || payload.type || "").toLowerCase();
+          const player = String(payload.player || payload.executingPlayer || "").toUpperCase();
+          const civRaw = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
           
-          if (!civ || type === "none") return;
+          if (!civRaw || type === "none") return;
           
           const formatCiv = (c) => {
               if (!c) return "";
-              const clean = c.trim();
+              const clean = String(c).trim();
               if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
               return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
           };
-          const civFormatted = formatCiv(civ);
+          const civFormatted = formatCiv(civRaw);
 
           setDraft(prev => {
               const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
