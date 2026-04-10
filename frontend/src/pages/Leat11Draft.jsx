@@ -136,16 +136,44 @@ function Leat11Draft() {
       });
 
       socket.on('playerEvent', (payload) => {
-          setDraft(prev => {
-              let newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
-              // Si CM manda varios eventos a la vez (ej. reveals simultáneos), procesamos todos
-              if (Array.isArray(payload)) {
-                  payload.forEach(ev => { newD = parseEventIntoDraft(ev, newD, isHost); });
-              } else {
-                  newD = parseEventIntoDraft(payload, newD, isHost);
-              }
-              return newD;
-          });
+          // 1. REACCIÓN INSTANTÁNEA (Optimista)
+          const type = String(payload.actionType || payload.type || "").toLowerCase();
+          const player = String(payload.player || payload.executingPlayer || "").toUpperCase();
+          const civRaw = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
+          
+          if (civRaw && type !== "none") {
+              const formatCiv = (c) => {
+                  const clean = String(c).trim();
+                  if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
+                  return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+              };
+              const civFormatted = formatCiv(civRaw);
+
+              setDraft(prev => {
+                  const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks], p1_snipe: prev.p1_snipe, p2_snipe: prev.p2_snipe };
+                  if (type === "ban") {
+                      if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
+                  } else if (type === "pick") {
+                      if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                          if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
+                      } else {
+                          if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
+                      }
+                  } else if (type === "snipe") {
+                      if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newD.p1_snipe = civFormatted;
+                      else newD.p2_snipe = civFormatted;
+                  }
+                  return newD;
+              });
+          }
+
+          // 2. CONFIRMACIÓN DEFINITIVA (800ms después para cazar los Reveals de CM)
+          setTimeout(() => {
+              socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
+                  const data = Array.isArray(response) ? response[0] : response;
+                  if (data && data.events) processEventsFull(data.events);
+              });
+          }, 800);
       });
 
       socket.on('connect_error', (err) => {
@@ -860,7 +888,7 @@ function Leat11Draft() {
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>}
                     </div>
