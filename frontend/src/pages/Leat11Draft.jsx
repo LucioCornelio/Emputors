@@ -42,7 +42,7 @@ function Leat11Draft() {
   const processEventsFull = (events) => {
       const formatCiv = (c) => {
           if (!c) return "";
-          if (c.toLowerCase() === "hidd") return "Hidden";
+          if (c.toLowerCase() === "hidd" || c.toLowerCase() === "hidden") return "Hidden";
           return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
       };
       let newBans = [], newP1 = [], newP2 = [], newP1Snipe = "", newP2Snipe = "";
@@ -50,94 +50,99 @@ function Leat11Draft() {
       events.forEach(ev => {
           const type = (ev.actionType || ev.type || "").toLowerCase();
           const player = (ev.player || ev.executingPlayer || "").toUpperCase();
-          const civ = ev.chosenOptionId || ev.drafted || ev.civ || "";
+          // Ampliamos la búsqueda de la civilización por si CM usa otro nombre de variable
+          const civ = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || "";
           
           if (!civ || type === "none") return;
           
-          if (type === "ban") newBans.push(formatCiv(civ));
-          else if (type === "pick") {
-              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(formatCiv(civ));
-              else newP2.push(formatCiv(civ));
-          } else if (type === "reveal") {
-              const actualCiv = formatCiv(civ);
-              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-                  const idx = newP1.indexOf("Hidden");
-                  if (idx !== -1) newP1[idx] = actualCiv;
+          const actualCiv = formatCiv(civ);
+
+          if (type === "ban") {
+              newBans.push(actualCiv);
+          } else if (type === "pick") {
+              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(actualCiv);
+              else newP2.push(actualCiv);
+          } else if (type.includes("reveal")) {
+              // Si es un evento de revelar, buscamos el primer "Hidden" libre y lo pisamos
+              let p1Idx = newP1.indexOf("Hidden");
+              let p2Idx = newP2.indexOf("Hidden");
+
+              if (player === "HOST") {
+                  if (isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
+                  else if (!isHost && p2Idx !== -1) newP2[p2Idx] = actualCiv;
+              } else if (player === "GUEST") {
+                  if (!isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
+                  else if (isHost && p2Idx !== -1) newP2[p2Idx] = actualCiv;
               } else {
-                  const idx = newP2.indexOf("Hidden");
-                  if (idx !== -1) newP2[idx] = actualCiv;
+                  // Fallback extremo por si Captain Mode oculta al jugador
+                  if (p1Idx !== -1) newP1[p1Idx] = actualCiv;
+                  else if (p2Idx !== -1) newP2[p2Idx] = actualCiv;
               }
           } else if (type === "snipe") {
-              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1Snipe = formatCiv(civ);
-              else newP2Snipe = formatCiv(civ);
+              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1Snipe = actualCiv;
+              else newP2Snipe = actualCiv;
           }
       });
       setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5), p1_snipe: newP1Snipe, p2_snipe: newP2Snipe }));
   };
 
   const syncCaptainMode = async () => {
-    if (!cmId || !roleAssigned) return;
-    setSyncing(true);
-    setSyncError("");
-    
-    try {
-      const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
-      const cleanId = match ? match[1] : cmId.trim();
+    if (!cmId || !roleAssigned) return;
+    setSyncing(true);
+    setSyncError("");
+    
+    try {
+      const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
+      const cleanId = match ? match[1] : cmId.trim();
 
-      if (liveSocket) liveSocket.disconnect();
+      if (liveSocket) liveSocket.disconnect();
 
-      // 1. Intentar cargar draft terminado por API
-      const apiRes = await fetch(`/api/draft?id=${cleanId}`);
-      if (apiRes.ok) {
-          const apiData = await apiRes.json();
-          const events = apiData.events || apiData.actions || [];
-          if (events.length > 0) {
-              setDraft(prev => ({ ...prev, events: events })); // Guardamos eventos iniciales
-              processEventsFull(events); // Procesamos estado inicial
-              setSyncing(false);
-              return;
-          }
-      }
+      // 1. Intentar cargar draft terminado por API
+      const apiRes = await fetch(`/api/draft?id=${cleanId}`);
+      if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          const events = apiData.events || apiData.actions || [];
+          if (events.length > 0) {
+              processEventsFull(events);
+              setSyncing(false);
+              return;
+          }
+      }
 
-      // 2. Si falla o está en vivo, conectar WebSocket
-      const socket = io('https://aoe2cm.net', {
-          query: { draftId: cleanId },
-          transports: ['websocket'] 
-      });
-      
-      socket.on('connect', () => {
-          setSyncing(false);
-          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
-              const data = Array.isArray(response) ? response[0] : response;
-              const initialEvents = data && data.events ? data.events : [];
-              if (initialEvents.length > 0) {
-                setDraft(prev => ({ ...prev, events: initialEvents })); // Guardamos eventos iniciales
-                processEventsFull(initialEvents); // Procesamos estado inicial
-              }
-          });
-      });
+      // 2. Si falla o está en vivo, conectar WebSocket
+      const socket = io('https://aoe2cm.net', {
+          query: { draftId: cleanId },
+          transports: ['websocket'] 
+      });
+      
+      socket.on('connect', () => {
+          setSyncing(false);
+          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
+              const data = Array.isArray(response) ? response[0] : response;
+              if (data && data.events) processEventsFull(data.events);
+          });
+      });
 
-      socket.on('playerEvent', (payload) => {
-        setDraft(prev => {
-            const newEvents = [...prev.events, payload]; // Añadimos el nuevo evento al historial
-            // Forzamos un reprocesamiento completo desde el primer evento
-            setTimeout(() => processEventsFull(newEvents), 0);
-            return { ...prev, events: newEvents }; // Actualizamos historial
-        });
-      });
+      socket.on('playerEvent', () => {
+          // Estrategia a prueba de balas: en lugar de adivinar el delta, pedimos el estado completo en cada clic
+          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
+              const data = Array.isArray(response) ? response[0] : response;
+              if (data && data.events) processEventsFull(data.events);
+          });
+      });
 
-      socket.on('connect_error', (err) => {
-          setSyncError("Fallo de conexión");
-          setSyncing(false);
-      });
+      socket.on('connect_error', (err) => {
+          setSyncError("Fallo de conexión");
+          setSyncing(false);
+      });
 
-      setLiveSocket(socket);
+      setLiveSocket(socket);
 
-    } catch (e) {
-      setSyncError("Error general");
-      setSyncing(false);
-    }
-  };
+    } catch (e) {
+      setSyncError("Error general");
+      setSyncing(false);
+    }
+  };
 
   const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
   const isDraftFinished = isSnipePhase && draft.p1_snipe !== "" && draft.p2_snipe !== "";
