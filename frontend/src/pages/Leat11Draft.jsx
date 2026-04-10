@@ -587,6 +587,7 @@ function Leat11Draft() {
            }
            else if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') {
                title = `${r.titlePrefix} ${r.opp} on ${mapsStr}`;
+           }
            else if (r.id === 'C2B') title = `Top 7 in Win Rate and CDPS on ${mapsStr}`;
            else if (r.id === 'C2C') title = `Top 7 in CDPS (Pro Meta) on ${mapsStr}`;
            else if (r.id === 'C2W') title = `Top 7 in Win Rate (Ladder) on ${mapsStr}`;
