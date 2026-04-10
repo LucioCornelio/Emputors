@@ -129,10 +129,22 @@ function Leat11Draft() {
       
       socket.on('connect', () => {
           setSyncing(false);
-          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
-              const data = Array.isArray(response) ? response[0] : response;
-              if (data && data.events) processEventsFull(data.events);
-          });
+          
+          const fetchState = () => {
+              socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
+                  const data = Array.isArray(response) ? response[0] : response;
+                  if (data && data.events) processEventsFull(data.events);
+              });
+          };
+          
+          fetchState(); // Carga inicial al conectar
+          
+          // LATIDO DE SEGURIDAD: Pedimos el estado cada 2 segundos.
+          // Caza eventos del servidor (como Reveals automáticos o Aborts) que no disparan clics.
+          const pollInterval = setInterval(fetchState, 2000);
+          
+          // Limpieza: apagamos el latido si nos desconectamos
+          socket.on('disconnect', () => clearInterval(pollInterval));
       });
 
       socket.on('playerEvent', (payload) => {
