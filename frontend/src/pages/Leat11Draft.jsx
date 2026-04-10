@@ -434,7 +434,6 @@ function Leat11Draft() {
       const coverage = {};
       if (!draft.analysis) return coverage;
 
-      // Usamos mis picks reales, dependiendo de si soy Host o Guest
       const myPicks = isHost ? draft.p1_picks : draft.p2_picks;
 
       draft.maps.forEach(m => {
@@ -445,26 +444,12 @@ function Leat11Draft() {
               const cdpsList = draft.analysis.top_cdps?.[m] || [];
               const wrList = draft.analysis.top_wr?.[m] || [];
 
-              // Top 15 de CDPS
-              const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim().toLowerCase().startsWith(civPrefix));
-              const isT = tIndex >= 0 && tIndex < 15; 
+              const inCdps = cdpsList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
+              const inWr = wrList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
 
-              // Win Rate decente (>= 49.5%) o Top 15 Ladder
-              let isW = false;
-              const wIndex = wrList.findIndex(s => s.split(' ')[0].trim().toLowerCase().startsWith(civPrefix));
-              if (wIndex >= 0) {
-                  const match = wrList[wIndex].match(/\(([\d,.]+)% \| (.*?)\)/);
-                  if (match) {
-                      const wrVal = parseFloat(match[1].replace(',', '.'));
-                      const prStr = match[2].toLowerCase();
-                      let prVal = prStr.includes('k') ? parseFloat(prStr.replace(',', '.').replace('k', '')) * 1000 : parseInt(prStr, 10);
-                      if (prVal >= 20 && wrVal >= 49.5) isW = true;
-                  } else {
-                      if (wIndex < 15) isW = true;
-                  }
+              if ((inCdps >= 0 && inCdps < 15) || (inWr >= 0 && inWr < 15)) {
+                  strongCivs++;
               }
-
-              if (isT || isW) strongCivs++;
           });
           coverage[m] = strongCivs;
       });
@@ -567,24 +552,10 @@ function Leat11Draft() {
              const cdpsList = draft.analysis.top_cdps?.[m] || [];
              const wrList = draft.analysis.top_wr?.[m] || [];
              
-             const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim().toLowerCase().startsWith(civPrefix));
-             const isT = tIndex >= 0 && tIndex < 15;
-
-             let isW = false;
-             const wIndex = wrList.findIndex(s => s.split(' ')[0].trim().toLowerCase().startsWith(civPrefix));
-             if (wIndex >= 0) {
-                 const match = wrList[wIndex].match(/\(([\d,.]+)% \| (.*?)\)/);
-                 if (match) {
-                     const wrVal = parseFloat(match[1].replace(',', '.'));
-                     const prStr = match[2].toLowerCase();
-                     let prVal = prStr.includes('k') ? parseFloat(prStr.replace(',', '.').replace('k', '')) * 1000 : parseInt(prStr, 10);
-                     if (prVal >= 20 && wrVal >= 49.5) isW = true;
-                 } else {
-                     if (wIndex < 15) isW = true;
-                 }
-             }
+             const inCdps = cdpsList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
+             const inWr = wrList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
              
-             if (isT || isW) {
+             if ((inCdps >= 0 && inCdps < 15) || (inWr >= 0 && inWr < 15)) {
                  score += 20; 
                  mapScore += 20;
                  viableMaps.add(m);
