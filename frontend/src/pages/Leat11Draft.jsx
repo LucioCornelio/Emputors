@@ -16,16 +16,14 @@ function Leat11Draft() {
   const [globalData, setGlobalData] = useState(null)
   const [globalError, setGlobalError] = useState(null)
   
-  const [draft, setDraft] = useState({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], p1_snipe: "", p2_snipe: "", analysis: null, events: [] })
+  const [draft, setDraft] = useState({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], p1_snipe: "", p2_snipe: "", analysis: null })
   const [civA, setCivA] = useState('');
   const [civB, setCivB] = useState('');
   const [civAnalysis, setCivAnalysis] = useState(null);
 
-  // Estados de autenticación
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
 
-  // Estados de Captain Mode (UNA SOLA VEZ)
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
   const [roleAssigned, setRoleAssigned] = useState(false);
@@ -34,18 +32,24 @@ function Leat11Draft() {
   const [syncError, setSyncError] = useState("");
   const [liveSocket, setLiveSocket] = useState(null);
 
-  // Limpieza al desmontar para no dejar conexiones fantasma
+  // COLORES DE CAPTAIN MODE
+  const colorHost = '#00c8c8'; // Cyan 
+  const colorGuest = '#ffb400'; // Amarillo 
+  const myColor = isHost ? colorHost : colorGuest;
+  const oppColor = isHost ? colorGuest : colorHost;
+
   useEffect(() => {
     return () => { if (liveSocket) liveSocket.disconnect(); };
   }, [liveSocket]);
 
+  const formatCiv = (c) => {
+      if (!c) return "";
+      const clean = String(c).trim();
+      if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
+      return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+  };
+
   const processEventsFull = (events) => {
-      const formatCiv = (c) => {
-          if (!c) return "";
-          const clean = String(c).trim();
-          if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
-          return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
-      };
       let newBans = [], newP1 = [], newP2 = [], newP1Snipe = "", newP2Snipe = "";
       
       events.forEach(ev => {
@@ -63,8 +67,8 @@ function Leat11Draft() {
               if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(actualCiv);
               else newP2.push(actualCiv);
           } else if (type.includes("reveal")) {
-              let p1Idx = newP1.findIndex(c => c === "Hidden");
-              let p2Idx = newP2.findIndex(c => c === "Hidden");
+              let p1Idx = newP1.indexOf("Hidden");
+              let p2Idx = newP2.indexOf("Hidden");
 
               if (player === "HOST") {
                   if (isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
@@ -95,7 +99,6 @@ function Leat11Draft() {
 
       if (liveSocket) liveSocket.disconnect();
 
-      // 1. Intentar cargar draft terminado por API
       const apiRes = await fetch(`/api/draft?id=${cleanId}`);
       if (apiRes.ok) {
           const apiData = await apiRes.json();
@@ -107,7 +110,6 @@ function Leat11Draft() {
           }
       }
 
-      // 2. Si falla o está en vivo, conectar WebSocket
       const socket = io('https://aoe2cm.net', {
           query: { draftId: cleanId },
           transports: ['websocket'] 
@@ -128,16 +130,10 @@ function Leat11Draft() {
           
           if (!civRaw || type === "none") return;
           
-          const formatCiv = (c) => {
-              if (!c) return "";
-              const clean = String(c).trim();
-              if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
-              return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
-          };
           const civFormatted = formatCiv(civRaw);
 
           setDraft(prev => {
-              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks], p1_snipe: prev.p1_snipe, p2_snipe: prev.p2_snipe };
+              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
               
               if (type === "ban") {
                   if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
@@ -148,8 +144,8 @@ function Leat11Draft() {
                       if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
                   }
               } else if (type.includes("reveal")) {
-                  let p1Idx = newD.p1_picks.findIndex(c => c === "Hidden");
-                  let p2Idx = newD.p2_picks.findIndex(c => c === "Hidden");
+                  let p1Idx = newD.p1_picks.indexOf("Hidden");
+                  let p2Idx = newD.p2_picks.indexOf("Hidden");
 
                   if (player === "HOST") {
                       if (isHost && p1Idx !== -1) newD.p1_picks[p1Idx] = civFormatted;
@@ -191,10 +187,8 @@ function Leat11Draft() {
 
   const getCivStyle = (mapName, civStr) => {
     if (!civStr || civStr === '-') return { color: '#555', fontWeight: 'normal', textDecoration: 'none' };
-    
     let color = '#aaa';
     let fontWeight = 'normal';
-    
     const wrMatch = civStr.match(/\(([\d,]+)%/);
     let wr = null;
     if (wrMatch) {
@@ -211,10 +205,7 @@ function Leat11Draft() {
     const civ = civStr.split(' ')[0].trim();
     const mapIndex = draft.maps.indexOf(mapName);
     const oppSelected = draft.plan_p2[mapIndex];
-    
-    if (!oppSelected) {
-      return { color, fontWeight, textDecoration: 'none' };
-    }
+    if (!oppSelected) return { color, fontWeight, textDecoration: 'none' };
 
     const tWr = draft.analysis.top_wr?.[mapName] || [];
     const tCdps = draft.analysis.top_cdps?.[mapName] || [];
@@ -235,16 +226,12 @@ function Leat11Draft() {
     const countCounters = (inCounterLadder ? 1 : 0) + (inCounterPros ? 1 : 0);
 
     if (countTop === 2 && countCounters === 2) {
-      color = '#ffd700'; 
-      fontWeight = 'bold';
+      color = '#ffd700'; fontWeight = 'bold';
     } else if ((countTop === 2 && countCounters === 1) || (countTop === 1 && countCounters === 2)) {
-      color = '#9abfe6'; 
-      fontWeight = 'bold';
+      color = '#9abfe6'; fontWeight = 'bold';
     } else if (countTop === 1 && countCounters === 1) {
-      color = '#e69950'; 
-      fontWeight = 'bold';
+      color = '#e69950'; fontWeight = 'bold';
     }
-
     return { color, fontWeight, textDecoration: 'none' };
   };
 
@@ -308,17 +295,12 @@ function Leat11Draft() {
 
     civs.forEach(civ => {
       if (excluded.includes(civ)) return;
-
-      let t_tot = 0;
-      let w_tot = 0;
-      let wrSum = 0;
-      let wrCount = 0;
+      let t_tot = 0; let w_tot = 0; let wrSum = 0; let wrCount = 0;
       const stats = [];
       const civPrefix = civ.substring(0, 4).toLowerCase();
 
       draft.maps.forEach((m) => {
         if (!m) { stats.push('-'); return; }
-        
         const cdpsList = draft.analysis.top_cdps?.[m] || [];
         const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
         const isT = tIndex >= 0 && tIndex < 12;
@@ -331,14 +313,9 @@ function Leat11Draft() {
            const match = wrList[wIndex].match(/\(([\d,.]+)% \| (.*?)\)/);
            if (match) {
               const wrVal = parseFloat(match[1].replace(',', '.'));
-              wrSum += wrVal;
-              wrCount++;
-
+              wrSum += wrVal; wrCount++;
               const prStr = match[2].toLowerCase();
-              let prVal = prStr.includes('k') 
-                ? parseFloat(prStr.replace(',', '.').replace('k', '')) * 1000 
-                : parseInt(prStr, 10);
-
+              let prVal = prStr.includes('k') ? parseFloat(prStr.replace(',', '.').replace('k', '')) * 1000 : parseInt(prStr, 10);
               if (prVal >= 30 && wrVal >= 50) isW = true;
            } else {
               if (wIndex < 12) isW = true;
@@ -369,8 +346,7 @@ function Leat11Draft() {
   const getSnipeSuggestions = () => {
     const snipes = [];
     draft.p2_picks.forEach(oppCiv => {
-        let score = 0;
-        const reasons = [];
+        let score = 0; const reasons = [];
         const oppLow = oppCiv.toLowerCase();
         const oppPrefix = oppLow.substring(0, 4);
 
@@ -379,9 +355,7 @@ function Leat11Draft() {
             if(!m) return;
             const topCdps = (draft.analysis?.top_cdps?.[m] || []).slice(0, 12);
             const topWr = (draft.analysis?.top_wr?.[m] || []).slice(0, 12);
-            if (checkIsCounter(topCdps, oppPrefix) || checkIsCounter(topWr, oppPrefix)) {
-                flexMaps.push(m);
-            }
+            if (checkIsCounter(topCdps, oppPrefix) || checkIsCounter(topWr, oppPrefix)) flexMaps.push(m);
         });
         if (flexMaps.length >= 2) {
             score += 15;
@@ -391,7 +365,6 @@ function Leat11Draft() {
         draft.maps.forEach((m, i) => {
             if(!m) return;
             const prob = draft.analysis?.opp_probs?.[m]?.[oppLow] || 0;
-            
             const topCdps3 = (draft.analysis?.top_cdps?.[m] || []).slice(0, 3);
             const topWr3 = (draft.analysis?.top_wr?.[m] || []).slice(0, 3);
             if (checkIsCounter(topCdps3, oppPrefix) || checkIsCounter(topWr3, oppPrefix)) {
@@ -399,52 +372,37 @@ function Leat11Draft() {
                 reasons.push({ text: `👑 GOD TIER`, color: '#ffd700', title: `Top 3 meta pick on [${m.toUpperCase()}]` });
             }
 
-            let beatsMyPlan = false;
-            let badMatchups = 0;
-            let checkedMatchups = 0;
+            let beatsMyPlan = false; let badMatchups = 0; let checkedMatchups = 0;
 
             draft.p1_picks.forEach(myCiv => {
                 const myLow = myCiv.toLowerCase();
                 const mStats = draft.analysis?.matchups?.[m]?.[`${myLow}_${oppLow}`];
-                
                 if (mStats && mStats.games >= 3) {
                     checkedMatchups++;
                     if (mStats.wr < 0.50) badMatchups++;
-                    
-                    if (draft.plan_p1[i] === myCiv && mStats.wr < 0.48) {
-                        beatsMyPlan = true;
-                    }
+                    if (draft.plan_p1[i] === myCiv && mStats.wr < 0.48) beatsMyPlan = true;
                 }
             });
 
             if (beatsMyPlan && prob > 0.05) {
-                const baseScore = 30;
-                const multiplier = prob > 0.4 ? 1.5 : 1; 
+                const baseScore = 30; const multiplier = prob > 0.4 ? 1.5 : 1; 
                 score += (baseScore * multiplier);
                 reasons.push({ text: `🎯 COUNTERS PLAN`, color: '#ff33cc', title: `Counters your planned pick on [${m.toUpperCase()}]` });
             }
 
             if (checkedMatchups >= 2 && badMatchups === checkedMatchups && prob > 0.05) {
-                const baseScore = 40;
-                const multiplier = prob > 0.4 ? 1.5 : 1;
+                const baseScore = 40; const multiplier = prob > 0.4 ? 1.5 : 1;
                 score += (baseScore * multiplier);
                 reasons.push({ text: `☠️ ROSTER KILLER`, color: '#ff4444', title: `Statistically beats your available roster on [${m.toUpperCase()}]` });
             }
         });
 
-        if (reasons.length === 0) {
-            reasons.push({ text: `🛡️ SAFE BAN`, color: '#888', title: `Standard ban` });
-        }
+        if (reasons.length === 0) reasons.push({ text: `🛡️ SAFE BAN`, color: '#888', title: `Standard ban` });
 
-        const uniqueReasons = [];
-        const seen = new Set();
+        const uniqueReasons = []; const seen = new Set();
         reasons.sort((a,b) => b.title.length - a.title.length).forEach(r => {
-            if(!seen.has(r.text)) {
-                seen.add(r.text);
-                uniqueReasons.push(r);
-            }
+            if(!seen.has(r.text)) { seen.add(r.text); uniqueReasons.push(r); }
         });
-
         snipes.push({ civ: oppCiv, score, reasons: uniqueReasons.slice(0, 3), bestMap: oppCiv });
     });
     return snipes.sort((a,b) => b.score - a.score);
@@ -460,11 +418,7 @@ function Leat11Draft() {
     civs.forEach(civ => {
       if (excluded.includes(civ)) return;
       const civPrefix = civ.substring(0, 4).toLowerCase();
-      let score = 0;
-      const rawReasons = [];
-      let bestMap = '';
-      let bestMapScore = -1;
-      let viableMaps = new Set();
+      let score = 0; const rawReasons = []; let bestMap = ''; let bestMapScore = -1; let viableMaps = new Set();
 
       draft.maps.forEach(m => {
         if (!m) return;
@@ -486,21 +440,13 @@ function Leat11Draft() {
           if (inLadder || inPros) {
             let pts, col, text, titlePrefix, rId;
             if (inLadder && inPros) {
-              pts = isCovered ? 40 : 60;
-              col = isCovered ? '#b266ff' : '#ff33cc'; 
-              text = `💎 BOTH VS ${plannedOpponent.substring(0,4).toUpperCase()}`;
-              titlePrefix = "Double counter (Ladder & Pros) against";
-              rId = 'C1A_DOUBLE';
+              pts = isCovered ? 40 : 60; col = isCovered ? '#b266ff' : '#ff33cc'; 
+              text = `💎 BOTH VS ${plannedOpponent.substring(0,4).toUpperCase()}`; titlePrefix = "Double counter (Ladder & Pros) against"; rId = 'C1A_DOUBLE';
             } else {
-              pts = isCovered ? 25 : 40;
-              col = isCovered ? '#66b2ff' : '#ffd700'; 
-              text = `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`;
-              titlePrefix = "Lethal counter against";
-              rId = 'C1A';
+              pts = isCovered ? 25 : 40; col = isCovered ? '#66b2ff' : '#ffd700'; 
+              text = `🎯 VS ${plannedOpponent.substring(0,4).toUpperCase()}`; titlePrefix = "Lethal counter against"; rId = 'C1A';
             }
-            score += pts;
-            mapScore += pts;
-            viableMaps.add(m);
+            score += pts; mapScore += pts; viableMaps.add(m);
             rawReasons.push({ id: rId, text: text, color: col, points: pts, map: m, opp: plannedOpponent, titlePrefix: titlePrefix });
           }
         }
@@ -509,28 +455,19 @@ function Leat11Draft() {
           const oppLow = p2_civ.toLowerCase();
           const ladderCounters = draft.analysis.counters_ladder?.[m]?.[oppLow] || [];
           const prosCounters = draft.analysis.counters_pros?.[m]?.[oppLow] || [];
-          
           const inLadder = checkIsCounter(ladderCounters, civPrefix);
           const inPros = checkIsCounter(prosCounters, civPrefix);
 
           if (inLadder || inPros) {
             let pts, col, text, titlePrefix, rId;
             if (inLadder && inPros) {
-              pts = isCovered ? 10 : 25;
-              col = '#b266ff'; 
-              text = `🔮 BOTH VS ${p2_civ.substring(0,4).toUpperCase()}`;
-              titlePrefix = "Potential double counter against";
-              rId = 'C1B_DOUBLE';
+              pts = isCovered ? 10 : 25; col = '#b266ff'; 
+              text = `🔮 BOTH VS ${p2_civ.substring(0,4).toUpperCase()}`; titlePrefix = "Potential double counter against"; rId = 'C1B_DOUBLE';
             } else {
-              pts = isCovered ? 5 : 15;
-              col = '#cd7f32'; 
-              text = `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`;
-              titlePrefix = "Good counter against";
-              rId = 'C1B';
+              pts = isCovered ? 5 : 15; col = '#cd7f32'; 
+              text = `⚔️ VS ${p2_civ.substring(0,4).toUpperCase()}`; titlePrefix = "Good counter against"; rId = 'C1B';
             }
-            score += pts;
-            mapScore += pts;
-            viableMaps.add(m);
+            score += pts; mapScore += pts; viableMaps.add(m);
             rawReasons.push({ id: rId, text: text, color: col, points: pts, map: m, opp: p2_civ, titlePrefix: titlePrefix });
           }
         });
@@ -541,32 +478,20 @@ function Leat11Draft() {
         const inWr = topWr.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
         
         if (inCdps && inWr) {
-          const pts = isCovered ? 25 : 35;
-          const col = isCovered ? '#66b2ff' : '#ffd700';
-          score += pts;
-          mapScore += pts;
-          viableMaps.add(m);
+          const pts = isCovered ? 25 : 35; const col = isCovered ? '#66b2ff' : '#ffd700';
+          score += pts; mapScore += pts; viableMaps.add(m);
           rawReasons.push({ id: 'C2B', text: '🌟 TOP BOTH', color: col, points: pts, map: m });
         } else if (inCdps) {
-          const pts = isCovered ? 10 : 25;
-          const col = isCovered ? '#cd7f32' : '#66b2ff';
-          score += pts;
-          mapScore += pts;
-          viableMaps.add(m);
+          const pts = isCovered ? 10 : 25; const col = isCovered ? '#cd7f32' : '#66b2ff';
+          score += pts; mapScore += pts; viableMaps.add(m);
           rawReasons.push({ id: 'C2C', text: '📈 TOP CDPS', color: col, points: pts, map: m });
         } else if (inWr) {
-          const pts = isCovered ? 10 : 25;
-          const col = isCovered ? '#cd7f32' : '#66b2ff';
-          score += pts;
-          mapScore += pts;
-          viableMaps.add(m);
+          const pts = isCovered ? 10 : 25; const col = isCovered ? '#cd7f32' : '#66b2ff';
+          score += pts; mapScore += pts; viableMaps.add(m);
           rawReasons.push({ id: 'C2W', text: '🏆 TOP WR', color: col, points: pts, map: m });
         }
 
-        if (mapScore > bestMapScore) {
-          bestMapScore = mapScore;
-          if (mapScore > 0) bestMap = m;
-        }
+        if (mapScore > bestMapScore) { bestMapScore = mapScore; if (mapScore > 0) bestMap = m; }
       });
 
       let flexMaps = [];
@@ -581,48 +506,29 @@ function Leat11Draft() {
       });
       
       if (flexMaps.length >= 2) {
-        score += 15;
-        flexMaps.forEach(fm => viableMaps.add(fm));
+        score += 15; flexMaps.forEach(fm => viableMaps.add(fm));
         rawReasons.push({ id: 'C3', text: '🔄 FLEX', color: '#cd7f32', points: 15, title: `Flexible pick: Top 12 on [${flexMaps.map(m => m.toUpperCase()).join(' and ')}]` });
-        if (bestMapScore < 15) {
-          bestMap = flexMaps.map(m => m.length > 10 ? m.substring(0, 4) + '.' : m).join(' / ');
-        }
+        if (bestMapScore < 15) bestMap = flexMaps.map(m => m.length > 10 ? m.substring(0, 4) + '.' : m).join(' / ');
       }
 
       if (score > 0) {
         const grouped = {};
         rawReasons.forEach(r => {
-           if (r.id === 'C3') { 
-               if (!grouped[r.text]) grouped[r.text] = r;
-               return;
-           }
-           
-           if (!grouped[r.text]) {
-               grouped[r.text] = { ...r, maps: [r.map] };
-           } else {
-               if (!grouped[r.text].maps.includes(r.map)) {
-                   grouped[r.text].maps.push(r.map);
-                   grouped[r.text].points += 10; 
-                   score += 10; 
-               }
-               if (r.color === '#ff33cc' || r.color === '#ffd700' || (r.color === '#66b2ff' && grouped[r.text].color === '#cd7f32')) {
-                   grouped[r.text].color = r.color;
-               }
+           if (r.id === 'C3') { if (!grouped[r.text]) grouped[r.text] = r; return; }
+           if (!grouped[r.text]) { grouped[r.text] = { ...r, maps: [r.map] }; } 
+           else {
+               if (!grouped[r.text].maps.includes(r.map)) { grouped[r.text].maps.push(r.map); grouped[r.text].points += 10; score += 10; }
+               if (r.color === '#ff33cc' || r.color === '#ffd700' || (r.color === '#66b2ff' && grouped[r.text].color === '#cd7f32')) grouped[r.text].color = r.color;
            }
         });
 
         const uniqueReasons = Object.values(grouped).map(r => {
            if (r.id === 'C3') return r; 
-           
-           const mapsStr = r.maps.map(m => `[${m.toUpperCase()}]`).join(' and ');
-           let title = "";
-           if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') {
-               title = `${r.titlePrefix} ${r.opp} on ${mapsStr}`;
-           }
+           const mapsStr = r.maps.map(m => `[${m.toUpperCase()}]`).join(' and '); let title = "";
+           if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') title = `${r.titlePrefix} ${r.opp} on ${mapsStr}`;
            else if (r.id === 'C2B') title = `Top 7 in Win Rate and CDPS on ${mapsStr}`;
            else if (r.id === 'C2C') title = `Top 7 in CDPS (Pro Meta) on ${mapsStr}`;
            else if (r.id === 'C2W') title = `Top 7 in Win Rate (Ladder) on ${mapsStr}`;
-           
            return { ...r, title };
         });
         
@@ -645,40 +551,23 @@ function Leat11Draft() {
 
     setDraft(prev => {
       const newD = {
-        ...prev,
-        p1_picks: [...prev.p1_picks],
-        p2_picks: [...prev.p2_picks],
-        bans: [...prev.bans],
-        plan_p1: [...prev.plan_p1],
-        plan_p2: [...prev.plan_p2]
+        ...prev, p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks], bans: [...prev.bans], plan_p1: [...prev.plan_p1], plan_p2: [...prev.plan_p2]
       };
 
       const isBanned = newD.bans.includes(civ);
       const isP1 = newD.p1_picks.includes(civ);
       const isP2 = newD.p2_picks.includes(civ);
-      const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
-      const isDraftFinished = isSnipePhase && draft.p1_snipe !== "" && draft.p2_snipe !== "";
+      const currentIsSnipePhase = newD.p1_picks.length === 5 && newD.p2_picks.length === 5;
 
-      // ARREGLADO: Cambio de isSnipePhaseActive a isSnipePhase
-      if (e && (e.ctrlKey || e.metaKey) && isSnipePhase) {
-         if (isP1) {
-             newD.p2_snipe = newD.p2_snipe === civ ? "" : civ;
-             return newD;
-         }
-         if (isP2) {
-             newD.p1_snipe = newD.p1_snipe === civ ? "" : civ;
-             return newD;
-         }
+      if (e && (e.ctrlKey || e.metaKey) && currentIsSnipePhase) {
+         if (isP1) { newD.p2_snipe = newD.p2_snipe === civ ? "" : civ; return newD; }
+         if (isP2) { newD.p1_snipe = newD.p1_snipe === civ ? "" : civ; return newD; }
       }
 
       if (type === 'ban') {
         if (isP1 || isP2) return prev; 
-        if (isBanned) {
-          newD.bans = newD.bans.filter(c => c !== civ); 
-        } else {
-          if (newD.bans.length >= 7) return prev; 
-          newD.bans.push(civ);
-        }
+        if (isBanned) newD.bans = newD.bans.filter(c => c !== civ); 
+        else { if (newD.bans.length >= 7) return prev; newD.bans.push(civ); }
         return newD;
       } 
       
@@ -707,7 +596,6 @@ function Leat11Draft() {
         if (type === 'p2') newD.p2_picks.push(civ);
         return newD;
       }
-      
       return newD;
     });
   }
@@ -820,10 +708,6 @@ function Leat11Draft() {
   const confPresence = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Picks', key: 'Picks', width: '20%' }, { label: 'Wins', key: 'Wins', width: '20%' }, { label: 'Global WR', key: 'Global WR', format: 'percent', width: '25%' }];
   const confTraps = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '30%' }, { label: 'Picks', key: 'Picks', width: '15%' }, { label: 'WR', key: 'Win Rate', format: 'percent', width: '15%' }, { label: 'Map', key: 'Map', align: 'left', width: '40%' }];
   const confVersatile = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Viable Maps', key: 'Viable_Maps', type: 'mapsTooltip', width: '30%' }, { label: 'Avg CDPS', key: 'Avg_CDPS', format: 'decimal', width: '35%' }];
-  const colorHost = '#00c8c8'; // Cyan Captain Mode
-  const colorGuest = '#ffb400'; // Yellow Captain Mode
-  const myColor = isHost ? colorHost : colorGuest;
-  const oppColor = isHost ? colorGuest : colorHost;
   
   if (!auth) {
     return (
@@ -979,11 +863,10 @@ function Leat11Draft() {
               <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
-                  {draft.p2_picks.map((c, i) => (
-                    <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
-                      {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                  {draft.bans.map((c, i) => (
+                    <div key={`${c}-${i}`} onClick={(e) => { if(isManual) toggleCiv(c, 'ban', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
+                      <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: '#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>
                     </div>
                   ))}
                 </div>
@@ -993,7 +876,7 @@ function Leat11Draft() {
                 <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                    <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
                       {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>}
