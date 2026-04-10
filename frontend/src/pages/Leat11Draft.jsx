@@ -42,8 +42,9 @@ function Leat11Draft() {
   const processEventsFull = (events) => {
       const formatCiv = (c) => {
           if (!c) return "";
-          if (c.toLowerCase() === "hidd" || c.toLowerCase() === "hidden") return "Hidden";
-          return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+          const clean = c.trim();
+          if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
+          return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
       };
       let newBans = [], newP1 = [], newP2 = [], newP1Snipe = "", newP2Snipe = "";
       
@@ -929,7 +930,7 @@ function Leat11Draft() {
                 <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p1_picks.map((c, i) => (
-                    <div key={i} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                    <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
                       {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p2_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p2_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
@@ -940,11 +941,12 @@ function Leat11Draft() {
 
               <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
-                <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', minHeight: '36px' }}>
-                  {draft.bans.map((c, i) => (
-                    <div key={i} onClick={(e) => { if(isManual) toggleCiv(c, 'ban', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
-                      <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: '#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>
+                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
+                  {draft.p2_picks.map((c, i) => (
+                    <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
+                      {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
                     </div>
                   ))}
                 </div>
