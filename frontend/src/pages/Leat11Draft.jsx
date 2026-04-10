@@ -42,7 +42,6 @@ function Leat11Draft() {
   const processEventsFull = (events) => {
       const formatCiv = (c) => {
           if (!c) return "";
-          // Convertimos a texto seguro y quitamos espacios invisibles para que no rompa la URL de la imagen
           const clean = String(c).trim();
           if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
           return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
@@ -64,8 +63,8 @@ function Leat11Draft() {
               if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(actualCiv);
               else newP2.push(actualCiv);
           } else if (type.includes("reveal")) {
-              let p1Idx = newP1.indexOf("Hidden");
-              let p2Idx = newP2.indexOf("Hidden");
+              let p1Idx = newP1.findIndex(c => c === "Hidden");
+              let p2Idx = newP2.findIndex(c => c === "Hidden");
 
               if (player === "HOST") {
                   if (isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
@@ -123,7 +122,6 @@ function Leat11Draft() {
       });
 
       socket.on('playerEvent', (payload) => {
-          // PROCESAMIENTO INSTANTÁNEO
           const type = String(payload.actionType || payload.type || "").toLowerCase();
           const player = String(payload.player || payload.executingPlayer || "").toUpperCase();
           const civRaw = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
@@ -139,7 +137,7 @@ function Leat11Draft() {
           const civFormatted = formatCiv(civRaw);
 
           setDraft(prev => {
-              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
+              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks], p1_snipe: prev.p1_snipe, p2_snipe: prev.p2_snipe };
               
               if (type === "ban") {
                   if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
@@ -150,8 +148,8 @@ function Leat11Draft() {
                       if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
                   }
               } else if (type.includes("reveal")) {
-                  let p1Idx = newD.p1_picks.indexOf("Hidden");
-                  let p2Idx = newD.p2_picks.indexOf("Hidden");
+                  let p1Idx = newD.p1_picks.findIndex(c => c === "Hidden");
+                  let p2Idx = newD.p2_picks.findIndex(c => c === "Hidden");
 
                   if (player === "HOST") {
                       if (isHost && p1Idx !== -1) newD.p1_picks[p1Idx] = civFormatted;
