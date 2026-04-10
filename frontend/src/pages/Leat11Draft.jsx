@@ -16,7 +16,7 @@ function Leat11Draft() {
   const [globalData, setGlobalData] = useState(null)
   const [globalError, setGlobalError] = useState(null)
   
-  const [draft, setDraft] = useState({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], p1_snipe: "", p2_snipe: "", analysis: null })
+  const [draft, setDraft] = useState({ maps: ["", "", ""], p1_picks: [], p2_picks: [], bans: [], plan_p1: ["", "", ""], plan_p2: ["", "", ""], p1_snipe: "", p2_snipe: "", analysis: null, events: [] })
   const [civA, setCivA] = useState('');
   const [civB, setCivB] = useState('');
   const [civAnalysis, setCivAnalysis] = useState(null);
@@ -76,97 +76,68 @@ function Leat11Draft() {
   };
 
   const syncCaptainMode = async () => {
-    if (!cmId || !roleAssigned) return;
-    setSyncing(true);
-    setSyncError("");
-    
-    try {
-      const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
-      const cleanId = match ? match[1] : cmId.trim();
+    if (!cmId || !roleAssigned) return;
+    setSyncing(true);
+    setSyncError("");
+    
+    try {
+      const match = cmId.match(/draft\/([a-zA-Z0-9_-]+)/);
+      const cleanId = match ? match[1] : cmId.trim();
 
-      if (liveSocket) liveSocket.disconnect();
+      if (liveSocket) liveSocket.disconnect();
 
-      // 1. Intentar cargar draft terminado por API
-      const apiRes = await fetch(`/api/draft?id=${cleanId}`);
-      if (apiRes.ok) {
-          const apiData = await apiRes.json();
-          const events = apiData.events || apiData.actions || [];
-          if (events.length > 0) {
-              processEventsFull(events);
-              setSyncing(false);
-              return;
-          }
-      }
+      // 1. Intentar cargar draft terminado por API
+      const apiRes = await fetch(`/api/draft?id=${cleanId}`);
+      if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          const events = apiData.events || apiData.actions || [];
+          if (events.length > 0) {
+              setDraft(prev => ({ ...prev, events: events })); // Guardamos eventos iniciales
+              processEventsFull(events); // Procesamos estado inicial
+              setSyncing(false);
+              return;
+          }
+      }
 
-      // 2. Si falla o está en vivo, conectar WebSocket
-      const socket = io('https://aoe2cm.net', {
-          query: { draftId: cleanId },
-          transports: ['websocket'] 
-      });
-      
-      socket.on('connect', () => {
-          setSyncing(false);
-          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
-              const data = Array.isArray(response) ? response[0] : response;
-              if (data && data.events) processEventsFull(data.events);
-          });
-      });
-
-      socket.on('playerEvent', (payload) => {
-          const type = (payload.actionType || payload.type || "").toLowerCase();
-          const player = (payload.player || payload.executingPlayer || "").toUpperCase();
-          const civ = payload.chosenOptionId || payload.drafted || payload.civ || "";
-          
-          if (!civ || type === "none") return;
-          
-          const formatCiv = (c) => {
-              if (c.toLowerCase() === "hidd") return "Hidden";
-              return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
-          };
-          const civFormatted = formatCiv(civ);
-
-          setDraft(prev => {
-              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
-              
-              if (type === "ban") {
-                  if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
-              } else if (type === "pick") {
-                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-                      if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
-                  } else {
-                      if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
-                  }
-              } else if (type === "reveal") {
-                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-                      const idx = newD.p1_picks.indexOf("Hidden");
-                      if (idx !== -1) newD.p1_picks[idx] = civFormatted;
-                  } else {
-                      const idx = newD.p2_picks.indexOf("Hidden");
-                      if (idx !== -1) newD.p2_picks[idx] = civFormatted;
-                  }
-              } else if (type === "snipe") {
-                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-                      newD.p1_snipe = civFormatted;
-                  } else {
-                      newD.p2_snipe = civFormatted;
-                  }
+      // 2. Si falla o está en vivo, conectar WebSocket
+      const socket = io('https://aoe2cm.net', {
+          query: { draftId: cleanId },
+          transports: ['websocket'] 
+      });
+      
+      socket.on('connect', () => {
+          setSyncing(false);
+          socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
+              const data = Array.isArray(response) ? response[0] : response;
+              const initialEvents = data && data.events ? data.events : [];
+              if (initialEvents.length > 0) {
+                setDraft(prev => ({ ...prev, events: initialEvents })); // Guardamos eventos iniciales
+                processEventsFull(initialEvents); // Procesamos estado inicial
               }
-              return newD;
-          });
-      });
+          });
+      });
 
-      socket.on('connect_error', (err) => {
-          setSyncError("Fallo de conexión");
-          setSyncing(false);
-      });
+      socket.on('playerEvent', (payload) => {
+        setDraft(prev => {
+            const newEvents = [...prev.events, payload]; // Añadimos el nuevo evento al historial
+            // Forzamos un reprocesamiento completo desde el primer evento
+            setTimeout(() => processEventsFull(newEvents), 0);
+            return { ...prev, events: newEvents }; // Actualizamos historial
+        });
+      });
 
-      setLiveSocket(socket);
+      socket.on('connect_error', (err) => {
+          setSyncError("Fallo de conexión");
+          setSyncing(false);
+      });
 
-    } catch (e) {
-      setSyncError("Error general");
-      setSyncing(false);
-    }
-  };
+      setLiveSocket(socket);
+
+    } catch (e) {
+      setSyncError("Error general");
+      setSyncing(false);
+    }
+  };
 
   const isSnipePhase = draft.p1_picks.length === 5 && draft.p2_picks.length === 5;
   const isDraftFinished = isSnipePhase && draft.p1_snipe !== "" && draft.p2_snipe !== "";
