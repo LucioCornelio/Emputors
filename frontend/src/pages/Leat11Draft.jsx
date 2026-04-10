@@ -442,15 +442,16 @@ function Leat11Draft() {
           myPicks.forEach(c => {
               if (c === "Hidden") return;
               const civPrefix = c.substring(0, 4).toLowerCase();
-              const cdpsList = draft.analysis.top_cdps?.[m] || [];
-              const wrList = draft.analysis.top_wr?.[m] || [];
+              
+              // Cogemos el Top 15 de ambos rankings
+              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 15);
+              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 15);
 
-              const inCdps = cdpsList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
-              const inWr = wrList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
+              // Evaluamos usando startsWith (el método infalible)
+              const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
+                               topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
 
-              if ((inCdps >= 0 && inCdps < 15) || (inWr >= 0 && inWr < 15)) {
-                  strongCivs++;
-              }
+              if (isStrong) strongCivs++;
           });
           coverage[m] = strongCivs;
       });
@@ -459,7 +460,7 @@ function Leat11Draft() {
 
   const mapCoverage = getMapCoverage();
   const myPicksCount = (isHost ? draft.p1_picks : draft.p2_picks).length;
-  // ALARMA: Solo entra en pánico si tienes 0 civis buenas para un mapa
+  // Solo activa la emergencia si tienes 4 picks Y algún mapa tiene CERO civis buenas
   const needsBackup = myPicksCount === 4 && Object.values(mapCoverage).some(val => val === 0);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
@@ -551,14 +552,13 @@ function Leat11Draft() {
 
         // --- NUEVA LÓGICA MAP SAVER ---
         if (myPicksCount === 4 && mapCoverage[m] === 0) {
-             const cdpsList = draft.analysis.top_cdps?.[m] || [];
-             const wrList = draft.analysis.top_wr?.[m] || [];
+             const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 15);
+             const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 15);
              
-             const inCdps = cdpsList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
-             const inWr = wrList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
+             const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
+                              topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
              
-             // Solo te la sugerimos como salvavidas si es Top 10 en ese mapa cojo
-             if ((inCdps >= 0 && inCdps < 10) || (inWr >= 0 && inWr < 10)) {
+             if (isStrong) {
                  score += 25; 
                  mapScore += 25;
                  viableMaps.add(m);
