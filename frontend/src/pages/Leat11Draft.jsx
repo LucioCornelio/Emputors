@@ -440,6 +440,7 @@ function Leat11Draft() {
           if (!m) return;
           let strongCivs = 0;
           myPicks.forEach(c => {
+              if (c === "Hidden") return;
               const civPrefix = c.substring(0, 4).toLowerCase();
               const cdpsList = draft.analysis.top_cdps?.[m] || [];
               const wrList = draft.analysis.top_wr?.[m] || [];
@@ -458,7 +459,8 @@ function Leat11Draft() {
 
   const mapCoverage = getMapCoverage();
   const myPicksCount = (isHost ? draft.p1_picks : draft.p2_picks).length;
-  const needsBackup = myPicksCount === 4 && Object.values(mapCoverage).some(val => val < 2);
+  // ALARMA: Solo entra en pánico si tienes 0 civis buenas para un mapa
+  const needsBackup = myPicksCount === 4 && Object.values(mapCoverage).some(val => val === 0);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
     if (isSnipePhase) return getSnipeSuggestions();
@@ -548,18 +550,19 @@ function Leat11Draft() {
         }
 
         // --- NUEVA LÓGICA MAP SAVER ---
-        if (needsBackup && mapCoverage[m] < 2) {
+        if (myPicksCount === 4 && mapCoverage[m] === 0) {
              const cdpsList = draft.analysis.top_cdps?.[m] || [];
              const wrList = draft.analysis.top_wr?.[m] || [];
              
              const inCdps = cdpsList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
              const inWr = wrList.findIndex(s => typeof s === 'string' && s.toLowerCase().includes(civPrefix));
              
-             if ((inCdps >= 0 && inCdps < 15) || (inWr >= 0 && inWr < 15)) {
-                 score += 20; 
-                 mapScore += 20;
+             // Solo te la sugerimos como salvavidas si es Top 10 en ese mapa cojo
+             if ((inCdps >= 0 && inCdps < 10) || (inWr >= 0 && inWr < 10)) {
+                 score += 25; 
+                 mapScore += 25;
                  viableMaps.add(m);
-                 rawReasons.push({ id: 'C_SAVER', text: `🚑 MAP SAVER`, color: '#ff4444', points: 20, map: m, titlePrefix: `Crucial backup for` });
+                 rawReasons.push({ id: 'C_SAVER', text: `🚑 MAP SAVER`, color: '#ff4444', points: 25, map: m, titlePrefix: `Crucial backup for` });
              }
         }
         // ------------------------------
@@ -1007,8 +1010,8 @@ function Leat11Draft() {
 
                     return (
                       <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#161920', padding: '6px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
-                        <div style={{ fontSize: '11px', color: (needsBackup && mapName && mapCoverage[mapName] < 2) ? '#ff4444' : '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {mapName || `Map ${i+1}`} {(needsBackup && mapName && mapCoverage[mapName] < 2) && '⚠️'}
+                        <div style={{ fontSize: '11px', color: (needsBackup && mapName && mapCoverage[mapName] === 0) ? '#ff4444' : '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {mapName || `Map ${i+1}`} {(needsBackup && mapName && mapCoverage[mapName] === 0) && '⚠️'}
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
