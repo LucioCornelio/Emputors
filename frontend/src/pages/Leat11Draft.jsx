@@ -49,43 +49,53 @@ function Leat11Draft() {
       return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
   };
 
-  const processEventsFull = (events) => {
-      let newBans = [], newP1 = [], newP2 = [], newP1Snipe = "", newP2Snipe = "";
+  const parseEventIntoDraft = (ev, currentDraft, isHostRole) => {
+      const type = String(ev.actionType || ev.type || "").toLowerCase();
+      const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
+      const civRaw = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId || "";
       
-      events.forEach(ev => {
-          const type = String(ev.actionType || ev.type || "").toLowerCase();
-          const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
-          const civ = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || "";
-          
-          if (!civ || type === "none") return;
-          
-          const actualCiv = formatCiv(civ);
+      if (!civRaw || type === "none") return currentDraft;
 
-          if (type === "ban") {
-              newBans.push(actualCiv);
-          } else if (type === "pick") {
-              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1.push(actualCiv);
-              else newP2.push(actualCiv);
-          } else if (type.includes("reveal")) {
-              let p1Idx = newP1.indexOf("Hidden");
-              let p2Idx = newP2.indexOf("Hidden");
+      const clean = String(civRaw).trim();
+      const actualCiv = (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") 
+          ? "Hidden" 
+          : clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
 
-              if (player === "HOST") {
-                  if (isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
-                  else if (!isHost && p2Idx !== -1) newP2[p2Idx] = actualCiv;
-              } else if (player === "GUEST") {
-                  if (!isHost && p1Idx !== -1) newP1[p1Idx] = actualCiv;
-                  else if (isHost && p2Idx !== -1) newP2[p2Idx] = actualCiv;
+      if (type === "ban") {
+          if (!currentDraft.bans.includes(actualCiv)) currentDraft.bans.push(actualCiv);
+      } else if (type === "pick" || type.includes("reveal")) {
+          let targetArray = null;
+          if (player === "HOST") targetArray = isHostRole ? currentDraft.p1_picks : currentDraft.p2_picks;
+          else if (player === "GUEST") targetArray = !isHostRole ? currentDraft.p1_picks : currentDraft.p2_picks;
+
+          if (actualCiv !== "Hidden") {
+              if (targetArray) {
+                  const hIdx = targetArray.indexOf("Hidden");
+                  if (hIdx !== -1) targetArray[hIdx] = actualCiv; // Sobrescribe el Hidden
+                  else if (!targetArray.includes(actualCiv)) targetArray.push(actualCiv); // O añade si es nuevo
               } else {
-                  if (p1Idx !== -1) newP1[p1Idx] = actualCiv;
-                  else if (p2Idx !== -1) newP2[p2Idx] = actualCiv;
+                  // Salvavidas: si CM no dice de quién es el reveal, buscamos el primer Hidden libre
+                  const p1Idx = currentDraft.p1_picks.indexOf("Hidden");
+                  const p2Idx = currentDraft.p2_picks.indexOf("Hidden");
+                  if (p1Idx !== -1) currentDraft.p1_picks[p1Idx] = actualCiv;
+                  else if (p2Idx !== -1) currentDraft.p2_picks[p2Idx] = actualCiv;
               }
-          } else if (type === "snipe") {
-              if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newP1Snipe = actualCiv;
-              else newP2Snipe = actualCiv;
+          } else {
+              if (targetArray && targetArray.length < 5) targetArray.push(actualCiv);
           }
+      } else if (type === "snipe") {
+          if ((player === "HOST" && isHostRole) || (player === "GUEST" && !isHostRole)) currentDraft.p1_snipe = actualCiv;
+          else currentDraft.p2_snipe = actualCiv;
+      }
+      return currentDraft;
+  };
+
+  const processEventsFull = (events) => {
+      let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
+      events.forEach(ev => {
+          tempDraft = parseEventIntoDraft(ev, tempDraft, isHost);
       });
-      setDraft(prev => ({ ...prev, bans: newBans.slice(0, 7), p1_picks: newP1.slice(0, 5), p2_picks: newP2.slice(0, 5), p1_snipe: newP1Snipe, p2_snipe: newP2Snipe }));
+      setDraft(prev => ({ ...prev, ...tempDraft }));
   };
 
   const syncCaptainMode = async () => {
@@ -99,6 +109,7 @@ function Leat11Draft() {
 
       if (liveSocket) liveSocket.disconnect();
 
+      // 1. Cargar historial
       const apiRes = await fetch(`/api/draft?id=${cleanId}`);
       if (apiRes.ok) {
           const apiData = await apiRes.json();
@@ -110,6 +121,7 @@ function Leat11Draft() {
           }
       }
 
+      // 2. Conectar en vivo
       const socket = io('https://aoe2cm.net', {
           query: { draftId: cleanId },
           transports: ['websocket'] 
@@ -124,42 +136,13 @@ function Leat11Draft() {
       });
 
       socket.on('playerEvent', (payload) => {
-          const type = String(payload.actionType || payload.type || "").toLowerCase();
-          const player = String(payload.player || payload.executingPlayer || "").toUpperCase();
-          const civRaw = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
-          
-          if (!civRaw || type === "none") return;
-          
-          const civFormatted = formatCiv(civRaw);
-
           setDraft(prev => {
-              const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
-              
-              if (type === "ban") {
-                  if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
-              } else if (type === "pick") {
-                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
-                      if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
-                  } else {
-                      if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
-                  }
-              } else if (type.includes("reveal")) {
-                  let p1Idx = newD.p1_picks.indexOf("Hidden");
-                  let p2Idx = newD.p2_picks.indexOf("Hidden");
-
-                  if (player === "HOST") {
-                      if (isHost && p1Idx !== -1) newD.p1_picks[p1Idx] = civFormatted;
-                      else if (!isHost && p2Idx !== -1) newD.p2_picks[p2Idx] = civFormatted;
-                  } else if (player === "GUEST") {
-                      if (!isHost && p1Idx !== -1) newD.p1_picks[p1Idx] = civFormatted;
-                      else if (isHost && p2Idx !== -1) newD.p2_picks[p2Idx] = civFormatted;
-                  } else {
-                      if (p1Idx !== -1) newD.p1_picks[p1Idx] = civFormatted;
-                      else if (p2Idx !== -1) newD.p2_picks[p2Idx] = civFormatted;
-                  }
-              } else if (type === "snipe") {
-                  if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newD.p1_snipe = civFormatted;
-                  else newD.p2_snipe = civFormatted;
+              let newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks] };
+              // Si CM manda varios eventos a la vez (ej. reveals simultáneos), procesamos todos
+              if (Array.isArray(payload)) {
+                  payload.forEach(ev => { newD = parseEventIntoDraft(ev, newD, isHost); });
+              } else {
+                  newD = parseEventIntoDraft(payload, newD, isHost);
               }
               return newD;
           });
