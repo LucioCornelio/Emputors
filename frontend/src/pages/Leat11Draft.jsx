@@ -434,24 +434,38 @@ function Leat11Draft() {
       const coverage = {};
       if (!draft.analysis) return coverage;
 
-      const myPicks = isHost ? draft.p1_picks : draft.p2_picks;
+      // p1_picks SIEMPRE son tus picks, da igual tu rol. ¡Ese era el maldito bug!
+      const myPicks = draft.p1_picks;
 
       draft.maps.forEach(m => {
           if (!m) return;
           let strongCivs = 0;
           myPicks.forEach(c => {
               if (c === "Hidden") return;
-              const civPrefix = c.substring(0, 4).toLowerCase();
+              const civPrefix = c.trim().substring(0, 4).toLowerCase();
               
-              // Cogemos el Top 15 de ambos rankings
-              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 15);
-              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 15);
+              const cdpsList = draft.analysis.top_cdps?.[m] || [];
+              const wrList = draft.analysis.top_wr?.[m] || [];
 
-              // Evaluamos usando startsWith (el método infalible)
-              const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
-                               topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
+              // Lógica de evaluación calcada a la tuya de Flex Picks (Top 12)
+              const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
+              const isT = tIndex >= 0 && tIndex < 12;
 
-              if (isStrong) strongCivs++;
+              let isW = false;
+              const wIndex = wrList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
+              if (wIndex >= 0) {
+                  const match = wrList[wIndex].match(/\(([\d,.]+)% \| (.*?)\)/);
+                  if (match) {
+                      const wrVal = parseFloat(match[1].replace(',', '.'));
+                      const prStr = match[2].toLowerCase();
+                      let prVal = prStr.includes('k') ? parseFloat(prStr.replace(',', '.').replace('k', '')) * 1000 : parseInt(prStr, 10);
+                      if (prVal >= 30 && wrVal >= 50) isW = true;
+                  } else {
+                      if (wIndex < 12) isW = true;
+                  }
+              }
+
+              if (isT || isW) strongCivs++;
           });
           coverage[m] = strongCivs;
       });
@@ -459,9 +473,7 @@ function Leat11Draft() {
   };
 
   const mapCoverage = getMapCoverage();
-  const myPicksCount = (isHost ? draft.p1_picks : draft.p2_picks).length;
-  // Solo activa la emergencia si tienes 4 picks Y algún mapa tiene CERO civis buenas
-  const needsBackup = myPicksCount === 4 && Object.values(mapCoverage).some(val => val === 0);
+  const needsBackup = draft.p1_picks.length === 4 && Object.values(mapCoverage).some(val => val === 0);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
     if (isSnipePhase) return getSnipeSuggestions();
@@ -551,14 +563,28 @@ function Leat11Draft() {
         }
 
         // --- NUEVA LÓGICA MAP SAVER ---
-        if (myPicksCount === 4 && mapCoverage[m] === 0) {
-             const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 15);
-             const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 15);
+        if (draft.p1_picks.length === 4 && mapCoverage[m] === 0) {
+             const cdpsList = draft.analysis.top_cdps?.[m] || [];
+             const wrList = draft.analysis.top_wr?.[m] || [];
              
-             const isStrong = topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix)) ||
-                              topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(civPrefix));
+             const tIndex = cdpsList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
+             const isT = tIndex >= 0 && tIndex < 12;
+
+             let isW = false;
+             const wIndex = wrList.findIndex(s => s.split(' ')[0].trim().toLowerCase() === civPrefix);
+             if (wIndex >= 0) {
+                 const match = wrList[wIndex].match(/\(([\d,.]+)% \| (.*?)\)/);
+                 if (match) {
+                     const wrVal = parseFloat(match[1].replace(',', '.'));
+                     const prStr = match[2].toLowerCase();
+                     let prVal = prStr.includes('k') ? parseFloat(prStr.replace(',', '.').replace('k', '')) * 1000 : parseInt(prStr, 10);
+                     if (prVal >= 30 && wrVal >= 50) isW = true;
+                 } else {
+                     if (wIndex < 12) isW = true;
+                 }
+             }
              
-             if (isStrong) {
+             if (isT || isW) {
                  score += 25; 
                  mapScore += 25;
                  viableMaps.add(m);
