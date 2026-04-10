@@ -431,20 +431,25 @@ function Leat11Draft() {
     return snipes.sort((a,b) => b.score - a.score);
   };
   const getMapCoverage = () => {
-        const coverage = {};
-        if (!draft.analysis) return coverage;
-        
-        draft.maps.forEach(m => {
-            if (!m) return;
-            let strongCivs = 0;
-            draft.p1_picks.forEach(c => {
-                const style = getCivStyle(m, c);
-                if (style.fontWeight === 'bold') strongCivs++;
-            });
-            coverage[m] = strongCivs;
-        });
-        return coverage;
-    };
+      const coverage = {};
+      if (!draft.analysis) return coverage;
+      
+      draft.maps.forEach(m => {
+          if (!m) return;
+          let strongCivs = 0;
+          draft.p1_picks.forEach(c => {
+              const civPrefix = c.substring(0, 4).toLowerCase();
+              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
+              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
+              // Es fuerte si está en el Top 12 de CDPS o WR de ese mapa
+              const isStrong = topCdps.some(x => typeof x === 'string' && x.toLowerCase().startsWith(civPrefix)) ||
+                               topWr.some(x => typeof x === 'string' && x.toLowerCase().startsWith(civPrefix));
+              if (isStrong) strongCivs++;
+          });
+          coverage[m] = strongCivs;
+      });
+      return coverage;
+  };
 
   const mapCoverage = getMapCoverage();
   const needsBackup = draft.p1_picks.length === 4 && Object.values(mapCoverage).some(val => val < 2);
@@ -538,12 +543,16 @@ function Leat11Draft() {
 
         // --- NUEVA LÓGICA MAP SAVER ---
         if (needsBackup && mapCoverage[m] < 2) {
-             const style = getCivStyle(m, civ);
-             if (style.fontWeight === 'bold') {
-                 score += 45; // Bonus enorme para asegurar que entre al Top 5
-                 mapScore += 45;
+             const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
+             const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
+             const isStrong = topCdps.some(x => typeof x === 'string' && x.toLowerCase().startsWith(civPrefix)) ||
+                              topWr.some(x => typeof x === 'string' && x.toLowerCase().startsWith(civPrefix));
+             
+             if (isStrong) {
+                 score += 20; // Bonus moderado para que ayude sin acaparar el Top 5
+                 mapScore += 20;
                  viableMaps.add(m);
-                 rawReasons.push({ id: 'C_SAVER', text: `🚑 MAP SAVER`, color: '#ff4444', points: 45, map: m, titlePrefix: `Crucial backup for` });
+                 rawReasons.push({ id: 'C_SAVER', text: `🚑 MAP SAVER`, color: '#ff4444', points: 20, map: m, titlePrefix: `Crucial backup for` });
              }
         }
         // ------------------------------
