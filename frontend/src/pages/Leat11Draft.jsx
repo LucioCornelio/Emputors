@@ -430,7 +430,24 @@ function Leat11Draft() {
     });
     return snipes.sort((a,b) => b.score - a.score);
   };
+  const getMapCoverage = () => {
+        const coverage = {};
+        if (!draft.analysis) return coverage;
+        
+        draft.maps.forEach(m => {
+            if (!m) return;
+            let strongCivs = 0;
+            draft.p1_picks.forEach(c => {
+                const style = getCivStyle(m, c);
+                if (style.fontWeight === 'bold') strongCivs++;
+            });
+            coverage[m] = strongCivs;
+        });
+        return coverage;
+    };
 
+  const mapCoverage = getMapCoverage();
+  const needsBackup = draft.p1_picks.length === 4 && Object.values(mapCoverage).some(val => val < 2);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
     if (isSnipePhase) return getSnipeSuggestions();
@@ -514,7 +531,22 @@ function Leat11Draft() {
           rawReasons.push({ id: 'C2W', text: '🏆 TOP WR', color: col, points: pts, map: m });
         }
 
-        if (mapScore > bestMapScore) { bestMapScore = mapScore; if (mapScore > 0) bestMap = m; }
+        if (mapScore > bestMapScore) {
+          bestMapScore = mapScore;
+          if (mapScore > 0) bestMap = m;
+        }
+
+        // --- NUEVA LÓGICA MAP SAVER ---
+        if (needsBackup && mapCoverage[m] < 2) {
+             const style = getCivStyle(m, civ);
+             if (style.fontWeight === 'bold') {
+                 score += 45; // Bonus enorme para asegurar que entre al Top 5
+                 mapScore += 45;
+                 viableMaps.add(m);
+                 rawReasons.push({ id: 'C_SAVER', text: `🚑 MAP SAVER`, color: '#ff4444', points: 45, map: m, titlePrefix: `Crucial backup for` });
+             }
+        }
+        // ------------------------------
       });
 
       let flexMaps = [];
@@ -547,8 +579,14 @@ function Leat11Draft() {
 
         const uniqueReasons = Object.values(grouped).map(r => {
            if (r.id === 'C3') return r; 
-           const mapsStr = r.maps.map(m => `[${m.toUpperCase()}]`).join(' and '); let title = "";
-           if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') title = `${r.titlePrefix} ${r.opp} on ${mapsStr}`;
+           
+           const mapsStr = r.maps.map(m => `[${m.toUpperCase()}]`).join(' and ');
+           let title = "";
+           if (r.id === 'C_SAVER') {
+               title = `${r.titlePrefix} ${mapsStr}`;
+           }
+           else if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') {
+               title = `${r.titlePrefix} ${r.opp} on ${mapsStr}`;
            else if (r.id === 'C2B') title = `Top 7 in Win Rate and CDPS on ${mapsStr}`;
            else if (r.id === 'C2C') title = `Top 7 in CDPS (Pro Meta) on ${mapsStr}`;
            else if (r.id === 'C2W') title = `Top 7 in Win Rate (Ladder) on ${mapsStr}`;
@@ -952,8 +990,8 @@ function Leat11Draft() {
 
                     return (
                       <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#161920', padding: '6px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
-                        <div style={{ fontSize: '11px', color: '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {mapName || `Map ${i+1}`}
+                        <div style={{ fontSize: '11px', color: (needsBackup && mapName && mapCoverage[mapName] < 2) ? '#ff4444' : '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {mapName || `Map ${i+1}`} {(needsBackup && mapName && mapCoverage[mapName] < 2) && '⚠️'}
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
