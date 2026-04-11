@@ -1,0 +1,129 @@
+C:\Users\javie\GitHub\LEAT11
+├── data_builder
+|  ├── data
+|  |  ├── Arabia_All.csv
+|  |  ├── Arabia_VOD.csv
+|  |  ├── Coast to Mountain_All.csv
+|  |  ├── Coast to Mountain_VOD.csv
+|  |  ├── Fortified Clearing_All.csv
+|  |  ├── Fortified Clearing_VOD.csv
+|  |  ├── Islands_All.csv
+|  |  ├── Islands_VOD.csv
+|  |  ├── Kawasan_All.csv
+|  |  ├── Kawasan_VOD.csv
+|  |  ├── matriz_counters_draft.csv
+|  |  ├── Megarandom_All.csv
+|  |  ├── Megarandom_VOD.csv
+|  |  ├── Sardis_All.csv
+|  |  ├── Sardis_VOD.csv
+|  |  ├── Skukuza_All.csv
+|  |  ├── Skukuza_VOD.csv
+|  |  ├── Stranded_All.csv
+|  |  ├── Stranded_VOD.csv
+|  |  ├── Thames_All.csv
+|  |  └── Thames_VOD.csv
+|  ├── descarga_civs.py
+|  ├── generar_db.py
+|  ├── main.py
+|  ├── requirements.txt
+|  └── __pycache__
+|     └── main.cpython-314.pyc
+└── frontend
+   ├── api
+   |  └── draft.js
+   ├── eslint.config.js
+   ├── index.html
+   ├── package-lock.json
+   ├── package.json
+   ├── public
+   |  ├── AgeofEmputorsWaterMark2.png
+   |  ├── civs
+   |  |  ├── armenians.png
+   |  |  ├── aztecs.png
+   |  |  ├── bengalis.png
+   |  |  ├── berbers.png
+   |  |  ├── bohemians.png
+   |  |  ├── britons.png
+   |  |  ├── bulgarians.png
+   |  |  ├── burgundians.png
+   |  |  ├── burmese.png
+   |  |  ├── byzantines.png
+   |  |  ├── celts.png
+   |  |  ├── chinese.png
+   |  |  ├── cumans.png
+   |  |  ├── dravidians.png
+   |  |  ├── ethiopians.png
+   |  |  ├── franks.png
+   |  |  ├── georgians.png
+   |  |  ├── goths.png
+   |  |  ├── gurjaras.png
+   |  |  ├── hindustanis.png
+   |  |  ├── huns.png
+   |  |  ├── incas.png
+   |  |  ├── italians.png
+   |  |  ├── japanese.png
+   |  |  ├── jurchens.png
+   |  |  ├── khitans.png
+   |  |  ├── khmer.png
+   |  |  ├── koreans.png
+   |  |  ├── lithuanians.png
+   |  |  ├── magyars.png
+   |  |  ├── malay.png
+   |  |  ├── malians.png
+   |  |  ├── mapuche.png
+   |  |  ├── mayans.png
+   |  |  ├── mongols.png
+   |  |  ├── muisca.png
+   |  |  ├── persians.png
+   |  |  ├── poles.png
+   |  |  ├── portuguese.png
+   |  |  ├── romans.png
+   |  |  ├── saracens.png
+   |  |  ├── shu.png
+   |  |  ├── sicilians.png
+   |  |  ├── slavs.png
+   |  |  ├── spanish.png
+   |  |  ├── tatars.png
+   |  |  ├── teutons.png
+   |  |  ├── tupi.png
+   |  |  ├── turks.png
+   |  |  ├── vietnamese.png
+   |  |  ├── vikings.png
+   |  |  ├── wei.png
+   |  |  └── wu.png
+   |  ├── db.json
+   |  ├── favicon-leat11.png
+   |  ├── favicon.svg
+   |  ├── icons.svg
+   |  └── maps
+   |     ├── Arabia.png
+   |     ├── Coast to Mountain.png
+   |     ├── Fortified Clearing.png
+   |     ├── Islands.png
+   |     ├── Kawasan.png
+   |     ├── Megarandom.png
+   |     ├── Sardis.png
+   |     ├── Skukuza.png
+   |     ├── Stranded.png
+   |     └── Thames.png
+   ├── README.md
+   ├── src
+   |  ├── App.css
+   |  ├── App.jsx
+   |  ├── assets
+   |  |  ├── hero.png
+   |  |  ├── react.svg
+   |  |  └── vite.svg
+   |  ├── components
+   |  |  └── Navbar.jsx
+   |  ├── engine.js
+   |  ├── index.css
+   |  ├── main.jsx
+   |  └── pages
+   |     └── Leat11Draft.jsx
+   ├── vercel.json
+   └── vite.config.js
+
+directory: 265 file: 653
+
+ignored: directory (25)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { getMapData, getGlobalMeta, analyzeDraft, analyzeCivs } from '../engine'
 
@@ -26,6 +26,7 @@ function Leat11Draft() {
 
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
+  const isHostRef = useRef(isHost);
   const [roleAssigned, setRoleAssigned] = useState(false);
   const [isManual, setIsManual] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -37,6 +38,8 @@ function Leat11Draft() {
   const colorGuest = '#ffb400'; // Amarillo 
   const myColor = isHost ? colorHost : colorGuest;
   const oppColor = isHost ? colorGuest : colorHost;
+
+  useEffect(() => { isHostRef.current = isHost; }, [isHost]);
 
   useEffect(() => {
     return () => { if (liveSocket) liveSocket.disconnect(); };
@@ -93,7 +96,7 @@ function Leat11Draft() {
   const processEventsFull = (events) => {
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
       events.forEach(ev => {
-          tempDraft = parseEventIntoDraft(ev, tempDraft, isHost);
+          tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
       });
       setDraft(prev => ({ ...prev, ...tempDraft }));
   };
@@ -154,11 +157,6 @@ function Leat11Draft() {
           const civRaw = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
           
           if (civRaw && type !== "none") {
-              const formatCiv = (c) => {
-                  const clean = String(c).trim();
-                  if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
-                  return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
-              };
               const civFormatted = formatCiv(civRaw);
 
               setDraft(prev => {
@@ -166,13 +164,13 @@ function Leat11Draft() {
                   if (type === "ban") {
                       if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
                   } else if (type === "pick") {
-                      if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) {
+                      if ((player === "HOST" && isHostRef.current) || (player === "GUEST" && !isHostRef.current)) {
                           if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
                       } else {
                           if (!newD.p2_picks.includes(civFormatted)) newD.p2_picks.push(civFormatted);
                       }
                   } else if (type === "snipe") {
-                      if ((player === "HOST" && isHost) || (player === "GUEST" && !isHost)) newD.p1_snipe = civFormatted;
+                      if ((player === "HOST" && isHostRef.current) || (player === "GUEST" && !isHostRef.current)) newD.p1_snipe = civFormatted;
                       else newD.p2_snipe = civFormatted;
                   }
                   return newD;
@@ -588,6 +586,9 @@ const getGoodMapsForCiv = (civ) => {
     return suggestions.sort((a, b) => b.score - a.score).slice(0, 5);
   };
 
+  const cachedSuggestions = (activeTab === 'draftAssistant' && !isDraftFinished) ? getSuggestions() : [];
+  const cachedFlexPicks = (activeTab === 'draftAssistant') ? getFlexPicks() : [];
+
   const toggleCiv = (civ, type, e = null) => {
     if ((type === 'p1' || type === 'p2') && draft.bans.length < 7) {
       if (!draft.p1_picks.includes(civ) && !draft.p2_picks.includes(civ) && !draft.bans.includes(civ)) {
@@ -653,6 +654,79 @@ const getGoodMapsForCiv = (civ) => {
   };
 
   const tooltipCDPS = "Civilization Draft Power Score: A composite metric evaluating overall strength and priority";
+
+  const getStatColor = (stat) => ({
+    color: stat === 'Both' ? '#b266ff' : stat === 'CDPS' ? '#66b2ff' : stat === 'WR' ? '#4caf50' : '#555',
+    fontWeight: stat !== '-' ? 'bold' : 'normal'
+  });
+
+  const Top7Table = ({ title, subtitle, dataKey, isCDPS = false }) => (
+    <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
+      <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>
+        {isCDPS ? <>TOP 7 <span title={tooltipCDPS} style={{ cursor: 'help', textDecoration: 'underline dotted #ffd700', textUnderlineOffset: '2px' }}>CDPS</span></> : title}
+      </h3>
+      <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>{subtitle}</div>
+      <table style={{width: '100%', fontSize: '11px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
+        <thead>
+          <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
+            <th style={{padding: '2px', width: '25px'}}>#</th>
+            {[0,1,2].map(j => <th key={j} style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[j] || `Map ${j+1}`}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {[0,1,2,3,4,5,6].map(i => (
+            <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', height: '22px'}}>
+              <td style={{padding: '2px', color: '#ffd700', fontWeight: 'bold'}}>#{i+1}</td>
+              {[0,1,2].map(j => (
+                <td key={j} style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[j], draft.analysis?.[dataKey]?.[draft.maps[j]]?.[i])}}>
+                  {draft.analysis?.[dataKey]?.[draft.maps[j]]?.[i] || '-'}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const CountersTable = ({ title, dataKey }) => (
+    <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
+      <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>{title}</h3>
+      <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>(WR% | matches)</div>
+      <table style={{width: '100%', fontSize: '9px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
+        <thead>
+          <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
+            <th style={{padding: '2px 1px', width: '45px'}}>OPP CIV</th>
+            {[0,1,2].map(j => <th key={j} style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[j] || `Map ${j+1}`}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {draft.p2_picks.length === 0 ? (
+            <tr><td colSpan={4} style={{padding: '4px', color: '#888', textAlign: 'center'}}>Waiting for Opp Picks...</td></tr>
+          ) : (
+            draft.p2_picks.map((c, i) => (
+              <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', opacity: draft.p1_snipe === c ? 0.3 : 1}}>
+                <td style={{padding: '2px 1px', color: '#ff6666', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', verticalAlign: 'top', textDecoration: draft.p1_snipe === c ? 'line-through' : 'none'}}>{c.substring(0,4)}</td>
+                {[0, 1, 2].map(j => {
+                  const m = draft.maps[j];
+                  if (!m) return <td key={j} style={{padding: '2px 1px'}}></td>;
+                  const counters = draft.analysis?.[dataKey]?.[m]?.[c.toLowerCase()] || ["-", "-", "-"];
+                  return (
+                    <td key={j} style={{padding: '2px 1px', verticalAlign: 'top'}}>
+                      {counters.map((cnt, idx) => {
+                        const style = getCivStyle(m, cnt);
+                        return <div key={idx} style={{marginBottom: '1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', color: style.color, fontWeight: style.fontWeight, textDecoration: style.textDecoration}}>{cnt}</div>
+                      })}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 
   const RenderTable = ({ title, dataset, totalMatches, isClickable = false }) => {
     const maxPicks = dataset?.length > 0 ? Math.max(...dataset.map(row => row['Picks'])) : 1;
@@ -1045,10 +1119,10 @@ const getGoodMapsForCiv = (civ) => {
                   {isSnipePhase ? `🎯 SNIPE EVALUATION${isManual ? ' (CTRL+CLICK TO BAN)' : ''}` : '🔥 SMART SUGGESTIONS (TOP 5)'}
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                  {getSuggestions().length === 0 ? (
+                  {cachedSuggestions.length === 0 ? (
                     <div style={{ color: '#888', fontSize: '10px', fontStyle: 'italic', textAlign: 'center', padding: '4px' }}>Not enough data or maps to suggest.</div>
                   ) : (
-                    getSuggestions().map((s, i) => (
+                    cachedSuggestions.map((s, i) => (
                       <div key={i} onClick={(e) => { if(isManual) toggleCiv(s.civ, isSnipePhase ? 'p2' : 'p1', e) }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1e212b', padding: '2px 6px', borderRadius: '3px', cursor: isManual ? 'pointer' : 'default', borderLeft: `2px solid ${s.reasons[0]?.color || '#555'}`, opacity: isSnipePhase && draft.p1_snipe === s.civ ? 0.4 : 1, transition: 'all 0.2s', height: '20px' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2d36'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1e212b'}>
                         <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: '15px', textAlign: 'left' }}>
                           <span style={{ fontWeight: 'bold', color: isSnipePhase ? '#ff6666' : '#fff', fontSize: '11px', width: '85px', textAlign: 'left', textDecoration: isSnipePhase && draft.p1_snipe === s.civ ? 'line-through' : 'none' }}>{s.civ}</span>
@@ -1072,158 +1146,14 @@ const getGoodMapsForCiv = (civ) => {
 
             {/* 5. TABLAS TOP 7 */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              
-              {/* TABLA TOP 7 LADDER */}
-              <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>TOP 7 WIN RATE</h3>
-                <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>(WR% | matches)</div>
-                <table style={{width: '100%', fontSize: '11px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
-                  <thead>
-                    <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
-                      <th style={{padding: '2px', width: '25px'}}>#</th>
-                      <th style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[0] || 'Map 1'}</th>
-                      <th style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[1] || 'Map 2'}</th>
-                      <th style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[2] || 'Map 3'}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[0,1,2,3,4,5,6].map(i => (
-                      <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', height: '22px'}}>
-                        <td style={{padding: '2px', color: '#ffd700', fontWeight: 'bold'}}>#{i+1}</td>
-                        <td style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[0], draft.analysis?.top_wr?.[draft.maps[0]]?.[i])}}>
-                          {draft.analysis?.top_wr?.[draft.maps[0]]?.[i] || '-'}
-                        </td>
-                        <td style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[1], draft.analysis?.top_wr?.[draft.maps[1]]?.[i])}}>
-                          {draft.analysis?.top_wr?.[draft.maps[1]]?.[i] || '-'}
-                        </td>
-                        <td style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[2], draft.analysis?.top_wr?.[draft.maps[2]]?.[i])}}>
-                          {draft.analysis?.top_wr?.[draft.maps[2]]?.[i] || '-'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* TABLA TOP 7 PROS */}
-              <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>
-                  TOP 7 <span title={tooltipCDPS} style={{ cursor: 'help', textDecoration: 'underline dotted #ffd700', textUnderlineOffset: '2px' }}>CDPS</span>
-                </h3>
-                <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>(Score | matches)</div>
-                <table style={{width: '100%', fontSize: '11px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
-                  <thead>
-                    <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
-                      <th style={{padding: '2px', width: '25px'}}>#</th>
-                      <th style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[0] || 'Map 1'}</th>
-                      <th style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[1] || 'Map 2'}</th>
-                      <th style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[2] || 'Map 3'}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[0,1,2,3,4,5,6].map(i => (
-                      <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', height: '22px'}}>
-                        <td style={{padding: '2px', color: '#ffd700', fontWeight: 'bold'}}>#{i+1}</td>
-                        <td style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[0], draft.analysis?.top_cdps?.[draft.maps[0]]?.[i])}}>
-                          {draft.analysis?.top_cdps?.[draft.maps[0]]?.[i] || '-'}
-                        </td>
-                        <td style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[1], draft.analysis?.top_cdps?.[draft.maps[1]]?.[i])}}>
-                          {draft.analysis?.top_cdps?.[draft.maps[1]]?.[i] || '-'}
-                        </td>
-                        <td style={{padding: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', ...getCivStyle(draft.maps[2], draft.analysis?.top_cdps?.[draft.maps[2]]?.[i])}}>
-                          {draft.analysis?.top_cdps?.[draft.maps[2]]?.[i] || '-'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
+              <Top7Table title="TOP 7 WIN RATE" subtitle="(WR% | matches)" dataKey="top_wr" />
+              <Top7Table title="TOP 7 CDPS" subtitle="(Score | matches)" dataKey="top_cdps" isCDPS={true} />
             </div>
 
             {/* 6. TABLAS DE COUNTERS TRANSPESTAS */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              
-              {/* LADDER COUNTERS */}
-              <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>TOP 3 COUNTERS (LADDER)</h3>
-                <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>(WR% | matches)</div>
-                <table style={{width: '100%', fontSize: '9px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
-                  <thead>
-                    <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
-                      <th style={{padding: '2px 1px', width: '45px'}}>OPP CIV</th>
-                      <th style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[0] || 'Map 1'}</th>
-                      <th style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[1] || 'Map 2'}</th>
-                      <th style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[2] || 'Map 3'}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {draft.p2_picks.length === 0 ? (
-                      <tr><td colSpan={4} style={{padding: '4px', color: '#888', textAlign: 'center'}}>Waiting for Opp Picks...</td></tr>
-                    ) : (
-                      draft.p2_picks.map((c, i) => (
-                        <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', opacity: draft.p1_snipe === c ? 0.3 : 1}}>
-                          <td style={{padding: '2px 1px', color: '#ff6666', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', verticalAlign: 'top', textDecoration: draft.p1_snipe === c ? 'line-through' : 'none'}}>{c.substring(0,4)}</td>
-                          {[0, 1, 2].map(j => {
-                            const m = draft.maps[j];
-                            if (!m) return <td key={j} style={{padding: '2px 1px'}}></td>;
-                            const counters = draft.analysis?.counters_ladder?.[m]?.[c.toLowerCase()] || ["-", "-", "-"];
-                            return (
-                              <td key={j} style={{padding: '2px 1px', verticalAlign: 'top'}}>
-                                {counters.map((cnt, idx) => {
-                                  const style = getCivStyle(m, cnt);
-                                  return <div key={idx} style={{marginBottom: '1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', color: style.color, fontWeight: style.fontWeight, textDecoration: style.textDecoration}}>{cnt}</div>
-                                })}
-                              </td>
-                            )
-                          })}
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* PROS COUNTERS */}
-              <div style={{ backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 2px 0', textTransform: 'uppercase' }}>TOP 3 COUNTERS (PROS)</h3>
-                <div style={{fontSize: '9px', color: '#888', marginBottom: '4px', fontStyle: 'italic'}}>(WR% | matches)</div>
-                <table style={{width: '100%', fontSize: '9px', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed', flex: 1}}>
-                  <thead>
-                    <tr style={{color: '#888', borderBottom: '1px solid #333'}}>
-                      <th style={{padding: '2px 1px', width: '45px'}}>OPP CIV</th>
-                      <th style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[0] || 'Map 1'}</th>
-                      <th style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[1] || 'Map 2'}</th>
-                      <th style={{padding: '2px 1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{draft.maps[2] || 'Map 3'}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {draft.p2_picks.length === 0 ? (
-                      <tr><td colSpan={4} style={{padding: '4px', color: '#888', textAlign: 'center'}}>Waiting for Opp Picks...</td></tr>
-                    ) : (
-                      draft.p2_picks.map((c, i) => (
-                        <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', opacity: draft.p1_snipe === c ? 0.3 : 1}}>
-                          <td style={{padding: '2px 1px', color: '#ff6666', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', verticalAlign: 'top', textDecoration: draft.p1_snipe === c ? 'line-through' : 'none'}}>{c.substring(0,4)}</td>
-                          {[0, 1, 2].map(j => {
-                            const m = draft.maps[j];
-                            if (!m) return <td key={j} style={{padding: '2px 1px'}}></td>;
-                            const counters = draft.analysis?.counters_pros?.[m]?.[c.toLowerCase()] || ["-", "-", "-"];
-                            return (
-                              <td key={j} style={{padding: '2px 1px', verticalAlign: 'top'}}>
-                                {counters.map((cnt, idx) => {
-                                  const style = getCivStyle(m, cnt);
-                                  return <div key={idx} style={{marginBottom: '1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.3px', color: style.color, fontWeight: style.fontWeight, textDecoration: style.textDecoration}}>{cnt}</div>
-                                })}
-                              </td>
-                            )
-                          })}
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
+              <CountersTable title="TOP 3 COUNTERS (LADDER)" dataKey="counters_ladder" />
+              <CountersTable title="TOP 3 COUNTERS (PROS)" dataKey="counters_pros" />
             </div>
 
             {/* 7. FLEX PICKS */}
@@ -1240,16 +1170,16 @@ const getGoodMapsForCiv = (civ) => {
                    </tr>
                  </thead>
                  <tbody>
-                   {getFlexPicks().map((f, i) => (
+                   {cachedFlexPicks.map((f, i) => (
                      <tr key={f.civ} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', height: '22px'}}>
                        <td style={{color: '#ffd700', fontWeight: 'bold'}}>{i+1}</td>
                        <td style={{textAlign: 'left', fontWeight: 'bold', color: '#e0e0e0'}}>{f.civ}</td>
-                       <td style={{color: f.stats[0] === 'Both' ? '#b266ff' : f.stats[0] === 'CDPS' ? '#66b2ff' : f.stats[0] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[0] !== '-' ? 'bold' : 'normal'}}>{f.stats[0]}</td>
-                       <td style={{color: f.stats[1] === 'Both' ? '#b266ff' : f.stats[1] === 'CDPS' ? '#66b2ff' : f.stats[1] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[1] !== '-' ? 'bold' : 'normal'}}>{f.stats[1]}</td>
-                       <td style={{color: f.stats[2] === 'Both' ? '#b266ff' : f.stats[2] === 'CDPS' ? '#66b2ff' : f.stats[2] === 'WR' ? '#4caf50' : '#555', fontWeight: f.stats[2] !== '-' ? 'bold' : 'normal'}}>{f.stats[2]}</td>
+                       <td style={getStatColor(f.stats[0])}>{f.stats[0]}</td>
+                       <td style={getStatColor(f.stats[1])}>{f.stats[1]}</td>
+                       <td style={getStatColor(f.stats[2])}>{f.stats[2]}</td>
                      </tr>
                    ))}
-                   {getFlexPicks().length === 0 && <tr><td colSpan={5} style={{padding: '10px', color: '#555', fontStyle: 'italic'}}>{draft.maps.filter(m => m).length < 2 ? 'Need at least 2 maps to calculate flex picks' : 'No flex picks matching the criteria (Top 12) found for these maps'}</td></tr>}
+                   {cachedFlexPicks.length === 0 && <tr><td colSpan={5} style={{padding: '10px', color: '#555', fontStyle: 'italic'}}>{draft.maps.filter(m => m).length < 2 ? 'Need at least 2 maps to calculate flex picks' : 'No flex picks matching the criteria (Top 12) found for these maps'}</td></tr>}
                  </tbody>
               </table>
             </div>
