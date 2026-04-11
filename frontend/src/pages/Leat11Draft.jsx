@@ -430,38 +430,24 @@ function Leat11Draft() {
     });
     return snipes.sort((a,b) => b.score - a.score);
   };
-  const getMapCoverage = () => {
-      const coverage = {};
-      if (!draft.analysis) return coverage;
-
-      // Evaluamos SIEMPRE tus picks manuales (p1_picks)
-      const myPicks = draft.p1_picks;
-
-      draft.maps.forEach(m => {
-          if (!m) return;
-          let strongCivs = 0;
-          myPicks.forEach(c => {
-              if (c === "Hidden" || !c) return;
-              
-              // Limpieza brutal: minúsculas y solo 4 letras
-              const myCivClean = c.trim().substring(0, 4).toLowerCase();
-              
-              const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
-              const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
-
-              // Comparamos peras con peras: limpiamos también las del Top 12 antes de comparar
-              const isStrong = topCdps.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === myCivClean) ||
-                               topWr.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === myCivClean);
-
-              if (isStrong) strongCivs++;
-          });
-          coverage[m] = strongCivs;
-      });
-      return coverage;
+const getGoodMapsForCiv = (civ) => {
+    if (!draft.analysis || !civ || civ === "Hidden") return "";
+    const civPrefix = civ.substring(0, 4).toLowerCase();
+    const goodMaps = [];
+    draft.maps.forEach(m => {
+      if (!m) return;
+      const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
+      const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
+      if (topCdps.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix)) || 
+          topWr.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix))) {
+        // Abreviar: "Fortified Clearing" -> "FC", "Islands" -> "Isl"
+        const shortMap = m.includes(' ') ? m.split(' ').map(w => w[0]).join('') : m.substring(0, 3);
+        goodMaps.push(shortMap);
+      }
+    });
+    return goodMaps.length > 0 ? ` (${goodMaps.join(', ')})` : "";
   };
 
-  const mapCoverage = getMapCoverage();
-  const needsBackup = draft.p1_picks.length === 4 && Object.values(mapCoverage).some(val => val === 0);
   const getSuggestions = () => {
     if (!draft.analysis || draft.maps.filter(m => m).length === 0) return [];
     if (isSnipePhase) return getSnipeSuggestions();
@@ -549,24 +535,6 @@ function Leat11Draft() {
           bestMapScore = mapScore;
           if (mapScore > 0) bestMap = m;
         }
-
-        // --- NUEVA LÓGICA MAP SAVER ---
-        if (draft.p1_picks.length === 4 && mapCoverage[m] === 0) {
-             const topCdps = (draft.analysis.top_cdps?.[m] || []).slice(0, 12);
-             const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
-             
-             // Limpieza brutal para que la sugerencia reconozca si es Top 12
-             const isStrong = topCdps.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === civPrefix) ||
-                              topWr.some(s => typeof s === 'string' && s.split(' ')[0].trim().substring(0, 4).toLowerCase() === civPrefix);
-             
-             if (isStrong) {
-                 score += 25; 
-                 mapScore += 25;
-                 viableMaps.add(m);
-                 rawReasons.push({ id: 'C_SAVER', text: `🚑 MAP SAVER`, color: '#ff4444', points: 25, map: m, titlePrefix: `Crucial backup for` });
-             }
-        }
-        // ------------------------------
       });
 
       let flexMaps = [];
@@ -602,10 +570,7 @@ function Leat11Draft() {
            
            const mapsStr = r.maps.map(m => `[${m.toUpperCase()}]`).join(' and ');
            let title = "";
-           if (r.id === 'C_SAVER') {
-               title = `${r.titlePrefix} ${mapsStr}`;
-           }
-           else if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') {
+           if (r.id === 'C1A_DOUBLE' || r.id === 'C1A' || r.id === 'C1B_DOUBLE' || r.id === 'C1B') {
                title = `${r.titlePrefix} ${r.opp} on ${mapsStr}`;
            }
            else if (r.id === 'C2B') title = `Top 7 in Win Rate and CDPS on ${mapsStr}`;
@@ -1011,8 +976,8 @@ function Leat11Draft() {
 
                     return (
                       <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#161920', padding: '6px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
-                        <div style={{ fontSize: '11px', color: (needsBackup && mapName && mapCoverage[mapName] === 0) ? '#ff4444' : '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {mapName || `Map ${i+1}`} {(needsBackup && mapName && mapCoverage[mapName] === 0) && '⚠️'}
+                        <div style={{ fontSize: '11px', color: '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {mapName || `Map ${i+1}`}
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
@@ -1048,9 +1013,17 @@ function Leat11Draft() {
                   <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>
                     UNASSIGNED / BENCH
                   </div>
-                  <div style={{ display: 'flex', gap: '10px', color: oppColor, fontSize: '11px', fontWeight: 'bold' }}>
-                    {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p1_snipe === c ? 'line-through' : 'none', opacity: draft.p1_snipe === c ? 0.5 : 1 }}>{c}</span>)}
+                  <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '10px', color: myColor, fontSize: '11px', fontWeight: 'bold' }}>
+                    {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p2_snipe === c ? 'line-through' : 'none', opacity: draft.p2_snipe === c ? 0.5 : 1 }}>{c}{getGoodMapsForCiv(c)}</span>)}
                   </div>
+                  <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>
+                    UNASSIGNED / BENCH
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px', color: oppColor, fontSize: '11px', fontWeight: 'bold' }}>
+                    {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p1_snipe === c ? 'line-through' : 'none', opacity: draft.p1_snipe === c ? 0.5 : 1 }}>{c}{getGoodMapsForCiv(c)}</span>)}
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
