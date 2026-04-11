@@ -97,6 +97,7 @@ function Leat11Draft() {
               if (targetArray && targetArray.length < 5) targetArray.push(actualCiv);
           }
       } else if (type === "snipe") {
+          console.log("SNIPE EVENT HIT:", { player, actualCiv, isHostRole, p1_picks: [...currentDraft.p1_picks], p2_picks: [...currentDraft.p2_picks] });
           if ((player === "HOST" && isHostRole) || (player === "GUEST" && !isHostRole)) currentDraft.p1_snipe = actualCiv;
           else currentDraft.p2_snipe = actualCiv;
       }
@@ -105,10 +106,16 @@ function Leat11Draft() {
 
   const processEventsFull = (events) => {
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
-      events.forEach(ev => {
+      events.forEach((ev, idx) => {
           tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
       });
-      setDraft(prev => ({ ...prev, ...tempDraft }));
+      // DEBUG SNIPE
+      console.log("SNIPE CHECK:", { p1_snipe: tempDraft.p1_snipe, p2_snipe: tempDraft.p2_snipe, p1_picks: tempDraft.p1_picks, p2_picks: tempDraft.p2_picks });
+      setDraft(prev => {
+          const merged = { ...prev, ...tempDraft };
+          console.log("DRAFT AFTER MERGE:", { p1_snipe: merged.p1_snipe, p2_snipe: merged.p2_snipe });
+          return merged;
+      });
   };
 
   const syncCaptainMode = async () => {
