@@ -970,9 +970,23 @@ const getGoodMapsForCiv = (civ) => {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                   {[0, 1, 2].map(i => {
                     const mapName = draft.maps[i];
-                    const p1_civ = draft.plan_p1[i]?.toLowerCase();
-                    const p2_civ = draft.plan_p2[i]?.toLowerCase();
-                    const m_stats = (p1_civ && p2_civ) ? draft.analysis?.matchups?.[mapName]?.[`${p1_civ}_${p2_civ}`] : null;
+                    
+                    // Aseguramos que p1 siempre sea "My Pick" (Host) en el plan, y p2 "Opp Pick" (Guest)
+                    const p1_civ = draft.plan_p1[i]?.toLowerCase(); // Host
+                    const p2_civ = draft.plan_p2[i]?.toLowerCase(); // Guest
+                    
+                    let m_stats = null;
+                    if (p1_civ && p2_civ) {
+                        m_stats = draft.analysis?.matchups?.[mapName]?.[`${p1_civ}_${p2_civ}`];
+                    }
+
+                    // Determinar qué civilización evaluar basándose en el rol
+                    let displayStats = null;
+                    if (m_stats) {
+                        displayStats = {
+                            wr: isHost ? m_stats.wr : (1 - m_stats.wr),
+                        };
+                    }
 
                     return (
                       <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#161920', padding: '6px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
@@ -981,18 +995,22 @@ const getGoodMapsForCiv = (civ) => {
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
-                          <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: myColor, border: `1px solid ${myColor}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
+                          
+                          {/* Selector del Host (Siempre p1) */}
+                          <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorHost, border: `1px solid ${colorHost}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- My Pick -</option>
                             {draft.p1_picks.map(c => (
                               <option key={c} value={c} disabled={draft.plan_p1.includes(c) && draft.plan_p1[i] !== c}>{c.substring(0,4)}</option>
                             ))}
                           </select>
 
-                          <div style={{ fontSize: '10px', fontWeight: 'bold', width: '38px', textAlign: 'center', color: m_stats ? (m_stats.wr >= 0.5 ? '#4caf50' : '#ff4444') : '#555' }}>
-                            {m_stats ? `${(m_stats.wr * 100).toFixed(1)}%` : 'VS'}
+                          {/* Estadísticas de la partida (dependen del rol) */}
+                          <div style={{ fontSize: '10px', fontWeight: 'bold', width: '38px', textAlign: 'center', color: displayStats ? (displayStats.wr >= 0.5 ? '#4caf50' : '#ff4444') : '#555' }}>
+                            {displayStats ? `${(displayStats.wr * 100).toFixed(1)}%` : 'VS'}
                           </div>
                           
-                          <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: oppColor, border: `1px solid ${oppColor}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
+                          {/* Selector del Guest (Siempre p2) */}
+                          <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorGuest, border: `1px solid ${colorGuest}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- Opp Pick -</option>
                             {draft.p2_picks.map(c => {
                               const prob = draft.analysis?.opp_probs?.[mapName]?.[c.toLowerCase()];
@@ -1008,13 +1026,6 @@ const getGoodMapsForCiv = (civ) => {
 
                 <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', gap: '10px', color: myColor, fontSize: '11px', fontWeight: 'bold' }}>
-                    {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p2_snipe === c ? 'line-through' : 'none', opacity: draft.p2_snipe === c ? 0.5 : 1 }}>{c}</span>)}
-                  </div>
-                  <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>
-                    UNASSIGNED / BENCH
-                  </div>
-                  <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', gap: '10px', color: myColor, fontSize: '11px', fontWeight: 'bold' }}>
                     {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p2_snipe === c ? 'line-through' : 'none', opacity: draft.p2_snipe === c ? 0.5 : 1 }}>{c}{getGoodMapsForCiv(c)}</span>)}
                   </div>
                   <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -1023,7 +1034,6 @@ const getGoodMapsForCiv = (civ) => {
                   <div style={{ display: 'flex', gap: '10px', color: oppColor, fontSize: '11px', fontWeight: 'bold' }}>
                     {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p1_snipe === c ? 'line-through' : 'none', opacity: draft.p1_snipe === c ? 0.5 : 1 }}>{c}{getGoodMapsForCiv(c)}</span>)}
                   </div>
-                </div>
                 </div>
               </div>
             </div>
