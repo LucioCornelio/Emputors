@@ -65,7 +65,17 @@ function Leat11Draft() {
           : clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
 
       if (type === "ban") {
-          if (!currentDraft.bans.includes(actualCiv)) currentDraft.bans.push(actualCiv);
+          // Si ambos tienen 5 picks y la civ baneada está en un roster, es un SNIPE
+          const isSnipe = currentDraft.p1_picks.length === 5 && currentDraft.p2_picks.length === 5;
+          if (isSnipe && currentDraft.p1_picks.includes(actualCiv)) {
+              // Alguien ha snipeado una civ de p1 → es el rival (p2) quien snipea
+              currentDraft.p2_snipe = actualCiv;
+          } else if (isSnipe && currentDraft.p2_picks.includes(actualCiv)) {
+              // Alguien ha snipeado una civ de p2 → es el usuario (p1) quien snipea
+              currentDraft.p1_snipe = actualCiv;
+          } else {
+              if (!currentDraft.bans.includes(actualCiv)) currentDraft.bans.push(actualCiv);
+          }
       } else if (type === "pick" || type.includes("reveal")) {
           let targetArray = null;
           if (player === "HOST") targetArray = isHostRole ? currentDraft.p1_picks : currentDraft.p2_picks;
@@ -94,6 +104,12 @@ function Leat11Draft() {
   };
 
   const processEventsFull = (events) => {
+      // DEBUG: ver qué envía CM (borrar después)
+      console.log("=== CM EVENTS DUMP ===", JSON.stringify(events.map(ev => ({
+          type: ev.actionType || ev.type,
+          player: ev.player || ev.executingPlayer,
+          civ: ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId
+      })), null, 2));
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
       events.forEach(ev => {
           tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
@@ -162,7 +178,14 @@ function Leat11Draft() {
               setDraft(prev => {
                   const newD = { ...prev, bans: [...prev.bans], p1_picks: [...prev.p1_picks], p2_picks: [...prev.p2_picks], p1_snipe: prev.p1_snipe, p2_snipe: prev.p2_snipe };
                   if (type === "ban") {
-                      if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
+                      const isSnipe = newD.p1_picks.length === 5 && newD.p2_picks.length === 5;
+                      if (isSnipe && newD.p1_picks.includes(civFormatted)) {
+                          newD.p2_snipe = civFormatted;
+                      } else if (isSnipe && newD.p2_picks.includes(civFormatted)) {
+                          newD.p1_snipe = civFormatted;
+                      } else {
+                          if (!newD.bans.includes(civFormatted)) newD.bans.push(civFormatted);
+                      }
                   } else if (type === "pick") {
                       if ((player === "HOST" && isHostRef.current) || (player === "GUEST" && !isHostRef.current)) {
                           if (!newD.p1_picks.includes(civFormatted)) newD.p1_picks.push(civFormatted);
