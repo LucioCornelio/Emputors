@@ -105,31 +105,32 @@ function Leat11Draft() {
       return currentDraft;
   };
 
+  // Contador de reintentos para resolver snipes ocultos
+  const snipePollCount = useRef(0);
+
   const processEventsFull = (events) => {
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
       events.forEach(ev => {
           tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
       });
       setDraft(prev => ({ ...prev, ...tempDraft }));
-  };
 
-  // Auto-reconexión para resolver snipes ocultos tras el REVEAL de CM
-  const snipeReconnectCount = useRef(0);
-  useEffect(() => {
-    if ((draft.p1_snipe === 'Hidden' || draft.p2_snipe === 'Hidden') && snipeReconnectCount.current < 3 && liveSocket) {
-      const delay = snipeReconnectCount.current === 0 ? 3000 : 5000;
-      const timer = setTimeout(() => {
-        snipeReconnectCount.current++;
-        liveSocket.disconnect();
-        setLiveSocket(null);
-        setTimeout(() => syncCaptainMode(), 500);
-      }, delay);
-      return () => clearTimeout(timer);
-    }
-    if (draft.p1_snipe !== 'Hidden' && draft.p2_snipe !== 'Hidden') {
-      snipeReconnectCount.current = 0;
-    }
-  }, [draft.p1_snipe, draft.p2_snipe]);
+      // Si hay snipes ocultos, programar polls agresivos para cazar el REVEAL
+      if ((tempDraft.p1_snipe === 'Hidden' || tempDraft.p2_snipe === 'Hidden') && snipePollCount.current < 15 && liveSocket) {
+        const delay = snipePollCount.current < 5 ? 1500 : 3000;
+        setTimeout(() => {
+          snipePollCount.current++;
+          if (liveSocket) {
+            liveSocket.emit('set_role', { name: `LEAT11_R${Date.now()}`, role: "SPECTATOR" }, (response) => {
+              const data = Array.isArray(response) ? response[0] : response;
+              if (data && data.events) processEventsFull(data.events);
+            });
+          }
+        }, delay);
+      } else if (tempDraft.p1_snipe !== 'Hidden' && tempDraft.p2_snipe !== 'Hidden') {
+        snipePollCount.current = 0;
+      }
+  };
 
   const syncCaptainMode = async () => {
     if (!cmId || !roleAssigned) return;
