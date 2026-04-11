@@ -331,6 +331,20 @@ function Leat11Draft() {
     }
   }, [draft.p1_picks, draft.p2_picks, draft.bans, draft.maps, activeTab, db]);
 
+  // Limpiar del Matchup Planner las civs que han sido snipeadas
+  useEffect(() => {
+    if (draft.p1_snipe || draft.p2_snipe) {
+      setDraft(prev => {
+        const np1 = prev.plan_p1.map(c => c === prev.p2_snipe ? "" : c);
+        const np2 = prev.plan_p2.map(c => c === prev.p1_snipe ? "" : c);
+        if (np1.join() !== prev.plan_p1.join() || np2.join() !== prev.plan_p2.join()) {
+          return { ...prev, plan_p1: np1, plan_p2: np2 };
+        }
+        return prev;
+      });
+    }
+  }, [draft.p1_snipe, draft.p2_snipe]);
+
   useEffect(() => {
     if (activeTab === 'civAnalyzer' && civA && db) {
       try {
@@ -1009,7 +1023,7 @@ const getGoodMapsForCiv = (civ) => {
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p1_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p2_snipe === c || draft.p2_snipe === 'Hidden') ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2a2d36 0%, #1a1c23 100%)' }}><svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 1L1 5v8c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V5L11 1z" stroke="#ffd700" strokeWidth="1.5" fill="none" opacity="0.6"/><text x="11" y="17" textAnchor="middle" fill="#ffd700" fontSize="13" fontWeight="bold" fontFamily="sans-serif">?</text></svg></div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p2_snipe === c || draft.p2_snipe === 'Hidden') ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p2_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
                       {draft.p2_snipe === 'Hidden' && c !== 'Hidden' && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(255,68,68,0.15)'}}><span style={{color:'#ff4444', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
@@ -1035,7 +1049,7 @@ const getGoodMapsForCiv = (civ) => {
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p1_snipe === c || draft.p1_snipe === 'Hidden') ? 0.3 : 1 }} />}
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2a2d36 0%, #1a1c23 100%)' }}><svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 1L1 5v8c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V5L11 1z" stroke="#ffd700" strokeWidth="1.5" fill="none" opacity="0.6"/><text x="11" y="17" textAnchor="middle" fill="#ffd700" fontSize="13" fontWeight="bold" fontFamily="sans-serif">?</text></svg></div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p1_snipe === c || draft.p1_snipe === 'Hidden') ? 0.3 : 1 }} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>}
                       {draft.p1_snipe === 'Hidden' && c !== 'Hidden' && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(76,175,80,0.15)'}}><span style={{color:'#4caf50', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
@@ -1111,7 +1125,7 @@ const getGoodMapsForCiv = (civ) => {
                           {/* Selector del Host (Siempre p1) */}
                           <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorHost, border: `1px solid ${colorHost}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- My Pick -</option>
-                            {draft.p1_picks.map(c => (
+                            {draft.p1_picks.filter(c => c !== 'Hidden' && c !== draft.p2_snipe).map(c => (
                               <option key={c} value={c} disabled={draft.plan_p1.includes(c) && draft.plan_p1[i] !== c}>{c.substring(0,4)}</option>
                             ))}
                           </select>
@@ -1124,7 +1138,7 @@ const getGoodMapsForCiv = (civ) => {
                           {/* Selector del Guest (Siempre p2) */}
                           <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorGuest, border: `1px solid ${colorGuest}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- Opp Pick -</option>
-                            {draft.p2_picks.map(c => {
+                            {draft.p2_picks.filter(c => c !== 'Hidden' && c !== draft.p1_snipe).map(c => {
                               const prob = draft.analysis?.opp_probs?.[mapName]?.[c.toLowerCase()];
                               const probStr = prob > 0 ? ` (${(prob * 100).toFixed(0)}%)` : '';
                               return <option key={c} value={c} disabled={draft.plan_p2.includes(c) && draft.plan_p2[i] !== c}>{c.substring(0,4)}{probStr}</option>
