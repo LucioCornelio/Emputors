@@ -104,12 +104,6 @@ function Leat11Draft() {
   };
 
   const processEventsFull = (events) => {
-      // DEBUG: ver qué envía CM (borrar después)
-      console.log("=== CM EVENTS DUMP ===", JSON.stringify(events.map(ev => ({
-          type: ev.actionType || ev.type,
-          player: ev.player || ev.executingPlayer,
-          civ: ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId
-      })), null, 2));
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
       events.forEach(ev => {
           tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
