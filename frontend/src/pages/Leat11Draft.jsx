@@ -53,6 +53,8 @@ function Leat11Draft() {
       return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
   };
 
+  const isHidden = (c) => c && (c === 'Hidden' || c.toLowerCase().startsWith('hidd'));
+
   const parseEventIntoDraft = (ev, currentDraft, isHostRole) => {
       const type = String(ev.actionType || ev.type || "").toLowerCase();
       const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
@@ -117,7 +119,7 @@ function Leat11Draft() {
   const autoSyncCount = useRef(0);
   const autoSyncDelays = [9000, 9000, 9000, 6000];
   useEffect(() => {
-    if ((draft.p1_snipe === 'Hidden' || draft.p2_snipe === 'Hidden') && !syncing && autoSyncCount.current < autoSyncDelays.length) {
+    if ((isHidden(draft.p1_snipe) || isHidden(draft.p2_snipe)) && !syncing && autoSyncCount.current < autoSyncDelays.length) {
       const delay = autoSyncDelays[autoSyncCount.current];
       const timer = setTimeout(() => {
         autoSyncCount.current++;
@@ -125,7 +127,7 @@ function Leat11Draft() {
       }, delay);
       return () => clearTimeout(timer);
     }
-    if (draft.p1_snipe !== 'Hidden' && draft.p2_snipe !== 'Hidden') {
+    if (!isHidden(draft.p1_snipe) && !isHidden(draft.p2_snipe)) {
       autoSyncCount.current = 0;
     }
   }, [draft.p1_snipe, draft.p2_snipe, syncing]);
@@ -756,7 +758,7 @@ const getGoodMapsForCiv = (civ) => {
           ) : (
             draft.p2_picks.map((c, i) => (
               <tr key={i} style={{borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'transparent':'#161920', opacity: draft.p1_snipe === c ? 0.3 : 1}}>
-                <td style={{padding: '2px 1px', color: '#ff6666', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', verticalAlign: 'top', textDecoration: draft.p1_snipe === c ? 'line-through' : 'none'}}>{c.substring(0,4)}</td>
+                <td style={{padding: '2px 1px', color: '#ff6666', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', verticalAlign: 'top', textDecoration: draft.p1_snipe === c ? 'line-through' : 'none'}}>{isHidden(c) ? '?' : c.substring(0,4)}</td>
                 {[0, 1, 2].map(j => {
                   const m = draft.maps[j];
                   if (!m) return <td key={j} style={{padding: '2px 1px'}}></td>;
@@ -1019,14 +1021,14 @@ const getGoodMapsForCiv = (civ) => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr', gap: '10px' }}>
               
               <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'}) {draft.p2_snipe === 'Hidden' && <span style={{ color: '#ff4444', animation: 'pulseAlert 1.5s infinite' }}>🎯 SNIPE INCOMING</span>}</h3>
+                <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'}) {isHidden(draft.p2_snipe) && <span style={{ color: '#ff4444', animation: 'pulseAlert 1.5s infinite' }}>🎯 SNIPE INCOMING</span>}</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p1_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2a2d36 0%, #1a1c23 100%)' }}><svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 1L1 5v8c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V5L11 1z" stroke="#ffd700" strokeWidth="1.5" fill="none" opacity="0.6"/><text x="11" y="17" textAnchor="middle" fill="#ffd700" fontSize="13" fontWeight="bold" fontFamily="sans-serif">?</text></svg></div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p2_snipe === c || draft.p2_snipe === 'Hidden') ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
+                      {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2a2d36 0%, #1a1c23 100%)' }}><svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 1L1 5v8c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V5L11 1z" stroke="#ffd700" strokeWidth="1.5" fill="none" opacity="0.6"/><text x="11" y="17" textAnchor="middle" fill="#ffd700" fontSize="13" fontWeight="bold" fontFamily="sans-serif">?</text></svg></div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p2_snipe === c || isHidden(draft.p2_snipe)) ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
                       {draft.p2_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
-                      {draft.p2_snipe === 'Hidden' && c !== 'Hidden' && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(255,68,68,0.15)'}}><span style={{color:'#ff4444', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
+                      {isHidden(draft.p2_snipe) && !isHidden(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(255,68,68,0.15)'}}><span style={{color:'#ff4444', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
                     </div>
                   ))}
                 </div>
@@ -1045,14 +1047,14 @@ const getGoodMapsForCiv = (civ) => {
               </div>
 
               <div style={{ order: isHost ? 3 : 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'}) {draft.p1_snipe === 'Hidden' && <span style={{ color: '#4caf50', animation: 'pulseAlert 1.5s infinite' }}>🎯 SNIPE SENT</span>}</h3>
+                <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'}) {isHidden(draft.p1_snipe) && <span style={{ color: '#4caf50', animation: 'pulseAlert 1.5s infinite' }}>🎯 SNIPE SENT</span>}</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2a2d36 0%, #1a1c23 100%)' }}><svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 1L1 5v8c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V5L11 1z" stroke="#ffd700" strokeWidth="1.5" fill="none" opacity="0.6"/><text x="11" y="17" textAnchor="middle" fill="#ffd700" fontSize="13" fontWeight="bold" fontFamily="sans-serif">?</text></svg></div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p1_snipe === c || draft.p1_snipe === 'Hidden') ? 0.3 : 1 }} />}
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
+                      {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #2a2d36 0%, #1a1c23 100%)' }}><svg width="22" height="26" viewBox="0 0 22 26" fill="none"><path d="M11 1L1 5v8c0 5.55 4.27 10.74 10 12 5.73-1.26 10-6.45 10-12V5L11 1z" stroke="#ffd700" strokeWidth="1.5" fill="none" opacity="0.6"/><text x="11" y="17" textAnchor="middle" fill="#ffd700" fontSize="13" fontWeight="bold" fontFamily="sans-serif">?</text></svg></div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p1_snipe === c || isHidden(draft.p1_snipe)) ? 0.3 : 1 }} />}
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>}
-                      {draft.p1_snipe === 'Hidden' && c !== 'Hidden' && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(76,175,80,0.15)'}}><span style={{color:'#4caf50', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
+                      {isHidden(draft.p1_snipe) && !isHidden(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(76,175,80,0.15)'}}><span style={{color:'#4caf50', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
                     </div>
                   ))}
                 </div>
@@ -1125,8 +1127,8 @@ const getGoodMapsForCiv = (civ) => {
                           {/* Selector del Host (Siempre p1) */}
                           <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorHost, border: `1px solid ${colorHost}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- My Pick -</option>
-                            {draft.p1_picks.filter(c => c !== 'Hidden' && c !== draft.p2_snipe).map(c => (
-                              <option key={c} value={c} disabled={draft.plan_p1.includes(c) && draft.plan_p1[i] !== c}>{c.substring(0,4)}</option>
+                            {draft.p1_picks.filter(c => !isHidden(c) && c !== draft.p2_snipe).map(c => (
+                              <option key={c} value={c} disabled={draft.plan_p1.includes(c) && draft.plan_p1[i] !== c}>{isHidden(c) ? '?' : c.substring(0,4)}</option>
                             ))}
                           </select>
 
@@ -1138,10 +1140,10 @@ const getGoodMapsForCiv = (civ) => {
                           {/* Selector del Guest (Siempre p2) */}
                           <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorGuest, border: `1px solid ${colorGuest}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- Opp Pick -</option>
-                            {draft.p2_picks.filter(c => c !== 'Hidden' && c !== draft.p1_snipe).map(c => {
+                            {draft.p2_picks.filter(c => !isHidden(c) && c !== draft.p1_snipe).map(c => {
                               const prob = draft.analysis?.opp_probs?.[mapName]?.[c.toLowerCase()];
                               const probStr = prob > 0 ? ` (${(prob * 100).toFixed(0)}%)` : '';
-                              return <option key={c} value={c} disabled={draft.plan_p2.includes(c) && draft.plan_p2[i] !== c}>{c.substring(0,4)}{probStr}</option>
+                              return <option key={c} value={c} disabled={draft.plan_p2.includes(c) && draft.plan_p2[i] !== c}>{isHidden(c) ? '?' : c.substring(0,4)}{probStr}</option>
                             })}
                           </select>
                         </div>
