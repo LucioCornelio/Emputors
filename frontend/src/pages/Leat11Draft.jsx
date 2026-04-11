@@ -48,7 +48,8 @@ function Leat11Draft() {
   const formatCiv = (c) => {
       if (!c) return "";
       const clean = String(c).trim();
-      if (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") return "Hidden";
+      const cleanLower = clean.toLowerCase();
+      if (cleanLower === "hidd" || cleanLower === "hidden" || cleanLower === "hidden_snipe") return "Hidden";
       return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
   };
 
@@ -60,7 +61,8 @@ function Leat11Draft() {
       if (!civRaw || type === "none") return currentDraft;
 
       const clean = String(civRaw).trim();
-      const actualCiv = (clean.toLowerCase() === "hidd" || clean.toLowerCase() === "hidden") 
+      const cleanLower = clean.toLowerCase();
+      const actualCiv = (cleanLower === "hidd" || cleanLower === "hidden" || cleanLower === "hidden_snipe") 
           ? "Hidden" 
           : clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
 
@@ -97,7 +99,6 @@ function Leat11Draft() {
               if (targetArray && targetArray.length < 5) targetArray.push(actualCiv);
           }
       } else if (type === "snipe") {
-          console.log("SNIPE EVENT HIT:", { player, actualCiv, isHostRole, p1_picks: [...currentDraft.p1_picks], p2_picks: [...currentDraft.p2_picks] });
           if ((player === "HOST" && isHostRole) || (player === "GUEST" && !isHostRole)) currentDraft.p1_snipe = actualCiv;
           else currentDraft.p2_snipe = actualCiv;
       }
@@ -106,16 +107,10 @@ function Leat11Draft() {
 
   const processEventsFull = (events) => {
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
-      events.forEach((ev, idx) => {
+      events.forEach(ev => {
           tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
       });
-      // DEBUG SNIPE
-      console.log("SNIPE CHECK:", { p1_snipe: tempDraft.p1_snipe, p2_snipe: tempDraft.p2_snipe, p1_picks: tempDraft.p1_picks, p2_picks: tempDraft.p2_picks });
-      setDraft(prev => {
-          const merged = { ...prev, ...tempDraft };
-          console.log("DRAFT AFTER MERGE:", { p1_snipe: merged.p1_snipe, p2_snipe: merged.p2_snipe });
-          return merged;
-      });
+      setDraft(prev => ({ ...prev, ...tempDraft }));
   };
 
   const syncCaptainMode = async () => {
@@ -993,13 +988,14 @@ const getGoodMapsForCiv = (civ) => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr', gap: '10px' }}>
               
               <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
+                <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'}) {draft.p2_snipe === 'Hidden' && <span style={{ color: '#ff4444', animation: 'pulseAlert 1.5s infinite' }}>🎯 SNIPE INCOMING</span>}</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p1_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p1', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p2_snipe === c ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p2_snipe === c || draft.p2_snipe === 'Hidden') ? 0.3 : 1, display: 'block' }} onLoad={(e) => e.target.style.display='block'} onError={(e) => e.target.style.display='none'} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p2_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                      {draft.p2_snipe === 'Hidden' && c !== 'Hidden' && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(255,68,68,0.15)'}}><span style={{color:'#ff4444', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
                     </div>
                   ))}
                 </div>
@@ -1018,13 +1014,14 @@ const getGoodMapsForCiv = (civ) => {
               </div>
 
               <div style={{ order: isHost ? 3 : 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
+                <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'}) {draft.p1_snipe === 'Hidden' && <span style={{ color: '#4caf50', animation: 'pulseAlert 1.5s infinite' }}>🎯 SNIPE SENT</span>}</h3>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
                   {draft.p2_picks.map((c, i) => (
                     <div key={`${c}-${i}`} onClick={(e) => { if(isManual || e.ctrlKey || e.metaKey) toggleCiv(c, 'p2', e) }} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', cursor: isManual ? 'pointer' : 'default' }}>
-                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.p1_snipe === c ? 0.3 : 1 }} />}
+                      {c === 'Hidden' ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#333', color: '#888', fontSize: '18px', fontWeight: 'bold' }}>?</div> : <img key={c} src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (draft.p1_snipe === c || draft.p1_snipe === 'Hidden') ? 0.3 : 1 }} />}
                       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{c.substring(0,4)}</div>
                       {draft.p1_snipe === c && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:'#ff4444', fontSize: '24px', fontWeight: '300'}}>✗</span></div>}
+                      {draft.p1_snipe === 'Hidden' && c !== 'Hidden' && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', backgroundColor: 'rgba(76,175,80,0.15)'}}><span style={{color:'#4caf50', fontSize:'16px', fontWeight: 'bold'}}>?</span></div>}
                     </div>
                   ))}
                 </div>
