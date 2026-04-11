@@ -105,32 +105,30 @@ function Leat11Draft() {
       return currentDraft;
   };
 
-  // Contador de reintentos para resolver snipes ocultos
-  const snipePollCount = useRef(0);
-
   const processEventsFull = (events) => {
       let tempDraft = { bans: [], p1_picks: [], p2_picks: [], p1_snipe: "", p2_snipe: "" };
       events.forEach(ev => {
           tempDraft = parseEventIntoDraft(ev, tempDraft, isHostRef.current);
       });
       setDraft(prev => ({ ...prev, ...tempDraft }));
-
-      // Si hay snipes ocultos, programar polls agresivos para cazar el REVEAL
-      if ((tempDraft.p1_snipe === 'Hidden' || tempDraft.p2_snipe === 'Hidden') && snipePollCount.current < 15 && liveSocket) {
-        const delay = snipePollCount.current < 5 ? 1500 : 3000;
-        setTimeout(() => {
-          snipePollCount.current++;
-          if (liveSocket) {
-            liveSocket.emit('set_role', { name: `LEAT11_R${Date.now()}`, role: "SPECTATOR" }, (response) => {
-              const data = Array.isArray(response) ? response[0] : response;
-              if (data && data.events) processEventsFull(data.events);
-            });
-          }
-        }, delay);
-      } else if (tempDraft.p1_snipe !== 'Hidden' && tempDraft.p2_snipe !== 'Hidden') {
-        snipePollCount.current = 0;
-      }
   };
+
+  // Auto-SYNC cuando hay snipes ocultos: intentos a ~9s, ~18s, ~27s y ~33s
+  const autoSyncCount = useRef(0);
+  const autoSyncDelays = [9000, 9000, 9000, 6000];
+  useEffect(() => {
+    if ((draft.p1_snipe === 'Hidden' || draft.p2_snipe === 'Hidden') && !syncing && autoSyncCount.current < autoSyncDelays.length) {
+      const delay = autoSyncDelays[autoSyncCount.current];
+      const timer = setTimeout(() => {
+        autoSyncCount.current++;
+        syncCaptainMode();
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+    if (draft.p1_snipe !== 'Hidden' && draft.p2_snipe !== 'Hidden') {
+      autoSyncCount.current = 0;
+    }
+  }, [draft.p1_snipe, draft.p2_snipe, syncing]);
 
   const syncCaptainMode = async () => {
     if (!cmId || !roleAssigned) return;
