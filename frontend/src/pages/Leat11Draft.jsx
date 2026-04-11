@@ -113,6 +113,24 @@ function Leat11Draft() {
       setDraft(prev => ({ ...prev, ...tempDraft }));
   };
 
+  // Auto-reconexión para resolver snipes ocultos tras el REVEAL de CM
+  const snipeReconnectCount = useRef(0);
+  useEffect(() => {
+    if ((draft.p1_snipe === 'Hidden' || draft.p2_snipe === 'Hidden') && snipeReconnectCount.current < 3 && liveSocket) {
+      const delay = snipeReconnectCount.current === 0 ? 3000 : 5000;
+      const timer = setTimeout(() => {
+        snipeReconnectCount.current++;
+        liveSocket.disconnect();
+        setLiveSocket(null);
+        setTimeout(() => syncCaptainMode(), 500);
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+    if (draft.p1_snipe !== 'Hidden' && draft.p2_snipe !== 'Hidden') {
+      snipeReconnectCount.current = 0;
+    }
+  }, [draft.p1_snipe, draft.p2_snipe]);
+
   const syncCaptainMode = async () => {
     if (!cmId || !roleAssigned) return;
     setSyncing(true);
