@@ -650,10 +650,27 @@ const getGoodMapsForCiv = (civ) => {
         if (bestMapScore < 15) bestMap = flexMaps.map(m => m.length > 10 ? m.substring(0, 4) + '.' : m).join(' / ');
       }
 
+      // MAP SAVER: tras el 4º pick, bonus si esta civ cubre mapas con cobertura débil
+      if (draft.p1_picks.length >= 4) {
+        const weakMaps = draft.maps.filter(m => m && getMapCoverage(m).count < 2);
+        const savesMaps = weakMaps.filter(m => {
+          const raw = getRawTop12(m);
+          return raw.wr.some(p => p.startsWith(civPrefix)) || raw.cdps.some(p => p.startsWith(civPrefix));
+        });
+        if (savesMaps.length > 0) {
+          const pts = savesMaps.length * 20;
+          score += pts;
+          savesMaps.forEach(m => viableMaps.add(m));
+          const mapsStr = savesMaps.map(m => m.includes(' ') ? m.split(' ').map(w => w[0]).join('') : m.substring(0,3)).join(', ');
+          rawReasons.push({ id: 'C4_SAVER', text: `🚑 SAVER [${mapsStr}]`, color: '#ff6600', points: pts, title: `Covers weak map(s): ${savesMaps.join(', ')}` });
+          if (bestMapScore < pts) bestMap = savesMaps[0];
+        }
+      }
+
       if (score > 0) {
         const grouped = {};
         rawReasons.forEach(r => {
-           if (r.id === 'C3') { if (!grouped[r.text]) grouped[r.text] = r; return; }
+           if (r.id === 'C3' || r.id === 'C4_SAVER') { if (!grouped[r.text]) grouped[r.text] = r; return; }
            if (!grouped[r.text]) { grouped[r.text] = { ...r, maps: [r.map] }; } 
            else {
                if (!grouped[r.text].maps.includes(r.map)) { grouped[r.text].maps.push(r.map); grouped[r.text].points += 10; score += 10; }
@@ -662,7 +679,7 @@ const getGoodMapsForCiv = (civ) => {
         });
 
         const uniqueReasons = Object.values(grouped).map(r => {
-           if (r.id === 'C3') return r; 
+           if (r.id === 'C3' || r.id === 'C4_SAVER') return r; 
            
            const mapsStr = r.maps.map(m => `[${m.toUpperCase()}]`).join(' and ');
            let title = "";
@@ -1209,21 +1226,25 @@ const getGoodMapsForCiv = (civ) => {
                       const tiers = getCivMapTiers(c);
                       const sniped = draft.p2_snipe === c;
                       return <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '4px', opacity: sniped ? 0.3 : 1, textDecoration: sniped ? 'line-through' : 'none' }}>
-                        <span style={{ color: myColor, fontSize: '11px', fontWeight: 'bold', minWidth: '55px' }}>{c.substring(0,6)}</span>
+                        <span style={{ color: myColor, fontSize: '11px', fontWeight: 'bold', minWidth: '80px' }}>{c}</span>
                         {tiers.map((t, j) => <span key={j} style={{ fontSize: '8px', padding: '1px 3px', borderRadius: '2px', backgroundColor: t.tier === 'top7' ? '#4caf5033' : '#ffb40033', color: t.tier === 'top7' ? '#4caf50' : '#ffb400', fontWeight: 'bold' }}>{t.map}</span>)}
                         {tiers.length === 0 && <span style={{ fontSize: '8px', color: '#555', fontStyle: 'italic' }}>—</span>}
                       </div>
                     })}
                   </div>
-                  <div style={{ fontSize: '9px', color: '#555', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px', paddingTop: '2px' }}>
-                    BENCH
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', paddingTop: '2px' }}>
+                    <div style={{ fontSize: '9px', color: '#555', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>BENCH</div>
+                    <div style={{ fontSize: '7px', color: '#555', display: 'flex', gap: '6px' }}>
+                      <span><span style={{ color: '#4caf50' }}>■</span> Top 7</span>
+                      <span><span style={{ color: '#ffb400' }}>■</span> Top 12</span>
+                    </div>
                   </div>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '3px', alignItems: 'flex-end' }}>
                     {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => {
                       const tiers = getCivMapTiers(c);
                       const sniped = draft.p1_snipe === c;
                       return <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '4px', flexDirection: 'row-reverse', opacity: sniped ? 0.3 : 1, textDecoration: sniped ? 'line-through' : 'none' }}>
-                        <span style={{ color: oppColor, fontSize: '11px', fontWeight: 'bold', minWidth: '55px', textAlign: 'right' }}>{c.substring(0,6)}</span>
+                        <span style={{ color: oppColor, fontSize: '11px', fontWeight: 'bold', minWidth: '80px', textAlign: 'right' }}>{c}</span>
                         {tiers.map((t, j) => <span key={j} style={{ fontSize: '8px', padding: '1px 3px', borderRadius: '2px', backgroundColor: t.tier === 'top7' ? '#4caf5033' : '#ffb40033', color: t.tier === 'top7' ? '#4caf50' : '#ffb400', fontWeight: 'bold' }}>{t.map}</span>)}
                         {tiers.length === 0 && <span style={{ fontSize: '8px', color: '#555', fontStyle: 'italic' }}>—</span>}
                       </div>
