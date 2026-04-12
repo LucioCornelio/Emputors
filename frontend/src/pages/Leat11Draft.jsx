@@ -481,7 +481,7 @@ function Leat11Draft() {
     return snipes.sort((a,b) => b.score - a.score);
   };
 const getGoodMapsForCiv = (civ) => {
-    if (!draft.analysis || !civ || civ === "Hidden") return "";
+    if (!draft.analysis || !civ || isHidden(civ)) return "";
     const civPrefix = civ.substring(0, 4).toLowerCase();
     const goodMaps = [];
     draft.maps.forEach(m => {
@@ -490,12 +490,45 @@ const getGoodMapsForCiv = (civ) => {
       const topWr = (draft.analysis.top_wr?.[m] || []).slice(0, 12);
       if (topCdps.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix)) || 
           topWr.some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix))) {
-        // Abreviar: "Fortified Clearing" -> "FC", "Islands" -> "Isl"
         const shortMap = m.includes(' ') ? m.split(' ').map(w => w[0]).join('') : m.substring(0, 3);
         goodMaps.push(shortMap);
       }
     });
     return goodMaps.length > 0 ? ` (${goodMaps.join(', ')})` : "";
+  };
+
+  // Detalle por mapa: devuelve { mapShort, tier } donde tier = 'top7' | 'top12' | null
+  const getCivMapTiers = (civ) => {
+    if (!draft.analysis || !civ || isHidden(civ)) return [];
+    const civPrefix = civ.substring(0, 4).toLowerCase();
+    const tiers = [];
+    draft.maps.forEach(m => {
+      if (!m) return;
+      const shortMap = m.includes(' ') ? m.split(' ').map(w => w[0]).join('') : m.substring(0, 3);
+      const topCdps = (draft.analysis.top_cdps?.[m] || []);
+      const topWr = (draft.analysis.top_wr?.[m] || []);
+      const inTop7Cdps = topCdps.slice(0, 7).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+      const inTop7Wr = topWr.slice(0, 7).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+      const inTop12Cdps = topCdps.slice(0, 12).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+      const inTop12Wr = topWr.slice(0, 12).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
+      if (inTop7Cdps || inTop7Wr) tiers.push({ map: shortMap, tier: 'top7' });
+      else if (inTop12Cdps || inTop12Wr) tiers.push({ map: shortMap, tier: 'top12' });
+    });
+    return tiers;
+  };
+
+  // Cobertura por mapa: cuántas civs de p1_picks están en Top 12
+  const getMapCoverage = (mapName) => {
+    if (!draft.analysis || !mapName) return { count: 0, civs: [] };
+    const topCdps = (draft.analysis.top_cdps?.[mapName] || []).slice(0, 12);
+    const topWr = (draft.analysis.top_wr?.[mapName] || []).slice(0, 12);
+    const covering = draft.p1_picks.filter(c => {
+      if (isHidden(c) || c === draft.p2_snipe) return false;
+      const pf = c.substring(0, 4).toLowerCase();
+      return topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(pf)) ||
+             topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(pf));
+    });
+    return { count: covering.length, civs: covering };
   };
 
   const getSuggestions = () => {
@@ -1098,6 +1131,9 @@ const getGoodMapsForCiv = (civ) => {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                   {[0, 1, 2].map(i => {
                     const mapName = draft.maps[i];
+                    const coverage = (mapName && draft.p1_picks.length >= 4) ? getMapCoverage(mapName) : null;
+                    const coverageBorder = coverage ? (coverage.count === 0 ? '#ff4444' : coverage.count === 1 ? '#ffb400' : '#2a2d36') : '#2a2d36';
+                    const showAlarm = coverage && coverage.count <= 1 && mapName;
                     
                     // Aseguramos que p1 siempre sea "My Pick" (Host) en el plan, y p2 "Opp Pick" (Guest)
                     const p1_civ = draft.plan_p1[i]?.toLowerCase(); // Host
@@ -1117,9 +1153,11 @@ const getGoodMapsForCiv = (civ) => {
                     }
 
                     return (
-                      <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#161920', padding: '6px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
-                        <div style={{ fontSize: '11px', color: '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {mapName || `Map ${i+1}`}
+                      <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px', backgroundColor: '#161920', padding: '6px', borderRadius: '4px', border: `1px solid ${coverageBorder}`, transition: 'border-color 0.3s' }}>
+                        <div style={{ fontSize: '11px', color: '#e0e0e0', fontWeight: 'bold', borderBottom: '1px dashed #333', paddingBottom: '2px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>
+                          {showAlarm && <span style={{ fontSize: '10px' }}>{coverage.count === 0 ? '🚨' : '⚠️'}</span>}
+                          <span>{mapName || `Map ${i+1}`}</span>
+                          {showAlarm && <span style={{ fontSize: '8px', color: coverageBorder, fontWeight: 'normal' }}>({coverage.count}/2)</span>}
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
@@ -1152,15 +1190,31 @@ const getGoodMapsForCiv = (civ) => {
                   })}
                 </div>
 
-                <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', gap: '10px', color: myColor, fontSize: '11px', fontWeight: 'bold' }}>
-                    {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p2_snipe === c ? 'line-through' : 'none', opacity: draft.p2_snipe === c ? 0.5 : 1 }}>{c}{getGoodMapsForCiv(c)}</span>)}
+                <div style={{ backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36', display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                    {draft.p1_picks.filter(c => !draft.plan_p1.includes(c)).map(c => {
+                      const tiers = getCivMapTiers(c);
+                      const sniped = draft.p2_snipe === c;
+                      return <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '4px', opacity: sniped ? 0.3 : 1, textDecoration: sniped ? 'line-through' : 'none' }}>
+                        <span style={{ color: myColor, fontSize: '11px', fontWeight: 'bold', minWidth: '55px' }}>{c.substring(0,6)}</span>
+                        {tiers.map((t, j) => <span key={j} style={{ fontSize: '8px', padding: '1px 3px', borderRadius: '2px', backgroundColor: t.tier === 'top7' ? '#4caf5033' : '#ffb40033', color: t.tier === 'top7' ? '#4caf50' : '#ffb400', fontWeight: 'bold' }}>{t.map}</span>)}
+                        {tiers.length === 0 && <span style={{ fontSize: '8px', color: '#555', fontStyle: 'italic' }}>—</span>}
+                      </div>
+                    })}
                   </div>
-                  <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px' }}>
-                    UNASSIGNED / BENCH
+                  <div style={{ fontSize: '9px', color: '#555', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px', paddingTop: '2px' }}>
+                    BENCH
                   </div>
-                  <div style={{ display: 'flex', gap: '10px', color: oppColor, fontSize: '11px', fontWeight: 'bold' }}>
-                    {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => <span key={c} style={{ textDecoration: draft.p1_snipe === c ? 'line-through' : 'none', opacity: draft.p1_snipe === c ? 0.5 : 1 }}>{c}{getGoodMapsForCiv(c)}</span>)}
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '3px', alignItems: 'flex-end' }}>
+                    {draft.p2_picks.filter(c => !draft.plan_p2.includes(c)).map(c => {
+                      const tiers = getCivMapTiers(c);
+                      const sniped = draft.p1_snipe === c;
+                      return <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '4px', flexDirection: 'row-reverse', opacity: sniped ? 0.3 : 1, textDecoration: sniped ? 'line-through' : 'none' }}>
+                        <span style={{ color: oppColor, fontSize: '11px', fontWeight: 'bold', minWidth: '55px', textAlign: 'right' }}>{c.substring(0,6)}</span>
+                        {tiers.map((t, j) => <span key={j} style={{ fontSize: '8px', padding: '1px 3px', borderRadius: '2px', backgroundColor: t.tier === 'top7' ? '#4caf5033' : '#ffb40033', color: t.tier === 'top7' ? '#4caf50' : '#ffb400', fontWeight: 'bold' }}>{t.map}</span>)}
+                        {tiers.length === 0 && <span style={{ fontSize: '8px', color: '#555', fontStyle: 'italic' }}>—</span>}
+                      </div>
+                    })}
                   </div>
                 </div>
               </div>
