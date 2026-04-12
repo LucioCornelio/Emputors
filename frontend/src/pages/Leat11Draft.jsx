@@ -497,36 +497,49 @@ const getGoodMapsForCiv = (civ) => {
     return goodMaps.length > 0 ? ` (${goodMaps.join(', ')})` : "";
   };
 
-  // Detalle por mapa: devuelve { mapShort, tier } donde tier = 'top7' | 'top12' | null
+  // Helper: Top 12 civs de un mapa desde datos brutos del db (sin filtrar por excluded)
+  const getRawTop12 = (mapName) => {
+    if (!db || !mapName) return { wr: [], cdps: [] };
+    const allData = db.maps_all?.[mapName] || [];
+    const vodData = db.maps_vod?.[mapName] || [];
+    const parseNum = (v) => { if (!v) return 0; let n = parseFloat(String(v).replace(',','.').replace('%','')); return isNaN(n) ? 0 : (n > 1 ? n/100 : n); };
+    const parseCd = (v) => { if (!v) return 0; let n = parseFloat(String(v).replace(',','.')); return isNaN(n) ? 0 : n; };
+    // WR del counters (ladder) — usar maps_all para WR
+    const wrRows = allData.filter(r => r['Civ List']).map(r => ({ civ: String(r['Civ List']).trim().toLowerCase(), wr: parseNum(r['Win Rate']) }));
+    const wrSorted = wrRows.sort((a,b) => b.wr - a.wr).slice(0, 12).map(r => r.civ.substring(0,4));
+    // CDPS de los VODs
+    const cdpsSource = vodData.length > 0 ? vodData : allData;
+    const cdpsRows = cdpsSource.filter(r => r['Civ List'] && r['CDPS Score']).map(r => ({ civ: String(r['Civ List']).trim().toLowerCase(), cdps: parseCd(r['CDPS Score']) }));
+    const cdpsSorted = cdpsRows.sort((a,b) => b.cdps - a.cdps).slice(0, 12).map(r => r.civ.substring(0,4));
+    return { wr: wrSorted, cdps: cdpsSorted };
+  };
+
+  // Detalle por mapa: devuelve { map, tier } donde tier = 'top7' | 'top12' | null
   const getCivMapTiers = (civ) => {
-    if (!draft.analysis || !civ || isHidden(civ)) return [];
+    if (!db || !civ || isHidden(civ)) return [];
     const civPrefix = civ.substring(0, 4).toLowerCase();
     const tiers = [];
     draft.maps.forEach(m => {
       if (!m) return;
       const shortMap = m.includes(' ') ? m.split(' ').map(w => w[0]).join('') : m.substring(0, 3);
-      const topCdps = (draft.analysis.top_cdps?.[m] || []);
-      const topWr = (draft.analysis.top_wr?.[m] || []);
-      const inTop7Cdps = topCdps.slice(0, 7).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-      const inTop7Wr = topWr.slice(0, 7).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-      const inTop12Cdps = topCdps.slice(0, 12).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-      const inTop12Wr = topWr.slice(0, 12).some(c => typeof c === 'string' && c.toLowerCase().startsWith(civPrefix));
-      if (inTop7Cdps || inTop7Wr) tiers.push({ map: shortMap, tier: 'top7' });
-      else if (inTop12Cdps || inTop12Wr) tiers.push({ map: shortMap, tier: 'top12' });
+      const raw = getRawTop12(m);
+      const wrIdx = raw.wr.findIndex(p => p.startsWith(civPrefix));
+      const cdpsIdx = raw.cdps.findIndex(p => p.startsWith(civPrefix));
+      const bestIdx = Math.min(wrIdx === -1 ? 99 : wrIdx, cdpsIdx === -1 ? 99 : cdpsIdx);
+      if (bestIdx < 7) tiers.push({ map: shortMap, tier: 'top7' });
+      else if (bestIdx < 12) tiers.push({ map: shortMap, tier: 'top12' });
     });
     return tiers;
   };
 
-  // Cobertura por mapa: cuántas civs de p1_picks están en Top 12
+  // Cobertura por mapa: cuántas civs de p1_picks están en Top 12 (datos brutos, sin filtrar)
   const getMapCoverage = (mapName) => {
-    if (!draft.analysis || !mapName) return { count: 0, civs: [] };
-    const topCdps = (draft.analysis.top_cdps?.[mapName] || []).slice(0, 12);
-    const topWr = (draft.analysis.top_wr?.[mapName] || []).slice(0, 12);
+    if (!db || !mapName) return { count: 0, civs: [] };
+    const raw = getRawTop12(mapName);
     const covering = draft.p1_picks.filter(c => {
       if (isHidden(c) || c === draft.p2_snipe) return false;
       const pf = c.substring(0, 4).toLowerCase();
-      return topCdps.some(s => typeof s === 'string' && s.toLowerCase().startsWith(pf)) ||
-             topWr.some(s => typeof s === 'string' && s.toLowerCase().startsWith(pf));
+      return raw.wr.some(p => p.startsWith(pf)) || raw.cdps.some(p => p.startsWith(pf));
     });
     return { count: covering.length, civs: covering };
   };
