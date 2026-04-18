@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Leat11Draft from './pages/Leat11Draft';
+import BuildOrders from './pages/BuildOrders';
+import BuildOrderDetail from './pages/BuildOrderDetail';
 
 // Placeholders (Sección por sección las iremos creando)
 const Home = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🏠 Home Page</h2><p>Age of Emputors Official Portal</p></div>;
 const CivFilter = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🔍 Civ Filter</h2><p>In development...</p></div>;
-const BuildOrders = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>📚 Build Orders</h2><p>In development...</p></div>;
 const Tournaments = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🏆 Tournaments</h2><p>Archive and Brackets in development...</p></div>;
 const HallOfFame = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🏅 Hall of Fame</h2><p>Palmarés in development...</p></div>;
 const Roster = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>⚔️ Clan Roster</h2><p>Member list in development...</p></div>;
@@ -21,6 +22,7 @@ function App() {
           <Route path="/tools/leat11" element={<Leat11Draft />} />
           <Route path="/tools/civ-filter" element={<CivFilter />} />
           <Route path="/academy/build-orders" element={<BuildOrders />} />
+          <Route path="/academy/build-orders/:buildId" element={<BuildOrderDetail />} />
           <Route path="/esports/tournaments" element={<Tournaments />} />
           <Route path="/esports/hall-of-fame" element={<HallOfFame />} />
           <Route path="/clan/roster" element={<Roster />} />
