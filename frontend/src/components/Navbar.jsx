@@ -66,10 +66,13 @@ const Navbar = () => {
   return (
     <nav style={navStyle}>
       {/* Logo y Nombre */}
-      <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-        <img src="/logo.jpg" alt="Logo" style={{ height: '45px', borderRadius: '4px' }} />
-        <span style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>Age of Emputors</span>
-      </Link>
+      <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+  <img 
+    src="/logo_emputors.png" 
+    alt="Emputors" 
+    style={{ height: '70px', objectFit: 'contain' }} 
+  />
+</Link>
 
       {/* Navegación Estructurada */}
       <div style={menuContainerStyle}>
