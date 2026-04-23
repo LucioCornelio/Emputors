@@ -22,6 +22,9 @@ const getIconPath = (name, type) => {
 };
 
 function AdvancedSearch() {
+  useEffect(() => {
+    document.title = 'Advanced Search | Emputors';
+  }, []);
   const [techtree, setTechtree] = useState(null)
   const [filters, setFilters] = useState([])
   

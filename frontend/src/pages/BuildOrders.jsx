@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import builds from '../data/builds.json';
 
@@ -36,6 +36,9 @@ const renderPremiumStratIcons = (strat) => {
 };
 
 const BuildOrders = () => {
+  useEffect(() => {
+    document.title = 'Build Orders | Emputors';
+  }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   
   const civFilter = searchParams.get('civ') || 'All';

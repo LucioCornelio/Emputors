@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import builds from '../data/builds.json';
 
@@ -421,7 +421,14 @@ const BuildOrderDetail = () => {
   const navigate = useNavigate();
   const build = builds.find((b) => b.id === buildId);
   const [gameMode, setGameMode] = useState(false);
-
+  useEffect(() => {
+    if (build) {
+      document.title = `${build.title} | Emputors`;
+    } else {
+      document.title = 'Build Not Found | Emputors';
+    }
+  }, [build]);
+  
   if (!build) {
     return (
       <div style={{ padding: '4rem', textAlign: 'center', color: C.textDim }}>
