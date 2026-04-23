@@ -406,12 +406,17 @@ const YouTubeBtn = ({ url }) => {
   if (!url) return null;
   return (
     <a href={url} target="_blank" rel="noopener noreferrer" style={{
-      display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', marginRight: '15px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', 
+      width: '32px', height: '32px',
       backgroundColor: '#cc0000', color: '#fff', textDecoration: 'none',
-      padding: '3px 10px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold',
-      letterSpacing: '0.05em', transition: 'background 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.5)'
-    }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ff0000'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#cc0000'}>
-      ▶ WATCH VOD
+      borderRadius: '50%', fontSize: '14px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.5)', transition: 'background 0.2s'
+    }} 
+    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ff0000'} 
+    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#cc0000'}
+    title="Watch VOD"
+    >
+      ▶
     </a>
   );
 };
@@ -421,6 +426,7 @@ const BuildOrderDetail = () => {
   const navigate = useNavigate();
   const build = builds.find((b) => b.id === buildId);
   const [gameMode, setGameMode] = useState(false);
+  
   useEffect(() => {
     if (build) {
       document.title = `${build.title} | Emputors`;
@@ -490,7 +496,7 @@ const BuildOrderDetail = () => {
             >←</Link>
             
             <div style={{ padding: '2px', background: 'rgba(30,33,43,0.8)', borderRadius: '6px', border: `1px solid ${C.cyan}`, display: 'flex' }}>
-              <img src={`/civs/${build.civ.toLowerCase()}.png`} style={{ width: '32px', height: '32px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
+              <img src={`/civs/${build.civ.toLowerCase()}.png`} alt={build.civ} style={{ width: '32px', height: '32px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
             </div>
             {renderPremiumStratIcons(build.strategy)}
             
