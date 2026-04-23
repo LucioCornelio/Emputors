@@ -40,39 +40,45 @@ const Navbar = () => {
 
   const dropdownStyle = {
     position: 'absolute',
-    top: '65px',
+    top: '100%',
     left: '0',
     backgroundColor: '#1a1c23',
-    border: '1px solid #2a2d36',
-    borderRadius: '0 0 4px 4px',
     minWidth: '180px',
-    boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '5px 0'
+    padding: '8px 0',
+    borderRadius: '4px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+    border: '1px solid #2a2d36',
+    zIndex: 100,
   };
 
   const dropLinkStyle = {
-    padding: '10px 20px',
-    color: '#a0aab5',
+    display: 'block',     
+    textAlign: 'left',    
+    padding: '10px 16px', 
+    color: '#e0e0e0',
     textDecoration: 'none',
-    fontSize: '13px',
+    fontSize: '14px',
     transition: 'background 0.2s, color 0.2s'
   };
 
   const handleMouseEnter = (menu) => setDropdown(menu);
   const handleMouseLeave = () => setDropdown(null);
 
+  const handleLinkHover = (e, isEnter) => {
+    e.target.style.color = isEnter ? '#ffd700' : '#e0e0e0';
+    e.target.style.backgroundColor = isEnter ? '#2a2d36' : 'transparent';
+  };
+
   return (
     <nav style={navStyle}>
       {/* Logo y Nombre */}
       <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-  <img 
-    src="/logo_emputors.png" 
-    alt="Emputors" 
-    style={{ height: '70px', objectFit: 'contain' }} 
-  />
-</Link>
+        <img 
+          src="/logo_emputors.png" 
+          alt="Emputors" 
+          style={{ height: '70px', objectFit: 'contain' }} 
+        />
+      </Link>
 
       {/* Navegación Estructurada */}
       <div style={menuContainerStyle}>
@@ -83,29 +89,22 @@ const Navbar = () => {
           <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Tools ▾</span>
           {dropdown === 'tools' && (
             <div style={dropdownStyle}>
-              <Link to="/tools/leat11" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>LEAT11 Draft</Link>
-              <Link to="/tools/civ-filter" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>Civ Filter</Link>
+              <Link to="/tools/leat11" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>LEAT11 Draft</Link>
+              <Link to="/tools/advanced-search" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Advanced Search</Link>
             </div>
           )}
         </div>
 
-        {/* Academy Dropdown */}
-        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('academy')} onMouseLeave={handleMouseLeave}>
-          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Academy ▾</span>
-          {dropdown === 'academy' && (
-            <div style={dropdownStyle}>
-              <Link to="/academy/build-orders" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>Build Orders</Link>
-            </div>
-          )}
-        </div>
+        {/* Build Orders (Direct Link) */}
+        <div style={itemStyle}><NavLink to="/academy/build-orders" style={getLinkStyle}>Build Orders</NavLink></div>
 
         {/* Esports Dropdown */}
         <div style={itemStyle} onMouseEnter={() => handleMouseEnter('esports')} onMouseLeave={handleMouseLeave}>
           <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Esports ▾</span>
           {dropdown === 'esports' && (
             <div style={dropdownStyle}>
-              <Link to="/esports/tournaments" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>Tournaments</Link>
-              <Link to="/esports/hall-of-fame" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>Hall of Fame</Link>
+              <Link to="/esports/tournaments" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Tournaments</Link>
+              <Link to="/esports/hall-of-fame" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Hall of Fame</Link>
             </div>
           )}
         </div>
@@ -115,8 +114,8 @@ const Navbar = () => {
           <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Clan ▾</span>
           {dropdown === 'clan' && (
             <div style={dropdownStyle}>
-              <Link to="/clan/roster" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>Roster</Link>
-              <Link to="/clan/about" style={dropLinkStyle} onMouseEnter={e => e.target.style.color='#ffd700'} onMouseLeave={e => e.target.style.color='#a0aab5'}>About</Link>
+              <Link to="/clan/roster" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Roster</Link>
+              <Link to="/clan/about" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>About</Link>
             </div>
           )}
         </div>

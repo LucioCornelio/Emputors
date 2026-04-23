@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import builds from '../data/builds.json';
 
 /* ════════════════════════════════════════════════
@@ -9,8 +9,36 @@ const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
   border: '#2a2d36', borderMed: '#333', borderLt: '#444',
   text: '#e0e0e0', textDim: '#a0aab5', textMute: '#888',
+  cyan: '#00c8c8',
   gold: '#ffd700', green: '#4caf50', red: '#ff4444', blue: '#66b2ff',
   resZero: '#334155', tipGreen: '#86efac', noteGold: '#fde68a',
+};
+
+const diffColor = (d) => d === 'Beginner' ? '#4caf50' : d === 'Intermediate' ? '#fb923c' : '#ff4444';
+
+const STRAT_ICONS = {
+  'Men-at-Arms': ['/units/Manatarms_aoe2DE.png'],
+  'Archers into Scouts': ['/units/Archer_aoe2DE.png', '➔', '/units/Scoutcavalry_aoe2DE.png'],
+  'Archers': ['/units/Archer_aoe2DE.png'],
+  'Scouts': ['/units/Scoutcavalry_aoe2DE.png']
+};
+
+const renderPremiumStratIcons = (strat) => {
+  const icons = STRAT_ICONS[strat];
+  if (!icons) return null;
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+      {icons.map((ic, i) => 
+        ic === '➔' ? (
+          <span key={i} style={{ fontSize: '12px', color: C.gold, margin: '0 2px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>➔</span> 
+        ) : (
+          <div key={i} style={{ padding: '2px', background: 'rgba(30,33,43,0.8)', borderRadius: '6px', border: `1px solid ${C.gold}`, boxShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+            <img src={ic} alt="" style={{ width: '28px', height: '28px', objectFit: 'contain', display: 'block' }} />
+          </div>
+        )
+      )}
+    </div>
+  );
 };
 
 /* ════════════════════════════════════════════════
@@ -70,6 +98,7 @@ const ICON_MAP = {
   'DoubleBitAxe_aoe2DE': '/techs/DoubleBitAxe_aoe2DE.png',
   'HeavyPlowDE': '/techs/HeavyPlowDE.png',
   'HorseCollarDE': '/techs/HorseCollarDE.png',
+  'FletchingDE': '/techs/FletchingDE.png',
   
   'ManAtArmsUpgDE': '/techs/ManAtArmsUpgDE.png',
   'LongSwordsmanUpgDE': '/techs/LongSwordmanUpgDE.png', 
@@ -79,6 +108,7 @@ const ICON_MAP = {
   'Longswordsman_aoe2DE': '/units/Longswordsman_aoe2DE.png',
   'Archer_aoe2DE': '/units/Archer_aoe2DE.png',
   'Tradecart_aoe2DE': '/units/Tradecart_aoe2DE.png',
+  'Scoutcavalry_aoe2DE': '/units/Scoutcavalry_aoe2DE.png',
 
   'House_aoe2DE': '/buildings/House_aoe2DE.png',
   'Mill_aoe2de': '/buildings/Mill_aoe2de.png',
@@ -89,6 +119,7 @@ const ICON_MAP = {
   'Market_aoe2DE': '/buildings/Market_aoe2DE.png',
   'Monastery_aoe2DE': '/buildings/Monastery_aoe2DE.png',
   'Siege_workshop_aoe2DE': '/buildings/Siege_workshop_aoe2DE.png',
+  'Stable_aoe2de': '/buildings/Stable_aoe2de.png',
 };
 
 const iconPath = (name) => {
@@ -378,7 +409,7 @@ const YouTubeBtn = ({ url }) => {
       display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', marginRight: '15px',
       backgroundColor: '#cc0000', color: '#fff', textDecoration: 'none',
       padding: '3px 10px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold',
-      letterSpacing: '0.05em', transition: 'background 0.2s'
+      letterSpacing: '0.05em', transition: 'background 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.5)'
     }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ff0000'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#cc0000'}>
       ▶ WATCH VOD
     </a>
@@ -387,6 +418,7 @@ const YouTubeBtn = ({ url }) => {
 
 const BuildOrderDetail = () => {
   const { buildId } = useParams();
+  const navigate = useNavigate();
   const build = builds.find((b) => b.id === buildId);
   const [gameMode, setGameMode] = useState(false);
 
@@ -399,17 +431,31 @@ const BuildOrderDetail = () => {
     );
   }
 
+  const hoverProps = {
+    onMouseEnter: (e) => e.currentTarget.style.filter = 'brightness(1.4) drop-shadow(0 0 2px rgba(255,255,255,0.2))',
+    onMouseLeave: (e) => e.currentTarget.style.filter = 'none',
+  };
+
   if (gameMode) {
     return (
       <div style={{ maxWidth: '820px', margin: '0 auto', padding: '8px 10px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
         <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          marginBottom: '6px', padding: '4px 10px',
-          background: C.card, border: `1px solid ${C.border}`, borderRadius: '5px',
+          position: 'relative', overflow: 'hidden',
+          borderRadius: '5px', border: `1px solid ${C.border}`,
+          marginBottom: '8px',
         }}>
-          <div style={{ color: C.gold, fontWeight: '700', fontSize: '13px' }}>{build.title}</div>
-          <YouTubeBtn url={build.video} />
-          <ToggleSwitch on={gameMode} onToggle={() => setGameMode(false)} label="Game Mode" />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('/maps/${build.map}.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, rgba(26,28,35,0.95) 20%, rgba(26,28,35,0.6) 100%)', zIndex: 0 }} />
+          
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ color: C.gold, fontWeight: '700', fontSize: '13px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>{build.title}</div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <YouTubeBtn url={build.video} />
+              <ToggleSwitch on={gameMode} onToggle={() => setGameMode(false)} label="Game Mode" />
+            </div>
+          </div>
         </div>
         <AgeSections build={build} />
       </div>
@@ -418,30 +464,56 @@ const BuildOrderDetail = () => {
 
   return (
     <div style={{ maxWidth: '820px', margin: '0 auto', padding: '12px 12px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
+      
+      {/* MAP BANNER HEADER */}
       <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: '10px', padding: '6px 10px',
-        background: C.card, border: `1px solid ${C.border}`, borderRadius: '6px',
-        borderTop: `2px solid ${C.gold}`,
+        position: 'relative', overflow: 'hidden',
+        borderRadius: '6px', border: `1px solid ${C.border}`,
+        marginBottom: '10px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <Link to="/academy/build-orders"
-            style={{ color: C.textMute, textDecoration: 'none', fontSize: '12px' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = C.gold)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = C.textMute)}
-          >←</Link>
-          <div style={{ color: C.gold, fontWeight: '700', fontSize: '15px' }}>{build.title}</div>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('/maps/${build.map}.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, rgba(26,28,35,0.95) 20%, rgba(26,28,35,0.5) 100%)', zIndex: 0 }} />
+        
+        <div style={{ position: 'relative', zIndex: 1, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Link to="/academy/build-orders"
+              style={{ color: C.textMute, textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = C.gold)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = C.textMute)}
+            >←</Link>
+            
+            <div style={{ padding: '2px', background: 'rgba(30,33,43,0.8)', borderRadius: '6px', border: `1px solid ${C.cyan}`, display: 'flex' }}>
+              <img src={`/civs/${build.civ.toLowerCase()}.png`} style={{ width: '32px', height: '32px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
+            </div>
+            {renderPremiumStratIcons(build.strategy)}
+            
+            <div style={{ color: C.gold, fontWeight: '800', fontSize: '16px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+              {build.title}
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <YouTubeBtn url={build.video} />
+            <ToggleSwitch on={gameMode} onToggle={() => setGameMode(true)} label="Game Mode" />
+          </div>
         </div>
-        <YouTubeBtn url={build.video} />
-        <ToggleSwitch on={gameMode} onToggle={() => setGameMode(true)} label="Game Mode" />
       </div>
 
       <div style={{
         background: C.card, border: `1px solid ${C.border}`, borderRadius: '6px',
-        padding: '8px 12px', marginBottom: '8px',
-        fontSize: '11px', lineHeight: '1.55', color: C.textDim,
+        padding: '12px', marginBottom: '12px',
+        textAlign: 'left'
       }}>
-        {build.description}
+        <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.55', marginBottom: '10px' }}>
+          {build.description}
+        </div>
+        
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <span onClick={() => navigate(`/academy/build-orders?civ=${encodeURIComponent(build.civ)}`)} {...hoverProps} style={{ cursor: 'pointer', padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.cyan}1a`, border: `1px solid ${C.cyan}33`, color: C.cyan, transition: 'filter 0.2s' }}>{build.civ}</span>
+          <span onClick={() => navigate(`/academy/build-orders?map=${encodeURIComponent(build.map)}`)} {...hoverProps} style={{ cursor: 'pointer', padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: '#2a2d36', border: '1px solid #444', color: C.textMain, transition: 'filter 0.2s' }}>{build.map}</span>
+          <span onClick={() => navigate(`/academy/build-orders?strat=${encodeURIComponent(build.strategy)}`)} {...hoverProps} style={{ cursor: 'pointer', padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.gold}1a`, border: `1px solid ${C.gold}33`, color: C.gold, transition: 'filter 0.2s' }}>{build.strategy}</span>
+          <span onClick={() => navigate(`/academy/build-orders?diff=${encodeURIComponent(build.difficulty)}`)} {...hoverProps} style={{ cursor: 'pointer', padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${diffColor(build.difficulty)}1a`, border: `1px solid ${diffColor(build.difficulty)}33`, color: diffColor(build.difficulty), transition: 'filter 0.2s' }}>{build.difficulty}</span>
+        </div>
       </div>
 
       <AgeSections build={build} />
@@ -449,7 +521,7 @@ const BuildOrderDetail = () => {
       {build.whatsNext && build.whatsNext.length > 0 && (
         <div style={{
           background: C.card, border: `1px solid ${C.border}`, borderRadius: '6px',
-          padding: '10px 12px', marginTop: '8px',
+          padding: '10px 12px', marginTop: '8px', textAlign: 'left'
         }}>
           <h2 style={{ fontSize: '11px', fontWeight: '800', color: C.gold, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 6px' }}>
             What's Next?
@@ -467,8 +539,8 @@ const BuildOrderDetail = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px',
                   backgroundColor: nc.bg, border: `1px solid ${nc.bd}`,
                 }}>{item.icon}</div>
-                <div style={{ fontSize: '11px', color: C.textDim, lineHeight: '1.45' }}>
-                  <strong style={{ color: C.text }}>{item.title}</strong> {item.text}
+                <div style={{ fontSize: '11px', color: C.textDim, lineHeight: '1.45', textAlign: 'left' }}>
+                  <strong style={{ color: C.textMain }}>{item.title}</strong> {item.text}
                 </div>
               </div>
             );
