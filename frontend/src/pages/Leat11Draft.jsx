@@ -763,7 +763,14 @@ const getGoodMapsForCiv = (civ) => {
   }
 
   const generateLiquipediaUrl = (mapName, civName) => {
-    const map = encodeURIComponent(mapName); const civ = encodeURIComponent(civName);
+    // Regla de traducción específica para Liquipedia
+    let queryMapName = mapName;
+    if (mapName === "Stranded") {
+      queryMapName = "Stranded (2020)";
+    }
+
+    const map = encodeURIComponent(queryMapName); 
+    const civ = encodeURIComponent(civName);
     return `https://liquipedia.net/ageofempires/Special:RunQuery/Game_history?title=Special%3ARunQuery%2FGame_history&pfRunQueryFormName=Game+history&Game_query=opponent1%3D%26opponent2%3D%26faction%3D${civ}%26faction1%3D%26faction2%3D%26game%3D%26mode%3D1v1%26map%3D${map}%26maps%3D%26tournament%3D%26sdate%255Bday%255D%3D%26sdate%255Bmonth%255D%3D%26sdate%255Byear%255D%3D%26edate%255Bday%255D%3D%26edate%255Bmonth%255D%3D%26edate%255Byear%255D%3D%26limit%3D500%26offset%3D%26vod%255Bis_checkbox%255D%3Dtrue%26vod%255Bvalue%255D%3D%26spoilerfree%255Bis_checkbox%255D%3Dtrue%26sort%255Bis_checkbox%255D%3Dtrue&wpRunQuery=&pf_free_text=&Game+query%5Bopponent1%5D=&Game+query%5Bopponent2%5D=&Game+query%5Bfaction%5D=${civ}&Game+query%5Bfaction1%5D=&Game+query%5Bfaction2%5D=&Game+query%5Bgame%5D=&Game+query%5Bmode%5D=1v1&Game+query%5Bmap%5D=${map}&Game+query%5Bmaps%5D=&Game+query%5Btournament%5D=&Game+query%5Bsdate%5D%5Bday%5D=&Game+query%5Bsdate%5D%5Bmonth%5D=&Game+query%5Bsdate%5D%5Byear%5D=&Game+query%5Bedate%5D%5Bday%5D=&Game+query%5Bedate%5D%5Bmonth%5D=&Game+query%5Bedate%5D%5Byear%5D=&Game+query%5Blimit%5D=500&Game+query%5Boffset%5D=&Game+query%5Bvod%5D%5Bis_checkbox%5D=true&Game+query%5Bvod%5D%5Bvalue%5D=&Game+query%5Bspoilerfree%5D%5Bis_checkbox%5D=true&Game+query%5Bsort%5D%5Bis_checkbox%5D=true&wpRunQuery=&pf_free_text=`;
   };
 
