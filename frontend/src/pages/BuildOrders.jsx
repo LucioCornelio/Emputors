@@ -14,7 +14,8 @@ const STRAT_ICONS = {
   'Men-at-Arms': ['/units/Manatarms_aoe2DE.png'],
   'Archers into Scouts': ['/units/Archer_aoe2DE.png', '➔', '/units/Scoutcavalry_aoe2DE.png'],
   'Archers': ['/units/Archer_aoe2DE.png'],
-  'Scouts': ['/units/Scoutcavalry_aoe2DE.png']
+  'Scouts': ['/units/Scoutcavalry_aoe2DE.png'],
+  'FC Crossbow + Siege': ['/techs/CastleAgeIconDE.png', '➔', '/units/Crossbowman_aoe2DE.png', '/buildings/Siege_workshop_aoe2DE.png']
 };
 
 const renderPremiumStratIcons = (strat) => {

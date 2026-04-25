@@ -20,7 +20,8 @@ const STRAT_ICONS = {
   'Men-at-Arms': ['/units/Manatarms_aoe2DE.png'],
   'Archers into Scouts': ['/units/Archer_aoe2DE.png', '➔', '/units/Scoutcavalry_aoe2DE.png'],
   'Archers': ['/units/Archer_aoe2DE.png'],
-  'Scouts': ['/units/Scoutcavalry_aoe2DE.png']
+  'Scouts': ['/units/Scoutcavalry_aoe2DE.png'],
+  'FC Crossbow + Siege': ['/techs/CastleAgeIconDE.png', '➔', '/units/Crossbowman_aoe2DE.png', '/buildings/Siege_workshop_aoe2DE.png']
 };
 
 const renderPremiumStratIcons = (strat) => {
@@ -46,15 +47,18 @@ const renderPremiumStratIcons = (strat) => {
    ════════════════════════════════════════════════ */
 const FOOD_KEYS = ['sheep','boar','underTC','hunt','chicken','berries','farm','fish'];
 const FIXED_KEYS = ['wood','gold','stone','builder'];
+const SHIP_KEYS = ['ship', 'ship_gold']; // Nueva categoría aislada
 
 const RES_ICON = {
   sheep: '🐑', boar: '🐗', underTC: '🛖', hunt: '🦌', chicken: '🐔', berries: '🫐',
   farm: '🌾', fish: '🐟', wood: '🪵', gold: '🪙', stone: '🪨', builder: '🔨',
+  ship: '🚢', ship_gold: '⛵',
 };
 const RES_COLOR = {
   sheep: '#ef4444', boar: '#ef4444', underTC: '#ef4444', hunt: '#ef4444',
   chicken: '#ef4444', berries: '#a855f7', farm: '#84cc16', fish: '#ef4444',
   wood: '#cd7f32', gold: '#fbbf24', stone: '#94a3b8', builder: '#94a3b8',
+  ship: '#3b82f6', ship_gold: '#fbbf24', // Azul para comida, Dorado para oro
 };
 
 /* ════════════════════════════════════════════════
@@ -99,9 +103,11 @@ const ICON_MAP = {
   'HeavyPlowDE': '/techs/HeavyPlowDE.png',
   'HorseCollarDE': '/techs/HorseCollarDE.png',
   'FletchingDE': '/techs/FletchingDE.png',
+  'BodkinArrowDE': '/techs/BodkinArrowDE.png',
   
   'ManAtArmsUpgDE': '/techs/ManAtArmsUpgDE.png',
   'LongSwordsmanUpgDE': '/techs/LongSwordmanUpgDE.png', 
+  'Crossbowman_aoe2DE': '/techs/CrossbowmanDE.png',
 
   'MilitiaDE': '/units/MilitiaDE.png',
   'Manatarms': '/units/Manatarms_aoe2DE.png',
@@ -109,6 +115,8 @@ const ICON_MAP = {
   'Archer_aoe2DE': '/units/Archer_aoe2DE.png',
   'Tradecart_aoe2DE': '/units/Tradecart_aoe2DE.png',
   'Scoutcavalry_aoe2DE': '/units/Scoutcavalry_aoe2DE.png',
+  'FishingShipDE': '/units/FishingShipDE.png',
+  'Hulk_AoE2': '/units/Hulk_AoE2.png',
 
   'House_aoe2DE': '/buildings/House_aoe2DE.png',
   'Mill_aoe2de': '/buildings/Mill_aoe2de.png',
@@ -120,6 +128,7 @@ const ICON_MAP = {
   'Monastery_aoe2DE': '/buildings/Monastery_aoe2DE.png',
   'Siege_workshop_aoe2DE': '/buildings/Siege_workshop_aoe2DE.png',
   'Stable_aoe2de': '/buildings/Stable_aoe2de.png',
+  'Dock_aoe2DE': '/buildings/Dock_aoe2DE.png',
 };
 
 const iconPath = (name) => {
@@ -182,8 +191,11 @@ const NEXT_COL = {
 const validateStep = (step) => {
   if (step.vil === null) return true;
   const res = step.res || {};
-  const sum = Object.values(res).reduce((a, b) => a + b, 0);
-  return sum === 0 || sum === step.vil;
+  // Sumamos solo los recursos que NO son barcos para validar a los aldeanos
+  const vilSum = Object.entries(res)
+    .filter(([k]) => !SHIP_KEYS.includes(k))
+    .reduce((a, [_, v]) => a + v, 0);
+  return vilSum === 0 || vilSum === step.vil;
 };
 
 const Badge = ({ resKey, value }) => {
@@ -210,7 +222,13 @@ const ResBadges = ({ step }) => {
   const fixedBadges = FIXED_KEYS.map((k) => (
     <Badge key={k} resKey={k} value={res[k] || 0} />
   ));
-  const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (res[k] || 0) > 0);
+  
+  // Los barcos SOLO se renderizan si existen en este paso (> 0)
+  const shipBadges = SHIP_KEYS
+    .filter((k) => (res[k] || 0) > 0)
+    .map((k) => <Badge key={k} resKey={k} value={res[k]} />);
+
+  const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (res[k] || 0) > 0) || shipBadges.length > 0;
   if (!hasAnything) return <div style={{ minWidth: '96px' }} />;
 
   return (
@@ -219,6 +237,11 @@ const ResBadges = ({ step }) => {
         <div style={{ display: 'flex', gap: '2px', marginRight: '6px' }}>{foodBadges}</div>
       )}
       <div style={{ display: 'flex', gap: '2px' }}>{fixedBadges}</div>
+      {shipBadges.length > 0 && (
+        <div style={{ display: 'flex', gap: '2px', marginLeft: '6px', paddingLeft: '6px', borderLeft: `1px solid ${C.border}` }}>
+          {shipBadges}
+        </div>
+      )}
     </div>
   );
 };
@@ -312,16 +335,30 @@ const StepRow = ({ step }) => {
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
         borderRadius: '4px', background: rowStyle.bg, border: rowStyle.bd,
       }}>
-        <div style={{ textAlign: 'center', position: 'relative' }}>
+        <div style={{ textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <span style={{
             fontSize: '12px', fontWeight: '700', color: C.gold,
-            fontVariantNumeric: 'tabular-nums',
+            fontVariantNumeric: 'tabular-nums', lineHeight: '1'
           }}>
             {step.vil !== null ? step.vil : '—'}
           </span>
+          
+          {/* Si hay barcos, mostramos el conteo extra debajo de forma compacta */}
+          {(() => {
+            const shipCount = SHIP_KEYS.reduce((sum, k) => sum + (step.res?.[k] || 0), 0);
+            if (shipCount > 0) {
+              return (
+                <span style={{ fontSize: '9px', color: '#3b82f6', fontWeight: 'bold', marginTop: '1px' }}>
+                  +{shipCount}🚢
+                </span>
+              );
+            }
+            return null;
+          })()}
+
           {!valid && (
             <span title="Resource assignment doesn't match vil count" style={{
-              position: 'absolute', top: '-3px', right: '-2px', fontSize: '9px', cursor: 'help',
+              position: 'absolute', top: '-4px', right: '-6px', fontSize: '9px', cursor: 'help',
             }}>⚠️</span>
           )}
         </div>

@@ -226,5 +226,360 @@
       { "icon": "🐎", "style": "scouts",  "title": "Double Down on Scouts:", "text": "If they open Skirmishers to counter your archers, sustain scout production or add a second stable to clean them up." },
       { "icon": "🏰", "style": "general", "title": "Adapt for Castle Age:", "text": "Add a Market, balance economy and click Castle Age behind your pressure." }
     ]
+  },
+
+  {
+    "id": "dravidians-stranded-archers",
+    "title": "19+2 Vils | Dravidians | Stranded | FC Crossbow + Siege",
+    "civ": "Dravidians",
+    "map": "Stranded",
+    "strategy": "FC Crossbow + Siege",
+    "difficulty": "Intermediate",
+    "popCount": 19,
+    "video": null,
+    "description": "Fast 19+2 FC leveraging Dravidian bonuses (+15 fish carry capacity, +200 wood on age up). The wood bonus saves villagers when building the Barracks, Range, and Blacksmith. The core difficulty is balancing wood/food villagers to sustain simultaneous TC and Dock production. Train 2-3 Hulks while advancing to Castle Age to defend your eco (remember fishing ships can garrison).",
+    "author": "LucioCornelio",
+    "strategyIcons": [
+      "/techs/CastleAgeIconDE.png",
+      "/units/Crossbowman_aoe2DE.png",
+      "/buildings/Siege_workshop_aoe2DE.png"
+    ],
+    "tags": [
+      "Fast Castle",
+      "Stranded"
+    ],
+    "ages": [
+      {
+        "name": "Dark Age",
+        "steps": [
+          {
+            "vil": 3,
+            "task": "wood",
+            "desc": "2 vils build TC, 1 builds Dock → TC, all 3 to wood. Start producing up to 8 fishing ships.",
+            "icon": [
+              "Dock_aoe2DE",
+              "🪵"
+            ],
+            "res": {
+              "wood": 3,
+              "ship": 1
+            }
+          },
+          {
+            "vil": 5,
+            "task": "wood",
+            "desc": "2 vils to wood",
+            "icon": "🪵",
+            "res": {
+              "wood": 5,
+              "ship": 2
+            }            
+          },
+          {
+            "vil": 6,
+            "task": "food_tc",
+            "desc": "1 vils to food under TC",
+            "icon": "🍖",
+            "res": {
+              "wood": 5,
+              "underTC": 1,
+              "ship": 2
+            }
+          },
+          {
+            "vil": 7,
+            "task": "wood",
+            "desc": "1 vil to wood",
+            "icon": "🪵",
+            "res": {
+              "wood": 6,
+              "underTC": 1,
+              "ship": 3
+            }            
+          },
+          {
+            "vil": 9,
+            "task": "food_tc",
+            "desc": "2 vils to food under TC",
+            "icon": "🍖",
+            "res": {
+              "wood": 6,
+              "underTC": 3,
+              "ship": 3
+            }
+          },
+          {
+            "vil": 10,
+            "task": "wood",
+            "desc": "1 vil to wood",
+            "icon": "🪵",
+            "res": {
+              "wood": 7,
+              "underTC": 3,
+              "ship": 4
+            }
+          },
+          {
+            "vil": 13,
+            "task": "wood",
+            "desc": "3 vils to food under TC",
+            "icon": "🍖",
+            "res": {
+              "wood": 7,
+              "underTC": 6,
+              "ship": 5
+            }
+          },
+          {
+            "vil": 15,
+            "task": "wood",
+            "desc": "2 vils to wood",
+            "icon": "🪵",
+            "res": {
+              "wood": 9,
+              "underTC": 6,
+              "ship": 5
+            },
+            "note": "build Lumber Camp with the villager when possible"
+          },
+          {
+            "vil": 16,
+            "task": "food_fish",
+            "desc": "1 vil to shore fish → builds 2nd Dock → back to shore fish",
+            "icon": [
+              "Dock_aoe2DE",
+              "🐟"
+            ],
+            "res": {
+              "wood": 9,
+              "underTC": 6,
+              "fish": 1,
+              "ship": 6
+            },
+            "note": null
+          },
+          
+          {
+            "vil": 17,
+            "task": "wood",
+            "desc": "1 to wood",
+            "icon": "🪵",
+            "res": {
+              "wood": 10,
+              "underTC": 6,
+              "fish": 1,
+              "ship": 7
+            },
+            "note": null
+          },
+
+          {
+            "vil": 18,
+            "task": "food_tc",
+            "desc": "1 vils to food under TC",
+            "icon": "🍖",
+            "res": {
+              "wood": 10,
+              "underTC": 7,
+              "fish": 1,
+              "ship": 7
+            }
+          },
+          
+          {
+            "vil": 19,
+            "task": "gold",
+            "desc": "1 to gold",
+            "icon": "🪙",
+            "res": {
+              "wood": 10,
+              "underTC": 7,
+              "fish": 1,
+              "ship": 8,
+              "gold": 1
+            }            
+          },
+
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Loom",
+            "icon": "LoomDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Feudal Age",
+            "icon": "FeudalAgeIconDE",
+            "res": {},
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Advancing to Feudal",
+        "steps": [
+          {
+            "vil": 19,
+            "task": "food_fish",
+            "desc": "Resume fishing: 2 more ships from 2nd Dock (total 10)",
+            "icon": [
+              "FishingShipDE",
+              "🐟"
+            ],
+            "res": {
+              "wood": 10,
+              "underTC": 5,
+              "fish": 1,
+              "gold": 3,
+              "ship": 10
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "1 from wood builds Barracks",
+            "icon": "Barracks_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 19,
+            "task": "reallocate",
+            "desc": "Move 2 from wood to gold",
+            "icon": "🪙",
+            "res": {
+              "wood": 8,
+              "underTC": 5,
+              "fish": 1,
+              "gold": 5,
+              "ship": 10
+            },
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Feudal Age",
+        "steps": [
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "2 from wood build Blacksmith → then to gold",
+            "icon": "Blacksmith_aoe2de",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "2 from wood build Archery Range → then to gold",
+            "icon": "Archery_range_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 19,
+            "task": "reallocate",
+            "desc": "1 more from under TC to gold (total 6)",
+            "icon": "🪙",
+            "res": {
+              "wood": 8,
+              "underTC": 4,
+              "fish": 1,
+              "gold": 6,
+              "ship": 10
+            },
+            "note": "Wood workers rebuilding after Barracks/Blacksmith/Range"
+          },
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Produce 2 Hulks from Docks",
+            "icon": "Hulk_AoE2",
+            "res": {},
+            "note": "Control water — Hulks counter enemy fishing ships"
+          },
+          {
+            "vil": 21,
+            "task": "gold",
+            "desc": "2 new vils to gold (total 8 on gold)",
+            "icon": "🪙",
+            "res": {
+              "wood": 8,
+              "underTC": 4,
+              "fish": 1,
+              "gold": 8,
+              "ship": 10
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Double-Bit Axe",
+            "icon": "DoubleBitAxe_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Start producing Archers non-stop",
+            "icon": "Archer_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Castle Age",
+            "icon": "CastleAgeIconDE",
+            "res": {},
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Castle Age",
+        "steps": [
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Bodkin Arrow",
+            "icon": "BodkinArrowDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Siege Workshop",
+            "icon": "Siege_workshop_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Crossbowman Upgrade",
+            "icon": "Crossbowman_aoe2DE",
+            "res": {},
+            "note": null
+          }
+        ]
+      }
+    ],
+    "whatsNext": [
+      {
+        "icon": "🚢",
+        "style": "water",
+        "title": "Water Control",
+        "text": "Hulks are essential — if you lose water, your 10 fishing ships die and your economy collapses. Keep 2-3 Hulks patrolling."
+      }
+    ]
   }
 ]
