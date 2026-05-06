@@ -24,8 +24,8 @@ const STRAT_ICONS = {
   'FC Crossbow + Siege': ['/techs/CastleAgeIconDE.png', '➔', '/units/Crossbowman_aoe2DE.png', '/buildings/Siege_workshop_aoe2DE.png']
 };
 
-const renderPremiumStratIcons = (strat) => {
-  const icons = STRAT_ICONS[strat];
+const renderPremiumStratIcons = (build) => {
+  const icons = build.strategyIcons || STRAT_ICONS[build.strategy];
   if (!icons) return null;
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -117,7 +117,7 @@ const ICON_MAP = {
   'Scoutcavalry_aoe2DE': '/units/Scoutcavalry_aoe2DE.png',
   'FishingShipDE': '/units/FishingShipDE.png',
   'Hulk_AoE2': '/units/Hulk_AoE2.png',
-
+  'MuleCartDE': '/units/MuleCartDE.png',
   'House_aoe2DE': '/buildings/House_aoe2DE.png',
   'Mill_aoe2de': '/buildings/Mill_aoe2de.png',
   'Lumber_camp_aoe2de': '/buildings/Lumber_camp_aoe2de.png',
@@ -535,7 +535,7 @@ const BuildOrderDetail = () => {
             <div style={{ padding: '2px', background: 'rgba(30,33,43,0.8)', borderRadius: '6px', border: `1px solid ${C.cyan}`, display: 'flex' }}>
               <img src={`/civs/${build.civ.toLowerCase()}.png`} alt={build.civ} style={{ width: '32px', height: '32px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
             </div>
-            {renderPremiumStratIcons(build.strategy)}
+            {renderPremiumStratIcons(build)}
             
             <div style={{ color: C.gold, fontWeight: '800', fontSize: '16px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
               {build.title}
@@ -554,9 +554,15 @@ const BuildOrderDetail = () => {
         padding: '12px', marginBottom: '12px',
         textAlign: 'left'
       }}>
-        <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.55', marginBottom: '10px' }}>
+        <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.55', marginBottom: '8px' }}>
           {build.description}
         </div>
+
+        {build.author && (
+          <div style={{ color: C.textMute, fontSize: '11px', fontStyle: 'italic', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span>📝</span> Build order concept by <strong style={{color: C.gold}}>{build.author}</strong>
+          </div>
+        )}
         
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
           <span onClick={() => navigate(`/academy/build-orders?civ=${encodeURIComponent(build.civ)}`)} {...hoverProps} style={{ cursor: 'pointer', padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.cyan}1a`, border: `1px solid ${C.cyan}33`, color: C.cyan, transition: 'filter 0.2s' }}>{build.civ}</span>

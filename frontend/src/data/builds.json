@@ -166,7 +166,6 @@
       { "icon": "🏰", "style": "general",  "title": "Castle Age goal:", "text": "Full Long Swordsman army with upgrades. Monastery for Redemption or Siege Workshop for Battering Rams depending on the matchup." }
     ]
   },
-
   {
     "id": "mongols-skukuza-archers-scouts",
     "title": "17 Vils | Mongols | Skukuza | Archers into Scouts",
@@ -227,7 +226,6 @@
       { "icon": "🏰", "style": "general", "title": "Adapt for Castle Age:", "text": "Add a Market, balance economy and click Castle Age behind your pressure." }
     ]
   },
-
   {
     "id": "dravidians-stranded-archers",
     "title": "19+2 Vils | Dravidians | Stranded | FC Crossbow + Siege",
@@ -501,7 +499,7 @@
             "desc": "Produce 2 Hulks from Docks",
             "icon": "Hulk_AoE2",
             "res": {},
-            "note": "Control water — Hulks counter enemy fishing ships"
+            "note": "Defend own fishing ships"
           },
           {
             "vil": 21,
@@ -579,6 +577,238 @@
         "style": "water",
         "title": "Water Control",
         "text": "Hulks are essential — if you lose water, your 10 fishing ships die and your economy collapses. Keep 2-3 Hulks patrolling."
+      }
+    ]
+  },
+  {
+    "id": "armenians-skukuza-ls",
+    "title": "18 Vils | Armenians | Skukuza | Feudal Long Swordsmen",
+    "civ": "Armenians",
+    "map": "Skukuza",
+    "strategy": "Men-at-Arms",
+    "difficulty": "Intermediate",
+    "popCount": 18,
+    "video": null,
+    "description": "Armenians aggressive opening on Skukuza capitalizing on their Mule Carts for a hyper-efficient center hunt. Their unique bonus allows researching Long Swordsman in Feudal Age, unleashing a devastating infantry push before the opponent can reach Castle Age.",
+    "author": "Selava",
+    "strategyIcons": [
+      "/techs/FeudalAgeIconDE.png",
+      "/units/Longswordsman_aoe2DE.png"
+    ],
+    "tags": [
+      "Hunt eco",
+      "Mule Cart",
+      "Feudal LS"
+    ],
+    "ages": [
+      {
+        "name": "Dark Age",
+        "steps": [
+          {
+            "vil": 6,
+            "task": "food_sheep",
+            "desc": "6 vils to sheep",
+            "res": {
+              "sheep": 6
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Scout immediately goes to center of map to push deer",
+            "icon": "Scoutcavalry_aoe2DE",
+            "res": {},
+            "note": "Explore woodlines with sheep, queue always a sheep after the deer under TC"
+          },
+          {
+            "vil": 9,
+            "task": "food_hunt",
+            "desc": "3 vils to hunt (center)",
+            "icon": [
+              "MuleCartDE",
+              "🦌"
+            ],
+            "res": {
+              "underTC": 6,
+              "hunt": 3
+            },
+            "note": "First vil makes Mule Cart"
+          },
+          {
+            "vil": 12,
+            "task": "wood",
+            "desc": "3 vils to wood (stragglers)",
+            "icon": [
+              "House_aoe2DE",
+              "🪵"
+            ],
+            "res": {
+              "underTC": 6,
+              "hunt": 3,
+              "wood": 3
+            },
+            "note": "First vil builds House"
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Barracks in middle when 175 wood",
+            "icon": "Barracks_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 18,
+            "task": "food_hunt",
+            "desc": "6 vils to hunt (center)",
+            "icon": "🦌",
+            "res": {
+              "underTC": 6,
+              "hunt": 9,
+              "wood": 3
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build one more House",
+            "icon": "House_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Loom",
+            "icon": "LoomDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Feudal Age",
+            "icon": "FeudalAgeIconDE",
+            "res": {},
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Advancing to Feudal",
+        "steps": [
+          {
+            "vil": 18,
+            "task": "reallocate",
+            "desc": "Move 6 from under TC: 3 to gold (Mining Camp) and 3 to hunt.",
+            "icon": [
+              "🛖",
+              "🪙",
+              "🦌"
+            ],
+            "res": {
+              "hunt": 12,
+              "wood": 3,
+              "gold": 3
+            },
+            "note": "You should now have 12 on hunt, 3 on wood (stragglers), 3 on gold."
+          },
+          {
+            "vil": null,
+            "task": "train",
+            "desc": "Train 4 Militias",
+            "icon": "MilitiaDE",
+            "res": {},
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Feudal Age",
+        "steps": [
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Men-at-Arms Upgrade",
+            "icon": "ManAtArmsUpgDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Long Swordsman Upgrade (Armenians Feudal bonus)",
+            "icon": "LongSwordsmanUpgDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 21,
+            "task": "wood",
+            "desc": "3 new vils to wood (total 6 on wood)",
+            "icon": [
+              "MuleCartDE",
+              "🪵"
+            ],
+            "res": {
+              "hunt": 12,
+              "wood": 6,
+              "gold": 3
+            },
+            "note": "First makes Mule Cart"
+          },
+          {
+            "vil": 26,
+            "task": "food_hunt",
+            "desc": "5 new vils to hunt (total 17 on hunt)",
+            "icon": "🦌",
+            "res": {
+              "hunt": 17,
+              "wood": 6,
+              "gold": 3
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build 2nd Barracks (or Archery Range)",
+            "icon": [
+              "Barracks_aoe2DE",
+              "Archery_range_aoe2DE"
+            ],
+            "res": {},
+            "note": "Switch to Range for Skirmishers if they commit heavily to Archers"
+          },
+          {
+            "vil": 29,
+            "task": "gold",
+            "desc": "3 new vils to gold (total 6 on gold)",
+            "icon": "🪙",
+            "res": {
+              "hunt": 17,
+              "wood": 6,
+              "gold": 6
+            },
+            "note": "Adapt from here"
+          }
+        ]
+      }
+    ],
+    "whatsNext": [
+      {
+        "icon": "⚔️",
+        "style": "maa",
+        "title": "Unstoppable Infantry:",
+        "text": "Feudal Long Swordsmen trade cost-effectively against almost everything in Feudal Age. Keep the pressure high and force engagements."
+      },
+      {
+        "icon": "🏹",
+        "style": "archers",
+        "title": "Beware of Mass Archers:",
+        "text": "If the opponent masses Archers and micro-manages well, your Long Swordsmen will melt. Anticipate this by transitioning into Skirmishers using your 6 wood / 6 gold economy."
       }
     ]
   }

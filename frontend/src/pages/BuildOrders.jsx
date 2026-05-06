@@ -18,8 +18,8 @@ const STRAT_ICONS = {
   'FC Crossbow + Siege': ['/techs/CastleAgeIconDE.png', '➔', '/units/Crossbowman_aoe2DE.png', '/buildings/Siege_workshop_aoe2DE.png']
 };
 
-const renderPremiumStratIcons = (strat) => {
-  const icons = STRAT_ICONS[strat];
+const renderPremiumStratIcons = (b) => {
+  const icons = b.strategyIcons || STRAT_ICONS[b.strategy];
   if (!icons) return null;
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -169,7 +169,7 @@ const BuildOrders = () => {
                   <div style={{ padding: '2px', background: '#1e212b', borderRadius: '6px', border: `1px solid ${C.cyan}`, boxShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                     <img src={`/civs/${b.civ.toLowerCase()}.png`} alt="" style={{ width: '24px', height: '24px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
                   </div>
-                  {renderPremiumStratIcons(b.strategy)}
+                  {renderPremiumStratIcons(b)}
                   <div style={{ marginLeft: 'auto', backgroundColor: '#2a2d36', padding: '4px 10px', borderRadius: '4px', border: `1px solid ${C.borderLt}`, color: C.textMain, fontSize: '11px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
                     {b.popCount} Vils
                   </div>
