@@ -26,7 +26,7 @@ function Leat11Draft() {
   const [draftPairs, setDraftPairs] = useState([{ id: 1, mapUrl: "", civUrl: "" }]);
   const [oppAnalysis, setOppAnalysis] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-
+  const [debugLogs, setDebugLogs] = useState([]);
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
 
@@ -149,11 +149,14 @@ function Leat11Draft() {
     if (!oppName.trim()) return alert("⚠️ Please enter the Opponent's Name.");
     setIsAnalyzing(true);
     setOppAnalysis(null);
+    setDebugLogs([]);
+    
+    let logs = [];
+    const addLog = (msg) => { console.log(msg); logs.push(msg); };
 
     const stats = { mapPicks: {}, mapBans: {}, civPicks: {}, civBans: {} };
 
-    // Simulador interno para rastrear picks ocultos
-    const processSimulation = (events, oppRole, isMap) => {
+    const processSimulation = (events, oppRole, isMap, draftId) => {
       const targetPicks = isMap ? stats.mapPicks : stats.civPicks;
       const targetBans = isMap ? stats.mapBans : stats.civBans;
       
@@ -172,17 +175,17 @@ function Leat11Draft() {
         if (type === "ban" || type === "snipe") {
           if (player === oppRole && !isHidden) {
             targetBans[cleanItem] = (targetBans[cleanItem] || 0) + 1;
+            addLog(`[${draftId}] ${oppRole} BANNED/SNIPED: ${cleanItem}`);
           }
         } else if (type === "pick" || type.includes("reveal")) {
           if (!isHidden) {
-            if (player === "HOST") p1_picks.push(cleanItem);
-            else if (player === "GUEST") p2_picks.push(cleanItem);
+            if (player === "HOST") { p1_picks.push(cleanItem); addLog(`[${draftId}] HOST PICKED: ${cleanItem}`); }
+            else if (player === "GUEST") { p2_picks.push(cleanItem); addLog(`[${draftId}] GUEST PICKED: ${cleanItem}`); }
             else {
-               // Si es un reveal global y CM no especifica el jugador, llena el primer hueco "Hidden" libre
                const idx1 = p1_picks.indexOf("Hidden");
                const idx2 = p2_picks.indexOf("Hidden");
-               if (idx1 !== -1) p1_picks[idx1] = cleanItem;
-               else if (idx2 !== -1) p2_picks[idx2] = cleanItem;
+               if (idx1 !== -1) { p1_picks[idx1] = cleanItem; addLog(`[${draftId}] REVEALED for HOST: ${cleanItem}`); }
+               else if (idx2 !== -1) { p2_picks[idx2] = cleanItem; addLog(`[${draftId}] REVEALED for GUEST: ${cleanItem}`); }
             }
           } else {
              if (player === "HOST") p1_picks.push("Hidden");
@@ -191,8 +194,9 @@ function Leat11Draft() {
         }
       });
 
-      // Sumamos los picks finales limpios asignados al rival
       const oppPicks = oppRole === "HOST" ? p1_picks : p2_picks;
+      addLog(`[${draftId}] Final picks for ${oppRole}: ${JSON.stringify(oppPicks)}`);
+      
       oppPicks.forEach(pick => {
         if (!pick.startsWith("Hidden")) targetPicks[pick] = (targetPicks[pick] || 0) + 1;
       });
@@ -200,14 +204,13 @@ function Leat11Draft() {
 
     try {
       for (const pair of draftPairs) {
-        // Procesar Mapas
         const mId = extractCmId(pair.mapUrl);
         if (mId) {
+          addLog(`--- Fetching Map Draft: ${mId} ---`);
           const mRes = await fetch(`/api/draft?id=${mId}`);
           if (mRes.ok) {
             const data = await mRes.json();
             const p = data.preset || {};
-            // Cobertura total de propiedades de nombre en CM
             const hostName = String(data.host || p.hostName || p.nameA || p.name1 || "").toLowerCase();
             const guestName = String(data.guest || p.guestName || p.nameB || p.name2 || "").toLowerCase();
             const targetName = oppName.toLowerCase();
@@ -216,14 +219,18 @@ function Leat11Draft() {
             if (hostName.includes(targetName)) oppRole = "HOST";
             else if (guestName.includes(targetName)) oppRole = "GUEST";
             
+            addLog(`[${mId}] HOST: ${hostName} | GUEST: ${guestName} | Assigned OppRole: ${oppRole}`);
+            
             const events = data.events || data.actions || [];
-            processSimulation(events, oppRole, true);
+            processSimulation(events, oppRole, true, mId);
+          } else {
+            addLog(`[${mId}] ERROR: Failed to fetch API`);
           }
         }
 
-        // Procesar Civis
         const cId = extractCmId(pair.civUrl);
         if (cId) {
+          addLog(`--- Fetching Civ Draft: ${cId} ---`);
           const cRes = await fetch(`/api/draft?id=${cId}`);
           if (cRes.ok) {
             const data = await cRes.json();
@@ -236,14 +243,19 @@ function Leat11Draft() {
             if (hostName.includes(targetName)) oppRole = "HOST";
             else if (guestName.includes(targetName)) oppRole = "GUEST";
             
+            addLog(`[${cId}] HOST: ${hostName} | GUEST: ${guestName} | Assigned OppRole: ${oppRole}`);
+
             const events = data.events || data.actions || [];
-            processSimulation(events, oppRole, false);
+            processSimulation(events, oppRole, false, cId);
+          } else {
+            addLog(`[${cId}] ERROR: Failed to fetch API`);
           }
         }
       }
       setOppAnalysis(stats);
+      setDebugLogs(logs);
     } catch (err) {
-      console.error("Analyzer Error:", err);
+      addLog(`CRITICAL ERROR: ${err.message}`);
       alert("Error fetching draft data. Check URLs or your proxy connection.");
     }
     setIsAnalyzing(false);
@@ -1672,6 +1684,13 @@ const getGoodMapsForCiv = (civ) => {
                     </div>
                   );
                 })}
+              </div>
+            )}
+            {/* CAJA DE LOGS PARA DEBUG */}
+            {debugLogs.length > 0 && (
+              <div style={{ marginTop: '10px', backgroundColor: '#111', padding: '10px', borderRadius: '4px', border: '1px solid #ff4444', color: '#0f0', fontFamily: 'monospace', fontSize: '10px', maxHeight: '200px', overflowY: 'auto' }}>
+                <div style={{ color: '#ff4444', marginBottom: '5px', fontWeight: 'bold' }}>DEBUG LOGS (Revisa qué nombres detecta y cómo los asigna):</div>
+                {debugLogs.map((log, i) => <div key={i}>{log}</div>)}
               </div>
             )}
           </div>
