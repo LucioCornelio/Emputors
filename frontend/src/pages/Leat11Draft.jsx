@@ -211,8 +211,9 @@ function Leat11Draft() {
           if (mRes.ok) {
             const data = await mRes.json();
             const p = data.preset || {};
-            const hostName = String(data.host || p.hostName || p.nameA || p.name1 || "").toLowerCase();
-            const guestName = String(data.guest || p.guestName || p.nameB || p.name2 || "").toLowerCase();
+            // Captain Mode guarda los nombres en la raíz como nameA y nameB
+            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "").toLowerCase();
+            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "").toLowerCase();
             const targetName = oppName.toLowerCase();
             
             let oppRole = "GUEST"; 
@@ -235,8 +236,8 @@ function Leat11Draft() {
           if (cRes.ok) {
             const data = await cRes.json();
             const p = data.preset || {};
-            const hostName = String(data.host || p.hostName || p.nameA || p.name1 || "").toLowerCase();
-            const guestName = String(data.guest || p.guestName || p.nameB || p.name2 || "").toLowerCase();
+            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "").toLowerCase();
+            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "").toLowerCase();
             const targetName = oppName.toLowerCase();
             
             let oppRole = "GUEST";
