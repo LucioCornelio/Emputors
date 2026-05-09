@@ -22,11 +22,10 @@ function Leat11Draft() {
   const [civAnalysis, setCivAnalysis] = useState(null);
   
   // ESTADOS DEL OPP ANALYZER
-  const [oppName, setOppName] = useState("");
-  const [draftPairs, setDraftPairs] = useState([{ id: 1, mapUrl: "", civUrl: "" }]);
+  const [draftPairs, setDraftPairs] = useState([{ id: Date.now(), mapUrl: "", civUrl: "", mapDetails: null, civDetails: null }]);
   const [oppAnalysis, setOppAnalysis] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [debugLogs, setDebugLogs] = useState([]);
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
 
@@ -145,21 +144,87 @@ function Leat11Draft() {
     return match ? match[1] : url.trim();
   };
 
-  const runOppAnalyzer = async () => {
-    if (!oppName.trim()) return alert("⚠️ Please enter the Opponent's Name.");
-    setIsAnalyzing(true);
+  const fetchDrafts = async () => {
+    setIsFetching(true);
     setOppAnalysis(null);
-    setDebugLogs([]);
     
-    let logs = [];
-    const addLog = (msg) => { console.log(msg); logs.push(msg); };
+    const updatedPairs = await Promise.all(draftPairs.map(async (pair) => {
+      const newPair = { ...pair };
 
+      // Extraer datos del Mapa
+      const mId = extractCmId(pair.mapUrl);
+      if (mId && pair.mapUrl !== pair._lastFetchedMapUrl) {
+        try {
+          const mRes = await fetch(`/api/draft?id=${mId}`);
+          if (mRes.ok) {
+            const data = await mRes.json();
+            const p = data.preset || {};
+            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "Host").trim();
+            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "Guest").trim();
+            newPair.mapDetails = { hostName, guestName, events: data.events || data.actions || [], selectedRole: "" };
+            newPair._lastFetchedMapUrl = pair.mapUrl;
+          }
+        } catch (err) { console.error(err); }
+      }
+
+      // Extraer datos de Civis
+      const cId = extractCmId(pair.civUrl);
+      if (cId && pair.civUrl !== pair._lastFetchedCivUrl) {
+        try {
+          const cRes = await fetch(`/api/draft?id=${cId}`);
+          if (cRes.ok) {
+            const data = await cRes.json();
+            const p = data.preset || {};
+            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "Host").trim();
+            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "Guest").trim();
+            newPair.civDetails = { hostName, guestName, events: data.events || data.actions || [], selectedRole: "" };
+            newPair._lastFetchedCivUrl = pair.civUrl;
+          }
+        } catch (err) { console.error(err); }
+      }
+      return newPair;
+    }));
+
+    setDraftPairs(updatedPairs);
+    setIsFetching(false);
+  };
+
+  const handleRoleSelect = (pairId, type, role) => {
+    let targetName = "";
+    const sourcePair = draftPairs.find(p => p.id === pairId);
+    if (sourcePair) {
+       const details = type === 'map' ? sourcePair.mapDetails : sourcePair.civDetails;
+       if (details) targetName = role === 'HOST' ? details.hostName : details.guestName;
+    }
+
+    if (!targetName) return;
+    const normalizedTarget = targetName.toLowerCase();
+
+    // Autopropagar a todos los desplegables
+    const updated = draftPairs.map(p => {
+       const newP = { ...p };
+       if (newP.mapDetails) {
+           newP.mapDetails = { ...newP.mapDetails };
+           if (newP.mapDetails.hostName.toLowerCase() === normalizedTarget) newP.mapDetails.selectedRole = 'HOST';
+           else if (newP.mapDetails.guestName.toLowerCase() === normalizedTarget) newP.mapDetails.selectedRole = 'GUEST';
+       }
+       if (newP.civDetails) {
+           newP.civDetails = { ...newP.civDetails };
+           if (newP.civDetails.hostName.toLowerCase() === normalizedTarget) newP.civDetails.selectedRole = 'HOST';
+           else if (newP.civDetails.guestName.toLowerCase() === normalizedTarget) newP.civDetails.selectedRole = 'GUEST';
+       }
+       return newP;
+    });
+    setDraftPairs(updated);
+  };
+
+  const runOppAnalyzer = () => {
+    setIsAnalyzing(true);
     const stats = { mapPicks: {}, mapBans: {}, civPicks: {}, civBans: {} };
 
-    const processSimulation = (events, oppRole, isMap, draftId) => {
+    const processSimulation = (events, oppRole, isMap) => {
       const targetPicks = isMap ? stats.mapPicks : stats.civPicks;
       const targetBans = isMap ? stats.mapBans : stats.civBans;
-      
       let p1_picks = []; let p2_picks = [];
 
       events.forEach(ev => {
@@ -168,24 +233,20 @@ function Leat11Draft() {
         const itemRaw = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId || "";
         
         if (!itemRaw || type === "none") return;
-        
         const cleanItem = String(itemRaw).trim().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
         const isHidden = cleanItem.startsWith("Hidden");
 
         if (type === "ban" || type === "snipe") {
-          if (player === oppRole && !isHidden) {
-            targetBans[cleanItem] = (targetBans[cleanItem] || 0) + 1;
-            addLog(`[${draftId}] ${oppRole} BANNED/SNIPED: ${cleanItem}`);
-          }
+          if (player === oppRole && !isHidden) targetBans[cleanItem] = (targetBans[cleanItem] || 0) + 1;
         } else if (type === "pick" || type.includes("reveal")) {
           if (!isHidden) {
-            if (player === "HOST") { p1_picks.push(cleanItem); addLog(`[${draftId}] HOST PICKED: ${cleanItem}`); }
-            else if (player === "GUEST") { p2_picks.push(cleanItem); addLog(`[${draftId}] GUEST PICKED: ${cleanItem}`); }
+            if (player === "HOST") p1_picks.push(cleanItem);
+            else if (player === "GUEST") p2_picks.push(cleanItem);
             else {
                const idx1 = p1_picks.indexOf("Hidden");
                const idx2 = p2_picks.indexOf("Hidden");
-               if (idx1 !== -1) { p1_picks[idx1] = cleanItem; addLog(`[${draftId}] REVEALED for HOST: ${cleanItem}`); }
-               else if (idx2 !== -1) { p2_picks[idx2] = cleanItem; addLog(`[${draftId}] REVEALED for GUEST: ${cleanItem}`); }
+               if (idx1 !== -1) p1_picks[idx1] = cleanItem;
+               else if (idx2 !== -1) p2_picks[idx2] = cleanItem;
             }
           } else {
              if (player === "HOST") p1_picks.push("Hidden");
@@ -195,70 +256,21 @@ function Leat11Draft() {
       });
 
       const oppPicks = oppRole === "HOST" ? p1_picks : p2_picks;
-      addLog(`[${draftId}] Final picks for ${oppRole}: ${JSON.stringify(oppPicks)}`);
-      
       oppPicks.forEach(pick => {
         if (!pick.startsWith("Hidden")) targetPicks[pick] = (targetPicks[pick] || 0) + 1;
       });
     };
 
-    try {
-      for (const pair of draftPairs) {
-        const mId = extractCmId(pair.mapUrl);
-        if (mId) {
-          addLog(`--- Fetching Map Draft: ${mId} ---`);
-          const mRes = await fetch(`/api/draft?id=${mId}`);
-          if (mRes.ok) {
-            const data = await mRes.json();
-            const p = data.preset || {};
-            // Captain Mode guarda los nombres en la raíz como nameA y nameB
-            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "").toLowerCase();
-            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "").toLowerCase();
-            const targetName = oppName.toLowerCase();
-            
-            let oppRole = "GUEST"; 
-            if (hostName.includes(targetName)) oppRole = "HOST";
-            else if (guestName.includes(targetName)) oppRole = "GUEST";
-            
-            addLog(`[${mId}] HOST: ${hostName} | GUEST: ${guestName} | Assigned OppRole: ${oppRole}`);
-            
-            const events = data.events || data.actions || [];
-            processSimulation(events, oppRole, true, mId);
-          } else {
-            addLog(`[${mId}] ERROR: Failed to fetch API`);
-          }
-        }
-
-        const cId = extractCmId(pair.civUrl);
-        if (cId) {
-          addLog(`--- Fetching Civ Draft: ${cId} ---`);
-          const cRes = await fetch(`/api/draft?id=${cId}`);
-          if (cRes.ok) {
-            const data = await cRes.json();
-            const p = data.preset || {};
-            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "").toLowerCase();
-            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "").toLowerCase();
-            const targetName = oppName.toLowerCase();
-            
-            let oppRole = "GUEST";
-            if (hostName.includes(targetName)) oppRole = "HOST";
-            else if (guestName.includes(targetName)) oppRole = "GUEST";
-            
-            addLog(`[${cId}] HOST: ${hostName} | GUEST: ${guestName} | Assigned OppRole: ${oppRole}`);
-
-            const events = data.events || data.actions || [];
-            processSimulation(events, oppRole, false, cId);
-          } else {
-            addLog(`[${cId}] ERROR: Failed to fetch API`);
-          }
-        }
+    draftPairs.forEach(pair => {
+      if (pair.mapDetails && pair.mapDetails.selectedRole) {
+        processSimulation(pair.mapDetails.events, pair.mapDetails.selectedRole, true);
       }
-      setOppAnalysis(stats);
-      setDebugLogs(logs);
-    } catch (err) {
-      addLog(`CRITICAL ERROR: ${err.message}`);
-      alert("Error fetching draft data. Check URLs or your proxy connection.");
-    }
+      if (pair.civDetails && pair.civDetails.selectedRole) {
+        processSimulation(pair.civDetails.events, pair.civDetails.selectedRole, false);
+      }
+    });
+
+    setOppAnalysis(stats);
     setIsAnalyzing(false);
   };
 
@@ -1608,47 +1620,72 @@ const getGoodMapsForCiv = (civ) => {
         {activeTab === 'oppAnalyzer' && (
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             
-            {/* CONTROLES COMPACTOS */}
-            <div style={{ backgroundColor: '#1a1c23', padding: '10px', borderRadius: '4px', border: '1px solid #333', display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <span style={{ color: '#ffd700', fontSize: '11px', fontWeight: 'bold' }}>OPPONENT NAME</span>
-                <input 
-                  type="text" 
-                  placeholder="e.g. xavi_rosendo" 
-                  value={oppName} 
-                  onChange={(e) => setOppName(e.target.value)}
-                  style={{ backgroundColor: '#161920', color: '#fff', border: '1px solid #444', padding: '4px 8px', borderRadius: '3px', fontSize: '12px', width: '150px', outline: 'none' }}
-                />
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
+            {/* CONTROLES EN DOS FASES */}
+            <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '4px', border: '1px solid #333', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {draftPairs.map((pair, index) => (
-                  <div key={pair.id} style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <span style={{ color: '#555', fontSize: '10px', width: '15px' }}>#{index + 1}</span>
-                    <input 
-                      type="text" 
-                      placeholder="Map Draft URL" 
-                      value={pair.mapUrl} 
-                      onChange={(e) => { const n = [...draftPairs]; n[index].mapUrl = e.target.value; setDraftPairs(n); }}
-                      style={{ flex: 1, backgroundColor: '#1e212b', color: '#e0e0e0', border: '1px solid #444', padding: '4px 8px', borderRadius: '3px', fontSize: '11px', outline: 'none' }}
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="Civ Draft URL" 
-                      value={pair.civUrl} 
-                      onChange={(e) => { const n = [...draftPairs]; n[index].civUrl = e.target.value; setDraftPairs(n); }}
-                      style={{ flex: 1, backgroundColor: '#1e212b', color: '#e0e0e0', border: '1px solid #444', padding: '4px 8px', borderRadius: '3px', fontSize: '11px', outline: 'none' }}
-                    />
+                  <div key={pair.id} style={{ display: 'flex', gap: '10px', alignItems: 'center', backgroundColor: '#161920', padding: '8px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
+                    <span style={{ color: '#555', fontSize: '11px', fontWeight: 'bold' }}>#{index + 1}</span>
+                    
+                    {/* INPUT MAPA */}
+                    <div style={{ display: 'flex', flex: 1, gap: '5px' }}>
+                      <input 
+                        type="text" placeholder="Map Draft URL" value={pair.mapUrl} 
+                        onChange={(e) => { const n = [...draftPairs]; n[index].mapUrl = e.target.value; setDraftPairs(n); }}
+                        style={{ flex: 1, backgroundColor: '#1e212b', color: '#e0e0e0', border: '1px solid #444', padding: '4px 8px', borderRadius: '3px', fontSize: '11px', outline: 'none' }}
+                      />
+                      {pair.mapDetails && (
+                        <select 
+                          value={pair.mapDetails.selectedRole} 
+                          onChange={(e) => handleRoleSelect(pair.id, 'map', e.target.value)}
+                          style={{ width: '130px', backgroundColor: pair.mapDetails.selectedRole ? '#2d3748' : '#1e212b', color: pair.mapDetails.selectedRole ? '#ffd700' : '#888', border: '1px solid #444', padding: '4px', borderRadius: '3px', fontSize: '10px', outline: 'none', cursor: 'pointer' }}
+                        >
+                          <option value="">Select Opponent...</option>
+                          <option value="HOST">{pair.mapDetails.hostName} (Host)</option>
+                          <option value="GUEST">{pair.mapDetails.guestName} (Guest)</option>
+                        </select>
+                      )}
+                    </div>
+
+                    {/* INPUT CIV */}
+                    <div style={{ display: 'flex', flex: 1, gap: '5px' }}>
+                      <input 
+                        type="text" placeholder="Civ Draft URL" value={pair.civUrl} 
+                        onChange={(e) => { const n = [...draftPairs]; n[index].civUrl = e.target.value; setDraftPairs(n); }}
+                        style={{ flex: 1, backgroundColor: '#1e212b', color: '#e0e0e0', border: '1px solid #444', padding: '4px 8px', borderRadius: '3px', fontSize: '11px', outline: 'none' }}
+                      />
+                      {pair.civDetails && (
+                        <select 
+                          value={pair.civDetails.selectedRole} 
+                          onChange={(e) => handleRoleSelect(pair.id, 'civ', e.target.value)}
+                          style={{ width: '130px', backgroundColor: pair.civDetails.selectedRole ? '#2d3748' : '#1e212b', color: pair.civDetails.selectedRole ? '#ffd700' : '#888', border: '1px solid #444', padding: '4px', borderRadius: '3px', fontSize: '10px', outline: 'none', cursor: 'pointer' }}
+                        >
+                          <option value="">Select Opponent...</option>
+                          <option value="HOST">{pair.civDetails.hostName} (Host)</option>
+                          <option value="GUEST">{pair.civDetails.guestName} (Guest)</option>
+                        </select>
+                      )}
+                    </div>
+
                     {draftPairs.length > 1 && (
-                      <button onClick={() => setDraftPairs(draftPairs.filter(p => p.id !== pair.id))} style={{ background: 'transparent', color: '#ff4444', border: 'none', cursor: 'pointer', fontSize: '14px' }}>×</button>
+                      <button onClick={() => setDraftPairs(draftPairs.filter(p => p.id !== pair.id))} style={{ background: 'transparent', color: '#ff4444', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>×</button>
                     )}
                   </div>
                 ))}
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'flex-end' }}>
-                <button onClick={() => setDraftPairs([...draftPairs, { id: Date.now(), mapUrl: "", civUrl: "" }])} style={{ backgroundColor: '#2a2d36', color: '#aaa', border: '1px solid #444', padding: '4px 10px', borderRadius: '3px', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }}>+ ADD ROW</button>
-                <button onClick={runOppAnalyzer} disabled={isAnalyzing} style={{ backgroundColor: isAnalyzing ? '#555' : '#4caf50', color: '#161920', border: 'none', padding: '4px 10px', borderRadius: '3px', cursor: isAnalyzing ? 'not-allowed' : 'pointer', fontSize: '11px', fontWeight: 'bold' }}>{isAnalyzing ? 'RUNNING...' : '▶ ANALYZE'}</button>
+              {/* BOTONERA INFERIOR */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <button onClick={() => setDraftPairs([...draftPairs, { id: Date.now(), mapUrl: "", civUrl: "", mapDetails: null, civDetails: null }])} style={{ backgroundColor: '#2a2d36', color: '#aaa', border: '1px solid #444', padding: '6px 12px', borderRadius: '3px', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }}>+ ADD ROW</button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button onClick={fetchDrafts} disabled={isFetching} style={{ backgroundColor: isFetching ? '#555' : '#00c8c8', color: '#161920', border: 'none', padding: '6px 15px', borderRadius: '3px', cursor: isFetching ? 'not-allowed' : 'pointer', fontSize: '11px', fontWeight: 'bold' }}>
+                    {isFetching ? 'FETCHING...' : '1. GET PLAYERS'}
+                  </button>
+                  <button onClick={runOppAnalyzer} disabled={isAnalyzing} style={{ backgroundColor: isAnalyzing ? '#555' : '#4caf50', color: '#161920', border: 'none', padding: '6px 15px', borderRadius: '3px', cursor: isAnalyzing ? 'not-allowed' : 'pointer', fontSize: '11px', fontWeight: 'bold' }}>
+                    2. ANALYZE SELECTED
+                  </button>
+                </div>
               </div>
             </div>
 
