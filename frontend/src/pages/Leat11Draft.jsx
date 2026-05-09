@@ -20,6 +20,12 @@ function Leat11Draft() {
   const [civA, setCivA] = useState('');
   const [civB, setCivB] = useState('');
   const [civAnalysis, setCivAnalysis] = useState(null);
+  
+  // ESTADOS DEL OPP ANALYZER
+  const [oppName, setOppName] = useState("");
+  const [draftPairs, setDraftPairs] = useState([{ id: 1, mapUrl: "", civUrl: "" }]);
+  const [oppAnalysis, setOppAnalysis] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
@@ -131,6 +137,92 @@ function Leat11Draft() {
       autoSyncCount.current = 0;
     }
   }, [draft.p1_snipe, draft.p2_snipe, syncing]);
+
+  // --- LÓGICA OPP ANALYZER ---
+  const extractCmId = (url) => {
+    if (!url) return "";
+    const match = url.match(/draft\/([a-zA-Z0-9_-]+)/);
+    return match ? match[1] : url.trim();
+  };
+
+  const runOppAnalyzer = async () => {
+    if (!oppName.trim()) return alert("⚠️ Please enter the Opponent's Name.");
+    setIsAnalyzing(true);
+    setOppAnalysis(null);
+
+    const stats = { mapPicks: {}, mapBans: {}, civPicks: {}, civBans: {} };
+
+    const processEvents = (events, oppRole, isMap) => {
+      const targetPicks = isMap ? stats.mapPicks : stats.civPicks;
+      const targetBans = isMap ? stats.mapBans : stats.civBans;
+
+      events.forEach(ev => {
+        const type = String(ev.actionType || ev.type || "").toLowerCase();
+        const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
+        const itemRaw = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || "";
+        
+        if (!itemRaw || type === "none" || isHidden(itemRaw)) return;
+        
+        // Limpieza de string
+        const cleanItem = String(itemRaw).trim().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+        if (player === oppRole) {
+          if (type === "pick") {
+            targetPicks[cleanItem] = (targetPicks[cleanItem] || 0) + 1;
+          } else if (type === "ban" || type === "snipe") {
+            targetBans[cleanItem] = (targetBans[cleanItem] || 0) + 1;
+          }
+        }
+      });
+    };
+
+    try {
+      for (const pair of draftPairs) {
+        // Procesar Mapas
+        const mId = extractCmId(pair.mapUrl);
+        if (mId) {
+          const mRes = await fetch(`/api/draft?id=${mId}`);
+          if (mRes.ok) {
+            const data = await mRes.json();
+            const hostName = String(data.host || data.preset?.hostName || "").toLowerCase();
+            const guestName = String(data.guest || data.preset?.guestName || "").toLowerCase();
+            const targetName = oppName.toLowerCase();
+            
+            let oppRole = "GUEST"; // Fallback por defecto
+            if (hostName.includes(targetName)) oppRole = "HOST";
+            else if (guestName.includes(targetName)) oppRole = "GUEST";
+            
+            const events = data.events || data.actions || [];
+            processEvents(events, oppRole, true);
+          }
+        }
+
+        // Procesar Civs
+        const cId = extractCmId(pair.civUrl);
+        if (cId) {
+          const cRes = await fetch(`/api/draft?id=${cId}`);
+          if (cRes.ok) {
+            const data = await cRes.json();
+            const hostName = String(data.host || data.preset?.hostName || "").toLowerCase();
+            const guestName = String(data.guest || data.preset?.guestName || "").toLowerCase();
+            const targetName = oppName.toLowerCase();
+            
+            let oppRole = "GUEST";
+            if (hostName.includes(targetName)) oppRole = "HOST";
+            else if (guestName.includes(targetName)) oppRole = "GUEST";
+            
+            const events = data.events || data.actions || [];
+            processEvents(events, oppRole, false);
+          }
+        }
+      }
+      setOppAnalysis(stats);
+    } catch (err) {
+      console.error("Analyzer Error:", err);
+      alert("Error fetching draft data. Check URLs or your proxy connection.");
+    }
+    setIsAnalyzing(false);
+  };
 
   const syncCaptainMode = async () => {
     if (!cmId || !roleAssigned) return;
@@ -982,6 +1074,7 @@ const getGoodMapsForCiv = (civ) => {
         <div onClick={() => setActiveTab('mapAnalysis')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'mapAnalysis' ? '#ffd700' : '#888', borderBottom: activeTab === 'mapAnalysis' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>Map Draft Analysis</div>
         <div onClick={() => setActiveTab('globalMeta')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'globalMeta' ? '#ffd700' : '#888', borderBottom: activeTab === 'globalMeta' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>Global Tournament Meta</div>
         <div onClick={() => setActiveTab('civAnalyzer')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'civAnalyzer' ? '#ffd700' : '#888', borderBottom: activeTab === 'civAnalyzer' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>Civ Analyzer & H2H</div>
+        <div onClick={() => setActiveTab('oppAnalyzer')} style={{ padding: '20px 30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'oppAnalyzer' ? '#ffd700' : '#888', borderBottom: activeTab === 'oppAnalyzer' ? '3px solid #ffd700' : '3px solid transparent', transition: 'all 0.2s ease-in-out' }}>Opp Analyzer</div>
       </div>
 
       <div style={{ padding: '1.5rem 2rem' }}>
@@ -1470,6 +1563,101 @@ const getGoodMapsForCiv = (civ) => {
                     })}
                   </tbody>
                 </table>
+              </div>
+            )}
+          </div>
+        )}
+        {activeTab === 'oppAnalyzer' && (
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            {/* CONTROLES SUPERIORES */}
+            <div style={{ backgroundColor: '#1a1c23', padding: '20px', borderRadius: '6px', border: '1px solid #333' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px', borderBottom: '1px solid #2a2d36', paddingBottom: '15px' }}>
+                <span style={{ color: '#ffd700', fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>OPPONENT NAME:</span>
+                <input 
+                  type="text" 
+                  placeholder="e.g. xavi_rosendo" 
+                  value={oppName} 
+                  onChange={(e) => setOppName(e.target.value)}
+                  style={{ backgroundColor: '#161920', color: '#fff', border: '1px solid #444', padding: '8px 12px', borderRadius: '4px', fontSize: '14px', width: '250px', outline: 'none' }}
+                />
+                <span style={{ color: '#888', fontSize: '12px', fontStyle: 'italic' }}>*Must match their name in the CM lobby</span>
+              </div>
+
+              {/* LISTA DE URLS */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {draftPairs.map((pair, index) => (
+                  <div key={pair.id} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <span style={{ color: '#888', fontWeight: 'bold', width: '25px' }}>#{index + 1}</span>
+                    <input 
+                      type="text" 
+                      placeholder="Map Draft URL (Optional)" 
+                      value={pair.mapUrl} 
+                      onChange={(e) => { const n = [...draftPairs]; n[index].mapUrl = e.target.value; setDraftPairs(n); }}
+                      style={{ flex: 1, backgroundColor: '#1e212b', color: '#e0e0e0', border: '1px solid #444', padding: '8px 12px', borderRadius: '4px', fontSize: '12px', outline: 'none' }}
+                    />
+                    <input 
+                      type="text" 
+                      placeholder="Civ Draft URL (Optional)" 
+                      value={pair.civUrl} 
+                      onChange={(e) => { const n = [...draftPairs]; n[index].civUrl = e.target.value; setDraftPairs(n); }}
+                      style={{ flex: 1, backgroundColor: '#1e212b', color: '#e0e0e0', border: '1px solid #444', padding: '8px 12px', borderRadius: '4px', fontSize: '12px', outline: 'none' }}
+                    />
+                    {draftPairs.length > 1 && (
+                      <button onClick={() => setDraftPairs(draftPairs.filter(p => p.id !== pair.id))} style={{ backgroundColor: 'transparent', color: '#ff4444', border: '1px solid #ff4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>×</button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '15px' }}>
+                <button onClick={() => setDraftPairs([...draftPairs, { id: Date.now(), mapUrl: "", civUrl: "" }])} style={{ backgroundColor: '#2a2d36', color: '#e0e0e0', border: '1px solid #444', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                  + ADD DRAFT PAIR
+                </button>
+                <button onClick={runOppAnalyzer} disabled={isAnalyzing} style={{ backgroundColor: isAnalyzing ? '#555' : '#4caf50', color: '#161920', border: 'none', padding: '8px 30px', borderRadius: '4px', cursor: isAnalyzing ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: 'bold', letterSpacing: '1px' }}>
+                  {isAnalyzing ? 'ANALYZING...' : '▶ RUN ANALYSIS'}
+                </button>
+              </div>
+            </div>
+
+            {/* RESULTADOS */}
+            {oppAnalysis && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                
+                {[
+                  { title: "TOP MAP PICKS", data: oppAnalysis.mapPicks, color: "#66b2ff", icon: "🗺️" },
+                  { title: "TOP MAP BANS / SNIPES", data: oppAnalysis.mapBans, color: "#ff6666", icon: "🚫" },
+                  { title: "TOP CIV PICKS", data: oppAnalysis.civPicks, color: "#ffd700", icon: "🛡️" },
+                  { title: "TOP CIV BANS / SNIPES", data: oppAnalysis.civBans, color: "#ff4444", icon: "☠️" }
+                ].map((section, i) => {
+                  // Sort descending by count
+                  const sortedItems = Object.entries(section.data).sort((a, b) => b[1] - a[1]);
+                  
+                  return (
+                    <div key={i} style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: `1px solid ${section.color}44`, borderTop: `3px solid ${section.color}` }}>
+                      <h3 style={{ color: section.color, margin: '0 0 10px 0', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>{section.icon}</span> {section.title}
+                      </h3>
+                      {sortedItems.length === 0 ? (
+                        <div style={{ color: '#555', fontStyle: 'italic', fontSize: '12px', padding: '10px 0' }}>No data recorded.</div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          {sortedItems.map(([name, count], idx) => {
+                            const max = sortedItems[0][1];
+                            const pct = (count / max) * 100;
+                            return (
+                              <div key={name} style={{ display: 'flex', alignItems: 'center', backgroundColor: '#161920', borderRadius: '3px', position: 'relative', overflow: 'hidden' }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: `${pct}%`, backgroundColor: `${section.color}22`, zIndex: 0 }}></div>
+                                <span style={{ position: 'relative', zIndex: 1, color: '#e0e0e0', fontSize: '12px', fontWeight: 'bold', padding: '6px 10px', flex: 1 }}>{name}</span>
+                                <span style={{ position: 'relative', zIndex: 1, color: section.color, fontSize: '13px', fontWeight: '900', padding: '6px 12px', backgroundColor: '#1e212b', borderLeft: '1px solid #2a2d36' }}>{count}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
