@@ -26,6 +26,7 @@ function Leat11Draft() {
   const [oppAnalysis, setOppAnalysis] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [debugLogs, setDebugLogs] = useState([]); // <-- ¡Faltaba declarar esto!
   const [auth, setAuth] = useState(false);
   const [pass, setPass] = useState("");
 
