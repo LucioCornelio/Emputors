@@ -152,27 +152,49 @@ function Leat11Draft() {
 
     const stats = { mapPicks: {}, mapBans: {}, civPicks: {}, civBans: {} };
 
-    const processEvents = (events, oppRole, isMap) => {
+    // Simulador interno para rastrear picks ocultos
+    const processSimulation = (events, oppRole, isMap) => {
       const targetPicks = isMap ? stats.mapPicks : stats.civPicks;
       const targetBans = isMap ? stats.mapBans : stats.civBans;
+      
+      let p1_picks = []; let p2_picks = [];
 
       events.forEach(ev => {
         const type = String(ev.actionType || ev.type || "").toLowerCase();
         const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
-        const itemRaw = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || "";
+        const itemRaw = ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId || "";
         
-        if (!itemRaw || type === "none" || isHidden(itemRaw)) return;
+        if (!itemRaw || type === "none") return;
         
-        // Limpieza de string
         const cleanItem = String(itemRaw).trim().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        const isHidden = cleanItem.startsWith("Hidden");
 
-        if (player === oppRole) {
-          if (type === "pick") {
-            targetPicks[cleanItem] = (targetPicks[cleanItem] || 0) + 1;
-          } else if (type === "ban" || type === "snipe") {
+        if (type === "ban" || type === "snipe") {
+          if (player === oppRole && !isHidden) {
             targetBans[cleanItem] = (targetBans[cleanItem] || 0) + 1;
           }
+        } else if (type === "pick" || type.includes("reveal")) {
+          if (!isHidden) {
+            if (player === "HOST") p1_picks.push(cleanItem);
+            else if (player === "GUEST") p2_picks.push(cleanItem);
+            else {
+               // Si es un reveal global y CM no especifica el jugador, llena el primer hueco "Hidden" libre
+               const idx1 = p1_picks.indexOf("Hidden");
+               const idx2 = p2_picks.indexOf("Hidden");
+               if (idx1 !== -1) p1_picks[idx1] = cleanItem;
+               else if (idx2 !== -1) p2_picks[idx2] = cleanItem;
+            }
+          } else {
+             if (player === "HOST") p1_picks.push("Hidden");
+             else if (player === "GUEST") p2_picks.push("Hidden");
+          }
         }
+      });
+
+      // Sumamos los picks finales limpios asignados al rival
+      const oppPicks = oppRole === "HOST" ? p1_picks : p2_picks;
+      oppPicks.forEach(pick => {
+        if (!pick.startsWith("Hidden")) targetPicks[pick] = (targetPicks[pick] || 0) + 1;
       });
     };
 
@@ -184,27 +206,30 @@ function Leat11Draft() {
           const mRes = await fetch(`/api/draft?id=${mId}`);
           if (mRes.ok) {
             const data = await mRes.json();
-            const hostName = String(data.host || data.preset?.hostName || "").toLowerCase();
-            const guestName = String(data.guest || data.preset?.guestName || "").toLowerCase();
+            const p = data.preset || {};
+            // Cobertura total de propiedades de nombre en CM
+            const hostName = String(data.host || p.hostName || p.nameA || p.name1 || "").toLowerCase();
+            const guestName = String(data.guest || p.guestName || p.nameB || p.name2 || "").toLowerCase();
             const targetName = oppName.toLowerCase();
             
-            let oppRole = "GUEST"; // Fallback por defecto
+            let oppRole = "GUEST"; 
             if (hostName.includes(targetName)) oppRole = "HOST";
             else if (guestName.includes(targetName)) oppRole = "GUEST";
             
             const events = data.events || data.actions || [];
-            processEvents(events, oppRole, true);
+            processSimulation(events, oppRole, true);
           }
         }
 
-        // Procesar Civs
+        // Procesar Civis
         const cId = extractCmId(pair.civUrl);
         if (cId) {
           const cRes = await fetch(`/api/draft?id=${cId}`);
           if (cRes.ok) {
             const data = await cRes.json();
-            const hostName = String(data.host || data.preset?.hostName || "").toLowerCase();
-            const guestName = String(data.guest || data.preset?.guestName || "").toLowerCase();
+            const p = data.preset || {};
+            const hostName = String(data.host || p.hostName || p.nameA || p.name1 || "").toLowerCase();
+            const guestName = String(data.guest || p.guestName || p.nameB || p.name2 || "").toLowerCase();
             const targetName = oppName.toLowerCase();
             
             let oppRole = "GUEST";
@@ -212,7 +237,7 @@ function Leat11Draft() {
             else if (guestName.includes(targetName)) oppRole = "GUEST";
             
             const events = data.events || data.actions || [];
-            processEvents(events, oppRole, false);
+            processSimulation(events, oppRole, false);
           }
         }
       }
