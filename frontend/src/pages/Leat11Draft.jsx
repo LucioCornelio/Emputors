@@ -152,6 +152,13 @@ function Leat11Draft() {
     const updatedPairs = await Promise.all(draftPairs.map(async (pair) => {
       const newPair = { ...pair };
 
+      const getPlayerName = (data, p, isHost) => {
+        const raw = isHost 
+          ? (p.nameA || data.nameA || p.hostName || data.host || p.name1 || data.name1)
+          : (p.nameB || data.nameB || p.guestName || data.guest || p.name2 || data.name2);
+        return raw && String(raw).trim() !== "" ? String(raw).trim() : (isHost ? "Host" : "Guest");
+      };
+
       // Extraer datos del Mapa
       const mId = extractCmId(pair.mapUrl);
       if (mId && pair.mapUrl !== pair._lastFetchedMapUrl) {
@@ -160,8 +167,8 @@ function Leat11Draft() {
           if (mRes.ok) {
             const data = await mRes.json();
             const p = data.preset || {};
-            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "Host").trim();
-            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "Guest").trim();
+            const hostName = getPlayerName(data, p, true);
+            const guestName = getPlayerName(data, p, false);
             newPair.mapDetails = { hostName, guestName, events: data.events || data.actions || [], selectedRole: "" };
             newPair._lastFetchedMapUrl = pair.mapUrl;
           }
@@ -176,8 +183,8 @@ function Leat11Draft() {
           if (cRes.ok) {
             const data = await cRes.json();
             const p = data.preset || {};
-            const hostName = String(data.nameA || data.host || p.nameA || p.hostName || "Host").trim();
-            const guestName = String(data.nameB || data.guest || p.nameB || p.guestName || "Guest").trim();
+            const hostName = getPlayerName(data, p, true);
+            const guestName = getPlayerName(data, p, false);
             newPair.civDetails = { hostName, guestName, events: data.events || data.actions || [], selectedRole: "" };
             newPair._lastFetchedCivUrl = pair.civUrl;
           }
@@ -191,31 +198,62 @@ function Leat11Draft() {
   };
 
   const handleRoleSelect = (pairId, type, role) => {
-    let targetName = "";
-    const sourcePair = draftPairs.find(p => p.id === pairId);
-    if (sourcePair) {
-       const details = type === 'map' ? sourcePair.mapDetails : sourcePair.civDetails;
-       if (details) targetName = role === 'HOST' ? details.hostName : details.guestName;
+    const sourceIndex = draftPairs.findIndex(p => p.id === pairId);
+    if (sourceIndex === -1) return;
+
+    const updated = [...draftPairs];
+
+    // Si deseleccionamos, solo afecta a la celda actual (no propaga borrados)
+    if (!role) {
+      if (type === 'map') updated[sourceIndex].mapDetails.selectedRole = "";
+      else updated[sourceIndex].civDetails.selectedRole = "";
+      setDraftPairs(updated);
+      return;
     }
 
-    if (!targetName) return;
+    const sourcePair = draftPairs[sourceIndex];
+    const details = type === 'map' ? sourcePair.mapDetails : sourcePair.civDetails;
+    const targetName = role === 'HOST' ? details?.hostName : details?.guestName;
+
+    // Asignamos el rol a la celda clickada
+    if (type === 'map') updated[sourceIndex].mapDetails.selectedRole = role;
+    else updated[sourceIndex].civDetails.selectedRole = role;
+
+    // Si el draft era anónimo ("Host" / "Guest"), no autopropagamos para evitar pisar otros drafts anónimos
+    if (!targetName || targetName.toLowerCase() === "host" || targetName.toLowerCase() === "guest") {
+      setDraftPairs(updated);
+      return;
+    }
+
     const normalizedTarget = targetName.toLowerCase();
 
-    // Autopropagar a todos los desplegables
-    const updated = draftPairs.map(p => {
-       const newP = { ...p };
-       if (newP.mapDetails) {
-           newP.mapDetails = { ...newP.mapDetails };
-           if (newP.mapDetails.hostName.toLowerCase() === normalizedTarget) newP.mapDetails.selectedRole = 'HOST';
-           else if (newP.mapDetails.guestName.toLowerCase() === normalizedTarget) newP.mapDetails.selectedRole = 'GUEST';
-       }
-       if (newP.civDetails) {
-           newP.civDetails = { ...newP.civDetails };
-           if (newP.civDetails.hostName.toLowerCase() === normalizedTarget) newP.civDetails.selectedRole = 'HOST';
-           else if (newP.civDetails.guestName.toLowerCase() === normalizedTarget) newP.civDetails.selectedRole = 'GUEST';
-       }
-       return newP;
-    });
+    // Propagación en CASCADA (Solo la fila actual y las de abajo)
+    for (let i = sourceIndex; i < updated.length; i++) {
+      const p = updated[i];
+      
+      // En la fila actual, si marcamos mapa, autocompleta su civ (y viceversa)
+      if (i === sourceIndex) {
+        if (type === 'map' && p.civDetails) {
+          if (p.civDetails.hostName?.toLowerCase() === normalizedTarget) p.civDetails.selectedRole = 'HOST';
+          else if (p.civDetails.guestName?.toLowerCase() === normalizedTarget) p.civDetails.selectedRole = 'GUEST';
+        } else if (type === 'civ' && p.mapDetails) {
+          if (p.mapDetails.hostName?.toLowerCase() === normalizedTarget) p.mapDetails.selectedRole = 'HOST';
+          else if (p.mapDetails.guestName?.toLowerCase() === normalizedTarget) p.mapDetails.selectedRole = 'GUEST';
+        }
+        continue;
+      }
+
+      // En las filas siguientes, completamos todo lo que coincida
+      if (p.mapDetails) {
+        if (p.mapDetails.hostName?.toLowerCase() === normalizedTarget) p.mapDetails.selectedRole = 'HOST';
+        else if (p.mapDetails.guestName?.toLowerCase() === normalizedTarget) p.mapDetails.selectedRole = 'GUEST';
+      }
+      if (p.civDetails) {
+        if (p.civDetails.hostName?.toLowerCase() === normalizedTarget) p.civDetails.selectedRole = 'HOST';
+        else if (p.civDetails.guestName?.toLowerCase() === normalizedTarget) p.civDetails.selectedRole = 'GUEST';
+      }
+    }
+
     setDraftPairs(updated);
   };
 
