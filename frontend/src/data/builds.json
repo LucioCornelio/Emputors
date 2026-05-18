@@ -1051,7 +1051,7 @@
     "strategy": "FC Crossbow + Siege",
     "difficulty": "Intermediate",
     "popCount": 19,
-    "video": "https://youtu.be/2mRiL_SSVnE",
+    "video": null,
     "description": "Fast 19+2 FC leveraging Dravidian bonuses (+15 fish carry capacity, +200 wood on age up). The wood bonus saves villagers when building the Barracks, Range, and Blacksmith. The core difficulty is balancing wood/food villagers to sustain simultaneous TC and Dock production. Train 2-3 Hulks while advancing to Castle Age to defend your eco (remember fishing ships can garrison).",
     "author": "LucioCornelio",
     "strategyIcons": [
@@ -1392,7 +1392,7 @@
     "strategy": "Men-at-Arms",
     "difficulty": "Intermediate",
     "popCount": 18,
-    "video": null,
+    "video": "https://youtu.be/2mRiL_SSVnE",
     "description": "Armenians aggressive opening on Skukuza capitalizing on their Mule Carts for a hyper-efficient center hunt. Their unique bonus allows researching Long Swordsman in Feudal Age, unleashing a devastating infantry push before the opponent can reach Castle Age.",
     "author": "Selava",
     "strategyIcons": [
