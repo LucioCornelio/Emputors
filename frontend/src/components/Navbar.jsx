@@ -52,7 +52,7 @@ const Navbar = () => {
   };
 
   const dropLinkStyle = {
-    display: 'block',     
+    display: 'block',      
     textAlign: 'left',    
     padding: '10px 16px', 
     color: '#e0e0e0',
@@ -98,13 +98,14 @@ const Navbar = () => {
         {/* Build Orders (Direct Link) */}
         <div style={itemStyle}><NavLink to="/academy/build-orders" style={getLinkStyle}>Build Orders</NavLink></div>
 
-        {/* Esports Dropdown */}
-        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('esports')} onMouseLeave={handleMouseLeave}>
-          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Esports ▾</span>
-          {dropdown === 'esports' && (
+        {/* Tournaments Dropdown */}
+        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('tournaments')} onMouseLeave={handleMouseLeave}>
+          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Tournaments ▾</span>
+          {dropdown === 'tournaments' && (
             <div style={dropdownStyle}>
-              <Link to="/esports/tournaments" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Tournaments</Link>
-              <Link to="/esports/hall-of-fame" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Hall of Fame</Link>
+              <Link to="/tournaments/current" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Current Event</Link>
+              <Link to="/tournaments/past-events" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Past Events</Link>
+              <Link to="/tournaments/hall-of-fame" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Hall of Fame</Link>
             </div>
           )}
         </div>

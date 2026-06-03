@@ -6,9 +6,11 @@ import BuildOrders from './pages/BuildOrders';
 import BuildOrderDetail from './pages/BuildOrderDetail';
 import Home from './pages/Home';
 
-// Placeholders (Sección por sección las iremos creando)
-const CivFilter = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🔍 Civ Filter</h2><p>In development...</p></div>;
-const Tournaments = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🏆 Tournaments</h2><p>Archive and Brackets in development...</p></div>;
+// 1. Añadimos el import real
+import CurrentEvent from './pages/CurrentEvent'; 
+
+// 2. Borramos el placeholder de CurrentEvent y dejamos el resto:
+const PastEvents = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>📚 Past Events</h2><p>Tournament archive in development...</p></div>;
 const HallOfFame = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🏅 Hall of Fame</h2><p>Palmarés in development...</p></div>;
 const Roster = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>⚔️ Clan Roster</h2><p>Member list in development...</p></div>;
 const About = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🛡️ About</h2><p>Philosophy and Rules...</p></div>;
@@ -24,8 +26,12 @@ function App() {
           <Route path="/tools/advanced-search" element={<AdvancedSearch />} />
           <Route path="/academy/build-orders" element={<BuildOrders />} />
           <Route path="/academy/build-orders/:buildId" element={<BuildOrderDetail />} />
-          <Route path="/esports/tournaments" element={<Tournaments />} />
-          <Route path="/esports/hall-of-fame" element={<HallOfFame />} />
+          
+          {/* El elemento de la ruta ya está correcto, ahora cogerá el import real */}
+          <Route path="/tournaments/current" element={<CurrentEvent />} />
+          <Route path="/tournaments/past-events" element={<PastEvents />} />
+          <Route path="/tournaments/hall-of-fame" element={<HallOfFame />} />
+          
           <Route path="/clan/roster" element={<Roster />} />
           <Route path="/clan/about" element={<About />} />
         </Routes>

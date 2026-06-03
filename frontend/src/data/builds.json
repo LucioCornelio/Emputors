@@ -1602,28 +1602,30 @@
     ]
   },
   {
-    "id": "malay-arena-fc-elephants",
-    "title": "29+2 Vils | Malay | FC into Elephants",
-    "civ": "Malay",
-    "map": "Arena",
-    "strategy": "Fast Castle",
+    "id": "any-arabia-17pop-forward-range",
+    "title": "17 Vils | Any | Forward Archery Range",
+    "civ": "Any",
+    "map": "Arabia",
+    "strategy": "Forward Archery Range",
     "difficulty": "Intermediate",
-    "popCount": 29,
+    "popCount": 18,
     "video": null,
-    "description": "Estrategia de Fast Castle directo a Elefantes de Batalla. Aprovecha el bonus de los Malayos (avanzan de edad un 66% más rápido) y el descuento del 30% en el coste de los elefantes para sorprender a tu rival con una masa imparable en early Castle Age.",
-    "author": "Pro Meta",
+    "description": "Generic aggressive 17-pop opening designed as an Anti-Phosphoru defense or general aggressive play. Uses 2 forward villagers to drop an Archery Range and disrupt the enemy's resources early on.",
+    "author": "LucioCornelio",
     "strategyIcons": [
-      "/techs/CastleAgeIconDE.png",
-      "/units/BattleElephantIcon_aoe2DE.png"
+      "/techs/FeudalAgeIconDE.png",
+      "/buildings/Archery_range_aoe2DE.png",
+      "/units/Archer_aoe2DE.png"
     ],
     "tags": [
-      "Fast Castle",
-      "Elephants",
-      "Boom"
+      "Anti-Phosphoru",
+      "Forward Range",
+      "Early aggression"
     ],
     "ages": [
       {
         "name": "Dark Age",
+        "icon": "DarkAgeIconDE",
         "steps": [
           {
             "vil": 6,
@@ -1632,91 +1634,54 @@
             "res": {
               "sheep": 6
             },
-            "note": null,
+            "note": "Start pushing at least 2 deer early during this phase.",
             "icon": null
           },
           {
-            "vil": 10,
+            "vil": 8,
             "task": "wood",
-            "desc": "4 vils to wood",
-            "icon": "Lumber_camp_aoe2de",
+            "desc": "2 vils to wood",
             "res": {
-              "underTC": 6,
-              "wood": 4
+              "sheep": 6,
+              "wood": 2
             },
-            "note": "First vil builds Lumber Camp"
+            "note": "Build Lumber Camp",
+            "icon": "Lumber_camp_aoe2de"
           },
           {
             "vil": 11,
             "task": "food_boar",
-            "desc": "1 vil to lure 1st boar",
-            "icon": null,
+            "desc": "3 vils to Boar 1 & 2",
             "res": {
-              "underTC": 7,
-              "wood": 4
+              "underTC": 9,
+              "wood": 2
             },
-            "note": null
+            "note": null,
+            "icon": null
           },
           {
-            "vil": 15,
-            "task": "food_berries",
-            "desc": "4 vils to berries",
-            "icon": "Mill_aoe2de",
+            "vil": 12,
+            "task": "build_then_resource",
+            "desc": "1 vil to berries",
             "res": {
-              "underTC": 7,
-              "wood": 4,
-              "berries": 4
+              "underTC": 9,
+              "wood": 2,
+              "berries": 1
             },
-            "note": "First vil builds Mill"
+            "note": "Vil #12 (Pop 13) builds House -> Mill -> Berries",
+            "icon": "Mill_aoe2de"
           },
           {
-            "vil": 16,
-            "task": "food_boar",
-            "desc": "1 vil to lure 2nd boar",
-            "icon": null,
-            "res": {
-              "underTC": 8,
-              "wood": 4,
-              "berries": 4
-            },
-            "note": null
-          },
-          {
-            "vil": 19,
+            "vil": 17,
             "task": "food_tc",
-            "desc": "3 vils to food under TC (sheep/boar/farms)",
-            "icon": null,
+            "desc": "5 vils to Boar / Sheep under TC",
             "res": {
-              "underTC": 11,
-              "wood": 4,
-              "berries": 4
+              "underTC": 14,
+              "wood": 2,
+              "berries": 1
             },
-            "note": null
-          },
-          {
-            "vil": 22,
-            "task": "wood",
-            "desc": "3 vils to wood",
-            "icon": null,
-            "res": {
-              "underTC": 11,
-              "wood": 7,
-              "berries": 4
-            },
-            "note": "Build 2nd Lumber Camp if needed"
-          },
-          {
-            "vil": 28,
-            "task": "gold",
-            "desc": "6 vils to gold",
-            "icon": "Mining_camp_aoe2de",
-            "res": {
-              "underTC": 11,
-              "wood": 7,
-              "berries": 4,
-              "gold": 6
-            },
-            "note": "First vil builds Mining Camp"
+            "note": null,
+            "icon": null
           },
           {
             "vil": null,
@@ -1732,141 +1697,214 @@
             "desc": "Click Feudal Age",
             "icon": "FeudalAgeIconDE",
             "res": {},
-            "note": "Malay age up 66% faster, be ready to act quickly!"
+            "note": null
           }
         ]
       },
       {
         "name": "Advancing to Feudal",
+        "icon": "FeudalAgeIconDE",
         "steps": [
           {
-            "vil": 28,
+            "vil": 17,
             "task": "reallocate",
-            "desc": "Move 2 vils from food to build Barracks",
-            "icon": "Barracks_aoe2DE",
+            "desc": "Send vils from under TC to chop stragglers temporarily",
+            "icon": null,
             "res": {
-              "underTC": 9,
-              "wood": 7,
-              "berries": 4,
-              "gold": 6
+              "stragglers": 14,
+              "wood": 2,
+              "berries": 1
             },
-            "note": "Prepare to build Stable and Blacksmith immediately upon hitting Feudal"
+            "note": null
+          },
+          {
+            "vil": 17,
+            "task": "wood",
+            "desc": "Send 5 from stragglers to the Lumber Camp",
+            "icon": null,
+            "res": {
+              "stragglers": 9,
+              "wood": 7,
+              "berries": 1
+            },
+            "note": "Making a total of 7 on wood"
+          },
+          {
+            "vil": 17,
+            "task": "gold",
+            "desc": "Send 2 from stragglers to Gold (build Mining Camp)",
+            "icon": "Mining_camp_aoe2de",
+            "res": {
+              "stragglers": 7,
+              "wood": 7,
+              "berries": 1,
+              "gold": 2
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Keep rest chopping stragglers until enough wood for Barracks, House, and forward Range. Use 1 vil to build Barracks.",
+            "icon": "Barracks_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 17,
+            "task": "reallocate",
+            "desc": "Settle into final pre-Feudal distribution: send 2 forward, return 5 to food under TC.",
+            "icon": null,
+            "res": {
+              "wood": 7,
+              "gold": 2,
+              "berries": 1,
+              "underTC": 5,
+              "forward": 2
+            },
+            "note": "The 2 forward villagers go across the map to the enemy base."
           }
         ]
       },
       {
         "name": "Feudal Age",
+        "icon": "FeudalAgeIconDE",
         "steps": [
-          {
-            "vil": 30,
-            "task": "wood",
-            "desc": "2 new vils to wood",
-            "icon": null,
-            "res": {
-              "underTC": 9,
-              "wood": 9,
-              "berries": 4,
-              "gold": 6
-            },
-            "note": null
-          },
           {
             "vil": null,
             "task": "build",
-            "desc": "Build Stable and Blacksmith",
-            "icon": "Stable_aoe2de",
+            "desc": "Forward Villagers: Build Archery Range immediately.",
+            "icon": "Archery_range_aoe2DE",
             "res": {},
-            "note": "Use 2-3 vils to build these quickly so you can click up"
-          },
-          {
-            "vil": null,
-            "task": "age_up",
-            "desc": "Click Castle Age",
-            "icon": "CastleAgeIconDE",
-            "res": {},
-            "note": null
-          }
-        ]
-      },
-      {
-        "name": "Advancing to Castle Age",
-        "steps": [
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Eco: Double-Bit Axe",
-            "icon": "DoubleBitAxe_aoe2DE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Eco: Horse Collar",
-            "icon": "HorseCollarDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "Build 1 or 2 more Stables",
-            "icon": "Stable_aoe2de",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": 30,
-            "task": "reallocate",
-            "desc": "Rebalance eco: move exhausted sheep/berry vils to farms",
-            "icon": null,
-            "res": {},
-            "note": "Elephants require a massive food economy. Seed farms aggressively."
-          }
-        ]
-      },
-      {
-        "name": "Castle Age",
-        "steps": [
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Bloodlines",
-            "icon": "BloodlinesDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Scale Barding Armor & Forging",
-            "icon": "ScaleBardingArmorDE",
-            "res": {},
-            "note": null
+            "note": "Follow up with a Tower (if a good spot is available) OR Blacksmith -> Forward Houses."
           },
           {
             "vil": null,
             "task": "train",
-            "desc": "Pump Battle Elephants full force",
-            "icon": "BattleElephantIcon_aoe2DE",
+            "desc": "Constantly produce Archers",
+            "icon": "Archer_aoe2DE",
             "res": {},
-            "note": "Keep making farms to sustain production from multiple Stables"
+            "note": "Move the opponent off key resources."
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Prioritize researching Fletching immediately",
+            "icon": "FletchingDE",
+            "res": {},
+            "note": "Even if it requires slightly idling the TC."
+          },
+          {
+            "vil": 19,
+            "task": "gold",
+            "desc": "First 2 new vils to Gold",
+            "icon": null,
+            "res": {
+              "wood": 7,
+              "gold": 4,
+              "berries": 1,
+              "underTC": 5,
+              "forward": 2
+            },
+            "note": null
+          },
+          {
+            "vil": 21,
+            "task": "wood",
+            "desc": "Next 2 vils to Wood",
+            "icon": null,
+            "res": {
+              "wood": 9,
+              "gold": 4,
+              "berries": 1,
+              "underTC": 5,
+              "forward": 2
+            },
+            "note": "Until you have 8 or 9 on wood."
+          },
+          {
+            "vil": 25,
+            "task": "food_berries",
+            "desc": "Next 4 vils to Berries",
+            "icon": null,
+            "res": {
+              "wood": 9,
+              "gold": 4,
+              "berries": 5,
+              "underTC": 5,
+              "forward": 2
+            },
+            "note": "Until you have 5 or 6 on berries."
+          },
+          {
+            "vil": null,
+            "task": "food_farm",
+            "desc": "Next vils start seeding Farms",
+            "icon": "FarmDE",
+            "res": {},
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Castle Age Transition",
+        "icon": "CastleAgeIconDE",
+        "steps": [
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Stop seeding farms at around 8 Farms.",
+            "icon": null,
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "gold",
+            "desc": "Send all newly created villagers to Gold.",
+            "icon": null,
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build a Market.",
+            "icon": "Market_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Sell excess wood and buy food to reach 800 food.",
+            "icon": null,
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Castle Age.",
+            "icon": "CastleAgeIconDE",
+            "res": {},
+            "note": "Adapt, adapt, adapt from here."
           }
         ]
       }
     ],
     "whatsNext": [
       {
-        "icon": "🐘",
-        "style": "cavalry",
-        "title": "Mass Elephants:",
-        "text": "Keep your Stables producing. Malay Battle Elephants are cheaper (30% discount), allowing you to overwhelm the opponent early in Castle Age before they can mass Pikemen or Monks."
+        "icon": "🏹",
+        "style": "archers",
+        "title": "Keep the pressure:",
+        "text": "Move the opponent off key resources (wood, gold, berries) with your archers."
       },
       {
-        "icon": "🛡️",
+        "icon": "🏰",
         "style": "general",
-        "title": "Counter the Counters:",
-        "text": "If the opponent defends with Monks, research Heresy or add Light Cavalry. If they mass Pikemen, mix in Scorpions from a Siege Workshop."
+        "title": "Castle Age Adaptation:",
+        "text": "Once in Castle Age, you will have a strong gold eco to transition into Crossbowmen or adapt based on the opponent's reaction."
       }
     ]
   }
