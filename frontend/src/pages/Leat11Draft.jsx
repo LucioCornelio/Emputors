@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { getMapData, getGlobalMeta, analyzeDraft, analyzeCivs } from '../engine'
+import { supabase } from '../supabaseClient'
 
 function Leat11Draft() {
   const mapPool = ["Skukuza", "Fortified Clearing", "Islands", "Coast to Mountain", "Kawasan", "Thames", "Stranded", "Sardis", "Arabia", "Megarandom"].sort()
@@ -27,8 +28,8 @@ function Leat11Draft() {
   const [isFetching, setIsFetching] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [debugLogs, setDebugLogs] = useState([]); // <-- ¡Faltaba declarar esto!
-  const [auth, setAuth] = useState(false);
-  const [pass, setPass] = useState("");
+  const [user, setUser] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
 
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
@@ -38,6 +39,18 @@ function Leat11Draft() {
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState("");
   const [liveSocket, setLiveSocket] = useState(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoadingAuth(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // COLORES DE CAPTAIN MODE
   const colorHost = '#00c8c8'; // Cyan 
@@ -476,7 +489,7 @@ function Leat11Draft() {
   };
 
   useEffect(() => {
-    if (!auth) return;
+    if (!user) return;
     fetch('/db.json')
       .then(res => res.json())
       .then(data => {
@@ -489,7 +502,7 @@ function Leat11Draft() {
         }
       })
       .catch(() => setGlobalError("Could not load local database."));
-  }, [auth]);
+  }, [user]);
 
   useEffect(() => {
     if (!db || !selectedMap) return;
@@ -1132,29 +1145,31 @@ const getGoodMapsForCiv = (civ) => {
   const confTraps = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '30%' }, { label: 'Picks', key: 'Picks', width: '15%' }, { label: 'WR', key: 'Win Rate', format: 'percent', width: '15%' }, { label: 'Map', key: 'Map', align: 'left', width: '40%' }];
   const confVersatile = [{ label: 'Civ', key: 'Civ List', align: 'left', width: '35%' }, { label: 'Viable Maps', key: 'Viable_Maps', type: 'mapsTooltip', width: '30%' }, { label: 'Avg CDPS', key: 'Avg_CDPS', format: 'decimal', width: '35%' }];
   
-  if (!auth) {
+  if (loadingAuth) {
+    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1c23', color: '#ffd700' }}>Loading credentials...</div>;
+  }
+
+  if (!user) {
     return (
       <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1c23' }}>
-        <div style={{ padding: '30px', backgroundColor: '#161920', borderRadius: '6px', border: '1px solid #333', textAlign: 'center' }}>
-          <h2 style={{ color: '#ffd700', fontSize: '16px', letterSpacing: '2px', marginBottom: '20px' }}>LEAT11 ENGINE - RESTRICTED ACCESS</h2>
-          <input 
-            type="password" 
-            value={pass} 
-            onChange={e => setPass(e.target.value)}
-            onKeyDown={e => { if(e.key === 'Enter' && pass === "Emputors") setAuth(true) }}
-            style={{ backgroundColor: '#1e212b', border: '1px solid #444', color: 'white', padding: '10px', borderRadius: '4px', outline: 'none', textAlign: 'center' }} 
-            placeholder="Enter password"
-          />
-          <br /><br />
+        <div style={{ padding: '40px', backgroundColor: '#161920', borderRadius: '6px', border: '1px solid #333', textAlign: 'center', maxWidth: '400px' }}>
+          <h2 style={{ color: '#ffd700', fontSize: '18px', letterSpacing: '2px', marginBottom: '10px', textTransform: 'uppercase' }}>Restricted Access</h2>
+          <p style={{ color: '#a0aab5', fontSize: '13px', marginBottom: '30px', lineHeight: '1.5' }}>
+            The LEAT11 Engine is a private clan tool. Log in with Discord to verify your access.
+          </p>
           <button 
-            onClick={() => { if (pass === "Emputors") setAuth(true) }} 
-            style={{ backgroundColor: '#66b2ff', color: '#161920', border: 'none', padding: '8px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginTop: '10px' }}>
-            ENTER
+            onClick={() => supabase.auth.signInWithOAuth({ provider: 'discord' })} 
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', backgroundColor: '#5865F2', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#4752C4'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#5865F2'}
+          >
+            LOGIN WITH DISCORD
           </button>
         </div>
       </div>
     );
   }
+
   return (
     <div style={{ backgroundColor: '#161920', color: '#e0e0e0', minHeight: '100vh', padding: '0', fontFamily: 'Segoe UI, sans-serif' }}>
       
