@@ -146,35 +146,13 @@ const Navbar = () => {
 
       {/* Navegación Estructurada */}
       <div style={menuContainerStyle}>
+        
+        {/* Home */}
         <div style={itemStyle}><NavLink to="/" style={getLinkStyle}>Home</NavLink></div>
-
-        {/* Tools Dropdown */}
-        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('tools')} onMouseLeave={handleMouseLeave}>
-          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Tools ▾</span>
-          {dropdown === 'tools' && (
-            <div style={dropdownStyle}>
-              {/* Aquí irán las herramientas activas en el futuro */}
-              <Link to="/tools/advanced-search" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Advanced Search</Link>
-            </div>
-          )}
-        </div>
-
-        {/* Legacy / Archive Dropdown */}
-        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('legacy')} onMouseLeave={handleMouseLeave}>
-          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Legacy ▾</span>
-          {dropdown === 'legacy' && (
-            <div style={dropdownStyle}>
-              <Link to="/tools/leat11" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>LEAT11 Draft</Link>
-            </div>
-          )}
-        </div>
-
-        {/* Build Orders (Direct Link) */}
-        <div style={itemStyle}><NavLink to="/academy/build-orders" style={getLinkStyle}>Build Orders</NavLink></div>
 
         {/* Tournaments Dropdown */}
         <div style={itemStyle} onMouseEnter={() => handleMouseEnter('tournaments')} onMouseLeave={handleMouseLeave}>
-          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Tournaments ▾</span>
+          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px', fontWeight: '500' }}>Tournaments ▾</span>
           {dropdown === 'tournaments' && (
             <div style={dropdownStyle}>
               <Link to="/tournaments/current" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Current Event</Link>
@@ -184,9 +162,32 @@ const Navbar = () => {
           )}
         </div>
 
+        {/* Build Orders (Direct Link) */}
+        <div style={itemStyle}><NavLink to="/academy/build-orders" style={getLinkStyle}>Build Orders</NavLink></div>
+
+        {/* Tools Dropdown */}
+        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('tools')} onMouseLeave={handleMouseLeave}>
+          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px', fontWeight: '500' }}>Tools ▾</span>
+          {dropdown === 'tools' && (
+            <div style={dropdownStyle}>
+              <Link to="/tools/advanced-search" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Advanced Search</Link>
+            </div>
+          )}
+        </div>
+
+        {/* Legacy Dropdown */}
+        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('legacy')} onMouseLeave={handleMouseLeave}>
+          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px', fontWeight: '500' }}>Legacy ▾</span>
+          {dropdown === 'legacy' && (
+            <div style={dropdownStyle}>
+              <Link to="/tools/leat11" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>LEAT11 Draft</Link>
+            </div>
+          )}
+        </div>
+
         {/* Clan Dropdown */}
         <div style={itemStyle} onMouseEnter={() => handleMouseEnter('clan')} onMouseLeave={handleMouseLeave}>
-          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Clan ▾</span>
+          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px', fontWeight: '500' }}>Clan ▾</span>
           {dropdown === 'clan' && (
             <div style={dropdownStyle}>
               <Link to="/clan/roster" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Roster</Link>
@@ -194,6 +195,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
+        
       </div>
 
       {/* Sección de Autenticación (Usuario / Login) */}
