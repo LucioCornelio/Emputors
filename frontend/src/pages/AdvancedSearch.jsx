@@ -26,13 +26,24 @@ const getIconPath = (name, type) => {
   if (!name) return null;
   const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
   const folder = type === 'unit' ? '/units/' : '/techs/';
-  
-  const match = ICON_LIST.find(path => {
+
+  // 1. Búsqueda estricta (Prioriza coincidencia exacta)
+  let match = ICON_LIST.find(path => {
     if (!path.startsWith(folder)) return false;
     const fileName = path.split('/').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
-    return fileName.includes(cleanName) || cleanName.includes(fileName.replace('aoe2de', '').replace('icon', '').replace('png', ''));
+    const baseName = fileName.replace('aoe2de', '').replace('icon', '').replace('png', '');
+    return baseName === cleanName;
   });
-  
+
+  // 2. Búsqueda flexible (Si no hay exacta, busca si el archivo contiene la palabra)
+  if (!match) {
+    match = ICON_LIST.find(path => {
+      if (!path.startsWith(folder)) return false;
+      const fileName = path.split('/').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
+      return fileName.includes(cleanName);
+    });
+  }
+
   return match || null;
 };
 
@@ -214,7 +225,7 @@ function AdvancedSearch() {
         </div>
 
         {/* FILTER BUILDER */}
-        <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', padding: '16px', marginBottom: '16px' }}>
+        <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', padding: '16px', marginBottom: '32px' }}>
           <h3 style={{ color: '#ffd700', fontSize: '11px', margin: '0 0 12px 0', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #444', paddingBottom: '6px' }}>Build Your Query</h3>
 
           {/* Active filters */}
@@ -321,7 +332,7 @@ function AdvancedSearch() {
         </div>
 
         {/* TAG CLOUD (Quick Filters) */}
-          <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #2a2d36' }}>
+          <div style={{ marginTop: '16px', paddingTop: '16px', paddingBottom: '8px', borderTop: '1px solid #2a2d36' }}>
             <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px', marginBottom: '8px' }}>Quick Filters</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {QUICK_TAGS.map(tag => {
