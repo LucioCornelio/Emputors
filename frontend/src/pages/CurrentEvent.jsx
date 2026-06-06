@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 const CurrentEvent = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('standings');
 
-  // COMPACT STYLES (PA Draft based)
+  // COMPACT STYLES
   const containerStyle = {
     backgroundColor: '#161920',
     color: '#e0e0e0',
@@ -72,10 +72,17 @@ const CurrentEvent = () => {
 
   // Temp Data
   const standings = [
-    { pos: 1, name: "Squadryzen", players: "Ryzenvelos & Squadrano", series: "0 - 0", maps: "0 - 0", diff: 0 },
-    { pos: 2, name: "Costalcanela", players: "Costalceleste & Ruizcanela", series: "0 - 0", maps: "0 - 0", diff: 0 },
-    { pos: 3, name: "PanisCornelio", players: "Panete & LucioCornelio", series: "0 - 0", maps: "0 - 0", diff: 0 },
-    { pos: 4, name: "SaborAverno", players: "Ersabo & Caronte", series: "0 - 0", maps: "0 - 0", diff: 0 }
+    { pos: 1, id: "raisquad", name: "RaiSquad", series: "0 - 0", maps: "0 - 0", diff: 0 },
+    { pos: 2, id: "costalcanela", name: "CostalCanela", series: "0 - 0", maps: "0 - 0", diff: 0 },
+    { pos: 3, id: "sarcornelio", name: "SarCornelio", series: "0 - 0", maps: "0 - 0", diff: 0 },
+    { pos: 4, id: "sabaronte", name: "Sabaronte", series: "0 - 0", maps: "0 - 0", diff: 0 }
+  ];
+
+  const teamsRoster = [
+    { id: "raisquad", name: "RaiSquad", player1: "Squadrano", player2: "Ryzenvelos" },
+    { id: "costalcanela", name: "CostalCanela", player1: "Costalceleste", player2: "Ruizcanela" },
+    { id: "sarcornelio", name: "SarCornelio", player1: "LucioCornelio", player2: "Panete" },
+    { id: "sabaronte", name: "Sabaronte", player1: "Ersabo", player2: "Caronte" }
   ];
 
   return (
@@ -93,19 +100,19 @@ const CurrentEvent = () => {
 
       {/* NAVIGATION TABS */}
       <div style={{ display: 'flex', borderBottom: '2px solid #2a2d36', backgroundColor: '#1e212b', padding: '0 1rem' }}>
-        <div onClick={() => setActiveTab('overview')} style={getTabStyle('overview')}>Overview Dashboard</div>
+        <div onClick={() => setActiveTab('standings')} style={getTabStyle('standings')}>Standings & Bracket</div>
         <div onClick={() => setActiveTab('teams')} style={getTabStyle('teams')}>Teams Roster</div>
+        <div onClick={() => setActiveTab('rules')} style={getTabStyle('rules')}>Ruleset</div>
       </div>
 
       {/* MAIN CONTENT */}
       <div style={{ padding: '1.5rem 2rem', maxWidth: '1400px', margin: '0 auto' }}>
         
-        {activeTab === 'overview' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+        {/* TAB 1: STANDINGS & BRACKET */}
+        {activeTab === 'standings' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
-            {/* LEFT COLUMN: STANDINGS & BRACKET */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
               {/* GROUP STAGE STANDINGS */}
               <div style={cardStyle}>
                 <div style={cardHeaderStyle}>
@@ -124,11 +131,16 @@ const CurrentEvent = () => {
                   </thead>
                   <tbody>
                     {standings.map((team, index) => (
-                      <tr key={index} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: index % 2 === 0 ? '#161920' : '#1a1c23', height: '36px' }}>
+                      <tr key={index} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: index % 2 === 0 ? '#161920' : '#1a1c23', height: '40px' }}>
                         <td style={{ ...tdStyle, color: '#ffd700', fontWeight: 'bold' }}>{team.pos}</td>
-                        <td style={{ ...tdStyle, textAlign: 'left' }}>
-                          <div style={{ fontWeight: 'bold', color: '#e0e0e0', fontSize: '13px' }}>{team.name}</div>
-                          <div style={{ fontSize: '10px', color: '#888' }}>{team.players}</div>
+                        <td style={{ ...tdStyle, textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px', height: '40px' }}>
+                          <img 
+                            src={`/teams/${team.id}.png`} 
+                            alt={team.name} 
+                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                            onError={(e) => { e.target.style.display='none'; }}
+                          />
+                          <span style={{ fontWeight: 'bold', color: '#e0e0e0', fontSize: '13px' }}>{team.name}</span>
                         </td>
                         <td style={{ ...tdStyle, fontWeight: 'bold' }}>{team.series}</td>
                         <td style={{ ...tdStyle }}>{team.maps}</td>
@@ -141,50 +153,6 @@ const CurrentEvent = () => {
                 </table>
               </div>
 
-              {/* PLAYOFFS BRACKET */}
-              <div style={cardStyle}>
-                <div style={cardHeaderStyle}>
-                  <h3 style={{ color: '#ffd700', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>🌳 Playoffs Bracket (2v2)</h3>
-                </div>
-                <div style={{ padding: '60px 15px', textAlign: 'center', color: '#555', fontSize: '12px', fontStyle: 'italic', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: '30px', marginBottom: '10px' }}>🔐</span>
-                  Bracket will unlock after the Group Stage is completed.
-                </div>
-              </div>
-
-            </div>
-
-            {/* RIGHT COLUMN: RULES & MATCHES */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              
-              {/* TOURNAMENT RULESET */}
-              <div style={cardStyle}>
-                <div style={cardHeaderStyle}>
-                  <h3 style={{ color: '#ff6666', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>📜 Tournament Ruleset</h3>
-                </div>
-                <div style={{ padding: '20px', fontSize: '13px', color: '#e0e0e0', lineHeight: '1.6', textAlign: 'left' }}>
-                  <div style={{ marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px dashed #333' }}>
-                    <strong style={{ color: '#ffd700', fontSize: '14px' }}>1. Group Stage (Liguilla)</strong><br />
-                    1v1 with Live Coaching. Format: <strong style={{color: '#fff'}}>Play All 3 (Pa3)</strong>. All 3 maps must be played to accumulate standings points.
-                  </div>
-                  <div style={{ marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px dashed #333' }}>
-                    <strong style={{ color: '#ffd700', fontSize: '14px' }}>2. Playoffs (2v2)</strong><br />
-                    <span style={{ color: '#66b2ff' }}>3rd vs 4th Place:</span> Best of 3 (Bo3).<br />
-                    <span style={{ color: '#66b2ff' }}>Grand Final (1st vs 2nd):</span> Best of 5 (Bo5).<br />
-                    <span style={{ color: '#888', fontStyle: 'italic', fontSize: '12px' }}>Played together as Master + Pupil.</span>
-                  </div>
-                  <div>
-                    <strong style={{ color: '#ffd700', fontSize: '14px' }}>3. Maps & Civs</strong><br />
-                    <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px', color: '#a0aab5', listStyleType: 'square' }}>
-                      <li style={{ marginBottom: '6px' }}>The first map is always <strong style={{color: '#fff'}}>Arabia</strong>.</li>
-                      <li style={{ marginBottom: '6px' }}>The loser picks the next map (Arabia or Arena).</li>
-                      <li style={{ marginBottom: '6px' }}>Free civilization choice (no draft).</li>
-                      <li><strong style={{color: '#ff4444'}}>No civilization repeats</strong> allowed during the entire series.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
               {/* UPCOMING MATCHES */}
               <div style={cardStyle}>
                 <div style={cardHeaderStyle}>
@@ -194,21 +162,87 @@ const CurrentEvent = () => {
                   Schedule is being generated...
                 </div>
               </div>
+            </div>
 
+            {/* PLAYOFFS BRACKET */}
+            <div style={cardStyle}>
+              <div style={cardHeaderStyle}>
+                <h3 style={{ color: '#ffd700', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>🌳 Playoffs Bracket (2v2)</h3>
+              </div>
+              <div style={{ padding: '60px 15px', textAlign: 'center', color: '#555', fontSize: '12px', fontStyle: 'italic', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '30px', marginBottom: '10px' }}>🔐</span>
+                Bracket will unlock after the Group Stage is completed.
+              </div>
             </div>
 
           </div>
         )}
 
-        {/* TEAMS ROSTER TAB */}
+        {/* TAB 2: TEAMS ROSTER */}
         {activeTab === 'teams' && (
-          <div style={cardStyle}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            {teamsRoster.map((team, index) => (
+              <div key={index} style={{ ...cardStyle, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '25px 20px', position: 'relative', borderTop: '3px solid #ffd700' }}>
+                <img 
+                  src={`/teams/${team.id}.png`} 
+                  alt={team.name} 
+                  style={{ width: '90px', height: '90px', objectFit: 'contain', marginBottom: '15px' }}
+                  onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='block'; }}
+                />
+                <div style={{ display: 'none', width: '90px', height: '90px', backgroundColor: '#2a2d36', borderRadius: '50%', marginBottom: '15px' }}></div>
+                
+                <h2 style={{ color: '#e0e0e0', margin: '0 0 15px 0', fontSize: '18px', textTransform: 'uppercase', letterSpacing: '1px' }}>{team.name}</h2>
+                
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', backgroundColor: '#1e212b', padding: '10px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
+                  <div style={{ textAlign: 'center', flex: 1 }}>
+                    <div style={{ color: '#888', fontSize: '9px', textTransform: 'uppercase', marginBottom: '2px' }}>Master</div>
+                    <div style={{ color: '#66b2ff', fontSize: '13px', fontWeight: 'bold' }}>{team.player1}</div>
+                  </div>
+                  <div style={{ width: '1px', backgroundColor: '#333' }}></div>
+                  <div style={{ textAlign: 'center', flex: 1 }}>
+                    <div style={{ color: '#888', fontSize: '9px', textTransform: 'uppercase', marginBottom: '2px' }}>Pupil</div>
+                    <div style={{ color: '#ff6666', fontSize: '13px', fontWeight: 'bold' }}>{team.player2}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* TAB 3: RULESET */}
+        {activeTab === 'rules' && (
+          <div style={{ ...cardStyle, maxWidth: '800px', margin: '0 auto' }}>
             <div style={cardHeaderStyle}>
-              <h3 style={{ color: '#ffd700', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>⚔️ Official Teams Roster</h3>
+              <h3 style={{ color: '#ff6666', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>📜 Tournament Ruleset</h3>
             </div>
-            <div style={{ padding: '40px', textAlign: 'center', color: '#888', fontSize: '12px' }}>
-              Teams grid in development.<br/>
-              (Master/Pupil avatars and team logos will be mapped here soon).
+            <div style={{ padding: '30px', fontSize: '14px', color: '#e0e0e0', lineHeight: '1.6' }}>
+              
+              <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #2a2d36' }}>
+                <h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>1. Group Stage</h4>
+                <p style={{ margin: 0 }}>
+                  <strong>1v1 with Live Coaching.</strong> Format: <strong>Play All 3</strong>. All 3 maps must be played to accumulate standings points.
+                </p>
+              </div>
+
+              <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #2a2d36' }}>
+                <h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>2. Playoffs (2v2)</h4>
+                <p style={{ margin: '0 0 8px 0' }}>Played together as Master + Pupil.</p>
+                <ul style={{ margin: 0, paddingLeft: '20px', color: '#a0aab5' }}>
+                  <li style={{ marginBottom: '6px' }}><strong style={{ color: '#e0e0e0' }}>3rd vs 4th Place:</strong> Best of 3.</li>
+                  <li><strong style={{ color: '#e0e0e0' }}>Grand Final (1st vs 2nd):</strong> Best of 5.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>3. Maps & Civs</h4>
+                <ul style={{ margin: 0, paddingLeft: '20px', color: '#a0aab5' }}>
+                  <li style={{ marginBottom: '8px' }}>The first map is always <strong>Arabia</strong>.</li>
+                  <li style={{ marginBottom: '8px' }}>The loser picks the next map (<strong>Arabia</strong> or <strong>Arena</strong>).</li>
+                  <li style={{ marginBottom: '8px' }}><strong>Free civilization choice</strong> (no draft).</li>
+                  <li><strong style={{ color: '#ff4444' }}>No civilization repeats</strong> allowed during the entire series.</li>
+                </ul>
+              </div>
+
             </div>
           </div>
         )}
