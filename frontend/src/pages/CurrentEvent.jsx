@@ -37,8 +37,11 @@ const CurrentEvent = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         setUser(session.user);
-        const discordNick = session.user.user_metadata.preferred_username || session.user.user_metadata.name;
-        const { data } = await supabase.from('clan_roles').select('role').ilike('discord_username', discordNick).single();
+        // Leemos el nick y lo limpiamos cortando todo lo que haya desde el "#"
+        const rawNick = session.user.user_metadata.preferred_username || session.user.user_metadata.name || '';
+        const cleanNick = rawNick.split('#')[0].toLowerCase(); 
+        
+        const { data } = await supabase.from('clan_roles').select('role').ilike('discord_username', cleanNick).single();
         if (data) setUserRole(data.role);
       }
     };
@@ -46,7 +49,8 @@ const CurrentEvent = () => {
   }, []);
 
   // Lógica de Permisos
-  const discordNick = user?.user_metadata?.preferred_username?.toLowerCase() || user?.user_metadata?.name?.toLowerCase() || '';
+  const rawNickForAuth = user?.user_metadata?.preferred_username || user?.user_metadata?.name || '';
+  const discordNick = rawNickForAuth.split('#')[0].toLowerCase(); // Quita el #0
   const isAdmin = userRole === 'admin';
   const isAuthorizedToLog = isAdmin || TEAM_MEMBERS[teamA]?.includes(discordNick) || TEAM_MEMBERS[teamB]?.includes(discordNick);
 
@@ -142,7 +146,7 @@ const CurrentEvent = () => {
       <div style={{ backgroundColor: '#ff4444', color: 'white', padding: '10px', textAlign: 'center', fontWeight: 'bold', zIndex: 9999, position: 'relative' }}>
         DEBUG - Nick de Discord leído: "{discordNick}" | Rol en BD: "{userRole || 'null'}"
       </div>
-      
+
       {/* BLOQUE DE ESTILOS PARA ANIMACIONES Y HOVERS */}
       <style>{`
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 rgba(255, 215, 0, 0.4); border-color: #ffd700; transform: scale(1); } 50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); border-color: #fff; transform: scale(1.03); } 100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); border-color: #333; transform: scale(1); } }
@@ -164,7 +168,9 @@ const CurrentEvent = () => {
         <div onClick={() => setActiveTab('standings')} style={getTabStyle('standings')}>Standings & Bracket</div>
         <div onClick={() => setActiveTab('teams')} style={getTabStyle('teams')}>Teams Roster</div>
         <div onClick={() => setActiveTab('rules')} style={getTabStyle('rules')}>Ruleset</div>
-        <div onClick={() => setActiveTab('log')} style={getTabStyle('log')}>Log Match</div>
+        {(userRole === 'admin' || userRole === 'member') && (
+          <div onClick={() => setActiveTab('log')} style={getTabStyle('log')}>Log Match</div>
+        )}
       </div>
 
       {/* MAIN CONTENT */}
@@ -291,7 +297,7 @@ const CurrentEvent = () => {
         )}
 
         {/* TAB 4: LOG MATCH */}
-        {activeTab === 'log' && (
+        {activeTab === 'log' && (userRole === 'admin' || userRole === 'member') && (
           <div style={{ ...cardStyle, maxWidth: '1000px', margin: '0 auto' }}>
             <div style={cardHeaderStyle}>
               <h3 style={{ color: '#ffd700', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>📝 Log Match Result (Group Stage)</h3>
