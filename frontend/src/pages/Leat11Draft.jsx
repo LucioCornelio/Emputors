@@ -1158,7 +1158,12 @@ const getGoodMapsForCiv = (civ) => {
             The LEAT11 Engine is a private clan tool. Log in with Discord to verify your access.
           </p>
           <button 
-            onClick={() => supabase.auth.signInWithOAuth({ provider: 'discord' })} 
+            onClick={() => supabase.auth.signInWithOAuth({ 
+              provider: 'discord',
+              options: {
+                redirectTo: window.location.origin
+              }
+            })} 
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', backgroundColor: '#5865F2', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'background 0.2s' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#4752C4'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#5865F2'}

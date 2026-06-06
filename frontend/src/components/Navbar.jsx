@@ -22,7 +22,12 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({ provider: 'discord' });
+    await supabase.auth.signInWithOAuth({ 
+      provider: 'discord',
+      options: {
+        redirectTo: window.location.origin
+      }
+    });
   };
 
   const handleLogout = async () => {
