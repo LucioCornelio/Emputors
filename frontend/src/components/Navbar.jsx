@@ -153,8 +153,18 @@ const Navbar = () => {
           <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Tools ▾</span>
           {dropdown === 'tools' && (
             <div style={dropdownStyle}>
-              <Link to="/tools/leat11" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>LEAT11 Draft</Link>
+              {/* Aquí irán las herramientas activas en el futuro */}
               <Link to="/tools/advanced-search" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Advanced Search</Link>
+            </div>
+          )}
+        </div>
+
+        {/* Legacy / Archive Dropdown */}
+        <div style={itemStyle} onMouseEnter={() => handleMouseEnter('legacy')} onMouseLeave={handleMouseLeave}>
+          <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px' }}>Legacy ▾</span>
+          {dropdown === 'legacy' && (
+            <div style={dropdownStyle}>
+              <Link to="/tools/leat11" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>LEAT11 Draft</Link>
             </div>
           )}
         </div>
