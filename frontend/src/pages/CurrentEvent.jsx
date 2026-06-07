@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../supabaseClient';
 
 // Diccionario de jugadores por equipo (nicks de Discord en minúsculas)
@@ -37,6 +37,10 @@ const CurrentEvent = () => {
   const [calculatedStandings, setCalculatedStandings] = useState([]);
 
   // SUPABASE: Estados del formulario de logueo
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedMatchModal, setSelectedMatchModal] = useState(null);
+  const [logStage, setLogStage] = useState('group');
+  const [selectedGroupMatchIdx, setSelectedGroupMatchIdx] = useState("");
   const [teamA, setTeamA] = useState("");
   const [teamB, setTeamB] = useState("");
   const [mapsData, setMapsData] = useState([
@@ -44,12 +48,6 @@ const CurrentEvent = () => {
     { map: "", civA: "", civB: "", winner: "" },
     { map: "", civA: "", civB: "", winner: "" }
   ]);
-  const [isSubmitting, setIsSubmitting] = useState(false);const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // NUEVOS ESTADOS
-  const [selectedMatchModal, setSelectedMatchModal] = useState(null);
-  const [logStage, setLogStage] = useState('group');
-  const [selectedGroupMatchIdx, setSelectedGroupMatchIdx] = useState("");
 
   // Cargar civilizaciones desde techtree.json
   useEffect(() => {
@@ -73,7 +71,7 @@ const CurrentEvent = () => {
     
     setMatchResults(data);
 
-    // Calcular clasificación base
+    // Calcular clasificación base (Solo cuenta Fase de Grupos)
     let initialStandings = {
       "RaiSquad": { id: "raisquad", name: "RaiSquad", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
       "CostalCanela": { id: "costalcanela", name: "CostalCanela", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
@@ -85,35 +83,31 @@ const CurrentEvent = () => {
       const { team_a, team_b, score_a, score_b } = match;
       
       if (initialStandings[team_a] && initialStandings[team_b]) {
-        // Mapas
         initialStandings[team_a].mapsW += score_a;
         initialStandings[team_a].mapsL += score_b;
         initialStandings[team_b].mapsW += score_b;
         initialStandings[team_b].mapsL += score_a;
 
-        // Series y Puntos (Opción 2 de la encuesta: Puntos = Mapas ganados + 1 pt extra por Serie ganada)
-        // OJO: Asumiendo que es al mejor de 3, quien gane 2 mapas gana la serie.
         if (score_a > score_b) {
           initialStandings[team_a].seriesW += 1;
           initialStandings[team_b].seriesL += 1;
-          initialStandings[team_a].pts += score_a + 1; // Mapas + Serie
-          initialStandings[team_b].pts += score_b;     // Solo Mapas
+          initialStandings[team_a].pts += score_a + 1;
+          initialStandings[team_b].pts += score_b;
         } else if (score_b > score_a) {
           initialStandings[team_b].seriesW += 1;
           initialStandings[team_a].seriesL += 1;
-          initialStandings[team_b].pts += score_b + 1; // Mapas + Serie
-          initialStandings[team_a].pts += score_a;     // Solo Mapas
+          initialStandings[team_b].pts += score_b + 1;
+          initialStandings[team_a].pts += score_a;
         }
       }
     });
 
-    // Convertir objeto a array y ordenar (Por Puntos, luego por Diff de mapas, luego Alfabético)
     const sortedStandings = Object.values(initialStandings).sort((a, b) => {
-      if (b.pts !== a.pts) return b.pts - a.pts; // 1. Mayor Puntuación
+      if (b.pts !== a.pts) return b.pts - a.pts;
       const diffA = a.mapsW - a.mapsL;
       const diffB = b.mapsW - b.mapsL;
-      if (diffB !== diffA) return diffB - diffA; // 2. Mejor diferencia de mapas
-      return a.name.localeCompare(b.name);       // 3. Orden alfabético
+      if (diffB !== diffA) return diffB - diffA;
+      return a.name.localeCompare(b.name);
     }).map((team, index) => ({ ...team, pos: index + 1 }));
 
     setCalculatedStandings(sortedStandings);
@@ -146,10 +140,13 @@ const CurrentEvent = () => {
   const groupMatchesPlayedCount = matchResults.filter(m => m.stage === 'group' || !m.stage).length;
   const isGroupStageComplete = groupMatchesPlayedCount >= 6;
 
-  const existingMatch = matchResults.find(m => 
-    m.stage === logStage && teamA && teamB && 
-    ((m.team_a === teamA && m.team_b === teamB) || (m.team_a === teamB && m.team_b === teamA))
-  );
+  const existingMatch = useMemo(() => {
+    if (!teamA || !teamB) return null;
+    return matchResults.find(m => 
+      m.stage === logStage && 
+      ((m.team_a === teamA && m.team_b === teamB) || (m.team_a === teamB && m.team_b === teamA))
+    );
+  }, [teamA, teamB, logStage, matchResults]);
 
   const handleGroupMatchSelect = (e) => {
     const idx = e.target.value;
@@ -162,15 +159,6 @@ const CurrentEvent = () => {
     }
   };
 
-  const resetAllResults = async () => {
-    if (!window.confirm("CRITICAL WARNING: Are you sure you want to delete ALL match results? This cannot be undone.")) return;
-    setIsSubmitting(true);
-    const { error } = await supabase.from('match_results').delete().neq('id', 0); // Borra todo
-    setIsSubmitting(false);
-    if (error) alert("Error resetting: " + error.message);
-    else { alert("All results wiped."); fetchMatches(); }
-  };
-
   const handleTeamClick = (teamId) => {
     setActiveTab('teams');
     setHighlightTeam(teamId);
@@ -181,6 +169,19 @@ const CurrentEvent = () => {
     const newMaps = [...mapsData];
     newMaps[index][field] = value;
     setMapsData(newMaps);
+  };
+
+  const resetAllResults = async () => {
+    if (!window.confirm("CRITICAL WARNING: Are you sure you want to delete ALL match results? This cannot be undone.")) return;
+    setIsSubmitting(true);
+    const { error } = await supabase.from('match_results').delete().neq('id', 0); // Hack Supabase delete all
+    setIsSubmitting(false);
+    if (error) {
+      alert("Error resetting: " + error.message);
+    } else { 
+      alert("All results wiped."); 
+      fetchMatches(); 
+    }
   };
 
   const handleSubmit = async (adminWinWinner = null) => {
@@ -249,20 +250,10 @@ const CurrentEvent = () => {
 
   // Generar la lista visual de partidos cruzando el calendario fijo con los resultados reales
   const generateGroupMatchesUI = () => {
-    const schedule = [
-      { t1: "CostalCanela", t2: "RaiSquad" },
-      { t1: "Sabaronte", t2: "SarCornelio" },
-      { t1: "CostalCanela", t2: "Sabaronte" },
-      { t1: "RaiSquad", t2: "SarCornelio" },
-      { t1: "CostalCanela", t2: "SarCornelio" },
-      { t1: "RaiSquad", t2: "Sabaronte" }
-    ];
-
-    return schedule.map(match => {
-      // Buscar si este partido ya se ha jugado
+    return GROUP_SCHEDULE.map(match => {
       const playedMatch = matchResults.find(m => 
-        (m.team_a === match.t1 && m.team_b === match.t2) || 
-        (m.team_a === match.t2 && m.team_b === match.t1)
+        (m.stage === 'group' || !m.stage) &&
+        ((m.team_a === match.t1 && m.team_b === match.t2) || (m.team_a === match.t2 && m.team_b === match.t1))
       );
 
       let scoreStr = "- : -";
@@ -541,7 +532,9 @@ const CurrentEvent = () => {
           </div>
         )}
 
-{/* MATCH DETAILS MODAL (LIQUIPEDIA STYLE) */}
+      </div>
+
+      {/* MATCH DETAILS MODAL (LIQUIPEDIA STYLE) */}
       {selectedMatchModal && (
         <div onClick={() => setSelectedMatchModal(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.85)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div onClick={e => e.stopPropagation()} style={{ backgroundColor: '#22252e', border: '1px solid #444', borderRadius: '8px', padding: '20px', width: '500px', maxWidth: '90vw', animation: 'zoomIn 0.2s ease-out' }}>
