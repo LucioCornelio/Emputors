@@ -43,6 +43,7 @@ const CurrentEvent = () => {
   const [selectedGroupMatchIdx, setSelectedGroupMatchIdx] = useState("");
   const [teamA, setTeamA] = useState("");
   const [teamB, setTeamB] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
   const [mapsData, setMapsData] = useState([
     { map: "Arabia", civA: "", civB: "", winner: "" },
     { map: "", civA: "", civB: "", winner: "" },
@@ -148,6 +149,25 @@ const CurrentEvent = () => {
     );
   }, [teamA, teamB, logStage, matchResults]);
 
+  // AUTORELLENADO DE DATOS SI EL PARTIDO EXISTE
+  useEffect(() => {
+    if (existingMatch) {
+      setYoutubeLink(existingMatch.youtube_link || "");
+      setMapsData([
+        existingMatch.map_1_data || { map: "Arabia", civA: "", civB: "", winner: "" },
+        existingMatch.map_2_data || { map: "", civA: "", civB: "", winner: "" },
+        existingMatch.map_3_data || { map: "", civA: "", civB: "", winner: "" }
+      ]);
+    } else {
+      setYoutubeLink("");
+      setMapsData([
+        { map: "Arabia", civA: "", civB: "", winner: "" },
+        { map: "", civA: "", civB: "", winner: "" },
+        { map: "", civA: "", civB: "", winner: "" }
+      ]);
+    }
+  }, [existingMatch]);
+
   const handleGroupMatchSelect = (e) => {
     const idx = e.target.value;
     setSelectedGroupMatchIdx(idx);
@@ -157,6 +177,23 @@ const CurrentEvent = () => {
     } else {
       setTeamA(""); setTeamB("");
     }
+  };
+
+  const handleEditFromModal = () => {
+    const match = selectedMatchModal;
+    setSelectedMatchModal(null);
+    setActiveTab('log');
+    setLogStage(match.stage || 'group');
+    
+    if (match.stage === 'group' || !match.stage) {
+      const idx = GROUP_SCHEDULE.findIndex(m => 
+        (m.t1 === match.team_a && m.t2 === match.team_b) || 
+        (m.t1 === match.team_b && m.t2 === match.team_a)
+      );
+      if (idx !== -1) setSelectedGroupMatchIdx(String(idx));
+    }
+    setTeamA(match.team_a);
+    setTeamB(match.team_b);
   };
 
   const handleTeamClick = (teamId) => {
@@ -174,7 +211,7 @@ const CurrentEvent = () => {
   const resetAllResults = async () => {
     if (!window.confirm("CRITICAL WARNING: Are you sure you want to delete ALL match results? This cannot be undone.")) return;
     setIsSubmitting(true);
-    const { error } = await supabase.from('match_results').delete().neq('id', 0); // Hack Supabase delete all
+    const { error } = await supabase.from('match_results').delete().neq('id', 0);
     setIsSubmitting(false);
     if (error) {
       alert("Error resetting: " + error.message);
@@ -208,7 +245,7 @@ const CurrentEvent = () => {
     const payload = {
       team_a: teamA, team_b: teamB, score_a: scoreA, score_b: scoreB,
       map_1_data: payloadMaps[0], map_2_data: payloadMaps[1], map_3_data: payloadMaps[2],
-      submitted_by: discordNick, stage: logStage
+      submitted_by: discordNick, stage: logStage, youtube_link: youtubeLink
     };
 
     let error;
@@ -225,10 +262,23 @@ const CurrentEvent = () => {
       alert("Error saving match: " + error.message);
     } else {
       alert(existingMatch ? "Match updated successfully!" : "Match logged successfully!");
-      setTeamA(""); setTeamB(""); setSelectedGroupMatchIdx("");
+      setTeamA(""); setTeamB(""); setSelectedGroupMatchIdx(""); setYoutubeLink("");
       setMapsData([{ map: "Arabia", civA: "", civB: "", winner: "" }, { map: "", civA: "", civB: "", winner: "" }, { map: "", civA: "", civB: "", winner: "" }]);
       fetchMatches(); 
       setActiveTab('standings'); 
+    }
+  };
+
+  const handleYoutubeSubmit = async () => {
+    if (!existingMatch) return;
+    setIsSubmitting(true);
+    const { error } = await supabase.from('match_results').update({ youtube_link: youtubeLink }).eq('id', existingMatch.id);
+    setIsSubmitting(false);
+    if (error) {
+      alert("Error saving VOD link: " + error.message);
+    } else {
+      alert("VOD link saved successfully!");
+      fetchMatches();
     }
   };
 
@@ -323,7 +373,7 @@ const CurrentEvent = () => {
                       <th style={{ ...thStyle, textAlign: 'left' }}>Team</th>
                       <th style={{ ...thStyle }}>Series (W-L)</th>
                       <th style={{ ...thStyle }}>Maps (W-L)</th>
-                      <th style={{ ...thStyle, width: '60px', color: '#ffd700' }}>Pts</th>
+                      <th style={{ ...thStyle, width: '60px', color: '#ffd700', cursor: 'help' }} title="Points = Total Maps Won + 1 Bonus Point per Series Won">Pts ⓘ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -423,7 +473,11 @@ const CurrentEvent = () => {
           <div style={{ ...cardStyle, maxWidth: '800px', margin: '0 auto' }}>
             <div style={cardHeaderStyle}><h3 style={{ color: '#ff6666', margin: 0, fontSize: '13px', textTransform: 'uppercase' }}>📜 Tournament Ruleset</h3></div>
             <div style={{ padding: '30px', fontSize: '14px', color: '#e0e0e0', lineHeight: '1.6', textAlign: 'left' }}>
-              <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #2a2d36' }}><h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>1. Group Stage</h4><p style={{ margin: 0 }}><strong>1v1 with Live Coaching.</strong> Format: <strong>Play All 3</strong>. All 3 maps must be played to accumulate standings points.</p></div>
+              <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #2a2d36' }}>
+                <h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>1. Group Stage</h4>
+                <p style={{ margin: '0 0 8px 0' }}><strong>1v1 with Live Coaching.</strong> Format: <strong>Play All 3</strong>. All 3 maps must be played.</p>
+                <p style={{ margin: 0, color: '#a0aab5', fontSize: '13px' }}><strong>Points Calculation:</strong> Teams earn 1 point for every map won, plus 1 bonus point for winning the series (e.g., winning 2-1 awards 3 points to the winner and 1 point to the loser).</p>
+              </div>
               <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #2a2d36' }}><h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>2. Playoffs (2v2)</h4><p style={{ margin: '0 0 8px 0' }}>Played together as Puppeteer + Puppet.</p><ul style={{ margin: 0, paddingLeft: '20px', color: '#a0aab5', listStyleType: 'disc' }}><li style={{ marginBottom: '6px' }}><strong style={{ color: '#e0e0e0' }}>Duel of Dwarves (3rd vs 4th):</strong> Best of 3.</li><li><strong style={{ color: '#e0e0e0' }}>Grand Final (1st vs 2nd):</strong> Best of 5.</li></ul></div>
               <div><h4 style={{ color: '#ffd700', fontSize: '16px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>3. Maps & Civs</h4><ul style={{ margin: 0, paddingLeft: '20px', color: '#a0aab5', listStyleType: 'disc' }}><li style={{ marginBottom: '8px' }}>The first map is always <strong>Arabia</strong>.</li><li style={{ marginBottom: '8px' }}>The loser picks the next map (<strong>Arabia</strong> or <strong>Arena</strong>).</li><li style={{ marginBottom: '8px' }}><strong>Free civilization choice</strong> (no draft).</li><li style={{ marginBottom: '8px' }}><strong style={{ color: '#ff4444' }}>No civilization repeats</strong> allowed during the entire series.</li><li><strong style={{ color: '#ffd700' }}>Penalty for repeating civ:</strong> If noticed before 10 minutes in-game, RE and the opponent chooses the offending player's civilization. If noticed after 10 minutes, automatic loss for that map.</li></ul></div>
             </div>
@@ -505,7 +559,7 @@ const CurrentEvent = () => {
                 </div>
               ))}
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '20px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   {existingMatch && <span style={{ color: isAdmin ? '#ffd700' : '#ff4444', fontSize: '12px', fontWeight: 'bold' }}>{isAdmin ? '⚠️ Match exists. Submitting will overwrite.' : '🔒 Match already logged. Only Admins can modify.'}</span>}
                   {(!isAuthorizedToLog && !isAdmin && !existingMatch && teamA && teamB) && <span style={{ color: '#ff4444', fontSize: '12px', fontWeight: 'bold' }}>⚠️ Only {teamA} or {teamB} members can submit.</span>}
@@ -527,6 +581,29 @@ const CurrentEvent = () => {
                   </button>
                 </div>
               </div>
+
+              {/* ADMIN: YOUTUBE LINK SECTION */}
+              {isAdmin && existingMatch && (
+                <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px dashed #444' }}>
+                  <h4 style={{ color: '#ff4444', margin: '0 0 10px 0', fontSize: '12px', textTransform: 'uppercase' }}>🔧 Admin: Add YouTube VOD Link</h4>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="https://youtube.com/watch?v=..." 
+                      value={youtubeLink} 
+                      onChange={(e) => setYoutubeLink(e.target.value)}
+                      style={{ flex: 1, padding: '8px', backgroundColor: '#161920', color: '#fff', border: '1px solid #444', borderRadius: '4px' }}
+                    />
+                    <button 
+                      onClick={handleYoutubeSubmit}
+                      disabled={isSubmitting || !youtubeLink}
+                      style={{ backgroundColor: '#cc0000', color: '#fff', fontWeight: 'bold', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: youtubeLink ? 'pointer' : 'not-allowed' }}
+                    >
+                      SAVE VOD
+                    </button>
+                  </div>
+                </div>
+              )}
 
             </div>
           </div>
@@ -563,7 +640,21 @@ const CurrentEvent = () => {
               ))}
             </div>
 
-            <button onClick={() => setSelectedMatchModal(null)} style={{ width: '100%', marginTop: '20px', padding: '10px', backgroundColor: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>CLOSE</button>
+            {selectedMatchModal.youtube_link && (
+              <div style={{ marginTop: '15px', textAlign: 'center' }}>
+                <a href={selectedMatchModal.youtube_link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#ff0000', color: '#fff', padding: '8px 16px', borderRadius: '4px', textDecoration: 'none', fontWeight: 'bold', fontSize: '13px', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#cc0000'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#ff0000'}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                  Watch VOD
+                </a>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+              {isAdmin && (
+                <button onClick={handleEditFromModal} style={{ flex: 1, padding: '10px', backgroundColor: '#ffd700', color: '#161920', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>EDIT MATCH</button>
+              )}
+              <button onClick={() => setSelectedMatchModal(null)} style={{ flex: 1, padding: '10px', backgroundColor: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>CLOSE</button>
+            </div>
           </div>
         </div>
       )}
