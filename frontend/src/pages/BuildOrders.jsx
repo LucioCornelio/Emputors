@@ -67,7 +67,7 @@ const BuildOrders = () => {
   const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || stratFilter !== 'All' || diffFilter !== 'All' || search !== '';
 
   const filtered = useMemo(() => {
-    return builds.filter((b) => {
+    const results = builds.filter((b) => {
       if (civFilter !== 'All' && b.civ !== civFilter) return false;
       if (mapFilter !== 'All' && b.map !== mapFilter) return false;
       if (stratFilter !== 'All' && b.strategy !== stratFilter) return false;
@@ -78,6 +78,22 @@ const BuildOrders = () => {
         if (!haystack.includes(q)) return false;
       }
       return true;
+    });
+
+    // SISTEMA DE ORDENACIÓN (Mapas > Civs > Vils)
+    return results.sort((a, b) => {
+      // 1. Mapas: Arabia -> Arena -> Resto (Alfabético)
+      const mapWeight = (m) => m === 'Arabia' ? 1 : m === 'Arena' ? 2 : 3;
+      if (mapWeight(a.map) !== mapWeight(b.map)) return mapWeight(a.map) - mapWeight(b.map);
+      if (a.map !== b.map) return a.map.localeCompare(b.map);
+
+      // 2. Civilizaciones: "Any" (Genéricas) primero -> Resto (Alfabético)
+      const civWeight = (c) => c === 'Any' ? 1 : 2;
+      if (civWeight(a.civ) !== civWeight(b.civ)) return civWeight(a.civ) - civWeight(b.civ);
+      if (a.civ !== b.civ) return a.civ.localeCompare(b.civ);
+
+      // 3. Cantidad de Vils: De menos a más
+      return a.popCount - b.popCount;
     });
   }, [civFilter, mapFilter, stratFilter, diffFilter, search]);
 
@@ -167,7 +183,7 @@ const BuildOrders = () => {
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
                   <div style={{ padding: '2px', background: '#1e212b', borderRadius: '6px', border: `1px solid ${C.cyan}`, boxShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                    <img src={`/civs/${b.civ.toLowerCase()}.png`} alt="" style={{ width: '24px', height: '24px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
+                    <img src={b.civ === 'Any' ? '/civs/random.png' : `/civs/${b.civ.toLowerCase()}.png`} alt="" style={{ width: '24px', height: '24px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
                   </div>
                   {renderPremiumStratIcons(b)}
                   <div style={{ marginLeft: 'auto', backgroundColor: '#2a2d36', padding: '4px 10px', borderRadius: '4px', border: `1px solid ${C.borderLt}`, color: C.textMain, fontSize: '11px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>

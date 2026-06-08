@@ -1,5 +1,177 @@
 [
   {
+    "id": "any-arabia-18pop-scouts-pela",
+    "title": "18 Vils | Any | Arabia | Pela's Scouts",
+    "civ": "Any",
+    "map": "Arabia",
+    "strategy": "Scouts",
+    "difficulty": "Beginner",
+    "popCount": 18,
+    "video": null,
+    "description": "Standard and reliable 19-pop (18 vils) Scouts build order by El Pela. A highly consistent opening for any civilization on Arabia, transitioning smoothly into a strong farm economy and Castle Age.",
+    "author": "El Pela",
+    "strategyIcons": [
+      "/techs/FeudalAgeIconDE.png",
+      "/units/Scoutcavalry_aoe2DE.png"
+    ],
+    "tags": [
+      "Scouts",
+      "Generic",
+      "El Pela"
+    ],
+    "ages": [
+      {
+        "name": "Dark Age",
+        "steps": [
+          {
+            "vil": 6,
+            "task": "food_sheep",
+            "desc": "6 vils to sheep",
+            "res": { "sheep": 6 }
+          },
+          {
+            "vil": 8,
+            "task": "wood",
+            "desc": "2 vils to wood",
+            "icon": "Lumber_camp_aoe2de",
+            "res": { "sheep": 6, "wood": 2 }
+          },
+          {
+            "vil": 12,
+            "task": "food_boar",
+            "desc": "4 vils to boar",
+            "res": { "underTC": 10, "wood": 2 }
+          },
+          {
+            "vil": 16,
+            "task": "food_berries",
+            "desc": "4 vils to berries",
+            "icon": "Mill_aoe2de",
+            "res": { "underTC": 10, "wood": 2, "berries": 4 }
+          },
+          {
+            "vil": 18,
+            "task": "food_tc",
+            "desc": "2 vils to food under TC",
+            "res": { "underTC": 12, "wood": 2, "berries": 4 }
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Loom",
+            "icon": "LoomDE",
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Feudal Age",
+            "icon": "FeudalAgeIconDE",
+            "res": {}
+          }
+        ]
+      },
+      {
+        "name": "Advancing to Feudal",
+        "steps": [
+          {
+            "vil": 18,
+            "task": "reallocate",
+            "desc": "Reallocate economy: 10 to food, 8 to wood",
+            "res": { "underTC": 6, "berries": 4, "wood": 8 },
+            "note": "Send vils from under TC to build a new Lumber Camp or join the existing one."
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Barracks with 2 vils",
+            "icon": "Barracks_aoe2DE",
+            "res": {}
+          }
+        ]
+      },
+      {
+        "name": "Feudal Age",
+        "steps": [
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Stable with the 2 vils from the Barracks",
+            "icon": "Stable_aoe2de",
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Set TC gather point to sheep/food under TC",
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "train",
+            "desc": "Constantly produce Scouts",
+            "icon": "Scoutcavalry_aoe2DE",
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Double-Bit Axe & Horse Collar",
+            "icon": ["DoubleBitAxe_aoe2DE", "HorseCollarDE"],
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "food_farm",
+            "desc": "Add up to 13 farms (keep 4 on berries)",
+            "icon": "FarmDE",
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "gold",
+            "desc": "Change TC gather point to Gold until you have 5 vils",
+            "icon": "Mining_camp_aoe2de",
+            "res": {}
+          }
+        ]
+      },
+      {
+        "name": "Castle Age Transition",
+        "steps": [
+          {
+            "vil": 32,
+            "task": "action",
+            "desc": "At 30-32 vils (depending on walls), research Wheelbarrow",
+            "icon": "WheelbarrowDE",
+            "res": {}
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Castle Age",
+            "icon": "CastleAgeIconDE",
+            "res": {}
+          }
+        ]
+      }
+    ],
+    "whatsNext": [
+      {
+        "icon": "🐎",
+        "style": "scouts",
+        "title": "Bloodlines & Upgrades:",
+        "text": "If you commit to extended Feudal scout wars, get Bloodlines and armor upgrades."
+      },
+      {
+        "icon": "🏰",
+        "style": "general",
+        "title": "Castle Age Transition:",
+        "text": "With a strong farm economy, you can easily transition into Knights in Castle Age. Drop a second Stable on the way up."
+      }
+    ]
+  },
+  {
     "id": "romans-morass-maa",
     "title": "18 Vils | Romans | Morass | Fast Blacksmith MAA",
     "civ": "Romans",
@@ -546,379 +718,6 @@
             "desc": "Train 3 militias",
             "icon": "MilitiaDE",
             "res": {},
-            "note": null
-          }
-        ]
-      },
-      {
-        "name": "Feudal Age",
-        "icon": "FeudalAgeIconDE",
-        "steps": [
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Men-at-Arms Upgrade",
-            "icon": "ManAtArmsUpgDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "Build Blacksmith (wall at LC with 3 vils)",
-            "icon": "Blacksmith_aoe2de",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Scale Mail Armor (as soon as affordable)",
-            "icon": "ScaleMailArmorDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": 22,
-            "task": "food_hunt",
-            "desc": "4 more to hunt (Grow food line to ~14 vils)",
-            "res": {
-              "hunt": 14,
-              "wood": 5,
-              "gold": 3
-            },
-            "note": "Build Mill when required",
-            "icon": null
-          },
-          {
-            "vil": null,
-            "task": "train",
-            "desc": "Pump more Men-at-Arms - adapt with Spears/Skirms",
-            "icon": "Manatarms",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": 29,
-            "task": "wood",
-            "desc": "7 more to wood (Grow wood line to ~12 vils)",
-            "res": {
-              "hunt": 14,
-              "wood": 12,
-              "gold": 3
-            },
-            "note": null,
-            "icon": null
-          },
-          {
-            "vil": 34,
-            "task": "food_hunt",
-            "desc": "5 more to food (Grow food line to ~19 vils)",
-            "res": {
-              "hunt": 19,
-              "wood": 12,
-              "gold": 3
-            },
-            "note": null,
-            "icon": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "Build Archery Range (if opponent goes archers)",
-            "icon": "Archery_range_aoe2DE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": 37,
-            "task": "gold",
-            "desc": "Add 3 more vils to gold (6 on gold total)",
-            "res": {
-              "hunt": 19,
-              "wood": 12,
-              "gold": 6
-            },
-            "note": null,
-            "icon": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "Build Market",
-            "icon": "Market_aoe2DE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "age_up",
-            "desc": "Click Castle Age",
-            "icon": "CastleAgeIconDE",
-            "res": {},
-            "note": null
-          }
-        ]
-      },
-      {
-        "name": "Advancing to Castle Age",
-        "icon": "CastleAgeIconDE",
-        "steps": [
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Eco: Double-Bit Axe",
-            "icon": "DoubleBitAxe_aoe2DE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Eco: Horse Collar",
-            "icon": "HorseCollarDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Forging",
-            "icon": "Forging_aoe2de",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "2nd Barracks",
-            "icon": "Barracks_aoe2DE",
-            "res": {},
-            "note": null
-          }
-        ]
-      },
-      {
-        "name": "Castle Age",
-        "icon": "CastleAgeIconDE",
-        "steps": [
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Long Swordsman Upgrade",
-            "icon": "LongSwordsmanUpgDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Chain Mail Armor",
-            "icon": "ChainMailArmorDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Squires",
-            "icon": "SquiresDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "Build defensive structure (Monastery or Siege Workshop)",
-            "icon": "Monastery_aoe2DE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "train",
-            "desc": "Pump Long Swordsmen full force",
-            "icon": "Longswordsman_aoe2DE",
-            "res": {},
-            "note": null
-          }
-        ]
-      }
-    ],
-    "whatsNext": [
-      {
-        "icon": "⚔️",
-        "style": "maa",
-        "title": "Keep MAA pressure.",
-        "text": "The goal is to disrupt the opponent's eco before they can stabilize. Don't over-commit — keep enough vils booming behind the push."
-      },
-      {
-        "icon": "🛡️",
-        "style": "general",
-        "title": "If they wall / turtle:",
-        "text": "Transition smoothly into Castle Age. Long Swordsmen with Forging + Chain Mail crush Feudal unit compositions."
-      },
-      {
-        "icon": "🏹",
-        "style": "archers",
-        "title": "If they go archers:",
-        "text": "Add Archery Range for Skirms. Don't abandon MAA production — a mixed army is hard to counter."
-      },
-      {
-        "icon": "🏰",
-        "style": "general",
-        "title": "Castle Age goal:",
-        "text": "Full Long Swordsman army with upgrades. Monastery for Redemption or Siege Workshop for Battering Rams depending on the matchup."
-      }
-    ]
-  },
-  {
-    "id": "mongols-skukuza-archers-scouts",
-    "title": "17 Vils | Mongols | Skukuza | Archers into Scouts",
-    "civ": "Mongols",
-    "map": "Skukuza",
-    "strategy": "Archers into Scouts",
-    "difficulty": "Intermediate",
-    "popCount": 17,
-    "video": "https://www.youtube.com/watch?v=CdOL5dVAxGk",
-    "description": "Mongols aggressive Archers into Scouts opening on Skukuza. Extremely fast 17 vils up, relying heavily on Skukuza's abundant center hunt instead of berries or early farms. Followed by a transition into Scouts.",
-    "author": "LucioCornelio",
-    "tags": [
-      "Hunt eco",
-      "Fast Feudal",
-      "Early aggression"
-    ],
-    "ages": [
-      {
-        "name": "Dark Age",
-        "icon": "DarkAgeIconDE",
-        "steps": [
-          {
-            "vil": 6,
-            "task": "food_sheep",
-            "desc": "6 vils to sheep",
-            "res": {
-              "sheep": 6
-            },
-            "note": null,
-            "icon": null
-          },
-          {
-            "vil": null,
-            "task": "action",
-            "desc": "Scout immediately goes to center of map to push deer",
-            "icon": "Scoutcavalry_aoe2DE",
-            "res": {},
-            "note": "Explore woodlines with sheep, queue always a sheep after the deer under TC"
-          },
-          {
-            "vil": 9,
-            "task": "wood",
-            "desc": "3 vils to wood",
-            "icon": null,
-            "res": {
-              "underTC": 6,
-              "wood": 3
-            },
-            "note": null
-          },
-          {
-            "vil": 13,
-            "task": "build_then_resource",
-            "desc": "4 vils to food under TC",
-            "icon": "House_aoe2DE",
-            "res": {
-              "underTC": 10,
-              "wood": 3
-            },
-            "note": "Build a house with first and back to food under TC"
-          },
-          {
-            "vil": 17,
-            "task": "build_then_resource",
-            "desc": "4 vils to food in center of map",
-            "icon": "Mill_aoe2de",
-            "res": {
-              "underTC": 10,
-              "hunt": 4,
-              "wood": 3
-            },
-            "note": "First makes mill"
-          },
-          {
-            "vil": null,
-            "task": "research",
-            "desc": "Loom",
-            "icon": "LoomDE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "age_up",
-            "desc": "Click Feudal Age",
-            "icon": "FeudalAgeIconDE",
-            "res": {},
-            "note": null
-          }
-        ]
-      },
-      {
-        "name": "Advancing to Feudal",
-        "icon": "FeudalAgeIconDE",
-        "steps": [
-          {
-            "vil": 17,
-            "task": "reallocate",
-            "desc": "10 from food under TC to stragglers",
-            "icon": null,
-            "res": {
-              "hunt": 4,
-              "wood": 13
-            },
-            "note": null
-          },
-          {
-            "vil": null,
-            "task": "build",
-            "desc": "Build Barracks, then house, with one from Hunt then back to hunt",
-            "icon": "Barracks_aoe2DE",
-            "res": {},
-            "note": null
-          },
-          {
-            "vil": 17,
-            "task": "wood",
-            "desc": "5 from stragglers to lumber camp",
-            "icon": null,
-            "res": {
-              "hunt": 4,
-              "wood": 13
-            },
-            "note": null
-          },
-          {
-            "vil": 17,
-            "task": "reallocate",
-            "desc": "2 from stragglers to gold (build Mining Camp)",
-            "icon": "Mining_camp_aoe2de",
-            "res": {
-              "hunt": 4,
-              "wood": 11,
-              "gold": 2
-            },
-            "note": null
-          },
-          {
-            "vil": 17,
-            "task": "reallocate",
-            "desc": "3 from stragglers to hunt",
-            "icon": null,
-            "res": {
-              "hunt": 7,
-              "wood": 8,
-              "gold": 2
-            },
             "note": null
           }
         ]
@@ -1603,12 +1402,12 @@
   },
   {
     "id": "any-arabia-17pop-forward-range",
-    "title": "17 Vils | Any | Forward Archery Range",
+    "title": "17 Vils | Any | Arabia | Forward Archery Range",
     "civ": "Any",
     "map": "Arabia",
     "strategy": "Forward Archery Range",
     "difficulty": "Intermediate",
-    "popCount": 18,
+    "popCount": 17,
     "video": null,
     "description": "Generic aggressive 17-pop opening designed as an Anti-Phosphoru defense or general aggressive play. Uses 2 forward villagers to drop an Archery Range and disrupt the enemy's resources early on.",
     "author": "LucioCornelio",
@@ -1905,6 +1704,277 @@
         "style": "general",
         "title": "Castle Age Adaptation:",
         "text": "Once in Castle Age, you will have a strong gold eco to transition into Crossbowmen or adapt based on the opponent's reaction."
+      }
+    ]
+  },
+  {
+    "id": "mongols-skukuza-archers-scouts",
+    "title": "17 Vils | Mongols | Skukuza | Archers into Scouts",
+    "civ": "Mongols",
+    "map": "Skukuza",
+    "strategy": "Archers into Scouts",
+    "difficulty": "Intermediate",
+    "popCount": 17,
+    "video": "https://www.youtube.com/watch?v=CdOL5dVAxGk",
+    "description": "Mongols aggressive Archers into Scouts opening on Skukuza. Extremely fast 17 vils up, relying heavily on Skukuza's abundant center hunt instead of berries or early farms. Followed by a transition into Scouts.",
+    "author": "LucioCornelio",
+    "tags": [
+      "Hunt eco",
+      "Fast Feudal",
+      "Early aggression"
+    ],
+    "ages": [
+      {
+        "name": "Dark Age",
+        "icon": "DarkAgeIconDE",
+        "steps": [
+          {
+            "vil": 6,
+            "task": "food_sheep",
+            "desc": "6 vils to sheep",
+            "res": {
+              "sheep": 6
+            },
+            "note": null,
+            "icon": null
+          },
+          {
+            "vil": null,
+            "task": "action",
+            "desc": "Scout immediately goes to center of map to push deer",
+            "icon": "Scoutcavalry_aoe2DE",
+            "res": {},
+            "note": "Explore woodlines with sheep, queue always a sheep after the deer under TC"
+          },
+          {
+            "vil": 9,
+            "task": "wood",
+            "desc": "3 vils to wood",
+            "icon": null,
+            "res": {
+              "underTC": 6,
+              "wood": 3
+            },
+            "note": null
+          },
+          {
+            "vil": 13,
+            "task": "build_then_resource",
+            "desc": "4 vils to food under TC",
+            "icon": "House_aoe2DE",
+            "res": {
+              "underTC": 10,
+              "wood": 3
+            },
+            "note": "Build a house with first and back to food under TC"
+          },
+          {
+            "vil": 17,
+            "task": "build_then_resource",
+            "desc": "4 vils to food in center of map",
+            "icon": "Mill_aoe2de",
+            "res": {
+              "underTC": 10,
+              "hunt": 4,
+              "wood": 3
+            },
+            "note": "First makes mill"
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Loom",
+            "icon": "LoomDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "age_up",
+            "desc": "Click Feudal Age",
+            "icon": "FeudalAgeIconDE",
+            "res": {},
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Advancing to Feudal",
+        "icon": "FeudalAgeIconDE",
+        "steps": [
+          {
+            "vil": 17,
+            "task": "reallocate",
+            "desc": "10 from food under TC to stragglers",
+            "icon": null,
+            "res": {
+              "hunt": 4,
+              "wood": 13
+            },
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Barracks, then house, with one from Hunt then back to hunt",
+            "icon": "Barracks_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 17,
+            "task": "wood",
+            "desc": "5 from stragglers to lumber camp",
+            "icon": null,
+            "res": {
+              "hunt": 4,
+              "wood": 13
+            },
+            "note": null
+          },
+          {
+            "vil": 17,
+            "task": "reallocate",
+            "desc": "2 from stragglers to gold (build Mining Camp)",
+            "icon": "Mining_camp_aoe2de",
+            "res": {
+              "hunt": 4,
+              "wood": 11,
+              "gold": 2
+            },
+            "note": null
+          },
+          {
+            "vil": 17,
+            "task": "reallocate",
+            "desc": "3 from stragglers to hunt",
+            "icon": null,
+            "res": {
+              "hunt": 7,
+              "wood": 8,
+              "gold": 2
+            },
+            "note": null
+          }
+        ]
+      },
+      {
+        "name": "Feudal Age",
+        "icon": "FeudalAgeIconDE",
+        "steps": [
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Double-bit axe",
+            "icon": "DoubleBitAxe_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Archery Range",
+            "icon": "Archery_range_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 19,
+            "task": "gold",
+            "desc": "2 to gold",
+            "res": {
+              "hunt": 7,
+              "wood": 8,
+              "gold": 4
+            },
+            "note": null,
+            "icon": null
+          },
+          {
+            "vil": null,
+            "task": "train",
+            "desc": "Train Archers",
+            "icon": "Archer_aoe2DE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Blacksmith",
+            "icon": "Blacksmith_aoe2de",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": null,
+            "task": "research",
+            "desc": "Research Fletching",
+            "icon": "FletchingDE",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 32,
+            "task": "food_hunt",
+            "desc": "13 to hunt",
+            "res": {
+              "hunt": 20,
+              "wood": 8,
+              "gold": 4
+            },
+            "note": null,
+            "icon": null
+          },
+          {
+            "vil": null,
+            "task": "build",
+            "desc": "Build Stable",
+            "icon": "Stable_aoe2de",
+            "res": {},
+            "note": null
+          },
+          {
+            "vil": 34,
+            "task": "gold",
+            "desc": "2 to gold",
+            "res": {
+              "hunt": 20,
+              "wood": 8,
+              "gold": 6
+            },
+            "note": null,
+            "icon": null
+          },
+          {
+            "vil": null,
+            "task": "train",
+            "desc": "Train scouts",
+            "icon": "Scoutcavalry_aoe2DE",
+            "res": {},
+            "note": null
+          }
+        ]
+      }
+    ],
+    "whatsNext": [
+      {
+        "icon": "🏹",
+        "style": "archers",
+        "title": "Double Archery Range:",
+        "text": "If the opponent is heavily walled or playing slow, add a second range."
+      },
+      {
+        "icon": "🐎",
+        "style": "scouts",
+        "title": "Double Down on Scouts:",
+        "text": "If they open Skirmishers to counter your archers, sustain scout production or add a second stable to clean them up."
+      },
+      {
+        "icon": "🏰",
+        "style": "general",
+        "title": "Adapt for Castle Age:",
+        "text": "Add a Market, balance economy and click Castle Age behind your pressure."
       }
     ]
   }

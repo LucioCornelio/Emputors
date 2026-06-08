@@ -47,7 +47,7 @@ const renderPremiumStratIcons = (build) => {
    ════════════════════════════════════════════════ */
 const FOOD_KEYS = ['sheep','boar','underTC','hunt','chicken','berries','farm','fish'];
 const FIXED_KEYS = ['wood','gold','stone','builder'];
-const SHIP_KEYS = ['ship', 'ship_gold']; // Nueva categoría aislada
+const SHIP_KEYS = ['ship', 'ship_gold']; 
 
 const RES_ICON = {
   sheep: '🐑', boar: '🐗', underTC: '🛖', hunt: '🦌', chicken: '🐔', berries: '🫐',
@@ -56,9 +56,33 @@ const RES_ICON = {
 };
 const RES_COLOR = {
   sheep: '#ef4444', boar: '#ef4444', underTC: '#ef4444', hunt: '#ef4444',
-  chicken: '#ef4444', berries: '#a855f7', farm: '#84cc16', fish: '#ef4444',
+  chicken: '#ef4444', berries: '#ef4444', farm: '#84cc16', fish: '#ef4444',
   wood: '#cd7f32', gold: '#fbbf24', stone: '#94a3b8', builder: '#94a3b8',
-  ship: '#3b82f6', ship_gold: '#fbbf24', // Azul para comida, Dorado para oro
+  ship: '#3b82f6', ship_gold: '#fbbf24', 
+};
+
+/* ════════════════════════════════════════════════
+   AUTO-BOLD KEYWORDS FORMATTER
+   ════════════════════════════════════════════════ */
+const KEYWORDS = [
+  "\\d+",
+  "sheep", "boar", "wood", "gold", "stone", "berries", "hunt", "fish", "shore fish", "straggler(?:s)?", "farm(?:s)?", "food", "deer",
+  "TC", "Town Center", "House(?:s)?", "Mill", "Lumber Camp", "Mining Camp", "Barracks", "Archery Range", "Range", "Market", "Blacksmith", "Stable", "Siege Workshop", "Monastery", "Dock(?:s)?", "Tower", "Castle",
+  "Loom", "Double-Bit Axe", "Horse Collar", "Forging", "Scale Mail Armor", "Chain Mail Armor", "Squires", "Fletching", "Bodkin Arrow", "Crossbowman Upgrade", "Men-at-Arms Upgrade", "Long Swordsman Upgrade",
+  "Militia(?:s)?", "Men-at-Arms", "MAA", "Long Swordsm[ea]n", "LS", "Spear(?:s)?", "Spearm[ea]n", "Skirm(?:s)?", "Skirmisher(?:s)?", "Archer(?:s)?", "Crossbowm[ea]n", "Scout(?:s)?", "Scout Cavalry", "Hulk(?:s)?", "Fishing Ship(?:s)?", "Mule Cart(?:s)?"
+];
+const BOLD_REGEX = new RegExp(`\\b(${KEYWORDS.join('|')})\\b`, 'gi');
+
+const formatDesc = (text) => {
+  if (!text) return null;
+  const parts = text.split(BOLD_REGEX);
+  return parts.map((part, i) => {
+    // Los índices impares corresponden a las coincidencias del Regex
+    if (i % 2 === 1) {
+      return <strong key={i} style={{ color: '#fff', fontWeight: '800' }}>{part}</strong>;
+    }
+    return part;
+  });
 };
 
 /* ════════════════════════════════════════════════
@@ -191,54 +215,58 @@ const NEXT_COL = {
 const validateStep = (step) => {
   if (step.vil === null) return true;
   const res = step.res || {};
-  // Sumamos solo los recursos que NO son barcos para validar a los aldeanos
   const vilSum = Object.entries(res)
     .filter(([k]) => !SHIP_KEYS.includes(k))
     .reduce((a, [_, v]) => a + v, 0);
   return vilSum === 0 || vilSum === step.vil;
 };
 
-const Badge = ({ resKey, value }) => {
+const Badge = ({ resKey, value, isGrowing }) => {
   const zero = value === 0;
   const color = RES_COLOR[resKey];
+  
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: '1px',
-      padding: '1px 4px', borderRadius: '3px', minWidth: '28px', justifyContent: 'center',
-      fontSize: '10px', fontWeight: '700', fontVariantNumeric: 'tabular-nums',
-      backgroundColor: zero ? 'transparent' : `${color}18`,
-      color: zero ? C.resZero : color,
+      display: 'flex', alignItems: 'center', gap: '2px',
+      padding: '2px 4px', borderRadius: '4px', minWidth: '30px', justifyContent: 'center',
+      fontSize: '10px', fontWeight: isGrowing ? '800' : '600', fontVariantNumeric: 'tabular-nums',
+      backgroundColor: isGrowing ? `${color}33` : (zero ? 'transparent' : `${color}15`),
+      border: `1px solid ${isGrowing ? color : 'transparent'}`,
+      color: isGrowing ? '#fff' : (zero ? C.resZero : color),
+      transition: 'all 0.2s ease',
+      boxSizing: 'border-box' // Obliga al borde a crecer hacia adentro, sin empujar los márgenes
     }}>
       <span style={{ fontSize: '9px' }}>{RES_ICON[resKey]}</span>{value}
     </div>
   );
 };
 
-const ResBadges = ({ step }) => {
+const ResBadges = ({ step, prevRes }) => {
   const res = step.res || {};
+  const safePrev = prevRes || {};
+
   const foodBadges = FOOD_KEYS
     .filter((k) => (res[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={res[k]} />);
+    .map((k) => <Badge key={k} resKey={k} value={res[k]} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />);
+    
   const fixedBadges = FIXED_KEYS.map((k) => (
-    <Badge key={k} resKey={k} value={res[k] || 0} />
+    <Badge key={k} resKey={k} value={res[k] || 0} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />
   ));
   
-  // Los barcos SOLO se renderizan si existen en este paso (> 0)
   const shipBadges = SHIP_KEYS
     .filter((k) => (res[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={res[k]} />);
+    .map((k) => <Badge key={k} resKey={k} value={res[k]} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />);
 
   const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (res[k] || 0) > 0) || shipBadges.length > 0;
   if (!hasAnything) return <div style={{ minWidth: '96px' }} />;
 
+  // Hemos sacado todos los badges a un único div contenedor con gap '4px' para que la separación sea matemáticamente perfecta
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexShrink: 0 }}>
-      {foodBadges.length > 0 && (
-        <div style={{ display: 'flex', gap: '2px', marginRight: '6px' }}>{foodBadges}</div>
-      )}
-      <div style={{ display: 'flex', gap: '2px' }}>{fixedBadges}</div>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexShrink: 0, gap: '4px' }}>
+      {foodBadges}
+      {fixedBadges}
       {shipBadges.length > 0 && (
-        <div style={{ display: 'flex', gap: '2px', marginLeft: '6px', paddingLeft: '6px', borderLeft: `1px solid ${C.border}` }}>
+        <div style={{ display: 'flex', gap: '4px', marginLeft: '4px', paddingLeft: '8px', borderLeft: `1px solid ${C.border}` }}>
           {shipBadges}
         </div>
       )}
@@ -315,7 +343,7 @@ const TaskIcon = ({ step, meta, cc }) => {
   );
 };
 
-const StepRow = ({ step }) => {
+const StepRow = ({ step, prevRes }) => {
   const meta = TASK_META[step.task] || { icon: '❓', cat: 'action' };
   const cc = CAT_BG[meta.cat] || CAT_BG.action;
   const valid = validateStep(step);
@@ -343,7 +371,6 @@ const StepRow = ({ step }) => {
             {step.vil !== null ? step.vil : '—'}
           </span>
           
-          {/* Si hay barcos, mostramos el conteo extra debajo de forma compacta */}
           {(() => {
             const shipCount = SHIP_KEYS.reduce((sum, k) => sum + (step.res?.[k] || 0), 0);
             if (shipCount > 0) {
@@ -372,18 +399,18 @@ const StepRow = ({ step }) => {
           paddingLeft: '10px', lineHeight: '1.4',
           textAlign: 'left',
         }}>
-          {step.desc}
+          {formatDesc(step.desc)}
           {step.note && (
             <span style={{
               color: noteColor, fontStyle: 'italic', fontSize: '11px',
               marginLeft: '8px',
             }}>
-              — {step.note}
+              — {formatDesc(step.note)}
             </span>
           )}
         </div>
 
-        <ResBadges step={step} />
+        <ResBadges step={step} prevRes={prevRes} />
       </div>
     </>
   );
@@ -428,16 +455,25 @@ const AgeHeader = ({ age }) => {
   );
 };
 
-const AgeSections = ({ build }) => (
-  <>
-    {build.ages.map((age, ai) => (
-      <div key={ai} style={{ marginBottom: '8px' }}>
-        <AgeHeader age={age} />
-        {age.steps.map((step, si) => <StepRow key={si} step={step} />)}
-      </div>
-    ))}
-  </>
-);
+const AgeSections = ({ build }) => {
+  let lastRes = {}; // Objeto que mantiene el registro de los recursos arrastrados
+  return (
+    <>
+      {build.ages.map((age, ai) => (
+        <div key={ai} style={{ marginBottom: '8px' }}>
+          <AgeHeader age={age} />
+          {age.steps.map((step, si) => {
+            const prevRes = { ...lastRes };
+            if (step.res) {
+              lastRes = { ...step.res };
+            }
+            return <StepRow key={si} step={step} prevRes={prevRes} />;
+          })}
+        </div>
+      ))}
+    </>
+  );
+};
 
 const YouTubeBtn = ({ url }) => {
   if (!url) return null;
@@ -555,7 +591,7 @@ const BuildOrderDetail = () => {
         textAlign: 'left'
       }}>
         <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.55', marginBottom: '8px' }}>
-          {build.description}
+          {formatDesc(build.description)}
         </div>
 
         {build.author && (
@@ -596,7 +632,7 @@ const BuildOrderDetail = () => {
                   backgroundColor: nc.bg, border: `1px solid ${nc.bd}`,
                 }}>{item.icon}</div>
                 <div style={{ fontSize: '11px', color: C.textDim, lineHeight: '1.45', textAlign: 'left' }}>
-                  <strong style={{ color: C.textMain }}>{item.title}</strong> {item.text}
+                  <strong style={{ color: C.textMain }}>{item.title}</strong> {formatDesc(item.text)}
                 </div>
               </div>
             );
