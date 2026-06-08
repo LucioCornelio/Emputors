@@ -80,19 +80,15 @@ const BuildOrders = () => {
       return true;
     });
 
-    // SISTEMA DE ORDENACIÓN (Mapas > Civs > Vils)
     return results.sort((a, b) => {
-      // 1. Mapas: Arabia -> Arena -> Resto (Alfabético)
       const mapWeight = (m) => m === 'Arabia' ? 1 : m === 'Arena' ? 2 : 3;
       if (mapWeight(a.map) !== mapWeight(b.map)) return mapWeight(a.map) - mapWeight(b.map);
       if (a.map !== b.map) return a.map.localeCompare(b.map);
 
-      // 2. Civilizaciones: "Any" (Genéricas) primero -> Resto (Alfabético)
       const civWeight = (c) => c === 'Any' ? 1 : 2;
       if (civWeight(a.civ) !== civWeight(b.civ)) return civWeight(a.civ) - civWeight(b.civ);
       if (a.civ !== b.civ) return a.civ.localeCompare(b.civ);
 
-      // 3. Cantidad de Vils: De menos a más
       return a.popCount - b.popCount;
     });
   }, [civFilter, mapFilter, stratFilter, diffFilter, search]);
@@ -167,7 +163,6 @@ const BuildOrders = () => {
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.gold; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = 'translateY(0)'; }}
             >
-              {/* Banner Fondo Mapa */}
               <div style={{
                 height: '70px',
                 backgroundImage: `url('/maps/${b.map}.png')`,
@@ -178,7 +173,6 @@ const BuildOrders = () => {
                 <div style={{ width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(26,28,35,0.15) 0%, rgba(26,28,35,1) 100%)' }} />
               </div>
 
-              {/* Contenido Real */}
               <div style={{ position: 'relative', zIndex: 1, padding: '16px 18px', paddingTop: '36px', display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}>
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>

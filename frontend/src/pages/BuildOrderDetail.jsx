@@ -2,9 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import builds from '../data/builds.json';
 
-/* ════════════════════════════════════════════════
-   PALETTE
-   ════════════════════════════════════════════════ */
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
   border: '#2a2d36', borderMed: '#333', borderLt: '#444',
@@ -42,9 +39,6 @@ const renderPremiumStratIcons = (build) => {
   );
 };
 
-/* ════════════════════════════════════════════════
-   RESOURCE CONFIG
-   ════════════════════════════════════════════════ */
 const FOOD_KEYS = ['sheep','boar','underTC','hunt','chicken','berries','farm','fish'];
 const FIXED_KEYS = ['wood','gold','stone','builder'];
 const SHIP_KEYS = ['ship', 'ship_gold']; 
@@ -61,14 +55,11 @@ const RES_COLOR = {
   ship: '#3b82f6', ship_gold: '#fbbf24', 
 };
 
-/* ════════════════════════════════════════════════
-   AUTO-BOLD KEYWORDS FORMATTER
-   ════════════════════════════════════════════════ */
 const KEYWORDS = [
   "\\d+",
   "sheep", "boar", "wood", "gold", "stone", "berries", "hunt", "fish", "shore fish", "straggler(?:s)?", "farm(?:s)?", "food", "deer",
   "TC", "Town Center", "House(?:s)?", "Mill", "Lumber Camp", "Mining Camp", "Barracks", "Archery Range", "Range", "Market", "Blacksmith", "Stable", "Siege Workshop", "Monastery", "Dock(?:s)?", "Tower", "Castle",
-  "Loom", "Double-Bit Axe", "Horse Collar", "Forging", "Scale Mail Armor", "Chain Mail Armor", "Squires", "Fletching", "Bodkin Arrow", "Crossbowman Upgrade", "Men-at-Arms Upgrade", "Long Swordsman Upgrade",
+  "Loom", "Double-Bit Axe", "Horse Collar", "Forging", "Scale Mail Armor", "Chain Mail Armor", "Squires", "Fletching", "Bodkin Arrow", "Crossbowman Upgrade", "Men-at-Arms Upgrade", "Long Swordsman Upgrade", "Wheelbarrow",
   "Militia(?:s)?", "Men-at-Arms", "MAA", "Long Swordsm[ea]n", "LS", "Spear(?:s)?", "Spearm[ea]n", "Skirm(?:s)?", "Skirmisher(?:s)?", "Archer(?:s)?", "Crossbowm[ea]n", "Scout(?:s)?", "Scout Cavalry", "Hulk(?:s)?", "Fishing Ship(?:s)?", "Mule Cart(?:s)?"
 ];
 const BOLD_REGEX = new RegExp(`\\b(${KEYWORDS.join('|')})\\b`, 'gi');
@@ -77,7 +68,6 @@ const formatDesc = (text) => {
   if (!text) return null;
   const parts = text.split(BOLD_REGEX);
   return parts.map((part, i) => {
-    // Los índices impares corresponden a las coincidencias del Regex
     if (i % 2 === 1) {
       return <strong key={i} style={{ color: '#fff', fontWeight: '800' }}>{part}</strong>;
     }
@@ -85,9 +75,6 @@ const formatDesc = (text) => {
   });
 };
 
-/* ════════════════════════════════════════════════
-   TASK META
-   ════════════════════════════════════════════════ */
 const TASK_META = {
   food_sheep:          { icon: '🐑', cat: 'food' },
   food_tc:             { icon: '🛖', cat: 'food' },
@@ -109,9 +96,6 @@ const TASK_META = {
   reallocate:          { icon: '🔄', cat: 'reallocate' },
 };
 
-/* ════════════════════════════════════════════════
-   ICON DICTIONARY
-   ════════════════════════════════════════════════ */
 const ICON_MAP = {
   'DarkAgeIconDE': '/techs/DarkAgeIconDE.png',
   'FeudalAgeIconDE': '/techs/FeudalAgeIconDE.png',
@@ -128,6 +112,7 @@ const ICON_MAP = {
   'HorseCollarDE': '/techs/HorseCollarDE.png',
   'FletchingDE': '/techs/FletchingDE.png',
   'BodkinArrowDE': '/techs/BodkinArrowDE.png',
+  'WheelbarrowDE': '/techs/WheelbarrowDE.png',
   
   'ManAtArmsUpgDE': '/techs/ManAtArmsUpgDE.png',
   'LongSwordsmanUpgDE': '/techs/LongSwordmanUpgDE.png', 
@@ -153,6 +138,8 @@ const ICON_MAP = {
   'Siege_workshop_aoe2DE': '/buildings/Siege_workshop_aoe2DE.png',
   'Stable_aoe2de': '/buildings/Stable_aoe2de.png',
   'Dock_aoe2DE': '/buildings/Dock_aoe2DE.png',
+  'Mining_camp_aoe2de': '/buildings/Mining_camp_aoe2de.png',
+  'FarmDE': '/buildings/FarmDE.png',
 };
 
 const iconPath = (name) => {
@@ -160,9 +147,6 @@ const iconPath = (name) => {
   return ICON_MAP[name] || null; 
 };
 
-/* ════════════════════════════════════════════════
-   STYLES
-   ════════════════════════════════════════════════ */
 const CAT_BG = {
   food:      { bg: 'rgba(239,68,68,0.18)',   bd: 'rgba(239,68,68,0.35)' },
   berries:   { bg: 'rgba(168,85,247,0.18)',  bd: 'rgba(168,85,247,0.35)' },
@@ -209,9 +193,6 @@ const NEXT_COL = {
   general:  { bg: 'rgba(76,175,80,0.08)',  bd: 'rgba(76,175,80,0.18)' },
 };
 
-/* ════════════════════════════════════════════════
-   COMPONENTS
-   ════════════════════════════════════════════════ */
 const validateStep = (step) => {
   if (step.vil === null) return true;
   const res = step.res || {};
@@ -234,7 +215,7 @@ const Badge = ({ resKey, value, isGrowing }) => {
       border: `1px solid ${isGrowing ? color : 'transparent'}`,
       color: isGrowing ? '#fff' : (zero ? C.resZero : color),
       transition: 'all 0.2s ease',
-      boxSizing: 'border-box' // Obliga al borde a crecer hacia adentro, sin empujar los márgenes
+      boxSizing: 'border-box'
     }}>
       <span style={{ fontSize: '9px' }}>{RES_ICON[resKey]}</span>{value}
     </div>
@@ -260,7 +241,6 @@ const ResBadges = ({ step, prevRes }) => {
   const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (res[k] || 0) > 0) || shipBadges.length > 0;
   if (!hasAnything) return <div style={{ minWidth: '96px' }} />;
 
-  // Hemos sacado todos los badges a un único div contenedor con gap '4px' para que la separación sea matemáticamente perfecta
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexShrink: 0, gap: '4px' }}>
       {foodBadges}
@@ -405,7 +385,7 @@ const StepRow = ({ step, prevRes }) => {
               color: noteColor, fontStyle: 'italic', fontSize: '11px',
               marginLeft: '8px',
             }}>
-              — {formatDesc(step.note)}
+              — {step.note}
             </span>
           )}
         </div>
@@ -456,7 +436,7 @@ const AgeHeader = ({ age }) => {
 };
 
 const AgeSections = ({ build }) => {
-  let lastRes = {}; // Objeto que mantiene el registro de los recursos arrastrados
+  let lastRes = {};
   return (
     <>
       {build.ages.map((age, ai) => (
@@ -569,7 +549,7 @@ const BuildOrderDetail = () => {
             >←</Link>
             
             <div style={{ padding: '2px', background: 'rgba(30,33,43,0.8)', borderRadius: '6px', border: `1px solid ${C.cyan}`, display: 'flex' }}>
-              <img src={`/civs/${build.civ.toLowerCase()}.png`} alt={build.civ} style={{ width: '32px', height: '32px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
+              <img src={build.civ === 'Any' ? '/civs/random.png' : `/civs/${build.civ.toLowerCase()}.png`} alt={build.civ} style={{ width: '32px', height: '32px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
             </div>
             {renderPremiumStratIcons(build)}
             
@@ -591,7 +571,7 @@ const BuildOrderDetail = () => {
         textAlign: 'left'
       }}>
         <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.55', marginBottom: '8px' }}>
-          {formatDesc(build.description)}
+          {build.description}
         </div>
 
         {build.author && (
@@ -632,7 +612,7 @@ const BuildOrderDetail = () => {
                   backgroundColor: nc.bg, border: `1px solid ${nc.bd}`,
                 }}>{item.icon}</div>
                 <div style={{ fontSize: '11px', color: C.textDim, lineHeight: '1.45', textAlign: 'left' }}>
-                  <strong style={{ color: C.textMain }}>{item.title}</strong> {formatDesc(item.text)}
+                  <strong style={{ color: C.textMain }}>{item.title}</strong> {item.text}
                 </div>
               </div>
             );
