@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 
 const C = {
@@ -17,6 +17,7 @@ const TASK_MAPPING = {
 
 const BuildOrderCreator = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const editBuild = location.state?.editBuild || null;
 
   // Metadatos (Pre-cargados si existe editBuild)
@@ -151,8 +152,12 @@ const BuildOrderCreator = () => {
     const { error } = await supabase.from('build_orders').upsert([payload]);
     setIsSubmitting(false);
     
-    if (error) alert("Error: " + error.message);
-    else alert("Build Order saved successfully!");
+    if (error) {
+      alert("Error: " + error.message);
+    } else {
+      alert("Build Order saved successfully!");
+      if (editBuild) navigate(`/academy/build-orders/${id}`);
+    }
   };
 
   const inputStyle = { width: '100%', padding: '8px', backgroundColor: '#1e212b', color: '#fff', border: `1px solid ${C.border}`, borderRadius: '4px', fontSize: '12px' };
@@ -173,11 +178,11 @@ const BuildOrderCreator = () => {
             <input type="text" value={id} onChange={e => setId(e.target.value)} style={inputStyle} placeholder="e.g. any-arabia-18pop-scouts" />
             {editBuild && <div style={{ fontSize: '9px', color: C.gold, marginTop: '4px' }}>Change ID to save as a copy/clone</div>}
           </div>
-          <div style={{ gridColumn: 'span 2' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Full Title</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} placeholder="18 Vils | Any | Arabia | Scouts" /></div>
+          <div style={{ gridColumn: 'span 2' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Legacy Title (Internal)</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} placeholder="18 Vils | Any | Arabia | Scouts" /></div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Civilization</label><input type="text" value={civ} onChange={e => setCiv(e.target.value)} style={inputStyle} /></div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Map</label><input type="text" value={map} onChange={e => setMap(e.target.value)} style={inputStyle} /></div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Strategy</label><input type="text" value={strategy} onChange={e => setStrategy(e.target.value)} style={inputStyle} /></div>
-          <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Pop Count</label><input type="number" value={popCount} onChange={e => setPopCount(e.target.value)} style={inputStyle} /></div>
+          <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Pop Count (Vils)</label><input type="number" value={popCount} onChange={e => setPopCount(e.target.value)} style={inputStyle} /></div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Difficulty</label>
             <select value={difficulty} onChange={e => setDifficulty(e.target.value)} style={inputStyle}>
               <option>Beginner</option><option>Intermediate</option><option>Advanced</option>

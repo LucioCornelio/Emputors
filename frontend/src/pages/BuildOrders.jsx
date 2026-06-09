@@ -227,7 +227,9 @@ const BuildOrders = () => {
                   </div>
                 </div>
 
-                <div style={{ color: '#fff', fontSize: '15px', fontWeight: '600', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>{b.title}</div>
+                <div style={{ color: '#e0e0e0', fontSize: '15px', fontWeight: '600', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+                  <strong style={{ fontWeight: '900', color: '#fff' }}>{b.map}</strong> <span style={{ color: C.textMute }}>|</span> {b.civ} <span style={{ color: C.textMute }}>|</span> {b.popCount} Vils <span style={{ color: C.textMute }}>|</span> {b.strategy}
+                </div>
                 
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
                   <span onClick={(e) => handleTagClick(e, 'civ', b.civ)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.cyan}1a`, border: `1px solid ${C.cyan}33`, color: C.cyan, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.civ}</span>
