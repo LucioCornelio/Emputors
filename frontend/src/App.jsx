@@ -5,6 +5,7 @@ import AdvancedSearch from './pages/AdvancedSearch';
 import BuildOrders from './pages/BuildOrders';
 import BuildOrderDetail from './pages/BuildOrderDetail';
 import Home from './pages/Home';
+import BuildOrderCreator from './pages/admin/BuildOrderCreator';
 
 // 1. Añadimos el import real
 import CurrentEvent from './pages/CurrentEvent'; 
@@ -34,6 +35,7 @@ function App() {
           
           <Route path="/clan/roster" element={<Roster />} />
           <Route path="/clan/about" element={<About />} />
+          <Route path="/admin/creator" element={<BuildOrderCreator />} />
         </Routes>
       </div>
     </BrowserRouter>

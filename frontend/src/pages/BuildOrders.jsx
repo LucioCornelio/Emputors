@@ -1,6 +1,6 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import builds from '../data/builds.json';
+import { supabase } from '../supabaseClient';
 
 const C = {
   card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8',
@@ -8,7 +8,7 @@ const C = {
 };
 
 const diffColor = (d) => d === 'Beginner' ? '#4caf50' : d === 'Intermediate' ? '#fb923c' : '#ff4444';
-const unique = (key) => [...new Set(builds.map((b) => b[key]))].sort();
+const getUnique = (arr, key) => [...new Set(arr.map((b) => b[key]))].sort();
 
 const STRAT_ICONS = {
   'Men-at-Arms': ['/units/Manatarms_aoe2DE.png'],
@@ -37,10 +37,43 @@ const renderPremiumStratIcons = (b) => {
 };
 
 const BuildOrders = () => {
+  const [builds, setBuilds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   useEffect(() => {
     document.title = 'Build Orders | Emputors';
+    
+    const fetchBuilds = async () => {
+      const { data, error } = await supabase.from('build_orders').select('*');
+      if (data) {
+        const formattedBuilds = data.map(b => ({
+          ...b,
+          popCount: b.pop_count,
+          strategyIcons: b.strategy_icons,
+          whatsNext: b.whats_next
+        }));
+        setBuilds(formattedBuilds);
+      } else if (error) {
+        console.error("Error fetching builds:", error);
+      }
+      setLoading(false);
+    };
+
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const rawNick = session.user.user_metadata.preferred_username || session.user.user_metadata.name || '';
+        const cleanNick = rawNick.split('#')[0].toLowerCase(); 
+        const { data } = await supabase.from('clan_roles').select('role').ilike('discord_username', cleanNick).single();
+        if (data) setUserRole(data.role);
+      }
+    };
+
+    fetchBuilds();
+    checkUser();
   }, []);
-  const [searchParams, setSearchParams] = useSearchParams();
   
   const civFilter = searchParams.get('civ') || 'All';
   const mapFilter = searchParams.get('map') || 'All';
@@ -48,10 +81,10 @@ const BuildOrders = () => {
   const diffFilter = searchParams.get('diff') || 'All';
   const search = searchParams.get('search') || '';
 
-  const civs = unique('civ');
-  const maps = unique('map');
-  const strats = unique('strategy');
-  const diffs = unique('difficulty');
+  const civs = getUnique(builds, 'civ');
+  const maps = getUnique(builds, 'map');
+  const strats = getUnique(builds, 'strategy');
+  const diffs = getUnique(builds, 'difficulty');
 
   const setFilter = (key, value) => {
     const newParams = new URLSearchParams(searchParams);
@@ -91,7 +124,7 @@ const BuildOrders = () => {
 
       return a.popCount - b.popCount;
     });
-  }, [civFilter, mapFilter, stratFilter, diffFilter, search]);
+  }, [builds, civFilter, mapFilter, stratFilter, diffFilter, search]);
 
   const sel = {
     backgroundColor: '#1e212b', color: C.textMain, border: `1px solid ${C.border}`,
@@ -108,12 +141,21 @@ const BuildOrders = () => {
     onMouseLeave: (e) => e.currentTarget.style.filter = 'none',
   };
 
+  if (loading) {
+    return <div style={{ color: C.textDim, textAlign: 'center', padding: '4rem' }}>Loading Build Orders...</div>;
+  }
+
   return (
     <div style={{ maxWidth: '1060px', margin: '0 auto', padding: '1.5rem 2rem 3.5rem', fontFamily: 'Segoe UI, sans-serif' }}>
       
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <h1 style={{ color: '#ffd700', fontSize: '20px', fontWeight: 'bold', margin: '0 0 4px 0', letterSpacing: '2px', textTransform: 'uppercase' }}>Build Orders</h1>
-        <p style={{ color: '#888', fontSize: '12px', margin: 0 }}>Curated build order library for Age of Emputors clan members</p>
+        <p style={{ color: '#888', fontSize: '12px', margin: '0 0 10px 0' }}>Curated build order library for Age of Emputors clan members</p>
+        {userRole === 'admin' && (
+          <Link to="/admin/creator" style={{ display: 'inline-block', backgroundColor: C.gold, color: '#161920', border: 'none', padding: '6px 16px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', textDecoration: 'none', marginTop: '5px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            🛠️ Create New Build
+          </Link>
+        )}
       </div>
 
       <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', padding: '16px', marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import builds from '../data/builds.json';
+import { supabase } from '../supabaseClient';
 
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
@@ -477,17 +477,40 @@ const YouTubeBtn = ({ url }) => {
 const BuildOrderDetail = () => {
   const { buildId } = useParams();
   const navigate = useNavigate();
-  const build = builds.find((b) => b.id === buildId);
+  const [build, setBuild] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [gameMode, setGameMode] = useState(false);
   
   useEffect(() => {
+    const fetchBuild = async () => {
+      const { data, error } = await supabase.from('build_orders').select('*').eq('id', buildId).single();
+      if (data) {
+        setBuild({
+          ...data,
+          popCount: data.pop_count,
+          strategyIcons: data.strategy_icons,
+          whatsNext: data.whats_next
+        });
+      } else if (error) {
+        console.error("Error fetching build details:", error);
+      }
+      setLoading(false);
+    };
+    fetchBuild();
+  }, [buildId]);
+
+  useEffect(() => {
     if (build) {
       document.title = `${build.title} | Emputors`;
-    } else {
+    } else if (!loading) {
       document.title = 'Build Not Found | Emputors';
     }
-  }, [build]);
+  }, [build, loading]);
   
+  if (loading) {
+    return <div style={{ color: C.textDim, textAlign: 'center', padding: '4rem' }}>Loading Build Order...</div>;
+  }
+
   if (!build) {
     return (
       <div style={{ padding: '4rem', textAlign: 'center', color: C.textDim }}>
