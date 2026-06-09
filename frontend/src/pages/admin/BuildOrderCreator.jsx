@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 
 const C = {
@@ -15,23 +16,33 @@ const TASK_MAPPING = {
 };
 
 const BuildOrderCreator = () => {
-  // Metadatos
-  const [id, setId] = useState('');
-  const [title, setTitle] = useState('');
-  const [civ, setCiv] = useState('Any');
-  const [map, setMap] = useState('Arabia');
-  const [strategy, setStrategy] = useState('Scouts');
-  const [difficulty, setDifficulty] = useState('Beginner');
-  const [popCount, setPopCount] = useState(19);
-  const [author, setAuthor] = useState('');
-  const [video, setVideo] = useState('');
-  const [description, setDescription] = useState('');
-  
-  // Edades y Pasos (Smart Logic)
-  const [ages, setAges] = useState([
-    { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] }
-  ]);
+  const location = useLocation();
+  const editBuild = location.state?.editBuild || null;
 
+  // Metadatos (Pre-cargados si existe editBuild)
+  const [id, setId] = useState(editBuild?.id || '');
+  const [title, setTitle] = useState(editBuild?.title || '');
+  const [civ, setCiv] = useState(editBuild?.civ || 'Any');
+  const [map, setMap] = useState(editBuild?.map || 'Arabia');
+  const [strategy, setStrategy] = useState(editBuild?.strategy || 'Scouts');
+  const [difficulty, setDifficulty] = useState(editBuild?.difficulty || 'Beginner');
+  const [popCount, setPopCount] = useState(editBuild?.popCount || 19);
+  const [author, setAuthor] = useState(editBuild?.author || '');
+  const [video, setVideo] = useState(editBuild?.video || '');
+  const [description, setDescription] = useState(editBuild?.description || '');
+  
+  // Edades y Pasos (Si es edición, mapeamos a 'manual' para no perder sus recursos internos)
+  const initialAges = editBuild?.ages ? editBuild.ages.map(age => ({
+    ...age,
+    steps: age.steps.map(step => ({
+      ...step,
+      actionType: 'manual', 
+      vilTotal: step.vil || 3,
+      resTarget: 'sheep', moveAmount: 1, resFrom: '', resTo: ''
+    }))
+  })) : [ { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] } ];
+
+  const [ages, setAges] = useState(initialAges);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // AUTO-CALCULADORA DE RECURSOS
@@ -43,6 +54,22 @@ const BuildOrderCreator = () => {
       name: age.name,
       icon: age.icon,
       steps: age.steps.map(step => {
+        
+        // Si el paso es manual (importado), mantenemos sus datos intactos pero actualizamos el running tracker
+        if (step.actionType === 'manual') {
+          if (step.res) runningRes = { ...step.res };
+          if (step.vil) lastVilCount = step.vil;
+          return {
+            vil: step.vil,
+            task: step.task || 'action',
+            desc: step.desc,
+            res: step.res || {},
+            note: step.note || null,
+            icon: step.icon || null
+          };
+        }
+
+        // Lógica Smart para pasos nuevos
         let stepRes = { ...runningRes };
         let finalTask = step.task || 'action';
         let finalVil = null;
@@ -117,7 +144,7 @@ const BuildOrderCreator = () => {
     const payload = {
       id, title, civ, map, strategy, difficulty,
       pop_count: parseInt(popCount), video, description, author,
-      tags: [], strategy_icons: [], whats_next: [],
+      tags: editBuild?.tags || [], strategy_icons: editBuild?.strategyIcons || [], whats_next: editBuild?.whatsNext || [],
       ages: calculateSmartSteps()
     };
 
@@ -133,13 +160,19 @@ const BuildOrderCreator = () => {
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px', fontFamily: 'Segoe UI, sans-serif', color: C.textMain }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={{ color: C.gold, fontSize: '24px', margin: 0, textTransform: 'uppercase' }}>🛠️ Build Order Creator</h1>
+        <h1 style={{ color: C.gold, fontSize: '24px', margin: 0, textTransform: 'uppercase' }}>
+          {editBuild ? '✏️ Edit Build Order' : '🛠️ Build Order Creator'}
+        </h1>
       </div>
 
       <div style={{ backgroundColor: C.card, padding: '20px', borderRadius: '8px', border: `1px solid ${C.border}`, marginBottom: '20px' }}>
         <h3 style={{ color: C.cyan, marginTop: 0, fontSize: '14px', textTransform: 'uppercase', borderBottom: `1px solid ${C.border}`, paddingBottom: '10px' }}>1. Basic Info</h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
-          <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>ID (Unique Slug)</label><input type="text" value={id} onChange={e => setId(e.target.value)} style={inputStyle} placeholder="e.g. any-arabia-18pop-scouts" /></div>
+          <div>
+            <label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>ID (Unique Slug)</label>
+            <input type="text" value={id} onChange={e => setId(e.target.value)} style={inputStyle} placeholder="e.g. any-arabia-18pop-scouts" />
+            {editBuild && <div style={{ fontSize: '9px', color: C.gold, marginTop: '4px' }}>Change ID to save as a copy/clone</div>}
+          </div>
           <div style={{ gridColumn: 'span 2' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Full Title</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} placeholder="18 Vils | Any | Arabia | Scouts" /></div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Civilization</label><input type="text" value={civ} onChange={e => setCiv(e.target.value)} style={inputStyle} /></div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Map</label><input type="text" value={map} onChange={e => setMap(e.target.value)} style={inputStyle} /></div>
@@ -172,11 +205,20 @@ const BuildOrderCreator = () => {
             {age.steps.map((step, sIdx) => (
               <div key={sIdx} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#1e212b', padding: '10px', borderRadius: '4px', marginBottom: '8px', borderLeft: '3px solid #66b2ff' }}>
                 <select value={step.actionType} onChange={e => handleUpdateStep(aIdx, sIdx, 'actionType', e.target.value)} style={{ ...inputStyle, width: '130px', backgroundColor: '#161920', color: '#66b2ff', fontWeight: 'bold' }}>
+                  <option value="manual">🛠️ Manual</option>
                   <option value="gather">📥 Gather Res</option>
                   <option value="reallocate">🔄 Reallocate</option>
                   <option value="build_res">🔨 Build ➔ Res</option>
                   <option value="action">⚡ Generic Action</option>
                 </select>
+
+                {step.actionType === 'manual' && (
+                  <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                    <span style={{ fontSize: '11px', color: '#888' }}>Vil #:</span>
+                    <input type="number" value={step.vil || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'vil', parseInt(e.target.value) || null)} style={{ ...inputStyle, width: '50px' }} />
+                    <input type="text" value={step.task || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'task', e.target.value)} style={{ ...inputStyle, width: '120px' }} placeholder="Task (e.g. wood)" />
+                  </div>
+                )}
 
                 {step.actionType === 'gather' && (
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
@@ -210,8 +252,8 @@ const BuildOrderCreator = () => {
 
                 <div style={{ flex: 1, display: 'flex', gap: '5px' }}>
                   <input type="text" value={step.desc} onChange={e => handleUpdateStep(aIdx, sIdx, 'desc', e.target.value)} style={{ ...inputStyle, flex: 2 }} placeholder="Description (e.g. 6 vils to sheep)" />
-                  <input type="text" value={step.note} onChange={e => handleUpdateStep(aIdx, sIdx, 'note', e.target.value)} style={{ ...inputStyle, flex: 1 }} placeholder="Note (optional)" />
-                  <input type="text" value={step.icon} onChange={e => handleUpdateStep(aIdx, sIdx, 'icon', e.target.value)} style={{ ...inputStyle, flex: 1 }} placeholder="Icon (e.g. LoomDE)" />
+                  <input type="text" value={step.note || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'note', e.target.value)} style={{ ...inputStyle, flex: 1 }} placeholder="Note (optional)" />
+                  <input type="text" value={step.icon || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'icon', e.target.value)} style={{ ...inputStyle, flex: 1 }} placeholder="Icon (e.g. LoomDE)" />
                 </div>
                 
                 <button onClick={() => handleRemoveStep(aIdx, sIdx)} style={{ background: 'transparent', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}>✗</button>
@@ -230,7 +272,7 @@ const BuildOrderCreator = () => {
           <strong>Auto-Calc Output:</strong> Total steps: {ages.reduce((sum, a) => sum + a.steps.length, 0)}
         </div>
         <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
-          {isSubmitting ? 'SAVING...' : '💾 PUBLISH BUILD ORDER'}
+          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
         </button>
       </div>
     </div>
