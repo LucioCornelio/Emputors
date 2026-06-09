@@ -480,6 +480,7 @@ const BuildOrderDetail = () => {
   const [build, setBuild] = useState(null);
   const [loading, setLoading] = useState(true);
   const [gameMode, setGameMode] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   
   useEffect(() => {
     const fetchBuild = async () => {
@@ -496,12 +497,24 @@ const BuildOrderDetail = () => {
       }
       setLoading(false);
     };
+
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const rawNick = session.user.user_metadata.preferred_username || session.user.user_metadata.name || '';
+        const cleanNick = rawNick.split('#')[0].toLowerCase(); 
+        const { data } = await supabase.from('clan_roles').select('role').ilike('discord_username', cleanNick).single();
+        if (data) setUserRole(data.role);
+      }
+    };
+
     fetchBuild();
+    checkUser();
   }, [buildId]);
 
   useEffect(() => {
     if (build) {
-      document.title = `${build.title} | Emputors`;
+      document.title = `${build.map} | ${build.civ} | ${build.popCount} Vils | ${build.strategy}`;
     } else if (!loading) {
       document.title = 'Build Not Found | Emputors';
     }
@@ -538,7 +551,9 @@ const BuildOrderDetail = () => {
           
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ color: C.gold, fontWeight: '700', fontSize: '13px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>{build.title}</div>
+              <div style={{ color: C.gold, fontSize: '13px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+                <strong style={{ fontWeight: '900', color: '#fff' }}>{build.map}</strong> <span style={{ color: '#888' }}>|</span> {build.civ} <span style={{ color: '#888' }}>|</span> {build.popCount} Vils <span style={{ color: '#888' }}>|</span> {build.strategy}
+              </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <YouTubeBtn url={build.video} />
@@ -576,12 +591,22 @@ const BuildOrderDetail = () => {
             </div>
             {renderPremiumStratIcons(build)}
             
-            <div style={{ color: C.gold, fontWeight: '800', fontSize: '16px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-              {build.title}
+            <div style={{ color: C.gold, fontSize: '15px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+              <strong style={{ fontWeight: '900', color: '#fff' }}>{build.map}</strong> <span style={{ color: C.textMute }}>|</span> {build.civ} <span style={{ color: C.textMute }}>|</span> {build.popCount} Vils <span style={{ color: C.textMute }}>|</span> {build.strategy}
             </div>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {userRole === 'admin' && (
+              <button 
+                onClick={() => navigate('/admin/creator', { state: { editBuild: build } })}
+                style={{ backgroundColor: '#2a2d36', color: '#fff', border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', transition: 'background 0.2s' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2d36'}
+              >
+                ✏️ EDIT
+              </button>
+            )}
             <YouTubeBtn url={build.video} />
             <ToggleSwitch on={gameMode} onToggle={() => setGameMode(true)} label="Game Mode" />
           </div>
