@@ -8,14 +8,14 @@ const C = {
   cyan: '#00c8c8', red: '#ff4444', green: '#4caf50'
 };
 
-const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone'];
+const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone', 'ship'];
 const TASK_MAPPING = {
   sheep: 'food_sheep', boar: 'food_boar', underTC: 'food_tc', hunt: 'food_hunt',
   berries: 'food_berries', farm: 'food_farm', fish: 'food_fish',
-  wood: 'wood', gold: 'gold', stone: 'stone'
+  wood: 'wood', gold: 'gold', stone: 'stone', ship: 'food_fish'
 };
 
-// Traductor Inverso: Convierte el JSON estático en pasos dinámicos para que el auto-cálculo funcione
+// Traductor Inverso: Analiza la build antigua y la convierte en bloques dinámicos 100% calculables
 const parseInitialAges = (build) => {
   if (!build?.ages) return [ { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] } ];
   let lastVil = 0;
@@ -24,8 +24,8 @@ const parseInitialAges = (build) => {
   return build.ages.map(age => ({
     ...age,
     steps: age.steps.map(step => {
-      let actionType = 'manual';
-      let vilTotal = 0; // Vils nuevos a añadir en este paso
+      let actionType = 'action';
+      let vilTotal = 3; 
       let resTarget = 'sheep';
       let moveAmount = 1;
       let resFrom = '';
@@ -35,31 +35,33 @@ const parseInitialAges = (build) => {
       const currVil = step.vil !== null ? step.vil : lastVil;
       const diffVil = currVil - lastVil;
 
-      // Detectar Gather (Se han añadido aldeanos nuevos)
-      if (diffVil > 0) {
+      let addedRes = null;
+      let addedAmount = 0;
+      let subtractedRes = null;
+      let subtractedAmount = 0;
+
+      // Buscamos qué recursos han cambiado respecto al paso anterior
+      const allKeys = new Set([...Object.keys(currRes), ...Object.keys(lastRes)]);
+      allKeys.forEach(k => {
+        const diff = (currRes[k] || 0) - (lastRes[k] || 0);
+        if (diff > 0) { addedRes = k; addedAmount = diff; }
+        if (diff < 0) { subtractedRes = k; subtractedAmount = Math.abs(diff); }
+      });
+
+      // Lógica de traducción de pasos
+      if (diffVil > 0 && addedRes) {
         actionType = 'gather';
         vilTotal = diffVil;
-        for (let r of RES_OPTIONS) {
-          if ((currRes[r] || 0) - (lastRes[r] || 0) === diffVil) {
-            resTarget = r;
-            break;
-          }
-        }
-      } 
-      // Detectar Reasignación
-      else if (step.task === 'reallocate') {
+        resTarget = addedRes;
+      } else if (diffVil === 0 && addedRes && subtractedRes) {
         actionType = 'reallocate';
-        for (let r of Object.keys(currRes)) {
-          const diff = (currRes[r] || 0) - (lastRes[r] || 0);
-          if (diff > 0) { resTo = r; moveAmount = diff; }
-          if (diff < 0) { resFrom = r; }
-        }
-      } 
-      // Detectar Acciones Genéricas y Construcción
-      else if (step.task === 'build_then_resource') {
+        moveAmount = addedAmount;
+        resFrom = subtractedRes;
+        resTo = addedRes;
+      } else if (step.task === 'build_then_resource') {
         actionType = 'build_res';
-      } 
-      else if (step.task && ['action', 'research', 'train', 'build', 'age_up'].includes(step.task)) {
+      } else {
+        // Fallback genérico para acciones sin recolección de aldeanos nuevos
         actionType = 'action';
       }
 
@@ -69,7 +71,7 @@ const parseInitialAges = (build) => {
       return {
         ...step,
         actionType,
-        vilTotal: vilTotal || 3, // Fallback para que el input no quede vacío
+        vilTotal,
         resTarget, moveAmount, resFrom, resTo
       };
     })
@@ -81,7 +83,6 @@ const BuildOrderCreator = () => {
   const navigate = useNavigate();
   const editBuild = location.state?.editBuild || null;
 
-  // Metadatos (Pre-cargados si existe editBuild)
   const [id, setId] = useState(editBuild?.id || '');
   const [title, setTitle] = useState(editBuild?.title || '');
   const [civ, setCiv] = useState(editBuild?.civ || 'Any');
@@ -93,42 +94,28 @@ const BuildOrderCreator = () => {
   const [video, setVideo] = useState(editBuild?.video || '');
   const [description, setDescription] = useState(editBuild?.description || '');
   
-  const [ages, setAges] = useState(parseInitialAges(editBuild));
+  // Usamos el parser dinámico en lugar de forzarlo a manual
+  const [ages, setAges] = useState(() => parseInitialAges(editBuild));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // AUTO-CALCULADORA DE RECURSOS
+  // AUTO-CALCULADORA DE RECURSOS (Totalmente en cascada)
   const calculateSmartSteps = () => {
     let runningRes = {};
-    let currentTotalVils = 0; // Se empieza desde cero absoluto
+    let currentTotalVils = 0; 
     
     return ages.map(age => ({
       name: age.name,
       icon: age.icon,
       steps: age.steps.map(step => {
-        
-        // Modo Manual: respeta la "foto fija"
-        if (step.actionType === 'manual') {
-          if (step.res) runningRes = { ...step.res };
-          if (step.vil) currentTotalVils = step.vil;
-          return {
-            vil: step.vil || null,
-            task: step.task || 'action',
-            desc: step.desc,
-            res: step.res || {},
-            note: step.note || null,
-            icon: step.icon || null
-          };
-        }
-
         let stepRes = { ...runningRes };
         let finalTask = step.task || 'action';
         let finalVil = null;
 
         if (step.actionType === 'gather') {
-          const addedVils = parseInt(step.vilTotal) || 0; // Vils NUEVOS a añadir
+          const addedVils = parseInt(step.vilTotal) || 0; 
           if (addedVils > 0 && step.resTarget) {
             stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + addedVils;
-            runningRes = { ...stepRes }; 
+            runningRes = { ...stepRes }; // Refrescamos el tracker global
           }
           currentTotalVils += addedVils;
           finalVil = currentTotalVils;
@@ -139,7 +126,7 @@ const BuildOrderCreator = () => {
           if (step.resFrom && step.resTo) {
             stepRes[step.resFrom] = Math.max(0, (stepRes[step.resFrom] || 0) - amt);
             stepRes[step.resTo] = (stepRes[step.resTo] || 0) + amt;
-            runningRes = { ...stepRes };
+            runningRes = { ...stepRes }; // Refrescamos el tracker global
           }
           finalVil = currentTotalVils; 
           finalTask = 'reallocate';
@@ -147,6 +134,11 @@ const BuildOrderCreator = () => {
         else if (step.actionType === 'build_res') {
            finalVil = currentTotalVils;
            finalTask = 'build_then_resource';
+        }
+        else {
+           // Actions, Research, Train...
+           finalVil = currentTotalVils > 0 ? currentTotalVils : null;
+           if (['research', 'age_up'].includes(step.task)) finalVil = null; 
         }
 
         return {
@@ -204,7 +196,7 @@ const BuildOrderCreator = () => {
     if (error) {
       alert("Error: " + error.message);
     } else {
-      // Redirección automática a la vista de la build actualizada
+      alert("Build Order saved successfully!");
       navigate(`/academy/build-orders/${id}`); 
     }
   };
@@ -217,7 +209,7 @@ const BuildOrderCreator = () => {
       alert("Error deleting: " + error.message);
       setIsSubmitting(false);
     } else {
-      // Redirección al catálogo si se borra con éxito
+      alert("Build Order deleted!");
       navigate('/academy/build-orders');
     }
   };
@@ -276,16 +268,7 @@ const BuildOrderCreator = () => {
                   <option value="reallocate">🔄 Reallocate</option>
                   <option value="build_res">🔨 Build ➔ Res</option>
                   <option value="action">⚡ Generic Action</option>
-                  <option value="manual">🛠️ Manual Override</option>
                 </select>
-
-                {step.actionType === 'manual' && (
-                  <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <span style={{ fontSize: '11px', color: '#888' }}>Vil #:</span>
-                    <input type="number" value={step.vil || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'vil', parseInt(e.target.value) || null)} style={{ ...inputStyle, width: '50px' }} />
-                    <input type="text" value={step.task || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'task', e.target.value)} style={{ ...inputStyle, width: '120px' }} placeholder="Task (e.g. wood)" />
-                  </div>
-                )}
 
                 {step.actionType === 'gather' && (
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
@@ -314,7 +297,9 @@ const BuildOrderCreator = () => {
                 )}
 
                 {(step.actionType === 'action' || step.actionType === 'build_res') && (
-                  <div style={{ width: '250px' }}></div>
+                  <div style={{ width: '250px' }}>
+                     <input type="text" value={step.task || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'task', e.target.value)} style={{ ...inputStyle, width: '100%' }} placeholder="System task (e.g. research)" />
+                  </div>
                 )}
 
                 <div style={{ flex: 1, display: 'flex', gap: '5px' }}>
@@ -346,7 +331,7 @@ const BuildOrderCreator = () => {
           )}
         </div>
         <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
-          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD' : '💾 PUBLISH BUILD')}
+          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
         </button>
       </div>
     </div>
