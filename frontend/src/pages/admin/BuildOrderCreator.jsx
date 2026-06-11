@@ -202,14 +202,13 @@ const BuildOrderCreator = () => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("⚠️ Are you sure you want to completely delete this build order? This cannot be undone.")) return;
+    if (!window.confirm("⚠️ Are you sure you want to delete this build order?")) return;
     setIsSubmitting(true);
-    const { error } = await supabase.from('build_orders').delete().eq('id', id);
+    const { error } = await supabase.from('build_orders').update({ is_deleted: true }).eq('id', id);
     if (error) {
       alert("Error deleting: " + error.message);
       setIsSubmitting(false);
     } else {
-      alert("Build Order deleted!");
       navigate('/academy/build-orders');
     }
   };

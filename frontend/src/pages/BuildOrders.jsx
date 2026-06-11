@@ -46,7 +46,7 @@ const BuildOrders = () => {
     document.title = 'Build Orders | Emputors';
     
     const fetchBuilds = async () => {
-      const { data, error } = await supabase.from('build_orders').select('*');
+      const { data, error } = await supabase.from('build_orders').select('*').eq('is_deleted', false);
       if (data) {
         const formattedBuilds = data.map(b => ({
           ...b,
