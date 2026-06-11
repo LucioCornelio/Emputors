@@ -15,12 +15,73 @@ const TASK_MAPPING = {
   wood: 'wood', gold: 'gold', stone: 'stone'
 };
 
+// Traductor Inverso: Convierte el JSON estático en pasos dinámicos para que el auto-cálculo funcione
+const parseInitialAges = (build) => {
+  if (!build?.ages) return [ { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] } ];
+  let lastVil = 0;
+  let lastRes = {};
+
+  return build.ages.map(age => ({
+    ...age,
+    steps: age.steps.map(step => {
+      let actionType = 'manual';
+      let vilTotal = 0; // Vils nuevos a añadir en este paso
+      let resTarget = 'sheep';
+      let moveAmount = 1;
+      let resFrom = '';
+      let resTo = '';
+
+      const currRes = step.res || {};
+      const currVil = step.vil !== null ? step.vil : lastVil;
+      const diffVil = currVil - lastVil;
+
+      // Detectar Gather (Se han añadido aldeanos nuevos)
+      if (diffVil > 0) {
+        actionType = 'gather';
+        vilTotal = diffVil;
+        for (let r of RES_OPTIONS) {
+          if ((currRes[r] || 0) - (lastRes[r] || 0) === diffVil) {
+            resTarget = r;
+            break;
+          }
+        }
+      } 
+      // Detectar Reasignación
+      else if (step.task === 'reallocate') {
+        actionType = 'reallocate';
+        for (let r of Object.keys(currRes)) {
+          const diff = (currRes[r] || 0) - (lastRes[r] || 0);
+          if (diff > 0) { resTo = r; moveAmount = diff; }
+          if (diff < 0) { resFrom = r; }
+        }
+      } 
+      // Detectar Acciones Genéricas y Construcción
+      else if (step.task === 'build_then_resource') {
+        actionType = 'build_res';
+      } 
+      else if (step.task && ['action', 'research', 'train', 'build', 'age_up'].includes(step.task)) {
+        actionType = 'action';
+      }
+
+      lastVil = currVil;
+      lastRes = { ...currRes };
+
+      return {
+        ...step,
+        actionType,
+        vilTotal: vilTotal || 3, // Fallback para que el input no quede vacío
+        resTarget, moveAmount, resFrom, resTo
+      };
+    })
+  }));
+};
+
 const BuildOrderCreator = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const editBuild = location.state?.editBuild || null;
 
-  // Metadatos
+  // Metadatos (Pre-cargados si existe editBuild)
   const [id, setId] = useState(editBuild?.id || '');
   const [title, setTitle] = useState(editBuild?.title || '');
   const [civ, setCiv] = useState(editBuild?.civ || 'Any');
@@ -32,31 +93,20 @@ const BuildOrderCreator = () => {
   const [video, setVideo] = useState(editBuild?.video || '');
   const [description, setDescription] = useState(editBuild?.description || '');
   
-  // Edades y Pasos (Modo manual por defecto si viene de edición para proteger los recursos viejos)
-  const initialAges = editBuild?.ages ? editBuild.ages.map(age => ({
-    ...age,
-    steps: age.steps.map(step => ({
-      ...step,
-      actionType: 'manual', 
-      vilTotal: step.vil || 3,
-      resTarget: 'sheep', moveAmount: 1, resFrom: '', resTo: ''
-    }))
-  })) : [ { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] } ];
-
-  const [ages, setAges] = useState(initialAges);
+  const [ages, setAges] = useState(parseInitialAges(editBuild));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // AUTO-CALCULADORA DE RECURSOS (Arreglada)
+  // AUTO-CALCULADORA DE RECURSOS
   const calculateSmartSteps = () => {
     let runningRes = {};
-    let currentTotalVils = 0; // Ahora empezamos desde cero absoluto
+    let currentTotalVils = 0; // Se empieza desde cero absoluto
     
     return ages.map(age => ({
       name: age.name,
       icon: age.icon,
       steps: age.steps.map(step => {
         
-        // Modo Manual: respeta los datos que pongas y sincroniza el tracker global
+        // Modo Manual: respeta la "foto fija"
         if (step.actionType === 'manual') {
           if (step.res) runningRes = { ...step.res };
           if (step.vil) currentTotalVils = step.vil;
@@ -78,7 +128,7 @@ const BuildOrderCreator = () => {
           const addedVils = parseInt(step.vilTotal) || 0; // Vils NUEVOS a añadir
           if (addedVils > 0 && step.resTarget) {
             stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + addedVils;
-            runningRes = { ...stepRes }; // Guardamos el nuevo estado global
+            runningRes = { ...stepRes }; 
           }
           currentTotalVils += addedVils;
           finalVil = currentTotalVils;
@@ -91,7 +141,7 @@ const BuildOrderCreator = () => {
             stepRes[step.resTo] = (stepRes[step.resTo] || 0) + amt;
             runningRes = { ...stepRes };
           }
-          finalVil = currentTotalVils; // Reasignar no cambia la pobación total
+          finalVil = currentTotalVils; 
           finalTask = 'reallocate';
         }
         else if (step.actionType === 'build_res') {
@@ -154,8 +204,8 @@ const BuildOrderCreator = () => {
     if (error) {
       alert("Error: " + error.message);
     } else {
-      alert("Build Order saved successfully!");
-      navigate(`/academy/build-orders/${id}`); // Redirección automática al terminar
+      // Redirección automática a la vista de la build actualizada
+      navigate(`/academy/build-orders/${id}`); 
     }
   };
 
@@ -167,7 +217,7 @@ const BuildOrderCreator = () => {
       alert("Error deleting: " + error.message);
       setIsSubmitting(false);
     } else {
-      alert("Build Order deleted!");
+      // Redirección al catálogo si se borra con éxito
       navigate('/academy/build-orders');
     }
   };
@@ -222,11 +272,11 @@ const BuildOrderCreator = () => {
             {age.steps.map((step, sIdx) => (
               <div key={sIdx} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#1e212b', padding: '10px', borderRadius: '4px', marginBottom: '8px', borderLeft: '3px solid #66b2ff' }}>
                 <select value={step.actionType} onChange={e => handleUpdateStep(aIdx, sIdx, 'actionType', e.target.value)} style={{ ...inputStyle, width: '130px', backgroundColor: '#161920', color: '#66b2ff', fontWeight: 'bold' }}>
-                  <option value="manual">🛠️ Manual</option>
                   <option value="gather">📥 Gather Res</option>
                   <option value="reallocate">🔄 Reallocate</option>
                   <option value="build_res">🔨 Build ➔ Res</option>
                   <option value="action">⚡ Generic Action</option>
+                  <option value="manual">🛠️ Manual Override</option>
                 </select>
 
                 {step.actionType === 'manual' && (
@@ -296,7 +346,7 @@ const BuildOrderCreator = () => {
           )}
         </div>
         <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
-          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
+          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD' : '💾 PUBLISH BUILD')}
         </button>
       </div>
     </div>
