@@ -22,7 +22,7 @@ const STRAT_ICONS = {
 };
 
 const renderPremiumStratIcons = (build) => {
-  const icons = build.strategyIcons || STRAT_ICONS[build.strategy];
+  const icons = (build.strategyIcons && build.strategyIcons.length > 0) ? build.strategyIcons : STRAT_ICONS[build.strategy];
   if (!icons) return null;
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

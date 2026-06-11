@@ -19,7 +19,7 @@ const STRAT_ICONS = {
 };
 
 const renderPremiumStratIcons = (b) => {
-  const icons = b.strategyIcons || STRAT_ICONS[b.strategy];
+  const icons = (b.strategyIcons && b.strategyIcons.length > 0) ? b.strategyIcons : STRAT_ICONS[b.strategy];
   if (!icons) return null;
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
