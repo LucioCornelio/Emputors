@@ -39,7 +39,7 @@ const renderPremiumStratIcons = (b) => {
 const BuildOrders = () => {
   const [builds, setBuilds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null);
+  const [userRole, setUserRole] = useState(null);s
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
