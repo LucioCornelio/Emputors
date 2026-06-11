@@ -15,7 +15,7 @@ const TASK_MAPPING = {
   wood: 'wood', gold: 'gold', stone: 'stone', ship: 'food_fish'
 };
 
-// Traductor Inverso: Analiza la build de la base de datos y la convierte en bloques dinámicos 100% calculables
+// Traductor Inverso: Analiza la build antigua y la convierte en bloques dinámicos 100% calculables
 const parseInitialAges = (build) => {
   if (!build?.ages) return [ { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] } ];
   let lastVil = 0;
@@ -38,13 +38,14 @@ const parseInitialAges = (build) => {
       let addedRes = null;
       let addedAmount = 0;
       let subtractedRes = null;
+      let subtractedAmount = 0;
 
       // Buscamos qué recursos han cambiado respecto al paso anterior
       const allKeys = new Set([...Object.keys(currRes), ...Object.keys(lastRes)]);
       allKeys.forEach(k => {
         const diff = (currRes[k] || 0) - (lastRes[k] || 0);
         if (diff > 0) { addedRes = k; addedAmount = diff; }
-        if (diff < 0) { subtractedRes = k; }
+        if (diff < 0) { subtractedRes = k; subtractedAmount = Math.abs(diff); }
       });
 
       // Lógica de traducción de pasos
@@ -60,6 +61,7 @@ const parseInitialAges = (build) => {
       } else if (step.task === 'build_then_resource') {
         actionType = 'build_res';
       } else {
+        // Fallback genérico para acciones sin recolección de aldeanos nuevos
         actionType = 'action';
       }
 
@@ -69,7 +71,7 @@ const parseInitialAges = (build) => {
       return {
         ...step,
         actionType,
-        vilTotal: vilTotal || 3, // Fallback para que el input no quede vacío
+        vilTotal,
         resTarget, moveAmount, resFrom, resTo
       };
     })
@@ -92,7 +94,7 @@ const BuildOrderCreator = () => {
   const [video, setVideo] = useState(editBuild?.video || '');
   const [description, setDescription] = useState(editBuild?.description || '');
   
-  // Usamos el parser dinámico
+  // Usamos el parser dinámico en lugar de forzarlo a manual
   const [ages, setAges] = useState(() => parseInitialAges(editBuild));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -108,20 +110,6 @@ const BuildOrderCreator = () => {
         let stepRes = { ...runningRes };
         let finalTask = step.task || 'action';
         let finalVil = null;
-
-        // Soporte para edición manual de emergencia
-        if (step.actionType === 'manual') {
-          if (step.res) runningRes = { ...step.res };
-          if (step.vil) currentTotalVils = step.vil;
-          return {
-            vil: step.vil || null,
-            task: step.task || 'action',
-            desc: step.desc,
-            res: step.res || {},
-            note: step.note || null,
-            icon: step.icon || null
-          };
-        }
 
         if (step.actionType === 'gather') {
           const addedVils = parseInt(step.vilTotal) || 0; 
@@ -214,15 +202,13 @@ const BuildOrderCreator = () => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("⚠️ Are you sure you want to completely delete this build order? This cannot be undone.")) return;
+    if (!window.confirm("⚠️ Are you sure you want to delete this build order?")) return;
     setIsSubmitting(true);
-    // Usamos el soft delete (o delete duro si así lo tienes configurado)
     const { error } = await supabase.from('build_orders').update({ is_deleted: true }).eq('id', id);
     if (error) {
       alert("Error deleting: " + error.message);
       setIsSubmitting(false);
     } else {
-      alert("Build Order deleted!");
       navigate('/academy/build-orders');
     }
   };
@@ -281,16 +267,7 @@ const BuildOrderCreator = () => {
                   <option value="reallocate">🔄 Reallocate</option>
                   <option value="build_res">🔨 Build ➔ Res</option>
                   <option value="action">⚡ Generic Action</option>
-                  <option value="manual">🛠️ Manual Override</option>
                 </select>
-
-                {step.actionType === 'manual' && (
-                  <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <span style={{ fontSize: '11px', color: '#888' }}>Vil #:</span>
-                    <input type="number" value={step.vil || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'vil', parseInt(e.target.value) || null)} style={{ ...inputStyle, width: '50px' }} />
-                    <input type="text" value={step.task || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'task', e.target.value)} style={{ ...inputStyle, width: '120px' }} placeholder="Task (e.g. wood)" />
-                  </div>
-                )}
 
                 {step.actionType === 'gather' && (
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
