@@ -20,7 +20,7 @@ const BuildOrderCreator = () => {
   const navigate = useNavigate();
   const editBuild = location.state?.editBuild || null;
 
-  // Metadatos (Pre-cargados si existe editBuild)
+  // Metadatos
   const [id, setId] = useState(editBuild?.id || '');
   const [title, setTitle] = useState(editBuild?.title || '');
   const [civ, setCiv] = useState(editBuild?.civ || 'Any');
@@ -32,7 +32,7 @@ const BuildOrderCreator = () => {
   const [video, setVideo] = useState(editBuild?.video || '');
   const [description, setDescription] = useState(editBuild?.description || '');
   
-  // Edades y Pasos (Si es edición, mapeamos a 'manual' para no perder sus recursos internos)
+  // Edades y Pasos (Modo manual por defecto si viene de edición para proteger los recursos viejos)
   const initialAges = editBuild?.ages ? editBuild.ages.map(age => ({
     ...age,
     steps: age.steps.map(step => ({
@@ -46,22 +46,22 @@ const BuildOrderCreator = () => {
   const [ages, setAges] = useState(initialAges);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // AUTO-CALCULADORA DE RECURSOS
+  // AUTO-CALCULADORA DE RECURSOS (Arreglada)
   const calculateSmartSteps = () => {
     let runningRes = {};
-    let lastVilCount = 3; 
+    let currentTotalVils = 0; // Ahora empezamos desde cero absoluto
     
     return ages.map(age => ({
       name: age.name,
       icon: age.icon,
       steps: age.steps.map(step => {
         
-        // Si el paso es manual (importado), mantenemos sus datos intactos pero actualizamos el running tracker
+        // Modo Manual: respeta los datos que pongas y sincroniza el tracker global
         if (step.actionType === 'manual') {
           if (step.res) runningRes = { ...step.res };
-          if (step.vil) lastVilCount = step.vil;
+          if (step.vil) currentTotalVils = step.vil;
           return {
-            vil: step.vil,
+            vil: step.vil || null,
             task: step.task || 'action',
             desc: step.desc,
             res: step.res || {},
@@ -70,19 +70,18 @@ const BuildOrderCreator = () => {
           };
         }
 
-        // Lógica Smart para pasos nuevos
         let stepRes = { ...runningRes };
         let finalTask = step.task || 'action';
         let finalVil = null;
 
         if (step.actionType === 'gather') {
-          const diff = step.vilTotal - lastVilCount;
-          if (diff > 0 && step.resTarget) {
-            stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + diff;
-            runningRes[step.resTarget] = stepRes[step.resTarget];
+          const addedVils = parseInt(step.vilTotal) || 0; // Vils NUEVOS a añadir
+          if (addedVils > 0 && step.resTarget) {
+            stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + addedVils;
+            runningRes = { ...stepRes }; // Guardamos el nuevo estado global
           }
-          lastVilCount = step.vilTotal;
-          finalVil = step.vilTotal;
+          currentTotalVils += addedVils;
+          finalVil = currentTotalVils;
           finalTask = TASK_MAPPING[step.resTarget] || 'action';
         } 
         else if (step.actionType === 'reallocate') {
@@ -92,11 +91,11 @@ const BuildOrderCreator = () => {
             stepRes[step.resTo] = (stepRes[step.resTo] || 0) + amt;
             runningRes = { ...stepRes };
           }
-          finalVil = lastVilCount;
+          finalVil = currentTotalVils; // Reasignar no cambia la pobación total
           finalTask = 'reallocate';
         }
         else if (step.actionType === 'build_res') {
-           finalVil = lastVilCount;
+           finalVil = currentTotalVils;
            finalTask = 'build_then_resource';
         }
 
@@ -156,7 +155,20 @@ const BuildOrderCreator = () => {
       alert("Error: " + error.message);
     } else {
       alert("Build Order saved successfully!");
-      if (editBuild) navigate(`/academy/build-orders/${id}`);
+      navigate(`/academy/build-orders/${id}`); // Redirección automática al terminar
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("⚠️ Are you sure you want to completely delete this build order? This cannot be undone.")) return;
+    setIsSubmitting(true);
+    const { error } = await supabase.from('build_orders').delete().eq('id', id);
+    if (error) {
+      alert("Error deleting: " + error.message);
+      setIsSubmitting(false);
+    } else {
+      alert("Build Order deleted!");
+      navigate('/academy/build-orders');
     }
   };
 
@@ -227,9 +239,9 @@ const BuildOrderCreator = () => {
 
                 {step.actionType === 'gather' && (
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <span style={{ fontSize: '11px', color: '#888' }}>Total Vils:</span>
-                    <input type="number" value={step.vilTotal} onChange={e => handleUpdateStep(aIdx, sIdx, 'vilTotal', parseInt(e.target.value))} style={{ ...inputStyle, width: '60px' }} />
-                    <span style={{ fontSize: '11px', color: '#888' }}>to</span>
+                    <span style={{ fontSize: '11px', color: '#888' }}>Add:</span>
+                    <input type="number" value={step.vilTotal} onChange={e => handleUpdateStep(aIdx, sIdx, 'vilTotal', parseInt(e.target.value))} style={{ ...inputStyle, width: '50px' }} />
+                    <span style={{ fontSize: '11px', color: '#888' }}>vils to</span>
                     <select value={step.resTarget} onChange={e => handleUpdateStep(aIdx, sIdx, 'resTarget', e.target.value)} style={{ ...inputStyle, width: '100px' }}>
                       {RES_OPTIONS.map(r => <option key={r} value={r}>{r}</option>)}
                     </select>
@@ -273,8 +285,15 @@ const BuildOrderCreator = () => {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ fontSize: '11px', color: '#888' }}>
-          <strong>Auto-Calc Output:</strong> Total steps: {ages.reduce((sum, a) => sum + a.steps.length, 0)}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#888', marginRight: '15px' }}>
+            <strong>Auto-Calc Output:</strong> Total steps: {ages.reduce((sum, a) => sum + a.steps.length, 0)}
+          </div>
+          {editBuild && (
+            <button onClick={handleDelete} disabled={isSubmitting} style={{ backgroundColor: 'transparent', color: '#ff4444', border: '1px solid #ff4444', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+              🗑️ DELETE BUILD
+            </button>
+          )}
         </div>
         <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
           {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
