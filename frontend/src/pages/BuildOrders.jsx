@@ -18,9 +18,13 @@ const STRAT_ICONS = {
   'FC Crossbow + Siege': ['/techs/CastleAgeIconDE.png', '➔', '/units/Crossbowman_aoe2DE.png', '/buildings/Siege_workshop_aoe2DE.png']
 };
 
-const renderPremiumStratIcons = (b) => {
-  const icons = (b.strategyIcons && b.strategyIcons.length > 0) ? b.strategyIcons : STRAT_ICONS[b.strategy];
-  if (!icons) return null;
+const renderPremiumStratIcons = (data) => {
+  // Aseguramos que pillamos los iconos, vengan de donde vengan, y comprobamos que no sea un array vacío
+  const dbIcons = data.strategyIcons || data.strategy_icons;
+  const icons = (dbIcons && dbIcons.length > 0) ? dbIcons : STRAT_ICONS[data.strategy];
+  
+  if (!icons || icons.length === 0) return null;
+  
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       {icons.map((ic, i) => 

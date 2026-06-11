@@ -21,17 +21,21 @@ const STRAT_ICONS = {
   'FC Crossbow + Siege': ['/techs/CastleAgeIconDE.png', '➔', '/units/Crossbowman_aoe2DE.png', '/buildings/Siege_workshop_aoe2DE.png']
 };
 
-const renderPremiumStratIcons = (build) => {
-  const icons = (build.strategyIcons && build.strategyIcons.length > 0) ? build.strategyIcons : STRAT_ICONS[build.strategy];
-  if (!icons) return null;
+const renderPremiumStratIcons = (data) => {
+  // Aseguramos que pillamos los iconos, vengan de donde vengan, y comprobamos que no sea un array vacío
+  const dbIcons = data.strategyIcons || data.strategy_icons;
+  const icons = (dbIcons && dbIcons.length > 0) ? dbIcons : STRAT_ICONS[data.strategy];
+  
+  if (!icons || icons.length === 0) return null;
+  
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       {icons.map((ic, i) => 
         ic === '➔' ? (
-          <span key={i} style={{ fontSize: '12px', color: C.gold, margin: '0 2px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>➔</span> 
+          <span key={i} style={{ fontSize: '10px', color: C.gold, margin: '0 2px' }}>➔</span> 
         ) : (
-          <div key={i} style={{ padding: '2px', background: 'rgba(30,33,43,0.8)', borderRadius: '6px', border: `1px solid ${C.gold}`, boxShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-            <img src={ic} alt="" style={{ width: '28px', height: '28px', objectFit: 'contain', display: 'block' }} />
+          <div key={i} style={{ padding: '2px', background: '#1e212b', borderRadius: '6px', border: `1px solid ${C.gold}`, boxShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+            <img src={ic} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain', display: 'block' }} />
           </div>
         )
       )}
