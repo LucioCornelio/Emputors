@@ -199,7 +199,8 @@ const BuildOrders = () => {
               position: 'relative', overflow: 'hidden',
               backgroundColor: C.card, border: `1px solid ${C.border}`, borderRadius: '8px',
               display: 'flex', flexDirection: 'column', height: '100%',
-              transition: 'border-color 0.2s, transform 0.15s', cursor: 'pointer', textDecoration: 'none',
+              transition: 'border-color 0.2s, transform 0.15s', cursor: 'pointer',
+              textDecoration: 'none', outline: 'none', color: 'inherit',
               textAlign: 'left'
             }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.gold; e.currentTarget.style.transform = 'translateY(-2px)'; }}
