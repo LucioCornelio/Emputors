@@ -8,7 +8,6 @@ const C = {
   cyan: '#00c8c8', red: '#ff4444', green: '#4caf50'
 };
 
-// AÑADIDO: 'builder' ahora es un recurso seleccionable en la UI
 const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone', 'ship', 'builder'];
 const TASK_MAPPING = {
   sheep: 'food_sheep', boar: 'food_boar', underTC: 'food_tc', hunt: 'food_hunt',
@@ -140,6 +139,16 @@ const BuildOrderCreator = () => {
         let finalTask = step.task || 'action';
         let finalVil = null;
 
+        // Unificamos sheep y boar en underTC INTERNAMENTE para evitar fallos matemáticos al reasignar
+        let actualTarget = step.resTarget;
+        if (actualTarget === 'sheep' || actualTarget === 'boar') actualTarget = 'underTC';
+        
+        let actualFrom = step.resFrom;
+        if (actualFrom === 'sheep' || actualFrom === 'boar') actualFrom = 'underTC';
+        
+        let actualTo = step.resTo;
+        if (actualTo === 'sheep' || actualTo === 'boar') actualTo = 'underTC';
+
         if (step.actionType === 'manual') {
           if (step.res) runningRes = { ...step.res };
           if (step.vil) currentTotalVils = step.vil;
@@ -155,8 +164,8 @@ const BuildOrderCreator = () => {
 
         if (step.actionType === 'gather' || step.actionType === 'build_res') {
           const addedVils = parseInt(step.vilTotal) || 0; 
-          if (addedVils > 0 && step.resTarget) {
-            stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + addedVils;
+          if (addedVils > 0 && actualTarget) {
+            stepRes[actualTarget] = (stepRes[actualTarget] || 0) + addedVils;
             runningRes = { ...stepRes }; 
           }
           currentTotalVils += addedVils;
@@ -165,17 +174,24 @@ const BuildOrderCreator = () => {
         } 
         else if (step.actionType === 'reallocate') {
           const amt = parseInt(step.moveAmount) || 0;
-          if (step.resFrom && step.resTo) {
-            stepRes[step.resFrom] = Math.max(0, (stepRes[step.resFrom] || 0) - amt);
-            stepRes[step.resTo] = (stepRes[step.resTo] || 0) + amt;
+          if (actualFrom && actualTo) {
+            stepRes[actualFrom] = Math.max(0, (stepRes[actualFrom] || 0) - amt);
+            stepRes[actualTo] = (stepRes[actualTo] || 0) + amt;
             runningRes = { ...stepRes }; 
           }
           finalVil = currentTotalVils; 
-          finalTask = 'reallocate';
+          // Si el destino es builder forzamos la tarea a build, si vuelve de builder le ponemos la que toque
+          if (step.resTo === 'builder') finalTask = 'build';
+          else if (step.resFrom === 'builder') finalTask = TASK_MAPPING[step.resTo] || 'reallocate';
+          else finalTask = 'reallocate';
         }
         else {
-           // OCULTAMOS EL NUMERO DE VILS PARA TODAS ESTAS TAREAS
-           finalVil = null; 
+           // Si es una acción genérica, entrenamiento o tecnología, ocultamos el total de aldeanos
+           if (['research', 'age_up', 'action', 'train'].includes(step.task) || (step.task === 'build' && step.actionType === 'action')) {
+               finalVil = null; 
+           } else {
+               finalVil = currentTotalVils > 0 ? currentTotalVils : null;
+           }
         }
 
         return {
@@ -394,9 +410,14 @@ const BuildOrderCreator = () => {
             </button>
           )}
         </div>
-        <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
-          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={() => navigate(-1)} style={{ backgroundColor: 'transparent', color: C.textDim, border: '1px solid #444', padding: '12px 20px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}>
+            CANCEL
+          </button>
+          <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
+            {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
+          </button>
+        </div>
       </div>
     </div>
   );
