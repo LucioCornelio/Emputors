@@ -181,8 +181,15 @@ const BuildOrderCreator = () => {
           finalTask = 'reallocate';
         }
         else if (step.actionType === 'build_res') {
-           finalVil = currentTotalVils;
-           finalTask = 'build_then_resource';
+          // Corrección: Si es un paso que introduce un nuevo aldeano (vilTotal), lo sumamos a la población activa
+          const addedVils = parseInt(step.vilTotal) || 0;
+          if (addedVils > 0 && step.resTarget) {
+            stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + addedVils;
+            runningRes = { ...stepRes };
+          }
+          currentTotalVils += addedVils;
+          finalVil = currentTotalVils;
+          finalTask = 'build_then_resource';
         }
         else {
            // Actions, Research, Train...

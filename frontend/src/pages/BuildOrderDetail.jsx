@@ -226,6 +226,9 @@ const Badge = ({ resKey, value, isGrowing }) => {
 };
 
 const ResBadges = ({ step, prevRes }) => {
+  if (['research', 'age_up', 'action'].includes(step.task)) {
+    return <div style={{ minWidth: '96px' }} />;
+  }
   const res = step.res || {};
   const safePrev = prevRes || {};
 
@@ -327,7 +330,12 @@ const TaskIcon = ({ step, meta, cc }) => {
 };
 
 const StepRow = ({ step, prevRes }) => {
-  const meta = TASK_META[step.task] || { icon: '❓', cat: 'action' };
+  let adjustedTask = step.task;
+  if (step.task === 'food_sheep' && prevRes && (prevRes.sheep > 6 || prevRes.underTC > 0 || prevRes.boar > 0)) {
+    adjustedTask = 'food_tc';
+  }
+  
+  const meta = TASK_META[adjustedTask] || { icon: '❓', cat: 'action' };
   const cc = CAT_BG[meta.cat] || CAT_BG.action;
   const valid = validateStep(step);
   const rowStyle = ROW_BG[meta.cat] || { bg: 'transparent', bd: 'none' };
