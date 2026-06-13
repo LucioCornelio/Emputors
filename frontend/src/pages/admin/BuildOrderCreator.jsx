@@ -45,7 +45,6 @@ const parseInitialAges = (build) => {
         if (diff < 0) { subtractedRes = k; }
       });
 
-      // CORRECCIÓN: Si hay nuevos aldeanos, evaluamos si es gather normal o build_res
       if (diffVil > 0 && addedRes) {
         actionType = step.task === 'build_then_resource' ? 'build_res' : 'gather';
         vilTotal = diffVil;
@@ -55,6 +54,10 @@ const parseInitialAges = (build) => {
         moveAmount = addedAmount;
         resFrom = subtractedRes;
         resTo = addedRes;
+      } else if (step.task === 'build_then_resource') {
+        actionType = 'build_res';
+        vilTotal = diffVil;
+        resTarget = addedRes || 'wood'; // Fallback
       } else {
         actionType = 'action';
       }
@@ -330,7 +333,6 @@ const BuildOrderCreator = () => {
                   </div>
                 )}
 
-                {/* CORRECCIÓN DE INTERFAZ: gather y build_res usan ahora los mismos inputs para añadir vils a un recurso */}
                 {(step.actionType === 'gather' || step.actionType === 'build_res') && (
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
                     <span style={{ fontSize: '11px', color: '#888' }}>Add:</span>
