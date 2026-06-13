@@ -229,22 +229,34 @@ const ResBadges = ({ step, prevRes }) => {
   if (['research', 'age_up', 'action'].includes(step.task)) {
     return <div style={{ minWidth: '96px' }} />;
   }
+
   const res = step.res || {};
   const safePrev = prevRes || {};
 
+  // TRUCO VISUAL: Agrupamos ovejas y jabalíes en "underTC" solo para la UI de la derecha
+  const visualRes = { ...res };
+  visualRes.underTC = (visualRes.underTC || 0) + (visualRes.sheep || 0) + (visualRes.boar || 0);
+  delete visualRes.sheep;
+  delete visualRes.boar;
+
+  const visualPrev = { ...safePrev };
+  visualPrev.underTC = (visualPrev.underTC || 0) + (visualPrev.sheep || 0) + (visualPrev.boar || 0);
+  delete visualPrev.sheep;
+  delete visualPrev.boar;
+
   const foodBadges = FOOD_KEYS
-    .filter((k) => (res[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={res[k]} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />);
+    .filter((k) => (visualRes[k] || 0) > 0)
+    .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />);
     
   const fixedBadges = FIXED_KEYS.map((k) => (
-    <Badge key={k} resKey={k} value={res[k] || 0} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />
+    <Badge key={k} resKey={k} value={visualRes[k] || 0} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />
   ));
   
   const shipBadges = SHIP_KEYS
-    .filter((k) => (res[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={res[k]} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />);
+    .filter((k) => (visualRes[k] || 0) > 0)
+    .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />);
 
-  const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (res[k] || 0) > 0) || shipBadges.length > 0;
+  const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (visualRes[k] || 0) > 0) || shipBadges.length > 0;
   if (!hasAnything) return <div style={{ minWidth: '96px' }} />;
 
   return (
@@ -330,12 +342,7 @@ const TaskIcon = ({ step, meta, cc }) => {
 };
 
 const StepRow = ({ step, prevRes }) => {
-  let adjustedTask = step.task;
-  if (step.task === 'food_sheep' && prevRes && (prevRes.sheep > 6 || prevRes.underTC > 0 || prevRes.boar > 0)) {
-    adjustedTask = 'food_tc';
-  }
-  
-  const meta = TASK_META[adjustedTask] || { icon: '❓', cat: 'action' };
+  const meta = TASK_META[step.task] || { icon: '❓', cat: 'action' };
   const cc = CAT_BG[meta.cat] || CAT_BG.action;
   const valid = validateStep(step);
   const rowStyle = ROW_BG[meta.cat] || { bg: 'transparent', bd: 'none' };
