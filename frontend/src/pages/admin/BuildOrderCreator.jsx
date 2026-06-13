@@ -8,11 +8,12 @@ const C = {
   cyan: '#00c8c8', red: '#ff4444', green: '#4caf50'
 };
 
-const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone', 'ship'];
+// AÑADIDO: 'builder' ahora es un recurso seleccionable en la UI
+const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone', 'ship', 'builder'];
 const TASK_MAPPING = {
   sheep: 'food_sheep', boar: 'food_boar', underTC: 'food_tc', hunt: 'food_hunt',
   berries: 'food_berries', farm: 'food_farm', fish: 'food_fish',
-  wood: 'wood', gold: 'gold', stone: 'stone', ship: 'food_fish'
+  wood: 'wood', gold: 'gold', stone: 'stone', ship: 'food_fish', builder: 'build'
 };
 
 const parseInitialAges = (build) => {
@@ -173,8 +174,8 @@ const BuildOrderCreator = () => {
           finalTask = 'reallocate';
         }
         else {
-           finalVil = currentTotalVils > 0 ? currentTotalVils : null;
-           if (['research', 'age_up'].includes(step.task)) finalVil = null; 
+           // OCULTAMOS EL NUMERO DE VILS PARA TODAS ESTAS TAREAS
+           finalVil = null; 
         }
 
         return {
