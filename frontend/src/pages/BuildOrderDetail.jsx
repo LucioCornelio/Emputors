@@ -216,7 +216,8 @@ const Badge = ({ resKey, value, isGrowing }) => {
       fontSize: '10px', fontWeight: isGrowing ? '800' : '600', fontVariantNumeric: 'tabular-nums',
       backgroundColor: isGrowing ? `${color}33` : (zero ? 'transparent' : `${color}15`),
       border: `1px solid ${isGrowing ? color : 'transparent'}`,
-      color: isGrowing ? '#fff' : (zero ? C.resZero : color),
+      // CAMBIO AQUÍ: Ahora usa siempre 'color' en lugar de '#fff' si no es cero.
+      color: zero ? C.resZero : color,
       transition: 'all 0.2s ease',
       boxSizing: 'border-box'
     }}>
