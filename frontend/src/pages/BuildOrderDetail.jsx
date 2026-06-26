@@ -53,7 +53,7 @@ const RES_ICON = {
 };
 const RES_COLOR = {
   sheep: '#ef4444', boar: '#ef4444', underTC: '#ef4444', hunt: '#ef4444',
-  chicken: '#ef4444', berries: '#ef4444', farm: '#84cc16', fish: '#ef4444',
+  chicken: '#ef4444', berries: '#ef4444', farm: '#ef4444', fish: '#ef4444', // Granja en rojo
   wood: '#cd7f32', gold: '#fbbf24', stone: '#94a3b8', builder: '#94a3b8',
   ship: '#3b82f6', ship_gold: '#fbbf24', 
 };
@@ -116,6 +116,7 @@ const ICON_MAP = {
   'FletchingDE': '/techs/FletchingDE.png',
   'BodkinArrowDE': '/techs/BodkinArrowDE.png',
   'WheelbarrowDE': '/techs/WheelbarrowDE.png',
+  'Gold_mining_aoe2de': '/techs/Gold_mining_aoe2de.png', // Icono de minería de oro
   
   'ManAtArmsUpgDE': '/techs/ManAtArmsUpgDE.png',
   'LongSwordsmanUpgDE': '/techs/LongSwordmanUpgDE.png', 
@@ -154,7 +155,7 @@ const CAT_BG = {
   food:      { bg: 'rgba(239,68,68,0.18)',   bd: 'rgba(239,68,68,0.35)' },
   berries:   { bg: 'rgba(168,85,247,0.18)',  bd: 'rgba(168,85,247,0.35)' },
   fish:      { bg: 'rgba(59,130,246,0.18)',  bd: 'rgba(59,130,246,0.35)' },
-  farm:      { bg: 'rgba(132,204,22,0.18)',  bd: 'rgba(132,204,22,0.35)' },
+  farm:      { bg: 'rgba(239,68,68,0.18)',   bd: 'rgba(239,68,68,0.35)' }, // Granja en rojo
   chicken:   { bg: 'rgba(251,191,36,0.18)',  bd: 'rgba(251,191,36,0.35)' },
   wood:      { bg: 'rgba(205,127,50,0.18)',  bd: 'rgba(205,127,50,0.35)' },
   gold:      { bg: 'rgba(251,191,36,0.18)',  bd: 'rgba(251,191,36,0.35)' },
@@ -227,22 +228,42 @@ const Badge = ({ resKey, value, isGrowing }) => {
 };
 
 const ResBadges = ({ step, prevRes }) => {
+  // OCULTAMOS LAS BADGES PARA ACCIONES, TRENES Y TECNOLOGÍAS
+  if (['research', 'age_up', 'action', 'train'].includes(step.task)) {
+    return <div style={{ minWidth: '96px' }} />;
+  }
+  // Y ocultamos para los 'build' genéricos que NO envían vils fijos al recurso constructor
+  if (step.task === 'build' && !(step.res && step.res.builder > 0)) {
+    return <div style={{ minWidth: '96px' }} />;
+  }
+
   const res = step.res || {};
   const safePrev = prevRes || {};
 
+  // TRUCO VISUAL: Agrupamos ovejas y jabalíes en "underTC" solo para la UI de la derecha
+  const visualRes = { ...res };
+  visualRes.underTC = (visualRes.underTC || 0) + (visualRes.sheep || 0) + (visualRes.boar || 0);
+  delete visualRes.sheep;
+  delete visualRes.boar;
+
+  const visualPrev = { ...safePrev };
+  visualPrev.underTC = (visualPrev.underTC || 0) + (visualPrev.sheep || 0) + (visualPrev.boar || 0);
+  delete visualPrev.sheep;
+  delete visualPrev.boar;
+
   const foodBadges = FOOD_KEYS
-    .filter((k) => (res[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={res[k]} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />);
+    .filter((k) => (visualRes[k] || 0) > 0)
+    .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />);
     
   const fixedBadges = FIXED_KEYS.map((k) => (
-    <Badge key={k} resKey={k} value={res[k] || 0} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />
+    <Badge key={k} resKey={k} value={visualRes[k] || 0} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />
   ));
   
   const shipBadges = SHIP_KEYS
-    .filter((k) => (res[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={res[k]} isGrowing={(res[k] || 0) > (safePrev[k] || 0)} />);
+    .filter((k) => (visualRes[k] || 0) > 0)
+    .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />);
 
-  const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (res[k] || 0) > 0) || shipBadges.length > 0;
+  const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (visualRes[k] || 0) > 0) || shipBadges.length > 0;
   if (!hasAnything) return <div style={{ minWidth: '96px' }} />;
 
   return (

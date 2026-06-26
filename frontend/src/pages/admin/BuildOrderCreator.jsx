@@ -8,14 +8,13 @@ const C = {
   cyan: '#00c8c8', red: '#ff4444', green: '#4caf50'
 };
 
-const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone', 'ship'];
+const RES_OPTIONS = ['sheep', 'boar', 'underTC', 'hunt', 'berries', 'farm', 'fish', 'wood', 'gold', 'stone', 'ship', 'builder'];
 const TASK_MAPPING = {
   sheep: 'food_sheep', boar: 'food_boar', underTC: 'food_tc', hunt: 'food_hunt',
   berries: 'food_berries', farm: 'food_farm', fish: 'food_fish',
-  wood: 'wood', gold: 'gold', stone: 'stone', ship: 'food_fish'
+  wood: 'wood', gold: 'gold', stone: 'stone', ship: 'food_fish', builder: 'build'
 };
 
-// Traductor Inverso: Analiza la build de la base de datos y la convierte en bloques dinámicos 100% calculables
 const parseInitialAges = (build) => {
   if (!build?.ages) return [ { name: 'Dark Age', icon: 'DarkAgeIconDE', steps: [] } ];
   let lastVil = 0;
@@ -39,7 +38,6 @@ const parseInitialAges = (build) => {
       let addedAmount = 0;
       let subtractedRes = null;
 
-      // Buscamos qué recursos han cambiado respecto al paso anterior
       const allKeys = new Set([...Object.keys(currRes), ...Object.keys(lastRes)]);
       allKeys.forEach(k => {
         const diff = (currRes[k] || 0) - (lastRes[k] || 0);
@@ -47,9 +45,8 @@ const parseInitialAges = (build) => {
         if (diff < 0) { subtractedRes = k; }
       });
 
-      // Lógica de traducción de pasos
       if (diffVil > 0 && addedRes) {
-        actionType = 'gather';
+        actionType = step.task === 'build_then_resource' ? 'build_res' : 'gather';
         vilTotal = diffVil;
         resTarget = addedRes;
       } else if (diffVil === 0 && addedRes && subtractedRes) {
@@ -59,6 +56,8 @@ const parseInitialAges = (build) => {
         resTo = addedRes;
       } else if (step.task === 'build_then_resource') {
         actionType = 'build_res';
+        vilTotal = diffVil;
+        resTarget = addedRes || 'wood'; // Fallback
       } else {
         actionType = 'action';
       }
@@ -69,7 +68,7 @@ const parseInitialAges = (build) => {
       return {
         ...step,
         actionType,
-        vilTotal: vilTotal || 3, // Fallback para que el input no quede vacío
+        vilTotal: vilTotal || 3, 
         resTarget, moveAmount, resFrom, resTo
       };
     })
@@ -92,11 +91,42 @@ const BuildOrderCreator = () => {
   const [video, setVideo] = useState(editBuild?.video || '');
   const [description, setDescription] = useState(editBuild?.description || '');
   
-  // Usamos el parser dinámico
+  const [tags, setTags] = useState(editBuild?.tags || []);
+  const [strategyIcons, setStrategyIcons] = useState(editBuild?.strategyIcons || []);
+  const [whatsNext, setWhatsNext] = useState(editBuild?.whatsNext || []);
+  
   const [ages, setAges] = useState(() => parseInitialAges(editBuild));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // AUTO-CALCULADORA DE RECURSOS (Totalmente en cascada)
+  const [showJsonImport, setShowJsonImport] = useState(false);
+  const [jsonInput, setJsonInput] = useState('');
+
+  const handleImportJson = () => {
+    try {
+      const data = JSON.parse(jsonInput);
+      if (data.id) setId(data.id);
+      if (data.title) setTitle(data.title);
+      if (data.civ) setCiv(data.civ);
+      if (data.map) setMap(data.map);
+      if (data.strategy) setStrategy(data.strategy);
+      if (data.difficulty) setDifficulty(data.difficulty);
+      if (data.popCount) setPopCount(data.popCount);
+      if (data.video !== undefined) setVideo(data.video);
+      if (data.description) setDescription(data.description);
+      if (data.author) setAuthor(data.author);
+      if (data.tags) setTags(data.tags);
+      if (data.strategyIcons) setStrategyIcons(data.strategyIcons);
+      if (data.whatsNext) setWhatsNext(data.whatsNext);
+      if (data.ages) setAges(data.ages); 
+      
+      setShowJsonImport(false);
+      setJsonInput('');
+      alert("✅ JSON imported successfully! Review the data and click Publish.");
+    } catch (e) {
+      alert("❌ Invalid JSON format. Make sure it's copied exactly.");
+    }
+  };
+
   const calculateSmartSteps = () => {
     let runningRes = {};
     let currentTotalVils = 0; 
@@ -109,7 +139,16 @@ const BuildOrderCreator = () => {
         let finalTask = step.task || 'action';
         let finalVil = null;
 
-        // Soporte para edición manual de emergencia
+        // Unificamos sheep y boar en underTC INTERNAMENTE para evitar fallos matemáticos al reasignar
+        let actualTarget = step.resTarget;
+        if (actualTarget === 'sheep' || actualTarget === 'boar') actualTarget = 'underTC';
+        
+        let actualFrom = step.resFrom;
+        if (actualFrom === 'sheep' || actualFrom === 'boar') actualFrom = 'underTC';
+        
+        let actualTo = step.resTo;
+        if (actualTo === 'sheep' || actualTo === 'boar') actualTo = 'underTC';
+
         if (step.actionType === 'manual') {
           if (step.res) runningRes = { ...step.res };
           if (step.vil) currentTotalVils = step.vil;
@@ -123,34 +162,36 @@ const BuildOrderCreator = () => {
           };
         }
 
-        if (step.actionType === 'gather') {
+        if (step.actionType === 'gather' || step.actionType === 'build_res') {
           const addedVils = parseInt(step.vilTotal) || 0; 
-          if (addedVils > 0 && step.resTarget) {
-            stepRes[step.resTarget] = (stepRes[step.resTarget] || 0) + addedVils;
-            runningRes = { ...stepRes }; // Refrescamos el tracker global
+          if (addedVils > 0 && actualTarget) {
+            stepRes[actualTarget] = (stepRes[actualTarget] || 0) + addedVils;
+            runningRes = { ...stepRes }; 
           }
           currentTotalVils += addedVils;
           finalVil = currentTotalVils;
-          finalTask = TASK_MAPPING[step.resTarget] || 'action';
+          finalTask = step.actionType === 'build_res' ? 'build_then_resource' : (TASK_MAPPING[step.resTarget] || 'action');
         } 
         else if (step.actionType === 'reallocate') {
           const amt = parseInt(step.moveAmount) || 0;
-          if (step.resFrom && step.resTo) {
-            stepRes[step.resFrom] = Math.max(0, (stepRes[step.resFrom] || 0) - amt);
-            stepRes[step.resTo] = (stepRes[step.resTo] || 0) + amt;
-            runningRes = { ...stepRes }; // Refrescamos el tracker global
+          if (actualFrom && actualTo) {
+            stepRes[actualFrom] = Math.max(0, (stepRes[actualFrom] || 0) - amt);
+            stepRes[actualTo] = (stepRes[actualTo] || 0) + amt;
+            runningRes = { ...stepRes }; 
           }
           finalVil = currentTotalVils; 
-          finalTask = 'reallocate';
-        }
-        else if (step.actionType === 'build_res') {
-           finalVil = currentTotalVils;
-           finalTask = 'build_then_resource';
+          // Si el destino es builder forzamos la tarea a build, si vuelve de builder le ponemos la que toque
+          if (step.resTo === 'builder') finalTask = 'build';
+          else if (step.resFrom === 'builder') finalTask = TASK_MAPPING[step.resTo] || 'reallocate';
+          else finalTask = 'reallocate';
         }
         else {
-           // Actions, Research, Train...
-           finalVil = currentTotalVils > 0 ? currentTotalVils : null;
-           if (['research', 'age_up'].includes(step.task)) finalVil = null; 
+           // Si es una acción genérica, entrenamiento o tecnología, ocultamos el total de aldeanos
+           if (['research', 'age_up', 'action', 'train'].includes(step.task) || (step.task === 'build' && step.actionType === 'action')) {
+               finalVil = null; 
+           } else {
+               finalVil = currentTotalVils > 0 ? currentTotalVils : null;
+           }
         }
 
         return {
@@ -198,7 +239,9 @@ const BuildOrderCreator = () => {
     const payload = {
       id, title, civ, map, strategy, difficulty,
       pop_count: parseInt(popCount), video, description, author,
-      tags: editBuild?.tags || [], strategy_icons: editBuild?.strategyIcons || [], whats_next: editBuild?.whatsNext || [],
+      tags: tags, 
+      strategy_icons: strategyIcons, 
+      whats_next: whatsNext,
       ages: calculateSmartSteps()
     };
 
@@ -216,7 +259,6 @@ const BuildOrderCreator = () => {
   const handleDelete = async () => {
     if (!window.confirm("⚠️ Are you sure you want to completely delete this build order? This cannot be undone.")) return;
     setIsSubmitting(true);
-    // Usamos el soft delete (o delete duro si así lo tienes configurado)
     const { error } = await supabase.from('build_orders').update({ is_deleted: true }).eq('id', id);
     if (error) {
       alert("Error deleting: " + error.message);
@@ -231,11 +273,27 @@ const BuildOrderCreator = () => {
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px', fontFamily: 'Segoe UI, sans-serif', color: C.textMain }}>
+      
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1 style={{ color: C.gold, fontSize: '24px', margin: 0, textTransform: 'uppercase' }}>
           {editBuild ? '✏️ Edit Build Order' : '🛠️ Build Order Creator'}
         </h1>
+        <button onClick={() => setShowJsonImport(!showJsonImport)} style={{ backgroundColor: '#2a2d36', color: '#fff', border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#333'} onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2a2d36'}>
+          🤖 IMPORT AI JSON
+        </button>
       </div>
+
+      {showJsonImport && (
+        <div style={{ backgroundColor: '#1e212b', padding: '15px', borderRadius: '8px', border: `1px solid ${C.cyan}`, marginBottom: '20px' }}>
+          <label style={{ fontSize: '11px', color: C.cyan, fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Paste the AI-generated JSON here:</label>
+          <textarea value={jsonInput} onChange={e => setJsonInput(e.target.value)} style={{ width: '100%', height: '150px', backgroundColor: '#161920', color: '#fff', border: '1px solid #444', padding: '8px', fontFamily: 'monospace', fontSize: '11px' }} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+            <button onClick={handleImportJson} style={{ backgroundColor: C.cyan, color: '#000', border: 'none', padding: '6px 16px', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', transition: 'filter 0.2s' }} onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'} onMouseLeave={e => e.currentTarget.style.filter = 'none'}>
+              LOAD DATA
+            </button>
+          </div>
+        </div>
+      )}
 
       <div style={{ backgroundColor: C.card, padding: '20px', borderRadius: '8px', border: `1px solid ${C.border}`, marginBottom: '20px' }}>
         <h3 style={{ color: C.cyan, marginTop: 0, fontSize: '14px', textTransform: 'uppercase', borderBottom: `1px solid ${C.border}`, paddingBottom: '10px' }}>1. Basic Info</h3>
@@ -292,7 +350,7 @@ const BuildOrderCreator = () => {
                   </div>
                 )}
 
-                {step.actionType === 'gather' && (
+                {(step.actionType === 'gather' || step.actionType === 'build_res') && (
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
                     <span style={{ fontSize: '11px', color: '#888' }}>Add:</span>
                     <input type="number" value={step.vilTotal} onChange={e => handleUpdateStep(aIdx, sIdx, 'vilTotal', parseInt(e.target.value))} style={{ ...inputStyle, width: '50px' }} />
@@ -318,7 +376,7 @@ const BuildOrderCreator = () => {
                   </div>
                 )}
 
-                {(step.actionType === 'action' || step.actionType === 'build_res') && (
+                {step.actionType === 'action' && (
                   <div style={{ width: '250px' }}>
                      <input type="text" value={step.task || ''} onChange={e => handleUpdateStep(aIdx, sIdx, 'task', e.target.value)} style={{ ...inputStyle, width: '100%' }} placeholder="System task (e.g. research)" />
                   </div>
@@ -352,9 +410,14 @@ const BuildOrderCreator = () => {
             </button>
           )}
         </div>
-        <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
-          {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={() => navigate(-1)} style={{ backgroundColor: 'transparent', color: C.textDim, border: '1px solid #444', padding: '12px 20px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}>
+            CANCEL
+          </button>
+          <button onClick={handleSubmit} disabled={isSubmitting} style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '12px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
+            {isSubmitting ? 'SAVING...' : (editBuild ? '💾 UPDATE BUILD ORDER' : '💾 PUBLISH BUILD ORDER')}
+          </button>
+        </div>
       </div>
     </div>
   );
