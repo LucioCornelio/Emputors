@@ -147,7 +147,7 @@ const ICON_MAP = {
   'University_aoe2de': '/buildings/University_AoE2_DE.png',
   'CastleDE': '/buildings/Castle_aoe2DE.png',
   'LightCavalryDE': '/units/LightCavalryDE.png',
-  'FarmDE': '/buildings/FarmDE.png',
+  'FarmDE': '/buildings/Farm_Icon_AoE.png',
 };
 
 const iconPath = (name) => {
