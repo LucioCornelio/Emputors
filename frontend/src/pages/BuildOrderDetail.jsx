@@ -143,6 +143,10 @@ const ICON_MAP = {
   'Stable_aoe2de': '/buildings/Stable_aoe2de.png',
   'Dock_aoe2DE': '/buildings/Dock_aoe2DE.png',
   'Mining_camp_aoe2de': '/buildings/Mining_camp_aoe2de.png',
+  'Town_center_aoe2de': '/buildings/Town_center_aoe2de.png',
+  'University_aoe2de': '/buildings/University_aoe2de.png',
+  'CastleDE': '/buildings/CastleDE.png',
+  'LightCavalryDE': '/units/LightCavalryDE.png',
   'FarmDE': '/buildings/FarmDE.png',
 };
 
@@ -281,7 +285,8 @@ const ResBadges = ({ step, prevRes }) => {
 
 const TaskIcon = ({ step, meta, cc }) => {
   if (Array.isArray(step.icon)) {
-    const isChoice = meta.cat === 'build' && step.icon.length > 1;
+    // Solo mostramos "OR" si la descripción dice explícitamente " or "
+    const isChoice = step.desc && step.desc.toLowerCase().includes(' or ');
     const isReallocate = meta.cat === 'reallocate';
 
     return (
@@ -311,7 +316,7 @@ const TaskIcon = ({ step, meta, cc }) => {
               </div>
               {showSeparator && (
                 <span style={{ fontSize: '9px', color: C.textMute, fontWeight: 'bold' }}>
-                  {isChoice ? 'OR' : '➔'}
+                  {isChoice ? 'OR' : (meta.cat === 'build' ? '+' : '➔')}
                 </span>
               )}
             </div>
