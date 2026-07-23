@@ -49,13 +49,16 @@ const BuildOrders = () => {
     document.title = 'Build Orders | Emputors';
     
     const fetchBuilds = async () => {
-      const { data, error } = await supabase.from('build_orders').select('*').eq('is_deleted', false);
+      // Cambiamos .eq(false) por .neq(true) para que incluya los NULL
+      const { data, error } = await supabase.from('build_orders').select('*').neq('is_deleted', true);
+      
       if (data) {
         const formattedBuilds = data.map(b => ({
           ...b,
-          popCount: b.pop_count,
-          strategyIcons: b.strategy_icons,
-          whatsNext: b.whats_next
+          // Añadimos compatibilidad para camelCase y un valor por defecto (99) para no romper el sort
+          popCount: b.pop_count ?? b.popCount ?? 99,
+          strategyIcons: b.strategy_icons ?? b.strategyIcons ?? [],
+          whatsNext: b.whats_next ?? b.whatsNext ?? []
         }));
         setBuilds(formattedBuilds);
       } else if (error) {
