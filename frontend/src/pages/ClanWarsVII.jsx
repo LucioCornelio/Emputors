@@ -31,7 +31,6 @@ function ClanWarsVII() {
       .then(data => {
         setDb(data);
         if (data && data.maps) {
-            // Priorizar Arabia si existe, si no el primero disponible
             if (data.maps["Arabia"]) {
                 setSelectedMap("Arabia");
             } else {
@@ -83,12 +82,12 @@ function ClanWarsVII() {
   return (
     <div style={{ backgroundColor: C.bg, minHeight: '100vh', padding: '20px', fontFamily: 'Segoe UI, sans-serif' }}>
       
-      {/* ESTILOS PARA TOOLTIPS ULTRACOMPACTOS */}
+      {/* MAGIA CSS PARA TOOLTIPS ULTRACOMPACTOS */}
       <style>{`
         .civ-tooltip {
           position: absolute; top: -5px; z-index: 50;
-          background: #14161b; border: 1px solid #444; border-radius: 4px; padding: 6px 8px;
-          width: 230px; box-shadow: 0 4px 15px rgba(0,0,0,0.9); max-height: 200px; overflow-y: auto;
+          background: #14161b; border: 1px solid #444; border-radius: 4px; padding: 2px;
+          width: 280px; box-shadow: 0 4px 15px rgba(0,0,0,0.9); max-height: 350px; overflow-y: auto;
           cursor: default; font-weight: normal; text-align: left;
         }
         .civ-tooltip::-webkit-scrollbar { width: 4px; }
@@ -143,17 +142,24 @@ function ClanWarsVII() {
                           
                           {activeTooltip === tooltipId && (
                             <div className="civ-tooltip" style={{ left: '105%' }} onClick={e => e.stopPropagation()}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #333', paddingBottom: '3px', marginBottom: '5px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
                                   <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>MATCHES</span>
-                                  <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '12px', lineHeight: '8px'}}>✕</span>
+                                  <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
                               </div>
-                              {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px'}}>No records</div> : 
+                              {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
                                 c.history.map((h, idx) => (
-                                  <div key={idx} style={{marginBottom:'4px', padding:'4px', backgroundColor:'#161920', borderRadius:'3px', borderLeft: `2px solid ${h.won ? C.green : C.red}`}}>
-                                      <div style={{fontSize:'9px', color:'#aaa'}}>{h.date} {h.game && <span style={{color:C.cyan, fontWeight:'bold', marginLeft:'3px'}}>{h.game}</span>}</div>
-                                      <div style={{fontSize:'9px', color:'#e0e0e0', margin:'2px 0'}}>With: <span style={{color:'#9abfe6'}}>{h.allies}</span></div>
-                                      <div style={{fontSize:'9px', color:'#ff8888', margin:'0 0 2px 0'}}>Vs: {h.opponents}</div>
-                                      {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold'}}>▶ WATCH VOD</a>}
+                                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                                      <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
+                                        <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
+                                        {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
+                                      </span>
+                                      {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
+                                    </div>
+                                    <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
+                                      <span style={{color:'#555'}}>w/</span> <span style={{ color: '#9abfe6' }}>{h.allies}</span><br/>
+                                      <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
+                                    </div>
                                   </div>
                                 ))
                               }
@@ -189,17 +195,24 @@ function ClanWarsVII() {
                             
                             {activeTooltip === tooltipId && (
                               <div className="civ-tooltip" style={{ left: '105%' }} onClick={e => e.stopPropagation()}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #333', paddingBottom: '3px', marginBottom: '5px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
                                     <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>MATCHES</span>
-                                    <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '12px', lineHeight: '8px'}}>✕</span>
+                                    <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
                                 </div>
-                                {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px'}}>No records</div> : 
+                                {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
                                   c.history.map((h, idx) => (
-                                    <div key={idx} style={{marginBottom:'4px', padding:'4px', backgroundColor:'#161920', borderRadius:'3px', borderLeft: `2px solid ${h.won ? C.green : C.red}`}}>
-                                        <div style={{fontSize:'9px', color:'#aaa'}}>{h.date} {h.game && <span style={{color:C.cyan, fontWeight:'bold', marginLeft:'3px'}}>{h.game}</span>}</div>
-                                        <div style={{fontSize:'9px', color:'#e0e0e0', margin:'2px 0'}}>With: <span style={{color:'#9abfe6'}}>{h.allies}</span></div>
-                                        <div style={{fontSize:'9px', color:'#ff8888', margin:'0 0 2px 0'}}>Vs: {h.opponents}</div>
-                                        {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold'}}>▶ WATCH VOD</a>}
+                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
+                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                                        <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
+                                          <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
+                                          {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
+                                        </span>
+                                        {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
+                                      </div>
+                                      <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
+                                        <span style={{color:'#555'}}>w/</span> <span style={{ color: '#9abfe6' }}>{h.allies}</span><br/>
+                                        <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
+                                      </div>
                                     </div>
                                   ))
                                 }
@@ -217,7 +230,7 @@ function ClanWarsVII() {
               </div>
             )}
 
-            {/* TABLA COMBOS (Con tooltips compactos abriéndose hacia la izquierda) */}
+            {/* TABLA COMBOS */}
             <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px', gridColumn: isNomad ? 'span 2' : 'span 1' }}>
               <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Top 10 Synergies</h3>
               <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
@@ -235,16 +248,23 @@ function ClanWarsVII() {
 
                           {activeTooltip === tooltipId && (
                             <div className="civ-tooltip" style={{ right: '105%', left: 'auto' }} onClick={e => e.stopPropagation()}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #333', paddingBottom: '3px', marginBottom: '5px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
                                   <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>COMBO MATCHES</span>
-                                  <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '12px', lineHeight: '8px'}}>✕</span>
+                                  <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
                               </div>
-                              {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px'}}>No records</div> : 
+                              {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
                                 c.history.map((h, idx) => (
-                                  <div key={idx} style={{marginBottom:'4px', padding:'4px', backgroundColor:'#161920', borderRadius:'3px', borderLeft: `2px solid ${h.won ? C.green : C.red}`}}>
-                                      <div style={{fontSize:'9px', color:'#aaa'}}>{h.date} {h.game && <span style={{color:C.cyan, fontWeight:'bold', marginLeft:'3px'}}>{h.game}</span>}</div>
-                                      <div style={{fontSize:'9px', color:'#ff8888', margin:'2px 0 2px 0'}}>Vs: {h.opponents}</div>
-                                      {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold'}}>▶ WATCH VOD</a>}
+                                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                                      <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
+                                        <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
+                                        {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
+                                      </span>
+                                      {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
+                                    </div>
+                                    <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
+                                      <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
+                                    </div>
                                   </div>
                                 ))
                               }
@@ -257,7 +277,7 @@ function ClanWarsVII() {
                       </tr>
                     )
                   })}
-                  {meta.topCombos.length === 0 && <tr><td colSpan="4" style={{ padding: '10px', textAlign: 'center', color: '#555' }}>No hay composiciones repetidas (2+ partidas) registradas aún.</td></tr>}
+                  {meta.topCombos.length === 0 && <tr><td colSpan="4" style={{ padding: '10px', textAlign: 'center', color: '#555' }}>No hay composiciones repetidas (2+ partidas).</td></tr>}
                 </tbody>
               </table>
             </div>
