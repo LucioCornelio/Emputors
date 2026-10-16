@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 
-const MAP_POOL = ["Arabia", "Socotra", "Colosseum", "Grand Bara", "Nomad", "Fortress", "Crescent", "Tres Leches"].sort();
+const MAP_POOL = ["Socotra", "Colosseum", "Grand Bara", "Nomad", "Fortress", "Crescent", "Tres Leches"].sort();
+const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', textMain: '#e0e0e0',
@@ -10,7 +11,7 @@ const C = {
 function ClanWarsVII() {
   const [db, setDb] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedMap, setSelectedMap] = useState("Arabia");
+  const [selectedMap, setSelectedMap] = useState("Fortress");
   const [activeTooltip, setActiveTooltip] = useState(null);
   const containerRef = useRef(null);
 
@@ -31,12 +32,9 @@ function ClanWarsVII() {
       .then(data => {
         setDb(data);
         if (data && data.maps) {
-            if (data.maps["Arabia"]) {
-                setSelectedMap("Arabia");
-            } else {
-                const availableMaps = Object.keys(data.maps);
-                if (availableMaps.length > 0) setSelectedMap(availableMaps[0]);
-            }
+            const preferred = ["Fortress", "Tres Leches", "Grand Bara", "Crescent"];
+            const defaultMap = preferred.find(m => data.maps[m]) || Object.keys(data.maps)[0];
+            if (defaultMap) setSelectedMap(defaultMap);
         }
         setLoading(false);
       })
@@ -82,7 +80,6 @@ function ClanWarsVII() {
   return (
     <div style={{ backgroundColor: C.bg, minHeight: '100vh', padding: '20px', fontFamily: 'Segoe UI, sans-serif' }}>
       
-      {/* MAGIA CSS PARA TOOLTIPS ULTRACOMPACTOS */}
       <style>{`
         .civ-tooltip {
           position: absolute; top: -5px; z-index: 50;
@@ -116,7 +113,6 @@ function ClanWarsVII() {
           </div>
         </div>
 
-        {/* METADATA DEL MAPA (LAS 3 TABLAS CLAVE) */}
         {!mapData ? (
           <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>No hay datos suficientes para {selectedMap} todavía. ¡Extrae más JSON de Liquipedia!</div>
         ) : (
