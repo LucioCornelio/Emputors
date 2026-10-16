@@ -18,6 +18,12 @@ def generate_3v3_db():
             matches = json.load(f)
             
         for match in matches:
+            tournament = match.get("tournament", "").lower()
+            
+            # FILTRO MÁGICO: Ignorar basura sin tener que volver a descargar nada
+            if "carry me or die" in tournament or "deathmatch" in tournament or "empire wars" in tournament or " dm " in tournament:
+                continue
+
             map_name = match.get("map", "Unknown")
             winner = match.get("winner", 0)
             has_vod = match.get("hasVod", False)
@@ -41,10 +47,9 @@ def generate_3v3_db():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(db, f, indent=2)
         
-    print(f"¡Éxito! Base de datos 3v3 actualizada en '{OUTPUT_FILE}'.")
+    print(f"¡Éxito! Base de datos 3v3 actualizada y limpiada en '{OUTPUT_FILE}'.")
 
 def process_team(civs, opp_civs, map_data, is_winner, has_vod, is_nomad, vod_url, game_num, date):
-    # Identificar aliados (las otras 2 civs del equipo) y enemigos
     for idx, civ in enumerate(civs):
         if civ not in map_data["civs"]:
             map_data["civs"][civ] = {
