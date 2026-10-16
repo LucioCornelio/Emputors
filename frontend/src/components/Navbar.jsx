@@ -170,6 +170,7 @@ const Navbar = () => {
           <span style={{ cursor: 'default', padding: '0 15px', color: '#a0aab5', fontSize: '14px', fontWeight: '500' }}>Tools ▾</span>
           {dropdown === 'tools' && (
             <div style={dropdownStyle}>
+              <Link to="/tools/clan-wars-vii" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Clan Wars VII (3v3)</Link>
               <Link to="/tools/advanced-search" style={dropLinkStyle} onMouseEnter={e => handleLinkHover(e, true)} onMouseLeave={e => handleLinkHover(e, false)}>Advanced Search</Link>
             </div>
           )}

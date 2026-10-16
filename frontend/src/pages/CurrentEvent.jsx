@@ -15,7 +15,7 @@ const GROUP_SCHEDULE = [
   { t1: "CostalCanela", t2: "Sabaronte" },
   { t1: "RaiSquad", t2: "SarCornelio" },
   { t1: "CostalCanela", t2: "SarCornelio" },
-  { t1: "RaiSquad", t2: "Sabaronte" }
+  { t1: "RaiSquad", t2: "Sabaaronte" }
 ];
 
 const mapPool = ["Arabia", "Arena"];

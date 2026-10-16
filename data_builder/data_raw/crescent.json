@@ -1,0 +1,1312 @@
+[
+  {
+    "date": "2026-09-19",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Jurchens",
+        "Huns",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Bengalis",
+        "Georgians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=vaCDC477q4E"
+  },
+  {
+    "date": "2026-09-17",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Benanji",
+        "Thofou05",
+        "Vodka_L"
+      ],
+      "civs": [
+        "Japanese",
+        "Huns",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bad_Koala",
+        "XuanLv",
+        "Jibatong"
+      ],
+      "civs": [
+        "Armenians",
+        "Burgundians",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=eGT6VWduhNX3p5Zq&t=928"
+  },
+  {
+    "date": "2026-09-13",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TheViper",
+        "TaToH",
+        "Vinchester"
+      ],
+      "civs": [
+        "Wu",
+        "Berbers",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Terz",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Dravidians",
+        "Lithuanians",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Fr5EwrQ5xPY"
+  },
+  {
+    "date": "2026-09-13",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Shu",
+        "Lithuanians",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "ACCM",
+        "Nicov"
+      ],
+      "civs": [
+        "Malay",
+        "Spanish",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=ZYn4UjokN_w"
+  },
+  {
+    "date": "2026-09-11",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nicov",
+        "ACCM",
+        "Sebastian"
+      ],
+      "civs": [
+        "Bengalis",
+        "Italians",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TheViper",
+        "TaToH",
+        "Vinchester"
+      ],
+      "civs": [
+        "Wu",
+        "Berbers",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=ERwC3rV6RSQ"
+  },
+  {
+    "date": "2026-09-11",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Japanese",
+        "Lithuanians",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Dravidians",
+        "Berbers",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-10",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "MbL",
+        "Sitaux",
+        "Mihai06"
+      ],
+      "civs": [
+        "Wu",
+        "Georgians",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Vikings",
+        "Lithuanians",
+        "Portuguese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=7S8CfhbVuC8"
+  },
+  {
+    "date": "2026-09-06",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Classicpro",
+        "Dark",
+        "IAnTaGoNiStI"
+      ],
+      "civs": [
+        "Wu",
+        "Berbers",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Vikings",
+        "Georgians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=yy1h2kDGPfY"
+  },
+  {
+    "date": "2026-09-05",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Mihai06",
+        "Sitaux",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Armenians",
+        "Lithuanians",
+        "Chinese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "ACCM",
+        "Nicov"
+      ],
+      "civs": [
+        "Koreans",
+        "Italians",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=JXywZ5LKW6Q"
+  },
+  {
+    "date": "2026-09-04",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Chart",
+        "TeMo",
+        "NeoZz"
+      ],
+      "civs": [
+        "Japanese",
+        "Lithuanians",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Wu",
+        "Huns",
+        "Celts"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Benanji",
+        "Thofou05",
+        "Vodka_L"
+      ],
+      "civs": [
+        "Japanese",
+        "Huns",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Italians",
+        "Khmer",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-02",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Dravidians",
+        "Burmese",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "Combito",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Malay",
+        "Georgians",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/CzMDIidedv4?si=57BSkmcTtwDO_DCv&t=7952"
+  },
+  {
+    "date": "2026-08-30",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Bengalis",
+        "Berbers",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TheViper",
+        "TaToH",
+        "Vinchester"
+      ],
+      "civs": [
+        "Shu",
+        "Turks",
+        "Koreans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=dkXYTNb07v0"
+  },
+  {
+    "date": "2026-08-29",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Vikings",
+        "Lithuanians",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "NeoZz",
+        "TeMo",
+        "Slam"
+      ],
+      "civs": [
+        "Wu",
+        "Jurchens",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/xi03ru83nTk?si=0NXZfKC0-X6LBwEA&t=389"
+  },
+  {
+    "date": "2026-08-23",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "Hearttt"
+      ],
+      "civs": [
+        "Vikings",
+        "Italians",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Dravidians",
+        "Chinese",
+        "Wu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=_LiaGVWV21Y"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vinchester",
+        "TaToH",
+        "TheViper"
+      ],
+      "civs": [
+        "Britons",
+        "Wei",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "IAnTaGoNiStI",
+        "Dark",
+        "Classicpro"
+      ],
+      "civs": [
+        "Turks",
+        "Armenians",
+        "Wu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=wX_bHRTfElQ"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Tulendeena",
+        "Robo",
+        "Noszombie"
+      ],
+      "civs": [
+        "Wu",
+        "Burgundians",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emalius2",
+        "Juyhou",
+        "TheMax"
+      ],
+      "civs": [
+        "Shu",
+        "Lithuanians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-21",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Mihai06",
+        "Sitaux",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Portuguese",
+        "Huns",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TheViper",
+        "TaToH",
+        "Vinchester"
+      ],
+      "civs": [
+        "Wu",
+        "Berbers",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=1W75Qa7ASbc"
+  },
+  {
+    "date": "2026-08-20",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lucho",
+        "Nicov",
+        "ACCM"
+      ],
+      "civs": [
+        "Malay",
+        "Berbers",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Vikings",
+        "Huns",
+        "Koreans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=NGV3wV9SZZQ"
+  },
+  {
+    "date": "2026-08-19",
+    "tournament": "The League: Division 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Japanese",
+        "Lithuanians",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "NeoZz",
+        "TeMo",
+        "Slam"
+      ],
+      "civs": [
+        "Portuguese",
+        "Georgians",
+        "Britons"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/1zplZnDIMXs?si=yJIFe-0cgvEF_7yW&t=11725"
+  },
+  {
+    "date": "2026-08-16",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Wu",
+        "Chinese",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Vikings",
+        "Berbers",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=LowKIEfyVnU"
+  },
+  {
+    "date": "2026-08-15",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Dravidians",
+        "Italians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "MbL",
+        "Sitaux",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Vikings",
+        "Persians",
+        "Wu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=2Rah3r50jVg"
+  },
+  {
+    "date": "2026-08-13",
+    "tournament": "The League: Division 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Portuguese",
+        "Turks",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TheViper",
+        "TaToH",
+        "Vinchester"
+      ],
+      "civs": [
+        "Shu",
+        "Berbers",
+        "Britons"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=gsITQnEG4NM"
+  },
+  {
+    "date": "2026-08-02",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Abundzuehalt",
+        "Valas",
+        "Ganji"
+      ],
+      "civs": [
+        "Armenians",
+        "Huns",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "StonePleaseAoE",
+        "The_Dragonstar",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Dravidians",
+        "Georgians",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=ez3pOBFUrSV5OQoW&t=8413"
+  },
+  {
+    "date": "2026-08-02",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Jibatong",
+        "XuanLv",
+        "Bad_Koala"
+      ],
+      "civs": [
+        "Malay",
+        "Magyars",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Vikings",
+        "Lithuanians",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=TXtFKrVQejkFVHwi&t=744"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Kamigawa",
+        "Thofou05"
+      ],
+      "civs": [
+        "Armenians",
+        "Berbers",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Chart"
+      ],
+      "civs": [
+        "Wu",
+        "Celts"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=7Ir7J7VKLDoC8_21&t=24783"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "M0re",
+        "Moneimon",
+        "Poxo"
+      ],
+      "civs": [
+        "Malay",
+        "Huns",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "StonePleaseAoE",
+        "The_Dragonstar",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Japanese",
+        "Burgundians",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "LautaLk",
+        "Rodrixs",
+        "Nahuel05"
+      ],
+      "civs": [
+        "Bengalis",
+        "Turks",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "VarVarus",
+        "Gali",
+        "Pela"
+      ],
+      "civs": [
+        "Wu",
+        "Saracens",
+        "Romans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/oEYX9vYDi3k?si=8U8YKEM113wZSawo&t=22640"
+  },
+  {
+    "date": "2026-07-31",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Danielsiii",
+        "Hitorek",
+        "Dziamdziak"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Magyars",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "NeoZz",
+        "TeMo",
+        "Slam"
+      ],
+      "civs": [
+        "Wu",
+        "Jurchens",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/oEYX9vYDi3k?si=V8Ki-mjig3oP47zr&t=2235"
+  },
+  {
+    "date": "2026-07-29",
+    "tournament": "The League: Qualifier 2",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Emil_:D",
+        "Good_luck",
+        "Mauseren"
+      ],
+      "civs": [
+        "Portuguese",
+        "Khmer",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Blve",
+        "Yukgit",
+        "Ryuutaku"
+      ],
+      "civs": [
+        "Armenians",
+        "Georgians",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/B3B5wSV1qJI?si=Usci1PZRkEJOTi6H&t=1666"
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Japanese",
+        "Berbers",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "IAnTaGoNiStI",
+        "Dark",
+        "Classicpro"
+      ],
+      "civs": [
+        "Armenians",
+        "Celts",
+        "Malians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=vHztpJRh_4I"
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Celts",
+        "Vikings",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Mihai06",
+        "Sitaux",
+        "MbL"
+      ],
+      "civs": [
+        "Japanese",
+        "Italians",
+        "Romans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Lv-j7I9ADC0"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Benanji",
+        "Thofou05",
+        "Vodka_L"
+      ],
+      "civs": [
+        "Malay",
+        "Byzantines",
+        "Armenians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Romans",
+        "Celts",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=nTiNiscwGPA"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Blve",
+        "Yukgit",
+        "Ryuutaku"
+      ],
+      "civs": [
+        "Jurchens",
+        "Berbers",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dogao",
+        "Miguel",
+        "KingstoNe"
+      ],
+      "civs": [
+        "Armenians",
+        "Huns",
+        "Wu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=_0ceHJqjK7U"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Japanese",
+        "Georgians",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=3iD-b-oHIn4"
+  },
+  {
+    "date": "2026-07-23",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Poxo",
+        "Moneimon",
+        "Pume"
+      ],
+      "civs": [
+        "Wu",
+        "Byzantines",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "Combito",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Khitans",
+        "Armenians",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/rb1GCwCxlxk?si=z7f28zlDwENiGoos&t=15126"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Steak",
+        "Fanjita",
+        "King_Boo"
+      ],
+      "civs": [
+        "Portuguese",
+        "Georgians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=cG1zZCjGBHI"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wosm",
+        "Hitorek",
+        "Danielsiii"
+      ],
+      "civs": [
+        "Malay",
+        "Jurchens",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bad_Koala",
+        "XuanLv",
+        "Jibatong"
+      ],
+      "civs": [
+        "Sicilians",
+        "Burgundians",
+        "Wu"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "LingYuan vs Team Vitality 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "Hearttt"
+      ],
+      "civs": [
+        "Koreans",
+        "Vikings",
+        "Romans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Burgundians",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Bv8F96XIPNU"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Tulendeena",
+        "Robo",
+        "Noszombie"
+      ],
+      "civs": [
+        "Wu",
+        "Byzantines",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Villese",
+        "Juyhou",
+        "TheMax"
+      ],
+      "civs": [
+        "Malians",
+        "Georgians",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=IEhviuhX0SI"
+  },
+  {
+    "date": "2026-07-10",
+    "tournament": "The League: Showmatch 2",
+    "map": "Crescent",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lucho",
+        "ACCM",
+        "Sebastian"
+      ],
+      "civs": [
+        "Italians",
+        "Berbers",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wide",
+        "IAnTaGoNiStI",
+        "Dark"
+      ],
+      "civs": [
+        "Celts",
+        "Vikings",
+        "Armenians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=xV0pRQxGYzw"
+  }
+]

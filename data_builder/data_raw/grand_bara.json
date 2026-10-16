@@ -1,0 +1,2073 @@
+[
+  {
+    "date": "2026-09-19",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Tatars",
+        "Poles",
+        "Ethiopians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lewis",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Tupi",
+        "Hindustanis",
+        "Saracens"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=vaCDC477q4E"
+  },
+  {
+    "date": "2026-09-17",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capoch",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Poles",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Slam"
+      ],
+      "civs": [
+        "Bohemians",
+        "Lithuanians",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=O9BlyCRAZKZrP2PO&t=13682"
+  },
+  {
+    "date": "2026-09-17",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Benanji",
+        "Thofou05",
+        "Vodka_L"
+      ],
+      "civs": [
+        "Burmese",
+        "Khmer",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Poles",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=eGT6VWduhNX3p5Zq&t=928"
+  },
+  {
+    "date": "2026-09-13",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lewis",
+        "TheViper",
+        "TaToH"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Khmer",
+        "Romans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Terz",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Poles",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Fr5EwrQ5xPY"
+  },
+  {
+    "date": "2026-09-13",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Pela",
+        "Gali",
+        "VarVarus"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Tupi",
+        "Franks",
+        "Byzantines"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-12",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "FreakinAndy",
+        "DauT",
+        "JorDan_AoE"
+      ],
+      "civs": [
+        "Bohemians",
+        "Khmer",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Lithuanians",
+        "Saracens"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=sGV6OjIYeQ8"
+  },
+  {
+    "date": "2026-09-08",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Uzzi",
+        "LobodeLaNieve",
+        "Combito"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Cumans",
+        "Muisca"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Britons",
+        "Khmer",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-06",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "StonePleaseAoE",
+        "The_Dragonstar",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Britons",
+        "Hindustanis",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Terz",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Cumans",
+        "Armenians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=9Aa14QRJIpM"
+  },
+  {
+    "date": "2026-09-05",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Tulendeena",
+        "Robo",
+        "Noszombie"
+      ],
+      "civs": [
+        "Dravidians",
+        "Franks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "LobodeLaNieve",
+        "Combito"
+      ],
+      "civs": [
+        "Chinese",
+        "Gurjaras",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/uYKUQU3lzMo?si=4T23y5-thvmQvUD0&t=544"
+  },
+  {
+    "date": "2026-09-05",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Capoch",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Poles",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Britons",
+        "Franks",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/7b6jVD3r-Fs?si=mTwMBOhxb4gI0ygJ&t=520"
+  },
+  {
+    "date": "2026-09-04",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Chart"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Poles"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Bohemians",
+        "Hindustanis",
+        "Tupi"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Saracens",
+        "Franks",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dark",
+        "IAnTaGoNiStI",
+        "Classicpro"
+      ],
+      "civs": [
+        "Magyars",
+        "Khmer",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Fk7_3hij7dA"
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Burmese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Cumans",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lewis",
+        "TheViper",
+        "TaToH"
+      ],
+      "civs": [
+        "Shu",
+        "Saracens",
+        "Magyars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Hindustanis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=7dcrUWqKpQk"
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "VarVarus",
+        "Gali",
+        "Pela"
+      ],
+      "civs": [
+        "Saracens",
+        "Hindustanis",
+        "Ethiopians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Fedex",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Burgundians",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-02",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capoch",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Saracens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Wei",
+        "Poles",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/GRVDgtCF0wo?si=2bSjDdBsbDDJQg9X&t=479"
+  },
+  {
+    "date": "2026-08-29",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "StonePleaseAoE",
+        "The_Dragonstar",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Khmer",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dark",
+        "IAnTaGoNiStI",
+        "Classicpro"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Cumans",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=65Xl3XFeEEw"
+  },
+  {
+    "date": "2026-08-28",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Wei",
+        "Britons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Tulendeena",
+        "Robo",
+        "Noszombie"
+      ],
+      "civs": [
+        "Shu",
+        "Poles",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/WjwmqjT9EIg?si=zIFGrZxrc8NfAfGM&t=1474"
+  },
+  {
+    "date": "2026-08-26",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Poxo",
+        "Moneimon",
+        "Pume"
+      ],
+      "civs": [
+        "Wu",
+        "Khmer",
+        "Saracens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Fedex",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Georgians",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=dJbhFXH3HuU"
+  },
+  {
+    "date": "2026-08-24",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Wei",
+        "Tupi"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dogao",
+        "Miguel",
+        "KingstoNe"
+      ],
+      "civs": [
+        "Italians",
+        "Berbers",
+        "Portuguese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-23",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Running",
+        "Annotoph",
+        "Terz"
+      ],
+      "civs": [
+        "Armenians",
+        "Poles",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Mihai06",
+        "Sitaux",
+        "MbL"
+      ],
+      "civs": [
+        "Britons",
+        "Khmer",
+        "Portuguese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Galxu_5Ga3w"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lucho",
+        "Nicov",
+        "Sebastian"
+      ],
+      "civs": [
+        "Italians",
+        "Slavs",
+        "Britons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Poles",
+        "Portuguese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=GRZLzKMoViM"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Jibatong",
+        "Bad_Koala",
+        "XuanLv"
+      ],
+      "civs": [
+        "Japanese",
+        "Burgundians",
+        "Wei"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Pela",
+        "Gali",
+        "VarVarus"
+      ],
+      "civs": [
+        "Portuguese",
+        "Hindustanis",
+        "Saracens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-20",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Abundzuehalt",
+        "Valas",
+        "Ganji"
+      ],
+      "civs": [
+        "Italians",
+        "Khmer",
+        "Tupi"
+      ]
+    },
+    "team2": {
+      "players": [
+        "LautaLk",
+        "Rodrixs",
+        "Nahuel05"
+      ],
+      "civs": [
+        "Koreans",
+        "Hindustanis",
+        "Mongols"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-18",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Daniel",
+        "Bad_Koala",
+        "XuanLv"
+      ],
+      "civs": [
+        "Malay",
+        "Khmer",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Tupi",
+        "Persians",
+        "Portuguese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/aLK-eHBViNY?si=mixgpakn3OwlO3bS&t=270"
+  },
+  {
+    "date": "2026-08-16",
+    "tournament": "The League: Division 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Pela",
+        "Gali",
+        "VarVarus"
+      ],
+      "civs": [
+        "Mongols",
+        "Gurjaras",
+        "Muisca"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Mauricioae13",
+        "Lord_Envidiates",
+        "Develement"
+      ],
+      "civs": [
+        "Tupi",
+        "Malians",
+        "Aztecs"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/1zplZnDIMXs?si=7MVpVTX5fB62oMM2&t=792"
+  },
+  {
+    "date": "2026-08-15",
+    "tournament": "The League: Division 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Koreans",
+        "Georgians",
+        "Tatars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "MbL",
+        "Sitaux",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Malay",
+        "Poles",
+        "Saracens"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=2Rah3r50jVg"
+  },
+  {
+    "date": "2026-08-02",
+    "tournament": "The League: Qualifier 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Portuguese",
+        "Poles",
+        "Saracens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Tatars",
+        "Franks",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=TXtFKrVQejkFVHwi&t=744"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Blve",
+        "Yukgit",
+        "Ryuutaku"
+      ],
+      "civs": [
+        "Tatars",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Terz",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Aztecs",
+        "Franks",
+        "Armenians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=ZTRAm7Gg3TPbclxL&t=32221"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Kamigawa",
+        "Thofou05"
+      ],
+      "civs": [
+        "Wei",
+        "Hindustanis",
+        "Jurchens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Chart"
+      ],
+      "civs": [
+        "Saracens",
+        "Khmer"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=7Ir7J7VKLDoC8_21&t=24783"
+  },
+  {
+    "date": "2026-07-31",
+    "tournament": "The League: Qualifier 2",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Parawhas",
+        "WilliamS",
+        "Dabighead"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Khmer",
+        "Byzantines"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/nkXnAFmZamE?si=RL4JlZRjRqhg4YWQ&t=1909"
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Shu",
+        "Huns",
+        "Armenians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Romans",
+        "Khmer",
+        "Wei"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=P81V3CsA0ao"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capoch",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Ethiopians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Khmer",
+        "Shu"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=81j2H38uYNE"
+  },
+  {
+    "date": "2026-07-23",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Dabighead",
+        "WilliamS",
+        "Dimo"
+      ],
+      "civs": [
+        "Tatars",
+        "Franks",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Muisca",
+        "Cumans",
+        "Portuguese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-23",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Still_in_Love",
+        "猪咪",
+        "Clearlove"
+      ],
+      "civs": [
+        "Franks",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Slam"
+      ],
+      "civs": [
+        "Shu",
+        "Poles",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-23",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "VarVarus",
+        "Gali",
+        "Pela"
+      ],
+      "civs": [
+        "Saracens",
+        "Gurjaras",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lord_Envidiates",
+        "SiNisTeR",
+        "Develement"
+      ],
+      "civs": [
+        "Tupi",
+        "Franks",
+        "Sicilians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=p9U4t3pvF6Y"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "DarK_KnighT",
+        "Millo",
+        "KoNFeR"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sora_Kuma",
+        "Sitaux",
+        "MbL"
+      ],
+      "civs": [
+        "Shu",
+        "Poles",
+        "Britons"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=FHcFQlZhe80"
+  },
+  {
+    "date": "2026-07-19",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Rey_Enigmaaa",
+        "El_Castigador",
+        "FelipeBesitosRicos"
+      ],
+      "civs": [
+        "Berbers",
+        "Hindustanis",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Tatars",
+        "Khmer",
+        "Muisca"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=7YIlv7l-uM8"
+  },
+  {
+    "date": "2026-07-19",
+    "tournament": "The League: Qualifier 1",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Rodrixs",
+        "IXAM",
+        "Nahuel05"
+      ],
+      "civs": [
+        "Muisca",
+        "Burgundians",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "CC_(Chinese_player)",
+        "DongHaiDi",
+        "DaDaYa"
+      ],
+      "civs": [
+        "Burmese",
+        "Poles",
+        "Romans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=CvHnNGmczXU"
+  },
+  {
+    "date": "2026-07-10",
+    "tournament": "The League: Showmatch 2",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sebastian",
+        "ACCM",
+        "Lucho"
+      ],
+      "civs": [
+        "Muisca",
+        "Cumans",
+        "Shu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wide",
+        "IAnTaGoNiStI",
+        "Dark"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Poles"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=xV0pRQxGYzw"
+  },
+  {
+    "date": "2026-05-28",
+    "tournament": "Open Royal SWB cup 2x2 Season 3",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Li_78",
+        "WaRRioR",
+        "ANDÃO"
+      ],
+      "civs": [
+        "Portuguese",
+        "Huns",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "NoName1234",
+        "Karabas",
+        "Kiritastrich"
+      ],
+      "civs": [
+        "Wu",
+        "Wei",
+        "Saracens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-02-18",
+    "tournament": "Germany vs France Charity Showmatch",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Terz",
+        "Acro17",
+        "PhilippHJS"
+      ],
+      "civs": [
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "NeoZz",
+        "HqSu",
+        "Sitaux"
+      ],
+      "civs": [
+        "Goths",
+        "Khmer",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-11-02",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capoch",
+        "Nicov",
+        "Lucho"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Chinese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Sitaux",
+        "Margougou"
+      ],
+      "civs": [
+        "Britons",
+        "Persians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/OzCxpuxrcUY?si=43gv4vjYYJ49dB8c&t=10527"
+  },
+  {
+    "date": "2024-11-01",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Thành_Cổ_Quảng_Trị",
+        "ACCM",
+        "BadBoy"
+      ],
+      "civs": [
+        "Persians",
+        "Britons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lucho",
+        "Nicov",
+        "Capoch"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Franks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/UkiNX27t4IY?si=q_yLhuKSznLcpEtN&t=8175"
+  },
+  {
+    "date": "2024-11-01",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Repard",
+        "Vinchester",
+        "IAnTaGoNiStI"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Burgundians",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Dravidians",
+        "Persians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/UkiNX27t4IY?si=XZ_gM1nbKOkoavbK&t=713"
+  },
+  {
+    "date": "2024-10-27",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Dark",
+        "Vinchester",
+        "Repard"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emalius2",
+        "TheMax",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Chinese",
+        "Hindustanis",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/PDFhD5BkMkE?si=zbzeLwVrQqWH4hwM&t=9107"
+  },
+  {
+    "date": "2024-10-27",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "BadBoy",
+        "ACCM",
+        "Thành_Cổ_Quảng_Trị"
+      ],
+      "civs": [
+        "Koreans",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Slam",
+        "Chris",
+        "Mentalist"
+      ],
+      "civs": [
+        "Chinese",
+        "Hindustanis",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/PDFhD5BkMkE?si=MxRf8Mf_h10tPUbU&t=1764"
+  },
+  {
+    "date": "2024-10-26",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "GoKu",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Koreans",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lucho",
+        "Nicov",
+        "Lucky_Rox"
+      ],
+      "civs": [
+        "Malay",
+        "Franks",
+        "Saracens"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/p3zL_b5W7gk?si=vhSqBMe1IctzYKJC&t=11811"
+  },
+  {
+    "date": "2024-10-26",
+    "tournament": "SAX Nations Cup",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ciskhan",
+        "Sitaux",
+        "Margougou"
+      ],
+      "civs": [
+        "Koreans",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Saracens",
+        "Franks",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/p3zL_b5W7gk?si=YhHr4FUimRJDVGGm&t=1545"
+  },
+  {
+    "date": "2024-10-13",
+    "tournament": "SAX Nations Cup: Qualifier",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Z40",
+        "Cloud_(Taiwanese_player)",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Cumans",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Repard",
+        "Vinchester",
+        "Dark"
+      ],
+      "civs": [
+        "Koreans",
+        "Burgundians",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/xDkuSpJ64ho?si=_ryKbx8xR0Ag6to-&t=1314"
+  },
+  {
+    "date": "2024-10-12",
+    "tournament": "SAX Nations Cup: Qualifier",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "DreamCl",
+        "Sobek",
+        "Whitecourt"
+      ],
+      "civs": [
+        "Saracens",
+        "Franks",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lucho",
+        "Nicov",
+        "Lucky_Rox"
+      ],
+      "civs": [
+        "Britons",
+        "Lithuanians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/z8nmLfITcFw?si=HAdG834ZwwpK646v&t=12434"
+  },
+  {
+    "date": "2024-05-05",
+    "tournament": "Fox Invitational Phuket",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Rayz",
+        "Taeyoon",
+        "Youpudding"
+      ],
+      "civs": [
+        "Armenians",
+        "Burgundians",
+        "Aztecs"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Byzantines",
+        "Malians",
+        "Tatars"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-05-05",
+    "tournament": "Fox Invitational Phuket",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Terz",
+        "PhilippHJS",
+        "Acro17"
+      ],
+      "civs": [
+        "Japanese",
+        "Persians",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Salsicciotto1999",
+        "Kamigawa",
+        "Nanimaren"
+      ],
+      "civs": [
+        "Romans",
+        "Hindustanis",
+        "Huns"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-04-21",
+    "tournament": "Fox Invitational Phuket",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Salsicciotto1999",
+        "Kamigawa",
+        "Nanimaren"
+      ],
+      "civs": [
+        "Bohemians",
+        "Cumans",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Tointoin",
+        "PLP"
+      ],
+      "civs": [
+        "Spanish",
+        "Teutons",
+        "Poles"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-03-25",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Salsicciotto1999",
+        "Kamigawa",
+        "Nanimaren"
+      ],
+      "civs": [
+        "Romans",
+        "Burmese",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Kongensgade",
+        "Good_luck",
+        "Emil_:D"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Burgundians",
+        "Khmer"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-21",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Salsicciotto1999",
+        "Kamigawa",
+        "Nanimaren"
+      ],
+      "civs": [
+        "Tatars",
+        "Poles",
+        "Goths"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emil_:D",
+        "Good_luck",
+        "Kongensgade"
+      ],
+      "civs": [
+        "Khmer",
+        "Burgundians",
+        "Turks"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-20",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "01DarkDevil",
+        "Loris"
+      ],
+      "civs": [
+        "Tatars",
+        "Hindustanis",
+        "Khmer"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Franks",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-14",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "WaRRioR",
+        "IAnTaGoNiStI",
+        "Wide"
+      ],
+      "civs": [
+        "Saracens",
+        "Burgundians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Terz",
+        "PhilippHJS",
+        "Acro17"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Berbers",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-10",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Kiss_BB_(Moroccan_player)",
+        "Macluffy",
+        "TeMo"
+      ],
+      "civs": [
+        "Berbers",
+        "Huns",
+        "Tatars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Poles",
+        "Franks",
+        "Spanish"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-09",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TeMo",
+        "Macluffy",
+        "Kiss_BB_(Moroccan_player)"
+      ],
+      "civs": [
+        "Tatars",
+        "Burmese",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "01DarkDevil",
+        "Mettiu"
+      ],
+      "civs": [
+        "Aztecs",
+        "Hindustanis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-07",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "PhilippHJS",
+        "Acro17",
+        "Terz"
+      ],
+      "civs": [
+        "Tatars",
+        "Slavs",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Nanimaren",
+        "Kamigawa",
+        "Salsicciotto1999"
+      ],
+      "civs": [
+        "Goths",
+        "Hindustanis",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-04",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "R4v3N",
+        "Nectarie",
+        "Saps"
+      ],
+      "civs": [
+        "Dravidians",
+        "Khmer",
+        "Saracens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Tointoin",
+        "PLP"
+      ],
+      "civs": [
+        "Tatars",
+        "Romans",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-02",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Acro17",
+        "PhilippHJS",
+        "Terz"
+      ],
+      "civs": [
+        "Burmese",
+        "Cumans",
+        "Tatars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "RaiD",
+        "IKill_UDie",
+        "Carnage_(Italian_player)"
+      ],
+      "civs": [
+        "Celts",
+        "Huns",
+        "Sicilians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-07",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Grand Bara",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Classicpro",
+        "Vinchester",
+        "Wide"
+      ],
+      "civs": [
+        "Koreans",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Somero",
+        "Valas",
+        "Barles"
+      ],
+      "civs": [
+        "Byzantines",
+        "Lithuanians",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-30",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wide",
+        "Vinchester",
+        "Classicpro"
+      ],
+      "civs": [
+        "Koreans",
+        "Lithuanians",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Mihai06"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Poles",
+        "Saracens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-16",
+    "tournament": "Rising Teams: Gold Bracket - Qualifier",
+    "map": "Grand Bara",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "C'COtter",
+        "_OPOP",
+        "Realidy"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Nili",
+        "DauT",
+        "TaToH"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Khmer",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  }
+]

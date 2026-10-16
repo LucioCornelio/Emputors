@@ -1,0 +1,1467 @@
+[
+  {
+    "date": "2026-09-18",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Benanji",
+        "Thofou05"
+      ],
+      "civs": [
+        "Byzantines",
+        "Japanese",
+        "Wei"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "Slam",
+        "NeoZz"
+      ],
+      "civs": [
+        "Berbers",
+        "Wu",
+        "Hindustanis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/-Yf0lyHV_FQ?si=SCcg9TwqkGSMKJeQ&t=1883"
+  },
+  {
+    "date": "2026-09-17",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Prisma09",
+        "Capoch",
+        "Monoz"
+      ],
+      "civs": [
+        "Jurchens",
+        "Wu",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "Slam",
+        "NeoZz"
+      ],
+      "civs": [
+        "Romans",
+        "Vikings",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=O9BlyCRAZKZrP2PO&t=13682"
+  },
+  {
+    "date": "2026-09-17",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Thofou05",
+        "Benanji",
+        "Vodka_L"
+      ],
+      "civs": [
+        "Berbers",
+        "Tatars",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bad_Koala",
+        "Jibatong",
+        "XuanLv"
+      ],
+      "civs": [
+        "Turks",
+        "Magyars",
+        "Wei"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=eGT6VWduhNX3p5Zq&t=928"
+  },
+  {
+    "date": "2026-09-13",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "Hearttt"
+      ],
+      "civs": [
+        "Japanese",
+        "Tupi",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "ACCM",
+        "Sebastian",
+        "Nicov"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Georgians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=ZYn4UjokN_w"
+  },
+  {
+    "date": "2026-09-12",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Classicpro",
+        "IAnTaGoNiStI",
+        "Dark"
+      ],
+      "civs": [
+        "Berbers",
+        "Burmese",
+        "Sicilians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Mihai06",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Magyars",
+        "Portuguese",
+        "Koreans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=9YXsnvFoayk"
+  },
+  {
+    "date": "2026-09-08",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "LobodeLaNieve",
+        "Uzzi",
+        "Combito"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Shu",
+        "Georgians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "Benanji",
+        "Thofou05"
+      ],
+      "civs": [
+        "Byzantines",
+        "Tatars",
+        "Wei"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-07",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "XuanLv",
+        "Jibatong",
+        "Bad_Koala"
+      ],
+      "civs": [
+        "Wei",
+        "Spanish",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "LautaLk",
+        "Rodrixs",
+        "Nahuel05"
+      ],
+      "civs": [
+        "Huns",
+        "Jurchens",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Thofou05",
+        "Benanji",
+        "Vodka_L"
+      ],
+      "civs": [
+        "Wei",
+        "Tupi",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TheMax",
+        "Villese",
+        "Emalius2"
+      ],
+      "civs": [
+        "Romans",
+        "Shu",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lewis",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Spanish",
+        "Wei",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "The_Dragonstar",
+        "StonePleaseAoE",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Mapuche",
+        "Tatars",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=7dcrUWqKpQk"
+  },
+  {
+    "date": "2026-09-02",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Rodrixs",
+        "Landy",
+        "Nahuel05"
+      ],
+      "civs": [
+        "Wei",
+        "Ethiopians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Moneimon",
+        "M0re",
+        "PoXoLo"
+      ],
+      "civs": [
+        "Japanese",
+        "Jurchens",
+        "Huns"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-02",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TheMax",
+        "Villese",
+        "Emalius2"
+      ],
+      "civs": [
+        "Magyars",
+        "Wu",
+        "Mapuche"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Combito",
+        "Uzzi",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Cumans",
+        "Saracens",
+        "Hindustanis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/CzMDIidedv4?si=57BSkmcTtwDO_DCv&t=7952"
+  },
+  {
+    "date": "2026-08-28",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Dogao",
+        "KingstoNe",
+        "GoKu"
+      ],
+      "civs": [
+        "Saracens",
+        "Bengalis",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Tulendeena",
+        "Noszombie",
+        "Robo"
+      ],
+      "civs": [
+        "Mapuche",
+        "Armenians",
+        "Romans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/WjwmqjT9EIg?si=zIFGrZxrc8NfAfGM&t=1474"
+  },
+  {
+    "date": "2026-08-23",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Hera",
+        "Hearttt",
+        "Liereyy"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Burmese",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "DauT",
+        "JorDan_AoE",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Wei",
+        "Bohemians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=_LiaGVWV21Y"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Combito",
+        "Uzzi",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Khmer",
+        "Tatars",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "Slam",
+        "NeoZz"
+      ],
+      "civs": [
+        "Saracens",
+        "Spanish",
+        "Jurchens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nicov",
+        "Sebastian",
+        "ACCM"
+      ],
+      "civs": [
+        "Dravidians",
+        "Magyars",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vivi",
+        "Lyx",
+        "Yo"
+      ],
+      "civs": [
+        "Berbers",
+        "Huns",
+        "Hindustanis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=GRZLzKMoViM"
+  },
+  {
+    "date": "2026-08-21",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Yo",
+        "Lyx",
+        "Vivi"
+      ],
+      "civs": [
+        "Cumans",
+        "Magyars",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "DauT",
+        "JorDan_AoE",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Saracens",
+        "Wu",
+        "Wei"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=E6EDiw2Fqlo"
+  },
+  {
+    "date": "2026-08-18",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Miguel",
+        "KingstoNe",
+        "Dogao"
+      ],
+      "civs": [
+        "Dravidians",
+        "Tupi",
+        "Khmer"
+      ]
+    },
+    "team2": {
+      "players": [
+        "LobodeLaNieve",
+        "Uzzi",
+        "Combito"
+      ],
+      "civs": [
+        "Mapuche",
+        "Muisca",
+        "Romans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/j1ZpLx1aTlY?si=R5QYI-qIQtR5dp8B&t=744"
+  },
+  {
+    "date": "2026-08-16",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "DauT",
+        "JorDan_AoE",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Saracens",
+        "Jurchens",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Annotoph",
+        "Terz",
+        "Running"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Georgians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=7u2TR1VMGU0"
+  },
+  {
+    "date": "2026-08-16",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Hera",
+        "Hearttt",
+        "Liereyy"
+      ],
+      "civs": [
+        "Magyars",
+        "Malians",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Yo",
+        "Lyx",
+        "Vivi"
+      ],
+      "civs": [
+        "Georgians",
+        "Huns",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=LowKIEfyVnU"
+  },
+  {
+    "date": "2026-08-15",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "IAnTaGoNiStI",
+        "Dark",
+        "Classicpro"
+      ],
+      "civs": [
+        "Georgians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "ACCM",
+        "Sebastian",
+        "Nicov"
+      ],
+      "civs": [
+        "Persians",
+        "Bohemians",
+        "Gurjaras"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=SR-1RO6G1bM"
+  },
+  {
+    "date": "2026-08-14",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vivi",
+        "Lyx",
+        "Yo"
+      ],
+      "civs": [
+        "Koreans",
+        "Wei",
+        "Georgians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "StonePleaseAoE",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Tatars",
+        "Byzantines",
+        "Persians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=vh60nzfeZgU"
+  },
+  {
+    "date": "2026-08-13",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "MbL",
+        "Mihai06",
+        "Sitaux"
+      ],
+      "civs": [
+        "Bengalis",
+        "Italians",
+        "Magyars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Hera",
+        "Hearttt",
+        "Liereyy"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Koreans",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=MEES1M98Y2k"
+  },
+  {
+    "date": "2026-08-13",
+    "tournament": "The League: Division 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "DauT",
+        "JorDan_AoE",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Saracens",
+        "Jurchens",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lewis",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Bohemians",
+        "Muisca"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=gsITQnEG4NM"
+  },
+  {
+    "date": "2026-08-07",
+    "tournament": "The League: Division 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Benanji",
+        "Thofou05"
+      ],
+      "civs": [
+        "Byzantines",
+        "Tatars",
+        "Wei"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Tulendeena",
+        "Noszombie",
+        "Robo"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Vikings",
+        "Magyars"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-02",
+    "tournament": "The League: Qualifier 2",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Annotoph",
+        "Running",
+        "Target331"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Jurchens",
+        "Wei"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dogao",
+        "KingstoNe",
+        "Miguel"
+      ],
+      "civs": [
+        "Georgians",
+        "Ethiopians",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=McC3PXkq5otDm9hN&t=18585"
+  },
+  {
+    "date": "2026-08-02",
+    "tournament": "The League: Qualifier 2",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ganji",
+        "Abundzuehalt",
+        "Valas"
+      ],
+      "civs": [
+        "Jurchens",
+        "Italians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "StonePleaseAoE",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Tatars",
+        "Magyars"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=ez3pOBFUrSV5OQoW&t=8413"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Emalius2",
+        "Villese",
+        "TheMax"
+      ],
+      "civs": [
+        "Japanese",
+        "Wu",
+        "Georgians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bad_Koala",
+        "Jibatong",
+        "XuanLv"
+      ],
+      "civs": [
+        "Magyars",
+        "Burmese",
+        "Wei"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/GXyvep2VMJQ?si=tGAHbdIlfhThZTWY&t=2962"
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "DauT",
+        "JorDan_AoE",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Saracens",
+        "Tatars",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "StonePleaseAoE",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Magyars",
+        "Jurchens"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=NVGI4JuJ8Js"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ryuutaku",
+        "Blve",
+        "Yukgit"
+      ],
+      "civs": [
+        "Khitans",
+        "Ethiopians",
+        "Celts"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Miguel",
+        "KingstoNe",
+        "Dogao"
+      ],
+      "civs": [
+        "Vikings",
+        "Shu",
+        "Georgians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=_0ceHJqjK7U"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Emalius2",
+        "Villese",
+        "TheMax"
+      ],
+      "civs": [
+        "Dravidians",
+        "Ethiopians",
+        "Romans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "StonePleaseAoE",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Tatars",
+        "Khmer",
+        "Jurchens"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=3iD-b-oHIn4"
+  },
+  {
+    "date": "2026-07-10",
+    "tournament": "The League: Showmatch 2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lucho",
+        "Sebastian",
+        "ACCM"
+      ],
+      "civs": [
+        "Jurchens",
+        "Magyars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wide",
+        "Dark",
+        "IAnTaGoNiStI"
+      ],
+      "civs": [
+        "Saracens",
+        "Georgians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=xV0pRQxGYzw"
+  },
+  {
+    "date": "2023-07-30",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "MbL"
+      ],
+      "civs": [
+        "Italians",
+        "Portuguese",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "DauT"
+      ],
+      "civs": [
+        "Dravidians",
+        "Tatars",
+        "Gurjaras"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=I27PRQ5VPc8"
+  },
+  {
+    "date": "2023-07-29",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "FreakinAndy",
+        "Daniel",
+        "Annotoph"
+      ],
+      "civs": [
+        "Japanese",
+        "Malians",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Miguel",
+        "Sitaux",
+        "Dogao"
+      ],
+      "civs": [
+        "Saracens",
+        "Gurjaras",
+        "Spanish"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=5mtgGX4-Qyw"
+  },
+  {
+    "date": "2023-07-23",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Margougou",
+        "Daniel",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Saracens",
+        "Malians",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "Hearttt"
+      ],
+      "civs": [
+        "Italians",
+        "Portuguese",
+        "Gurjaras"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=QhlHrizkulI"
+  },
+  {
+    "date": "2023-07-23",
+    "tournament": "Delicious Whirled Cup 2023: Showmatch #2",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Vivi",
+        "Yo"
+      ],
+      "civs": [
+        "Malians",
+        "Mongols",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Valas",
+        "Rubenstock",
+        "TheMax"
+      ],
+      "civs": [
+        "Vikings",
+        "Dravidians",
+        "Gurjaras"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-07-22",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "DauT"
+      ],
+      "civs": [
+        "Malay",
+        "Lithuanians",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Margougou",
+        "Daniel",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Saracens",
+        "Malians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=hT6IjuudiJw"
+  },
+  {
+    "date": "2023-07-22",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "MbL"
+      ],
+      "civs": [
+        "Vikings",
+        "Portuguese",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Dogao",
+        "Miguel"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Tatars",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=V2J_Bu8pitk"
+  },
+  {
+    "date": "2023-07-21",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Miguel",
+        "Sitaux",
+        "Dogao"
+      ],
+      "civs": [
+        "Vikings",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "JorDan_AoE"
+      ],
+      "civs": [
+        "Italians",
+        "Tatars",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=d_7YTtT36dE"
+  },
+  {
+    "date": "2023-07-16",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sitaux",
+        "Dogao",
+        "Miguel"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Burmese",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Vivi",
+        "Yo"
+      ],
+      "civs": [
+        "Malians",
+        "Gurjaras",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=dEmWJ6nZi_0"
+  },
+  {
+    "date": "2023-07-16",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Italians",
+        "Lithuanians",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "DauT",
+        "TheViper",
+        "TaToH"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Berbers",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=IMxmnRgXKnE"
+  },
+  {
+    "date": "2023-07-16",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Margougou",
+        "Daniel",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Japanese",
+        "Malians",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Saymyname",
+        "BadBoy",
+        "Thành_Cổ_Quảng_Trị"
+      ],
+      "civs": [
+        "Japanese",
+        "Magyars",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-07-15",
+    "tournament": "Delicious Whirled Cup 2023",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "MbL",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Italians",
+        "Magyars",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Barles"
+      ],
+      "civs": [
+        "Saracens",
+        "Malians",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=x9iB75wVTYc"
+  },
+  {
+    "date": "2023-07-05",
+    "tournament": "Aftermath vs White Wolf Palace (5)",
+    "map": "Tres Leches",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Malay",
+        "Berbers",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "MbL"
+      ],
+      "civs": [
+        "Portuguese",
+        "Burmese",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-25",
+    "tournament": "Delicious Whirled Cup 2023: Seeding Deciders",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Slam",
+        "Chris",
+        "Mentalist"
+      ],
+      "civs": [
+        "Malay",
+        "Huns",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "StonePleaseAoE",
+        "Running",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Vikings",
+        "Gurjaras",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-22",
+    "tournament": "Delicious Whirled Cup 2023: Seeding Deciders",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Barles",
+        "Ganji",
+        "Valas"
+      ],
+      "civs": [
+        "Saracens",
+        "Spanish",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Miguel",
+        "Dogao",
+        "Sitaux"
+      ],
+      "civs": [
+        "Dravidians",
+        "Berbers",
+        "Gurjaras"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-01-11",
+    "tournament": "The Delicious Showmatch 6",
+    "map": "Tres Leches",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "TheViper",
+        "DauT",
+        "ACCM"
+      ],
+      "civs": [
+        "Bengalis",
+        "Burmese",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "Yo",
+        "Miguel"
+      ],
+      "civs": [
+        "Dravidians",
+        "Spanish",
+        "Vikings"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=CcQASN0dha4"
+  }
+]

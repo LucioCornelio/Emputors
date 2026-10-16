@@ -1,0 +1,1601 @@
+[
+  {
+    "date": "2026-10-11",
+    "tournament": "CNZS Invitational 8",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "The_Dragonstar",
+        "StonePleaseAoE",
+        "Gali"
+      ],
+      "civs": [
+        "Danes",
+        "Saracens",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Jibatong",
+        "Bad_Koala",
+        "XuanLv"
+      ],
+      "civs": [
+        "Dravidians",
+        "Gurjaras",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-10-09",
+    "tournament": "CNZS Invitational 7",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "NeoZz",
+        "Slam",
+        "TeMo"
+      ],
+      "civs": [
+        "Dravidians",
+        "Saracens",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Donghaidi",
+        "Yukgit",
+        "Jibatong"
+      ],
+      "civs": [
+        "Bengalis",
+        "Saxons",
+        "Burgundians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-10-01",
+    "tournament": "CNZS Invitational 1",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "Hearttt"
+      ],
+      "civs": [
+        "Malay",
+        "Hindustanis",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Goths",
+        "Saracens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-18",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Slavs",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "Slam",
+        "NeoZz"
+      ],
+      "civs": [
+        "Turks",
+        "Saracens",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/-Yf0lyHV_FQ?si=SCcg9TwqkGSMKJeQ&t=1883"
+  },
+  {
+    "date": "2026-09-13",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Nahuel05",
+        "LautaLk",
+        "Rodrixs"
+      ],
+      "civs": [
+        "Portuguese",
+        "Slavs",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Gali",
+        "Pela",
+        "VarVarus"
+      ],
+      "civs": [
+        "Shu",
+        "Burmese",
+        "Turks"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-11",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Celts",
+        "Saracens",
+        "Britons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Bengalis",
+        "Khmer",
+        "Turks"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-06",
+    "tournament": "The League: Division 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ciskhan",
+        "The_Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Turks",
+        "Khmer",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Running",
+        "Annotoph",
+        "Target331"
+      ],
+      "civs": [
+        "Bohemians",
+        "Persians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=9Aa14QRJIpM"
+  },
+  {
+    "date": "2026-09-05",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Noszombie",
+        "Robo",
+        "Tulendeena"
+      ],
+      "civs": [
+        "Turks",
+        "Saracens",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "Combito",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Jurchens",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/uYKUQU3lzMo?si=4T23y5-thvmQvUD0&t=544"
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 1",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hearttt",
+        "Hera"
+      ],
+      "civs": [
+        "Italians",
+        "Lithuanians",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dark",
+        "IAnTaGoNiStI",
+        "Classicpro"
+      ],
+      "civs": [
+        "Malay",
+        "Berbers",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Fk7_3hij7dA"
+  },
+  {
+    "date": "2026-09-03",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Gali",
+        "Pela",
+        "VarVarus"
+      ],
+      "civs": [
+        "Shu",
+        "Bengalis",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Fedex",
+        "Prisma09",
+        "Monoz"
+      ],
+      "civs": [
+        "Bohemians",
+        "Lithuanians",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-30",
+    "tournament": "The League: Division 1",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Running",
+        "Annotoph",
+        "Target331"
+      ],
+      "civs": [
+        "Dravidians",
+        "Lithuanians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Turks",
+        "Romans",
+        "Portuguese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=C0rGd3WJaG8"
+  },
+  {
+    "date": "2026-08-29",
+    "tournament": "The League: Division 1",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Nicov",
+        "ACCM",
+        "Sebastian"
+      ],
+      "civs": [
+        "Dravidians",
+        "Jurchens",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Bengalis",
+        "Magyars",
+        "Bohemians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=zvIA9fEiaTA"
+  },
+  {
+    "date": "2026-08-23",
+    "tournament": "The League: Division 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Target331",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Bengalis",
+        "Jurchens",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "MbL",
+        "Sitaux",
+        "Mihai06"
+      ],
+      "civs": [
+        "Chinese",
+        "Spanish",
+        "Bohemians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Galxu_5Ga3w"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Noszombie",
+        "Robo",
+        "Tulendeena"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Saracens",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emalius2",
+        "TheMax",
+        "Juyhou"
+      ],
+      "civs": [
+        "Britons",
+        "Khmer",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-18",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Bohemians",
+        "Lithuanians",
+        "Saracens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Combito",
+        "LobodeLaNieve",
+        "Uzzi"
+      ],
+      "civs": [
+        "Turks",
+        "Berbers",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/j1ZpLx1aTlY?si=R5QYI-qIQtR5dp8B&t=744"
+  },
+  {
+    "date": "2026-08-16",
+    "tournament": "The League: Division 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Gali",
+        "Pela",
+        "VarVarus"
+      ],
+      "civs": [
+        "Shu",
+        "Burmese",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Mauricioae13",
+        "SiNisTeR",
+        "Lord_Envidiates"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Lithuanians",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/1zplZnDIMXs?si=7MVpVTX5fB62oMM2&t=792"
+  },
+  {
+    "date": "2026-08-02",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Running",
+        "Annotoph",
+        "Target331"
+      ],
+      "civs": [
+        "Turks",
+        "Lithuanians",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dogao",
+        "Miguel",
+        "KingstoNe"
+      ],
+      "civs": [
+        "Muisca",
+        "Hindustanis",
+        "Burmese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=McC3PXkq5otDm9hN&t=18585"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Kamigawa",
+        "Thofou05"
+      ],
+      "civs": [
+        "Italians",
+        "Slavs",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Chart"
+      ],
+      "civs": [
+        "Cumans",
+        "Poles",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=7Ir7J7VKLDoC8_21&t=24783"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Uzzi",
+        "Ozone",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Wu",
+        "Saracens",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Chinese",
+        "Slavs",
+        "Tupi"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=qcK07WFYqV7ejA3T&t=7184"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Emalius2"
+      ],
+      "civs": [
+        "Bengalis",
+        "Saracens",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Britons",
+        "Burgundians",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/GXyvep2VMJQ?si=E4WM4ixhiLVf5x8k&t=618"
+  },
+  {
+    "date": "2026-07-31",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "猪咪",
+        "Still_in_Love",
+        "Clearlove"
+      ],
+      "civs": [
+        "Tatars",
+        "Saracens",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Portuguese",
+        "Georgians",
+        "Jurchens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-31",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "WilliamS",
+        "Dabighead",
+        "Parawhas"
+      ],
+      "civs": [
+        "Koreans",
+        "Teutons",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Britons",
+        "Slavs",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/nkXnAFmZamE?si=RL4JlZRjRqhg4YWQ&t=1909"
+  },
+  {
+    "date": "2026-07-30",
+    "tournament": "The League: Qualifier 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Tulendeena",
+        "Robo",
+        "Noszombie"
+      ],
+      "civs": [
+        "Koreans",
+        "Saracens",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "CC_(Chinese_player)",
+        "DongHaiDi",
+        "DaDaYa"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=AFICrPey40E"
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Bohemians",
+        "Slavs",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "StonePleaseAoE",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Hindustanis",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=NVGI4JuJ8Js"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Classicpro",
+        "IAnTaGoNiStI",
+        "Dark"
+      ],
+      "civs": [
+        "Bengalis",
+        "Franks",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Terz",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Bohemians",
+        "Lithuanians",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=o2z3R4H2z1E"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Combito",
+        "LobodeLaNieve",
+        "Uzzi"
+      ],
+      "civs": [
+        "Italians",
+        "Poles",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sora_Kuma",
+        "Mihai06",
+        "MbL"
+      ],
+      "civs": [
+        "Burgundians",
+        "Lithuanians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=MATHhVEEnBk"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Yukgit",
+        "Ryuutaku",
+        "Blve"
+      ],
+      "civs": [
+        "Chinese",
+        "Khmer",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dogao",
+        "Miguel",
+        "KingstoNe"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Lithuanians",
+        "Teutons"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=_0ceHJqjK7U"
+  },
+  {
+    "date": "2026-07-24",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "TheKroks",
+        "VoNDutcH",
+        "AKaTepBackWards"
+      ],
+      "civs": [
+        "Dravidians",
+        "Slavs",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Blve",
+        "Ryuutaku",
+        "Yukgit"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Bengalis",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/wlf7f_fTCRg?si=Giu3HDJRYeppCsGR&t=237"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Steak",
+        "King_Boo",
+        "Fanjita"
+      ],
+      "civs": [
+        "Malay",
+        "Hindustanis",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Dragonstar",
+        "StonePleaseAoE"
+      ],
+      "civs": [
+        "Poles",
+        "Saracens",
+        "Wei"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=cG1zZCjGBHI"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Danielsiii",
+        "Hitorek",
+        "Dziamdziak"
+      ],
+      "civs": [
+        "Turks",
+        "Teutons",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Jibatong",
+        "XuanLv",
+        "Bad_Koala"
+      ],
+      "civs": [
+        "Britons",
+        "Huns",
+        "Cumans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "LingYuan vs Team Vitality 2",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Liereyy",
+        "Hearttt",
+        "Hera"
+      ],
+      "civs": [
+        "Portuguese",
+        "Spanish",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Chinese",
+        "Lithuanians",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=Bv8F96XIPNU"
+  },
+  {
+    "date": "2026-07-19",
+    "tournament": "The League: Qualifier 1",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nahuel05",
+        "IXAM",
+        "Rodrixs"
+      ],
+      "civs": [
+        "Byzantines",
+        "Gurjaras",
+        "Teutons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "DaDaYa",
+        "DongHaiDi",
+        "CC_(Chinese_player)"
+      ],
+      "civs": [
+        "Bengalis",
+        "Slavs",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=CvHnNGmczXU"
+  },
+  {
+    "date": "2026-07-12",
+    "tournament": "The League: Showmatch 3",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Valas",
+        "Ganji",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Malay",
+        "Lithuanians",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Britons"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=QTTxVzMIquw"
+  },
+  {
+    "date": "2025-03-07",
+    "tournament": "LingYuan Invitational 7",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "GoKu",
+        "Lewis",
+        "Liereyy"
+      ],
+      "civs": [
+        "Portuguese",
+        "Burgundians",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Slavs",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-02-06",
+    "tournament": "Germany vs France Charity Showmatch",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Running",
+        "Mr.Dobbsn",
+        "Target331"
+      ],
+      "civs": [
+        "Tatars",
+        "Mongols",
+        "Ethiopians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Gryphon",
+        "Ciskhan",
+        "Nono12"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Hindustanis",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-09-21",
+    "tournament": "2v2 HunCup 2024",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Salytmacska",
+        "SchleK_SobeR",
+        "Peppsi96"
+      ],
+      "civs": [
+        "Cumans",
+        "Bohemians",
+        "Teutons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Scipi",
+        "Trombone",
+        "Rolo"
+      ],
+      "civs": [
+        "Georgians",
+        "Turks",
+        "Khmer"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2257041486"
+  },
+  {
+    "date": "2024-08-13",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "FreakinAndy",
+        "FreakinChris",
+        "Chaos_2_win"
+      ],
+      "civs": [
+        "Bohemians",
+        "Lithuanians",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "IAnTaGoNiStI",
+        "Vinchester",
+        "Classicpro"
+      ],
+      "civs": [
+        "Malay",
+        "Slavs",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-07-29",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "OLADUSHEK",
+        "Koti",
+        "Bread Pudding With Bum Sauce"
+      ],
+      "civs": [
+        "Georgians",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Classicpro",
+        "Vinchester",
+        "Wide"
+      ],
+      "civs": [
+        "Britons",
+        "Georgians",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-07-03",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vinchester",
+        "WaRRioR",
+        "IAnTaGoNiStI"
+      ],
+      "civs": [
+        "Bohemians",
+        "Burgundians",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Acro17",
+        "PhilippHJS",
+        "Terz"
+      ],
+      "civs": [
+        "Italians",
+        "Spanish",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-06-28",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Zeroreasonz",
+        "Kelldat",
+        "Kaibab"
+      ],
+      "civs": [
+        "Mongols",
+        "Franks",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "BigChief51",
+        "Sitaux",
+        "Smiley"
+      ],
+      "civs": [
+        "Portuguese",
+        "Mongols",
+        "Spanish"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-06-24",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Reilled",
+        "Bomas",
+        "Tommerd"
+      ],
+      "civs": [
+        "Bohemians",
+        "Teutons",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "OLADUSHEK",
+        "Koti",
+        "Bread Pudding With Bum Sauce"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Spanish",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-06-18",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Hallis",
+        "Bleys",
+        "FeAge"
+      ],
+      "civs": [
+        "Turks",
+        "Cumans",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "FreakinAndy",
+        "FreakinChris",
+        "Trashmaster"
+      ],
+      "civs": [
+        "Malay",
+        "Lithuanians",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-06-10",
+    "tournament": "Dignitas Conquest",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Reilled",
+        "Bomas",
+        "Tommerd"
+      ],
+      "civs": [
+        "Bohemians",
+        "Teutons",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Microsoft's Intern",
+        "Markymark",
+        "Killshot18"
+      ],
+      "civs": [
+        "Chinese",
+        "Magyars",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-04-28",
+    "tournament": "Dignitas Conquest: Groups Phase",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Rey_Enigmaaaaa",
+        "SiNisTeR",
+        "Carlitos_Cox"
+      ],
+      "civs": [
+        "Bengalis",
+        "Burgundians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "FreakinAndy",
+        "Leogrampy",
+        "Trashmaster"
+      ],
+      "civs": [
+        "Malay",
+        "Burgundians",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-04-28",
+    "tournament": "Dignitas Conquest: Groups Phase",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "HGB_AOE",
+        "Imfury",
+        "Snapy"
+      ],
+      "civs": [
+        "Bohemians",
+        "Mongols",
+        "Georgians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vinchester",
+        "WaRRioR",
+        "Classicpro"
+      ],
+      "civs": [
+        "Bohemians",
+        "Burgundians",
+        "Portuguese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2132157826"
+  },
+  {
+    "date": "2023-10-18",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Classicpro",
+        "Vinchester",
+        "Good_Game"
+      ],
+      "civs": [
+        "Britons",
+        "Lithuanians",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Slam",
+        "FreakinAndy",
+        "ACCM"
+      ],
+      "civs": [
+        "Bengalis",
+        "Slavs",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-08",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Uzzi",
+        "LobodeLaNieve",
+        "KingstoNe"
+      ],
+      "civs": [
+        "Turks",
+        "Cumans",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Annotoph",
+        "Daniel",
+        "Sitaux"
+      ],
+      "civs": [
+        "Poles",
+        "Saracens",
+        "Portuguese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-27",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "King_Boo",
+        "Fanjita",
+        "Dave_hun"
+      ],
+      "civs": [
+        "Italians",
+        "Slavs",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Nanimaren",
+        "Kamigawa",
+        "Chaos_2_win"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Mongols",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-04",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Fortress",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "ActionMarc",
+        "Ganji",
+        "Terz"
+      ],
+      "civs": [
+        "Goths",
+        "Saracens",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ronotovi",
+        "Jouds",
+        "Sitaux"
+      ],
+      "civs": [
+        "Sicilians",
+        "Magyars",
+        "Poles"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-04",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Fortress",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Skittle",
+        "Fanjita",
+        "Somero"
+      ],
+      "civs": [
+        "Vikings",
+        "Khmer",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "ActionMarc",
+        "Terz"
+      ],
+      "civs": [
+        "Chinese",
+        "Slavs",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  }
+]

@@ -1,0 +1,4957 @@
+[
+  {
+    "date": "2026-09-20",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Hera",
+        "Liereyy",
+        "Hearttt"
+      ],
+      "civs": [
+        "Wei",
+        "Muisca",
+        "Jurchens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Huns",
+        "Bohemians",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/m6domLvKrBQ?si=juMOJ4JlCV37NBp1&t=3469"
+  },
+  {
+    "date": "2026-09-19",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Wei",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Byzantines",
+        "Vikings",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=vaCDC477q4E"
+  },
+  {
+    "date": "2026-09-17",
+    "tournament": "The League: Division 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Vodka_L",
+        "Thofou05",
+        "Benanji"
+      ],
+      "civs": [
+        "Vikings",
+        "Malians",
+        "Chinese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Muisca",
+        "Georgians",
+        "Koreans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=eGT6VWduhNX3p5Zq&t=928"
+  },
+  {
+    "date": "2026-09-12",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Malay",
+        "Portuguese",
+        "Wei"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "StonePleaseAoE",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Chinese",
+        "Berbers",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=sGV6OjIYeQ8"
+  },
+  {
+    "date": "2026-09-11",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wide",
+        "Classicpro",
+        "Dark"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Chinese",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Khitans",
+        "Lithuanians",
+        "Mongols"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=mdOsRHOOlC8"
+  },
+  {
+    "date": "2026-09-10",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "StonePleaseAoE",
+        "Ciskhan",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Persians",
+        "Burmese",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Liereyy",
+        "Hera",
+        "Hearttt"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Georgians",
+        "Malians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=wVM8N8mqdE0"
+  },
+  {
+    "date": "2026-09-06",
+    "tournament": "The League: Division 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Abundzuehalt"
+      ],
+      "civs": [
+        "Portuguese",
+        "Persians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "M0re",
+        "Pume",
+        "Poxo"
+      ],
+      "civs": [
+        "Koreans",
+        "Spanish",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-09-02",
+    "tournament": "The League: Division 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Juyhou",
+        "Villese",
+        "TheMax"
+      ],
+      "civs": [
+        "Vikings",
+        "Vietnamese",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "LobodeLaNieve",
+        "Combito"
+      ],
+      "civs": [
+        "Armenians",
+        "Chinese",
+        "Persians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/CzMDIidedv4?si=57BSkmcTtwDO_DCv&t=7952"
+  },
+  {
+    "date": "2026-08-29",
+    "tournament": "The League: Division 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "KingstoNe",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Berbers",
+        "Tupi"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Slam"
+      ],
+      "civs": [
+        "Bengalis",
+        "Muisca",
+        "Romans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/xi03ru83nTk?si=0NXZfKC0-X6LBwEA&t=389"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "Lewis"
+      ],
+      "civs": [
+        "Magyars",
+        "Berbers",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "IAnTaGoNiStI",
+        "Classicpro",
+        "Dark"
+      ],
+      "civs": [
+        "Burmese",
+        "Georgians",
+        "Tupi"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=wX_bHRTfElQ"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sebastian",
+        "ACCM",
+        "Nicov"
+      ],
+      "civs": [
+        "Chinese",
+        "Bohemians",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Teutons",
+        "Lithuanians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=GRZLzKMoViM"
+  },
+  {
+    "date": "2026-08-22",
+    "tournament": "The League: Division 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "XuanLv",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Lithuanians",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Gali",
+        "Pela",
+        "VarVarus"
+      ],
+      "civs": [
+        "Italians",
+        "Berbers",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-08-21",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sitaux",
+        "Sora_Kuma",
+        "MbL"
+      ],
+      "civs": [
+        "Georgians",
+        "Vietnamese",
+        "Tupi"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lewis",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Mapuche",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=1W75Qa7ASbc"
+  },
+  {
+    "date": "2026-08-21",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Vivi",
+        "Yo"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Portuguese",
+        "Koreans",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=E6EDiw2Fqlo"
+  },
+  {
+    "date": "2026-08-19",
+    "tournament": "The League: Division 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Emalius2",
+        "TheMax",
+        "Villese"
+      ],
+      "civs": [
+        "Mapuche",
+        "Huns",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "Slam",
+        "NeoZz"
+      ],
+      "civs": [
+        "Berbers",
+        "Malians",
+        "Muisca"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/1zplZnDIMXs?si=yJIFe-0cgvEF_7yW&t=11725"
+  },
+  {
+    "date": "2026-08-16",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Bengalis",
+        "Muisca"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Target331",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Huns",
+        "Wei"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=7u2TR1VMGU0"
+  },
+  {
+    "date": "2026-08-13",
+    "tournament": "The League: Division 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "JorDan_AoE",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Khitans",
+        "Malians",
+        "Tupi"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Magyars",
+        "Mongols",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=gsITQnEG4NM"
+  },
+  {
+    "date": "2026-08-01",
+    "tournament": "The League: Qualifier 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Villese",
+        "Emalius2",
+        "TheMax"
+      ],
+      "civs": [
+        "Huns",
+        "Celts",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Jibatong",
+        "XuanLv",
+        "Bad_Koala"
+      ],
+      "civs": [
+        "Malians",
+        "Tatars",
+        "Armenians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=P5yo_BKeSPKvQVdk&t=295"
+  },
+  {
+    "date": "2026-07-31",
+    "tournament": "The League: Qualifier 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "ChossMx",
+        "SoyLaHostia",
+        "Keno"
+      ],
+      "civs": [
+        "Malians",
+        "Bengalis",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Monoz",
+        "Prisma09",
+        "Capoch"
+      ],
+      "civs": [
+        "Berbers",
+        "Burmese",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/oEYX9vYDi3k?si=929oJFPx4gObc9u2&t=10733"
+  },
+  {
+    "date": "2026-07-29",
+    "tournament": "The League: Qualifier 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Pume",
+        "PoXoLo",
+        "M0re"
+      ],
+      "civs": [
+        "Koreans",
+        "Persians",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Develement",
+        "Mauricioae13",
+        "SiNisTeR"
+      ],
+      "civs": [
+        "Vikings",
+        "Romans",
+        "Burgundians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=ckTGTGzNRrc"
+  },
+  {
+    "date": "2026-07-29",
+    "tournament": "The League: Qualifier 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Emil_:D",
+        "Mauseren",
+        "Good_luck"
+      ],
+      "civs": [
+        "Malians",
+        "Dravidians",
+        "Burmese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Yukgit",
+        "Ryuutaku",
+        "Blve"
+      ],
+      "civs": [
+        "Wei",
+        "Bengalis",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/B3B5wSV1qJI?si=Usci1PZRkEJOTi6H&t=1666"
+  },
+  {
+    "date": "2026-07-29",
+    "tournament": "The League: Qualifier 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "AKaTepBackWards",
+        "TheKroks",
+        "RaiD"
+      ],
+      "civs": [
+        "Celts",
+        "Japanese",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Juyhou",
+        "Villese",
+        "TheMax"
+      ],
+      "civs": [
+        "Bengalis",
+        "Vietnamese",
+        "Georgians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/gnGeY3IRb1Y?si=2g5SR5NJ89CiTgP0&t=57"
+  },
+  {
+    "date": "2026-07-28",
+    "tournament": "The League: Qualifier 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Feroker",
+        "Ovenka",
+        "Pren"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Malians",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Target331",
+        "Annotoph",
+        "Terz"
+      ],
+      "civs": [
+        "Romans",
+        "Burmese",
+        "Portuguese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Vivi",
+        "Yo"
+      ],
+      "civs": [
+        "Huns",
+        "Tupi",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lucho",
+        "Sebastian",
+        "ACCM"
+      ],
+      "civs": [
+        "Turks",
+        "Bengalis",
+        "Bohemians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=xlH5qOcvf1U"
+  },
+  {
+    "date": "2026-07-26",
+    "tournament": "The League: Qualifier 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Jibatong",
+        "XuanLv",
+        "Bad_Koala"
+      ],
+      "civs": [
+        "Berbers",
+        "Turks",
+        "Burmese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "TheViper",
+        "Vinchester"
+      ],
+      "civs": [
+        "Malay",
+        "Bengalis",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=P81V3CsA0ao"
+  },
+  {
+    "date": "2026-07-25",
+    "tournament": "The League: Qualifier 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Uzzi",
+        "Combito",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Japanese",
+        "Dravidians",
+        "Georgians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Sora_Kuma",
+        "Mihai06"
+      ],
+      "civs": [
+        "Malians",
+        "Vikings",
+        "Berbers"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=MATHhVEEnBk"
+  },
+  {
+    "date": "2026-07-24",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Never_Began",
+        "Murkbey",
+        "Aleko"
+      ],
+      "civs": [
+        "Vikings",
+        "Berbers",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dave",
+        "Heidewolf",
+        "Woodhouse"
+      ],
+      "civs": [
+        "Wu",
+        "Lithuanians",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-23",
+    "tournament": "The League: Qualifier 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "猪咪",
+        "Clearlove",
+        "Still_in_Love"
+      ],
+      "civs": [
+        "Magyars",
+        "Khitans",
+        "Burmese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "Chart"
+      ],
+      "civs": [
+        "Georgians",
+        "Celts",
+        "Japanese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Barneys",
+        "Lighty",
+        "Eratuss"
+      ],
+      "civs": [
+        "Persians",
+        "Spanish",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TaToH",
+        "Lewis",
+        "Vinchester"
+      ],
+      "civs": [
+        "Dravidians",
+        "Lithuanians",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=ITP2rdOT7mY"
+  },
+  {
+    "date": "2026-07-22",
+    "tournament": "The League: Qualifier 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Tulendeena",
+        "Robo",
+        "Noszombie"
+      ],
+      "civs": [
+        "Tupi",
+        "Berbers",
+        "Mapuche"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Juyhou",
+        "Villese",
+        "TheMax"
+      ],
+      "civs": [
+        "Bengalis",
+        "Chinese",
+        "Huns"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=IEhviuhX0SI"
+  },
+  {
+    "date": "2026-06-22",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wosm",
+        "Sundev",
+        "Pl0tterGhost"
+      ],
+      "civs": [
+        "Persians",
+        "Lithuanians",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Murkbey",
+        "Aleko",
+        "Simonz"
+      ],
+      "civs": [
+        "Italians",
+        "Persians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-06-14",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ceeelebrate",
+        "Tusky",
+        "Instinct"
+      ],
+      "civs": [
+        "Persians",
+        "Italians",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wosm",
+        "Sundev",
+        "Pl0tterGhost"
+      ],
+      "civs": [
+        "Persians",
+        "Bengalis",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-06-08",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "AleksanderG",
+        "IThink",
+        "EXvision"
+      ],
+      "civs": [
+        "Malians",
+        "Portuguese",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ceeelebrate",
+        "Tusky",
+        "MTExplore"
+      ],
+      "civs": [
+        "Dravidians",
+        "Malay",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-06-08",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Heidewolf",
+        "Dave",
+        "Woodhouse"
+      ],
+      "civs": [
+        "Persians",
+        "Bohemians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Murkbey",
+        "Aleko",
+        "Saibot"
+      ],
+      "civs": [
+        "Persians",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-06-07",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "ElNoniro",
+        "Jimmy",
+        "UxCima"
+      ],
+      "civs": [
+        "Japanese",
+        "Wu",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wosm",
+        "Sundev",
+        "Pl0tterGhost"
+      ],
+      "civs": [
+        "Dravidians",
+        "Bengalis",
+        "Vikings"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-05-31",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ceeelebrate",
+        "MTExplore",
+        "115slayer"
+      ],
+      "civs": [
+        "Persians",
+        "Lithuanians",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Aleko",
+        "Saibot",
+        "Murkbey"
+      ],
+      "civs": [
+        "Persians",
+        "Italians",
+        "Malians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2787887531?t=00h48m25s"
+  },
+  {
+    "date": "2026-05-31",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "AleksanderG",
+        "IThink",
+        "EXvision"
+      ],
+      "civs": [
+        "Malians",
+        "Portuguese",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bread_Pudding",
+        "Ingreenheaven",
+        "Upsguy7"
+      ],
+      "civs": [
+        "Italians",
+        "Persians",
+        "Bengalis"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2787887531?t=01h45m49s"
+  },
+  {
+    "date": "2026-05-31",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Danielsiii",
+        "QuatschmitSoße",
+        "Armazmar"
+      ],
+      "civs": [
+        "Persians",
+        "Burmese",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "ElNoniro",
+        "Jimmy",
+        "Jaxto"
+      ],
+      "civs": [
+        "Persians",
+        "Dravidians",
+        "Koreans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2785438430?t=01h14m16s"
+  },
+  {
+    "date": "2026-05-29",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Heidewolf",
+        "Dave",
+        "Woodhouse"
+      ],
+      "civs": [
+        "Malians",
+        "Lithuanians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wosm",
+        "Pl0tterGhost",
+        "ErdeneMangudai"
+      ],
+      "civs": [
+        "Persians",
+        "Vikings",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-05-24",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Murkbey",
+        "Aleko",
+        "Simonz"
+      ],
+      "civs": [
+        "Japanese",
+        "Lithuanians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "ElNoniro",
+        "Jimmy",
+        "Golden_canine"
+      ],
+      "civs": [
+        "Persians",
+        "Dravidians",
+        "Italians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2781965319?t=03h43m47s"
+  },
+  {
+    "date": "2026-05-23",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Danielsiii",
+        "QuatschmitSoße",
+        "Armazmar"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Italians",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ceeelebrate",
+        "Tusky",
+        "Instinct"
+      ],
+      "civs": [
+        "Japanese",
+        "Spanish",
+        "Malians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2781965319?t=00h46m46s"
+  },
+  {
+    "date": "2026-05-23",
+    "tournament": "Nomad Cup 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Wosm",
+        "Pl0tterGhost",
+        "ErdeneMangudai"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Vikings",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bread_Pudding",
+        "DJ_Pesto",
+        "Upsguy7"
+      ],
+      "civs": [
+        "Malians",
+        "Armenians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2781965319?t=02h02m10s"
+  },
+  {
+    "date": "2026-05-17",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Target331",
+        "Terz",
+        "Running"
+      ],
+      "civs": [
+        "Romans",
+        "Berbers",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "TheKroks"
+      ],
+      "civs": [
+        "Vikings",
+        "Italians",
+        "Persians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-05-10",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Lord_Envidiates",
+        "Mauricioae13",
+        "Develement"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Burmese",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Steak",
+        "Noszombie",
+        "Fanjita"
+      ],
+      "civs": [
+        "Wei",
+        "Muisca",
+        "Wu"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-05-09",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "DOOMSTER",
+        "Dr.Kozmonot",
+        "The_Dragonstar"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Vikings",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "TheKroks"
+      ],
+      "civs": [
+        "Koreans",
+        "Malians",
+        "Hindustanis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-05-01",
+    "tournament": "The League: Showmatch",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lewis",
+        "DauT",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Spanish",
+        "Persians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Hearttt",
+        "Hera",
+        "Liereyy"
+      ],
+      "civs": [
+        "Chinese",
+        "Persians",
+        "Tupi"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/eO-V9Xopz1Y?si=kOPorDSqwHiae-v4&t=2026"
+  },
+  {
+    "date": "2026-04-24",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Pume",
+        "Duke_Thompson",
+        "C3mbrich"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Dravidians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Spaden",
+        "Davve02"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Italians",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-04-23",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "El_Matador",
+        "Mr.Dobbsn",
+        "Madtomski"
+      ],
+      "civs": [
+        "Berbers",
+        "Malians",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Danielsiii",
+        "Xarkey",
+        "ElNoniro"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Vietnamese",
+        "Japanese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-04-19",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "PoXoLo",
+        "Moneimon",
+        "M0re"
+      ],
+      "civs": [
+        "Berbers",
+        "Malians",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lord_Envidiates",
+        "SiNisTeR",
+        "Mauricioae13"
+      ],
+      "civs": [
+        "Wei",
+        "Koreans",
+        "Chinese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-04-14",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "TheKroks"
+      ],
+      "civs": [
+        "Koreans",
+        "Mongols",
+        "Celts"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vodka_L",
+        "Kamigawa",
+        "Benanji"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Italians",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-04-14",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Danielsiii",
+        "Xarkey",
+        "ElNoniro"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Persians",
+        "Tupi"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Spaden",
+        "Frost_9"
+      ],
+      "civs": [
+        "Mongols",
+        "Shu",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-03-17",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TeMo",
+        "NeoZz",
+        "TheKroks"
+      ],
+      "civs": [
+        "Koreans",
+        "Dravidians",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wean_Dinchester",
+        "Acro17",
+        "Mr.Dobbsn"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Japanese",
+        "Mapuche"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-03-17",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "ElNoniro",
+        "Xarkey",
+        "Danielsiii"
+      ],
+      "civs": [
+        "Japanese",
+        "Turks",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Pume",
+        "PoXoLo",
+        "M0re"
+      ],
+      "civs": [
+        "Malians",
+        "Spanish",
+        "Mongols"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-03-16",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ganji",
+        "Spaden",
+        "Davve02"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Dravidians",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Acro17",
+        "Wean_Dinchester",
+        "Mr.Dobbsn"
+      ],
+      "civs": [
+        "Huns",
+        "Berbers",
+        "Wu"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2026-03-08",
+    "tournament": "World Team League 2026: Invitational Season",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Acro17",
+        "Mr.Dobbsn",
+        "Wean_Dinchester"
+      ],
+      "civs": [
+        "Huns",
+        "Celts",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sobek",
+        "Whitecourt",
+        "Felipe"
+      ],
+      "civs": [
+        "Malians",
+        "Khmer",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-11-14",
+    "tournament": "TAG Invitational: TAG vs LingYuan",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sitaux",
+        "MbL",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Vietnamese",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Berbers",
+        "Wei",
+        "Huns"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/jnyYqmsZ6Ig?si=8ZYSHRzwn8yPl8FW&t=6985"
+  },
+  {
+    "date": "2025-10-26",
+    "tournament": "LingYuan Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Yo",
+        "TheViper",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Spanish",
+        "Khmer",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Nicov",
+        "ACCM"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Turks"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/4So1B-xcIzM?si=ihA5YodzYvcAoIkU&t=20766"
+  },
+  {
+    "date": "2025-09-29",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Dodo",
+        "Odemeister",
+        "Shyles"
+      ],
+      "civs": [
+        "Bohemians",
+        "Malians",
+        "Wu"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Jiinska",
+        "Villese",
+        "Wza"
+      ],
+      "civs": [
+        "Bengalis",
+        "Huns"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-09-26",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ebbu",
+        "Tomppa",
+        "Nightrider"
+      ],
+      "civs": [
+        "Koreans",
+        "Malians",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ee-meili",
+        "Emalius2",
+        "Kaarlos"
+      ],
+      "civs": [
+        "Italians",
+        "Hindustanis",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-09-10",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Jupe",
+        "Weski",
+        "Jääpala"
+      ],
+      "civs": [
+        "Portuguese",
+        "Italians",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Fatbeard",
+        "Rubenstock",
+        "Pahvi"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Mongols",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-09-09",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Jiinska",
+        "Wza",
+        "Villese"
+      ],
+      "civs": [
+        "Italians",
+        "Dravidians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ebbu",
+        "Tomppa",
+        "Nightrider"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Malians",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-09-05",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Pahvi",
+        "Rubenstock",
+        "Fatbeard"
+      ],
+      "civs": [
+        "Berbers",
+        "Vietnamese",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Juyhou",
+        "Pyrrhos",
+        "K1ng-4rthur"
+      ],
+      "civs": [
+        "Mongols",
+        "Koreans",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-09-01",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Pyrrhos",
+        "Juyhou",
+        "K1ng-4rthur"
+      ],
+      "civs": [
+        "Italians",
+        "Berbers",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Jääpala",
+        "Weski",
+        "Jupe"
+      ],
+      "civs": [
+        "Burmese",
+        "Bengalis",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-27",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Odemeister",
+        "Shyles",
+        "Dodo"
+      ],
+      "civs": [
+        "Burmese",
+        "Berbers",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Pahvi",
+        "Fatbeard",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Portuguese",
+        "Lithuanians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-25",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Dasran",
+        "TheMax",
+        "30Markus"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Lithuanians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ebbu",
+        "Tomppa",
+        "Nightrider"
+      ],
+      "civs": [
+        "Italians",
+        "Malians",
+        "Japanese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-20",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Pyrrhos",
+        "Juyhou",
+        "K1ng-4rthur"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Koreans",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dodo",
+        "Shyles",
+        "Odemeister"
+      ],
+      "civs": [
+        "Italians",
+        "Vikings",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-17",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Pahvi0",
+        "Fatbeard",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Berbers",
+        "Lithuanians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ee-meili",
+        "Emalius2",
+        "Kaarlos"
+      ],
+      "civs": [
+        "Malians",
+        "Vietnamese",
+        "Mongols"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-13",
+    "tournament": "Sisällissota",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ebbu",
+        "Tomppa",
+        "Nightrider"
+      ],
+      "civs": [
+        "Turks",
+        "Koreans",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Morso",
+        "Woodman",
+        "Mullisaukko"
+      ],
+      "civs": [
+        "Berbers",
+        "Vietnamese",
+        "Persians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-10",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sundev",
+        "Gary",
+        "Kivarmicz"
+      ],
+      "civs": [
+        "Bengalis",
+        "Mongols",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bread_Pudding_With_Bum_Sauce",
+        "Mo_Tastic",
+        "Betze"
+      ],
+      "civs": [
+        "Bohemians",
+        "Romans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-08-10",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sundev",
+        "Gary",
+        "QuatschmitSoße"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Malians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bread_Pudding_With_Bum_Sauce",
+        "Mo_Tastic",
+        "Betze"
+      ],
+      "civs": [
+        "Dravidians",
+        "Malians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-07-27",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sundev",
+        "Kivarmicz",
+        "QuatschmitSoße"
+      ],
+      "civs": [
+        "Burmese",
+        "Vikings",
+        "Byzantines"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Murkbey",
+        "Saibot",
+        "Heidewolf"
+      ],
+      "civs": [
+        "Malians",
+        "Japanese",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-06-28",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "LaSmoth",
+        "Deadbeat_Dan",
+        "TheTiger"
+      ],
+      "civs": [
+        "Turks",
+        "Saracens",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Lovee",
+        "Boofbuddha",
+        "MrOsoVC8"
+      ],
+      "civs": [
+        "Malay",
+        "Bengalis",
+        "Khmer"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-06-14",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Murkbey",
+        "ROBIN_HOOD_YO",
+        "Bel"
+      ],
+      "civs": [
+        "Persians",
+        "Celts",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Rodrixs",
+        "Jdac",
+        "Nicostock"
+      ],
+      "civs": [
+        "Persians",
+        "Byzantines"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2485974316"
+  },
+  {
+    "date": "2025-05-31",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Kebek",
+        "Lelouch",
+        "HuLk_Chileno"
+      ],
+      "civs": [
+        "Celts",
+        "Aztecs",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sundev",
+        "Gary",
+        "QuatschmitSoße"
+      ],
+      "civs": [
+        "Koreans",
+        "Huns",
+        "Vikings"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-05-24",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "LaSmoth",
+        "TheTiger",
+        "Deadbeat_Dan"
+      ],
+      "civs": [
+        "Malay",
+        "Tatars",
+        "Japanese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dely",
+        "Gary",
+        "QuatschmitSoße"
+      ],
+      "civs": [
+        "Bengalis",
+        "Japanese",
+        "Vikings"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-05-17",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sundev",
+        "Gary",
+        "QuatschmitSoße"
+      ],
+      "civs": [
+        "Bengalis",
+        "Berbers",
+        "Vikings"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Bread_Pudding_With_Bum_Sauce",
+        "Hata",
+        "Betze"
+      ],
+      "civs": [
+        "Italians",
+        "Japanese",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-05-11",
+    "tournament": "Nomad Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Heidewolf",
+        "Chainy555",
+        "Bel"
+      ],
+      "civs": [
+        "Dravidians",
+        "Italians",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TheKroks",
+        "Amaom",
+        "J0N-PERKiNS"
+      ],
+      "civs": [
+        "Persians",
+        "Dravidians",
+        "Berbers"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2456245148"
+  },
+  {
+    "date": "2025-03-27",
+    "tournament": "LingYuan Invitational 8",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Hera",
+        "TaToH",
+        "DauT"
+      ],
+      "civs": [
+        "Persians",
+        "Dravidians",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Yo",
+        "Vivi",
+        "Lyx"
+      ],
+      "civs": [
+        "Persians",
+        "Spanish",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-03-07",
+    "tournament": "LingYuan Invitational 7",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "GoKu",
+        "F1Re",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Persians",
+        "Vikings",
+        "Spanish"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Spanish",
+        "Persians",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-02-22",
+    "tournament": "Captain's Winter Draft",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TIGERBOSS",
+        "SpOefT",
+        "Entropic"
+      ],
+      "civs": []
+    },
+    "team2": {
+      "players": [
+        "Tunison",
+        "LoveBR",
+        "Allapes"
+      ],
+      "civs": []
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-02-15",
+    "tournament": "Captain's Winter Draft",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TheLastJarl",
+        "El_Matador",
+        "NoBrainur"
+      ],
+      "civs": []
+    },
+    "team2": {
+      "players": [
+        "Ulysses",
+        "DivineDFP",
+        "BallBag"
+      ],
+      "civs": []
+    },
+    "hasVod": true,
+    "vodUrl": "https://youtu.be/27BZgfupfxQ"
+  },
+  {
+    "date": "2025-02-12",
+    "tournament": "Germany vs France Charity Showmatch",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Wean_Dinchester",
+        "Target331",
+        "Chaos_2_win"
+      ],
+      "civs": [
+        "Burgundians",
+        "Burmese",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Thanouille",
+        "Hadeo",
+        "Kimbo"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Lithuanians",
+        "Goths"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-12-27",
+    "tournament": "Showmatch Wonders vs DarkSidE",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Uzzi",
+        "LobodeLaNieve",
+        "Biry"
+      ],
+      "civs": [
+        "Huns",
+        "Persians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Monoz",
+        "Prisma09",
+        "Lucho"
+      ],
+      "civs": [
+        "Spanish",
+        "Malians",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-12-09",
+    "tournament": "Fox vs Taiwan Aoe Gamer 2",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Sitaux",
+        "MbL"
+      ],
+      "civs": [
+        "Spanish",
+        "Italians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Dark"
+      ],
+      "civs": [
+        "Malians",
+        "Koreans",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-12-01",
+    "tournament": "Copa Banda Catalana II: Showmatch",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Duke_Thompson",
+        "PoXoLo",
+        "M0re"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Malians",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Jorge_Garcia",
+        "TaToH",
+        "12Tirador"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Mongols",
+        "Dravidians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=zdnkDhl1kCg"
+  },
+  {
+    "date": "2024-11-30",
+    "tournament": "Copa Banda Catalana II",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Pume",
+        "MarcAoe",
+        "ErAmo"
+      ],
+      "civs": []
+    },
+    "team2": {
+      "players": [
+        "Bixiyo",
+        "Jorge_Garcia",
+        "SeMuR"
+      ],
+      "civs": []
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-11-03",
+    "tournament": "SAX Nations Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Italians",
+        "Malians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Ciskhan",
+        "Margougou"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Vietnamese",
+        "Koreans"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/WO52vy-_86s?si=vBqkhijQTki0J2C0&t=12299"
+  },
+  {
+    "date": "2024-11-02",
+    "tournament": "SAX Nations Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nicov",
+        "Lucky_Rox",
+        "Capoch"
+      ],
+      "civs": [
+        "Persians",
+        "Vietnamese",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Ciskhan",
+        "Margougou"
+      ],
+      "civs": [
+        "Malians",
+        "Japanese",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/OzCxpuxrcUY?si=43gv4vjYYJ49dB8c&t=10527"
+  },
+  {
+    "date": "2024-11-02",
+    "tournament": "SAX Nations Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Yo",
+        "Vivi"
+      ],
+      "civs": [
+        "Malians",
+        "Bengalis",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "GoKu",
+        "Miguel",
+        "Dogao"
+      ],
+      "civs": [
+        "Armenians",
+        "Georgians",
+        "Japanese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/OzCxpuxrcUY?si=jdhF3xZ-_dTX_qN3&t=1102"
+  },
+  {
+    "date": "2024-08-25",
+    "tournament": "Three Swords Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nixishin",
+        "Lextop97",
+        "BlackBaby"
+      ],
+      "civs": [
+        "Italians",
+        "Mongols",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "LeeChia",
+        "Dragon",
+        "小雨Renee"
+      ],
+      "civs": [
+        "Georgians",
+        "Bohemians",
+        "Spanish"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-08-24",
+    "tournament": "Three Swords Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "小雨Renee",
+        "LeeChia",
+        "Dragon"
+      ],
+      "civs": [
+        "Koreans",
+        "Dravidians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "AceW",
+        "Loki_(Dutch_player)",
+        "Flyzlin"
+      ],
+      "civs": [
+        "Persians",
+        "Mongols",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-08-17",
+    "tournament": "2v2 HunCup 2024",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Szotyesz",
+        "Mityus",
+        "BodokoS"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Bengalis",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Salytmacska",
+        "Peppsi96",
+        "SchleK_SobeR"
+      ],
+      "civs": [
+        "Berbers",
+        "Georgians",
+        "Persians"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.twitch.tv/videos/2227409308"
+  },
+  {
+    "date": "2024-08-10",
+    "tournament": "Three Swords Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lextop97",
+        "Nixishin",
+        "BlackBaby"
+      ],
+      "civs": [
+        "Mongols",
+        "Italians",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Loki_(Dutch_player)",
+        "Flyzlin",
+        "LexiNíAnord"
+      ],
+      "civs": [
+        "Persians",
+        "Malians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-08-10",
+    "tournament": "Three Swords Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "SiNisTeR",
+        "Guardian_Azul",
+        "Alice"
+      ],
+      "civs": [
+        "Burgundians",
+        "Mongols",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "LeeChia",
+        "Dragon",
+        "小雨Renee"
+      ],
+      "civs": [
+        "Dravidians",
+        "Bengalis",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-08-03",
+    "tournament": "Three Swords Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "LeeChia",
+        "Dragon",
+        "小雨Renee"
+      ],
+      "civs": [
+        "Dravidians",
+        "Bengalis",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Leogrampy",
+        "FreakinAndy",
+        "Chris_der_Fiese"
+      ],
+      "civs": [
+        "Malians",
+        "Persians",
+        "Vikings"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-06-08",
+    "tournament": "Console Conquest Trios",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Whitewidow52",
+        "SoloGhostAK47",
+        "CrazyBball4life"
+      ],
+      "civs": [
+        "Sicilians",
+        "Gurjaras",
+        "Celts"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Big_Conigz",
+        "KovDaTryHard",
+        "Faith2Adventure"
+      ],
+      "civs": [
+        "Huns",
+        "Burmese",
+        "Spanish"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-06-01",
+    "tournament": "Console Conquest Trios",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Turtle_tank3344",
+        "Darth_Masala",
+        "OvercomeCloud74"
+      ],
+      "civs": [
+        "Britons",
+        "Franks",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "SoloGhostAK47",
+        "Whitewidow52",
+        "CrazyBball4life"
+      ],
+      "civs": [
+        "Georgians",
+        "Spanish",
+        "Armenians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-05-20",
+    "tournament": "Console Conquest Trios",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Fiz_98",
+        "FrostedIceCold",
+        "Gold_LIama"
+      ],
+      "civs": [
+        "Berbers",
+        "Vietnamese",
+        "Saracens"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Faith2Adventure",
+        "KovDaTryHard",
+        "Big_Conigz"
+      ],
+      "civs": [
+        "Persians",
+        "Dravidians",
+        "Huns"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=SD38-E5oySE"
+  },
+  {
+    "date": "2024-05-18",
+    "tournament": "Console Conquest Trios",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "D4NI3L_J0N35",
+        "A_Mongolito",
+        "Sneakyturtle213"
+      ],
+      "civs": [
+        "Bengalis",
+        "Vietnamese",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "SoloGhostAK47",
+        "CrazyBball4life",
+        "DsT_Ash_9"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Japanese",
+        "Malay"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/watch?v=JufI1IssAa8"
+  },
+  {
+    "date": "2024-04-13",
+    "tournament": "TAG Invitational: TAG vs Finland",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Armenians",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Juyhou",
+        "TheMax",
+        "Villese"
+      ],
+      "civs": [
+        "Berbers",
+        "Persians",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-03-16",
+    "tournament": "TAG x Growlife AoE Party 2",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Bad_Koala",
+        "Jibatong",
+        "Yo"
+      ],
+      "civs": [
+        "Malians",
+        "Vietnamese",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Dravidians",
+        "Persians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-03-16",
+    "tournament": "TAG x Growlife AoE Party 1",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Youpudding",
+        "Taeyoon",
+        "Rayz"
+      ],
+      "civs": [
+        "Dravidians",
+        "Berbers",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Tointoin",
+        "PLP"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Byzantines",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-01-14",
+    "tournament": "Dreamers vs Taiwan Aoe Gamer",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Z40",
+        "Sora_Kuma",
+        "Rayz"
+      ],
+      "civs": [
+        "Persians",
+        "Koreans",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Monoz",
+        "Gary",
+        "Nicov"
+      ],
+      "civs": [
+        "Dravidians",
+        "Malians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-01-06",
+    "tournament": "Fox Invitational Paris",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "L'Ammiraglio",
+        "Kamigawa",
+        "nanimaren"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Malians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Rayz",
+        "Youpudding",
+        "Taeyoon"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Huns",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-01-04",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Teutons",
+        "Italians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Daniel",
+        "Annotoph"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Portuguese",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-21",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Romans",
+        "Khmer",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Mihai06",
+        "Margougou"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Malians",
+        "Lithuanians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-17",
+    "tournament": "Fox Invitational Paris",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Carnage",
+        "nanimaren",
+        "Zuccolo"
+      ],
+      "civs": [
+        "Berbers",
+        "Mongols",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Cl3m3nT",
+        "Nyusika"
+      ],
+      "civs": [
+        "Portuguese",
+        "Malians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-17",
+    "tournament": "Fox Invitational Paris",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Rayz",
+        "Youpudding",
+        "Taeyoon"
+      ],
+      "civs": [
+        "Italians",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Dfx"
+      ],
+      "civs": [
+        "Koreans",
+        "Malians",
+        "Spanish"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-14",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Annotoph",
+        "Running",
+        "Sitaux"
+      ],
+      "civs": [
+        "Bohemians",
+        "Bengalis",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Barles"
+      ],
+      "civs": [
+        "Dravidians",
+        "Lithuanians",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-11",
+    "tournament": "Fox Invitational Buenos Aires",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "IAnTaGoNiStI",
+        "Repard",
+        "Dark"
+      ],
+      "civs": [
+        "Berbers",
+        "Gurjaras",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Mihai06"
+      ],
+      "civs": [
+        "Spanish",
+        "Lithuanians",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-09",
+    "tournament": "Fox Invitational Paris",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Rayz",
+        "Taeyoon",
+        "Youpudding"
+      ],
+      "civs": [
+        "Persians",
+        "Vietnamese",
+        "Hindustanis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ciskhan",
+        "Cl3m3nT",
+        "Nyusika"
+      ],
+      "civs": [
+        "Portuguese",
+        "Malians",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-07",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Mihai06"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Malians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "ACCM",
+        "FreakinChris",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Georgians",
+        "Bengalis",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-02",
+    "tournament": "Copa Banda Catalana",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TaToH",
+        "ComteAlex",
+        "Rich_m"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Bohemians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PoXoLo",
+        "Duke_Thompson",
+        "Russi18"
+      ],
+      "civs": [
+        "Malians",
+        "Berbers",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-12-01",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Margougou",
+        "Sebastian",
+        "Mihai06"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Malians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "MrOsoVC8",
+        "Uzzi",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-11-28",
+    "tournament": "Fox Invitational Buenos Aires",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Jibatong",
+        "Bad_Koala",
+        "Ming_(Hong_Kongese_player)"
+      ],
+      "civs": [
+        "Berbers",
+        "Vietnamese",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Mihai06"
+      ],
+      "civs": [
+        "Koreans",
+        "Lithuanians",
+        "Spanish"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-11-24",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Berbers",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "WaRRioR",
+        "Classicpro",
+        "Vinchester"
+      ],
+      "civs": [
+        "Bengalis",
+        "Malians",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-11-17",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Barles"
+      ],
+      "civs": [
+        "Spanish",
+        "Berbers",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Slam",
+        "ACCM",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Bengalis",
+        "Aztecs",
+        "Lithuanians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-11-06",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "FreakinAndy",
+        "Slam",
+        "ACCM"
+      ],
+      "civs": [
+        "Koreans",
+        "Bengalis",
+        "Burmese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Annotoph",
+        "Daniel"
+      ],
+      "civs": [
+        "Berbers",
+        "Burgundians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-11-05",
+    "tournament": "Fox Invitational Buenos Aires",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ming_(Hong_Kongese_player)",
+        "Bad_Koala",
+        "Jibatong"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Koreans",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dark",
+        "Repard",
+        "IAnTaGoNiStI"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Mongols",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-11-02",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wean_Dinchester",
+        "Terz",
+        "Acro17"
+      ],
+      "civs": [
+        "Japanese",
+        "Burmese",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "MrOsoVC8",
+        "Uzzi",
+        "LobodeLaNieve"
+      ],
+      "civs": [
+        "Italians",
+        "Burgundians",
+        "Portuguese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-28",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nahuel05",
+        "Eskabe",
+        "Bl4ck"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Vietnamese",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "HGB_AOE",
+        "Snapy",
+        "Imfury"
+      ],
+      "civs": [
+        "Italians",
+        "Portuguese",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-26",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wean_Dinchester",
+        "Terz",
+        "Acro17"
+      ],
+      "civs": [
+        "Malians",
+        "Italians",
+        "Turks"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Kw",
+        "TaeYoon",
+        "Rayz"
+      ],
+      "civs": [
+        "Berbers",
+        "Bengalis"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-23",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Fpl_whisperer",
+        "Pits",
+        "Mojotzotzo"
+      ],
+      "civs": [
+        "Japanese",
+        "Teutons"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ubetnir",
+        "Ronotovi",
+        "Dr.Kozmonot"
+      ],
+      "civs": [
+        "Malay",
+        "Italians",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-22",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Blackheart",
+        "AR12",
+        "Wenegor"
+      ],
+      "civs": [
+        "Turks",
+        "Teutons",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Monoz",
+        "Gary",
+        "Lucky_Rox"
+      ],
+      "civs": [
+        "Dravidians",
+        "Persians",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-21",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Cloud_(Taiwanese_player)",
+        "Sora_Kuma",
+        "Z40"
+      ],
+      "civs": [
+        "Burgundians",
+        "Italians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Slam",
+        "FreakinAndy",
+        "ACCM"
+      ],
+      "civs": [
+        "Malians",
+        "Japanese",
+        "Turks"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-15",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "The_French_Kiddo",
+        "Klemens",
+        "Myzel"
+      ],
+      "civs": [
+        "Italians",
+        "Turks",
+        "Romans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PromoART",
+        "Bo-FORCE",
+        "OLADUSHEK"
+      ],
+      "civs": [
+        "Koreans",
+        "Dravidians",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-15",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "WaRRioR",
+        "Classicpro",
+        "Vinchester"
+      ],
+      "civs": [
+        "Dravidians",
+        "Persians",
+        "Bengalis"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Mihai06"
+      ],
+      "civs": [
+        "Spanish",
+        "Italians",
+        "Britons"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-08",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Inc",
+        "Influenza",
+        "Mentalist"
+      ],
+      "civs": [
+        "Hindustanis",
+        "Persians",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sebastian",
+        "Margougou",
+        "Mihai06"
+      ],
+      "civs": [
+        "Malians",
+        "Lithuanians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-07",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "WaRRioR",
+        "Classicpro",
+        "Vinchester"
+      ],
+      "civs": [
+        "Dravidians",
+        "Persians",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Valas",
+        "Barles"
+      ],
+      "civs": [
+        "Spanish",
+        "Mongols",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-01",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "E1stea",
+        "ShiXo.",
+        "Storm"
+      ],
+      "civs": [
+        "Koreans",
+        "Burmese",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "Themariach1",
+        "MrOsoVC8"
+      ],
+      "civs": [
+        "Malians",
+        "Dravidians",
+        "Portuguese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-29",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Mac-A",
+        "Nagharoth",
+        "AOEByzantines"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Bengalis",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wide",
+        "Classicpro",
+        "WaRRioR"
+      ],
+      "civs": [
+        "Portuguese",
+        "Koreans",
+        "Lithuanians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-28",
+    "tournament": "A4G Nomadic Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "The_Bloodless",
+        "Blackheart",
+        "Wenegor"
+      ],
+      "civs": [
+        "Malians",
+        "Portuguese",
+        "Italians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Faraday",
+        "Paganini",
+        "Alive"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Persians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-26",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Terz",
+        "Acro17",
+        "PhilippHJS"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Berbers",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Slam",
+        "FreakinAndy",
+        "ACCM"
+      ],
+      "civs": [
+        "Italians",
+        "Portuguese",
+        "Aztecs"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-25",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Capout"
+      ],
+      "civs": [
+        "Koreans",
+        "Lithuanians",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Edgar_Davids",
+        "Target331",
+        "Jouds"
+      ],
+      "civs": [
+        "Persians",
+        "Malians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-19",
+    "tournament": "A4G Nomadic Cup: Showmatch",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Turks",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Margougou",
+        "Mihai06",
+        "Sebastian"
+      ],
+      "civs": [
+        "Portuguese",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-15",
+    "tournament": "Fox Invitational Copenhagen",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capy",
+        "King_Boo",
+        "Darvoi"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Berbers",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "SaladEsc",
+        "Good_luck",
+        "Streetpete"
+      ],
+      "civs": [
+        "Dravidians",
+        "Spanish",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-12",
+    "tournament": "Fox Invitational Copenhagen",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "SaladEsc",
+        "Emil_:D",
+        "Good_luck"
+      ],
+      "civs": [
+        "Dravidians",
+        "Persians",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Capout",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Vietnamese",
+        "Turks",
+        "Lithuanians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-09",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Villese",
+        "Valas",
+        "TheMax"
+      ],
+      "civs": [
+        "Persians",
+        "Malay",
+        "Burmese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Ciskhan",
+        "Margougou"
+      ],
+      "civs": [
+        "Malians",
+        "Bulgarians",
+        "Byzantines"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-09",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Ciskhan",
+        "Sitaux",
+        "Margougou"
+      ],
+      "civs": [
+        "Celts",
+        "Lithuanians",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Target331",
+        "Annotoph",
+        "Running"
+      ],
+      "civs": [
+        "Malians",
+        "Burmese",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-09",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Lyx",
+        "Vivi",
+        "Bad_Koala"
+      ],
+      "civs": [
+        "Mongols",
+        "Gurjaras",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Berbers",
+        "Lithuanians",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-08",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Z40",
+        "Cloud_(Taiwanese_player)",
+        "Sora_Kuma"
+      ],
+      "civs": [
+        "Bulgarians",
+        "Persians",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Spanish",
+        "Dravidians",
+        "Celts"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-08",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Margougou",
+        "Ciskhan",
+        "Sitaux"
+      ],
+      "civs": [
+        "Koreans",
+        "Berbers",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Villese",
+        "TheMax",
+        "Rubenstock"
+      ],
+      "civs": [
+        "Spanish",
+        "Persians",
+        "Teutons"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-07",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "ElNoniro",
+        "JackK",
+        "Dziamdziak"
+      ],
+      "civs": [
+        "Mongols",
+        "Lithuanians",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Wide",
+        "Classicpro",
+        "Vinchester"
+      ],
+      "civs": [
+        "Slavs",
+        "Dravidians",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-07",
+    "tournament": "The Unexpected Summer Cup",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Z40",
+        "Sora_Kuma",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Cumans",
+        "Persians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Ciskhan",
+        "Margougou"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Dravidians",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-08-14",
+    "tournament": "Fox Invitational Mexico",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Cloud_(Taiwanese_player)",
+        "Z40"
+      ],
+      "civs": [
+        "Persians",
+        "Berbers",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dr.Kozmonot",
+        "Ronotovi",
+        "Cyclops"
+      ],
+      "civs": [
+        "Burgundians",
+        "Gurjaras",
+        "Saracens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-08-05",
+    "tournament": "Fox Invitational Berlin",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Mr.Dobbsn",
+        "Terz",
+        "Acro17"
+      ],
+      "civs": [
+        "Persians",
+        "Koreans",
+        "Berbers"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Capout"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Malians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-07-30",
+    "tournament": "Fox Invitational Berlin",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Heisen",
+        "Dexter",
+        "TomS"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Malians",
+        "Persians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Mr.Dobbsn",
+        "Acro17",
+        "Madtomski"
+      ],
+      "civs": [
+        "Japanese",
+        "Bulgarians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-07-22",
+    "tournament": "Fox Invitational Mexico",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Sora_Kuma",
+        "Z40",
+        "Cloud_(Taiwanese_player)"
+      ],
+      "civs": [
+        "Persians",
+        "Burgundians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Margougou",
+        "Mihai06",
+        "Lighty"
+      ],
+      "civs": [
+        "Malians",
+        "Vietnamese",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-04",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Somero",
+        "Big_Tuna",
+        "Fanjita"
+      ],
+      "civs": [
+        "Portuguese",
+        "Persians",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Ganji",
+        "Madtomski",
+        "ActionMarc"
+      ],
+      "civs": [
+        "Berbers",
+        "Goths",
+        "Italians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-04",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TeMo",
+        "Mununez",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Mongols",
+        "Malians",
+        "Lithuanians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Jouds",
+        "Edgar_Davids"
+      ],
+      "civs": [
+        "Persians",
+        "Berbers",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-03",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Mununez",
+        "FreakinAndy",
+        "TeMo"
+      ],
+      "civs": [
+        "Malians",
+        "Lithuanians",
+        "Mongols"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Alf_Shumway",
+        "Target331",
+        "Dark"
+      ],
+      "civs": [
+        "Berbers",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-03",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Somero",
+        "Big_Tuna",
+        "Fanjita"
+      ],
+      "civs": [
+        "Koreans",
+        "Malians",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Annotoph",
+        "Steak",
+        "Shed"
+      ],
+      "civs": [
+        "Berbers",
+        "Persians",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-06-03",
+    "tournament": "Weekend Warlords: New Horizons",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capy",
+        "King_Boo",
+        "Dr.Kozmonot"
+      ],
+      "civs": [
+        "Dravidians",
+        "Vietnamese",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Ronotovi",
+        "Jouds"
+      ],
+      "civs": [
+        "Persians",
+        "Gurjaras",
+        "Berbers"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-03-05",
+    "tournament": "The Tea Party",
+    "map": "Nomad",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Capy",
+        "King_Boo",
+        "Darvoi"
+      ],
+      "civs": [
+        "Persians",
+        "Koreans",
+        "Burgundians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "BadBoy",
+        "Saymyname",
+        "BuloaSaky"
+      ],
+      "civs": [
+        "Lithuanians",
+        "Dravidians",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-02-21",
+    "tournament": "Aftermath vs White Wolf Palace (3)",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Turks",
+        "Portuguese",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Hera",
+        "MbL",
+        "Nicov"
+      ],
+      "civs": [
+        "Burmese",
+        "Portuguese",
+        "Persians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-02-21",
+    "tournament": "Aftermath vs White Wolf Palace (3)",
+    "map": "Nomad",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Vivi",
+        "Yo",
+        "Lyx"
+      ],
+      "civs": [
+        "Spanish",
+        "Persians",
+        "Dravidians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "MbL",
+        "Nicov",
+        "Liereyy"
+      ],
+      "civs": [
+        "Spanish",
+        "Dravidians",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  }
+]

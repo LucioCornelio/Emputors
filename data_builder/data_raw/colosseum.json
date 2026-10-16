@@ -1,0 +1,562 @@
+[
+  {
+    "date": "2025-02-08",
+    "tournament": "Germany vs France Charity Showmatch",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Madtomski",
+        "Acro17",
+        "Running"
+      ],
+      "civs": [
+        "Britons",
+        "Lithuanians",
+        "Koreans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dfx2",
+        "Sitaux",
+        "Kimbo"
+      ],
+      "civs": [
+        "Mongols",
+        "Chinese",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-12-27",
+    "tournament": "Showmatch Wonders vs DarkSidE",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Uzzi",
+        "LobodeLaNieve",
+        "Biry"
+      ],
+      "civs": [
+        "Mongols",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Monoz",
+        "Prisma09",
+        "Lucho"
+      ],
+      "civs": [
+        "Japanese",
+        "Magyars",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-03-25",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Nanimaren",
+        "Kamigawa",
+        "Salsicciotto1999"
+      ],
+      "civs": [
+        "Berbers",
+        "Magyars",
+        "Chinese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Kongensgade",
+        "Good_luck",
+        "Emil_:D"
+      ],
+      "civs": [
+        "Franks",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-03-10",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Salsicciotto1999",
+        "Kamigawa",
+        "Nanimaren"
+      ],
+      "civs": [
+        "Dravidians",
+        "Franks",
+        "Armenians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TeMo",
+        "Macluffy",
+        "Kiss_BB_(Moroccan_player)"
+      ],
+      "civs": [
+        "Portuguese",
+        "Magyars",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-03-04",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Magyars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emil_:D",
+        "Good_luck",
+        "SaladEsc"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Khmer",
+        "Koreans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-14",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "WaRRioR",
+        "IAnTaGoNiStI",
+        "Wide"
+      ],
+      "civs": [
+        "Chinese",
+        "Magyars",
+        "Ethiopians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PhilippHJS",
+        "Acro17",
+        "Terz"
+      ],
+      "civs": [
+        "Khmer",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-13",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wide",
+        "IAnTaGoNiStI",
+        "WaRRioR"
+      ],
+      "civs": [
+        "Malians",
+        "Romans",
+        "Tatars"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emil_:D",
+        "Good_luck",
+        "Kongensgade"
+      ],
+      "civs": [
+        "Khmer",
+        "Magyars",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-12",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "RaiD",
+        "Carnage_(Italian_player)",
+        "IKill_UDie"
+      ],
+      "civs": [
+        "Mongols",
+        "Khmer",
+        "Armenians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Nanimaren",
+        "Kamigawa",
+        "L'Ammiraglio"
+      ],
+      "civs": [
+        "Celts",
+        "Georgians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-10",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Kiss_BB_(Moroccan_player)",
+        "TeMo",
+        "Macluffy"
+      ],
+      "civs": [
+        "Malay",
+        "Khmer",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "PLP",
+        "Tointoin",
+        "Ciskhan"
+      ],
+      "civs": [
+        "Goths",
+        "Magyars"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-04",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Terz",
+        "Acro17",
+        "PhilippHJS"
+      ],
+      "civs": [
+        "Huns",
+        "Khmer"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Emil_:D",
+        "Good_luck",
+        "Kongensgade"
+      ],
+      "civs": [
+        "Ethiopians",
+        "Magyars",
+        "Mongols"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-04",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Wide",
+        "IAnTaGoNiStI",
+        "WaRRioR"
+      ],
+      "civs": [
+        "Malians",
+        "Magyars",
+        "Khmer"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Nanimaren",
+        "Kamigawa",
+        "Salsicciotto1999"
+      ],
+      "civs": [
+        "Romans",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2024-02-02",
+    "tournament": "3v3 Ita Invitational",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Terz",
+        "Acro17",
+        "PhilippHJS"
+      ],
+      "civs": [
+        "Mongols",
+        "Khmer",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "RaiD",
+        "IKill_UDie",
+        "Carnage_(Italian_player)"
+      ],
+      "civs": [
+        "Malay",
+        "Magyars",
+        "Japanese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-10-23",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TheViper",
+        "DauT",
+        "TaToH"
+      ],
+      "civs": [
+        "Malians",
+        "Slavs",
+        "Portuguese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Sitaux",
+        "Annotoph",
+        "Daniel"
+      ],
+      "civs": [
+        "Magyars",
+        "Huns"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-25",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Ciskhan",
+        "Tointoin",
+        "Capout"
+      ],
+      "civs": [
+        "Japanese",
+        "Magyars",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Pollux",
+        "Target331",
+        "Edgar_Davids"
+      ],
+      "civs": [
+        "Khmer",
+        "Dravidians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-24",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Terz",
+        "Acro17",
+        "PhilippHJS"
+      ],
+      "civs": [
+        "Dravidians",
+        "Khmer",
+        "Malians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Uzzi",
+        "KingstoNe",
+        "Themariach1"
+      ],
+      "civs": [
+        "Magyars",
+        "Vietnamese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-21",
+    "tournament": "Rising Teams: Gold Bracket",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "E1sTea",
+        "Kelar",
+        "Storm"
+      ],
+      "civs": [
+        "Saracens",
+        "Slavs"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Annotoph",
+        "Daniel",
+        "Sitaux"
+      ],
+      "civs": [
+        "Huns",
+        "Khmer"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-09-10",
+    "tournament": "Summer Slapdown II",
+    "map": "Colosseum",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Mojalo",
+        "RaiD",
+        "Null"
+      ],
+      "civs": [
+        "Dravidians",
+        "Romans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Leafman",
+        "Disaster_Edition",
+        "Reto"
+      ],
+      "civs": [
+        "Celts",
+        "Khmer",
+        "Malians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2023-08-25",
+    "tournament": "Summer Slapdown II",
+    "map": "Colosseum",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Develement",
+        "Xumpy",
+        "Arcy"
+      ],
+      "civs": [
+        "Mongols",
+        "Khmer",
+        "Vietnamese"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Skyleck",
+        "Lighty",
+        "Lifes"
+      ],
+      "civs": [
+        "Persians",
+        "Ethiopians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  }
+]

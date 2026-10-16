@@ -1,0 +1,6154 @@
+{
+  "maps": {
+    "Colosseum": {
+      "civs": {
+        "Britons": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Koreans": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 2,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Mongols": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Chinese": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malians": {
+          "picks": 3,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Dravidians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Franks": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Armenians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Magyars": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 3,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Romans": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Tatars": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khmer": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malay": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Britons + Koreans + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Chinese + Malians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Armenians + Dravidians + Franks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Magyars + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Malians + Romans + Tatars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Ethiopians + Khmer + Magyars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Khmer + Malians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Magyars + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        }
+      }
+    },
+    "Crescent": {
+      "civs": {
+        "Jurchens": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 0,
+          "cdps_flank": 2,
+          "pocket_picks": 3,
+          "pocket_wins": 2,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Huns": {
+          "picks": 9,
+          "wins": 5,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 9,
+          "pocket_wins": 5,
+          "cdps_pocket": 6,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wu": {
+          "picks": 21,
+          "wins": 11,
+          "flank_picks": 21,
+          "flank_wins": 11,
+          "cdps_flank": 18,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bengalis": {
+          "picks": 12,
+          "wins": 5,
+          "flank_picks": 12,
+          "flank_wins": 5,
+          "cdps_flank": 10,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Georgians": {
+          "picks": 10,
+          "wins": 4,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 10,
+          "pocket_wins": 4,
+          "cdps_pocket": 10,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Japanese": {
+          "picks": 21,
+          "wins": 13,
+          "flank_picks": 21,
+          "flank_wins": 13,
+          "cdps_flank": 16,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malay": {
+          "picks": 13,
+          "wins": 3,
+          "flank_picks": 13,
+          "flank_wins": 3,
+          "cdps_flank": 9,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Armenians": {
+          "picks": 10,
+          "wins": 3,
+          "flank_picks": 8,
+          "flank_wins": 2,
+          "cdps_flank": 8,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burgundians": {
+          "picks": 6,
+          "wins": 4,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 6,
+          "pocket_wins": 4,
+          "cdps_pocket": 4,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Berbers": {
+          "picks": 12,
+          "wins": 7,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 12,
+          "pocket_wins": 7,
+          "cdps_pocket": 11,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Koreans": {
+          "picks": 6,
+          "wins": 5,
+          "flank_picks": 6,
+          "flank_wins": 5,
+          "cdps_flank": 6,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Dravidians": {
+          "picks": 12,
+          "wins": 6,
+          "flank_picks": 12,
+          "flank_wins": 6,
+          "cdps_flank": 11,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Lithuanians": {
+          "picks": 10,
+          "wins": 5,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 9,
+          "pocket_wins": 5,
+          "cdps_pocket": 7,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Vikings": {
+          "picks": 18,
+          "wins": 12,
+          "flank_picks": 15,
+          "flank_wins": 11,
+          "cdps_flank": 15,
+          "pocket_picks": 3,
+          "pocket_wins": 1,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Shu": {
+          "picks": 9,
+          "wins": 8,
+          "flank_picks": 9,
+          "flank_wins": 8,
+          "cdps_flank": 9,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Italians": {
+          "picks": 16,
+          "wins": 8,
+          "flank_picks": 11,
+          "flank_wins": 5,
+          "cdps_flank": 9,
+          "pocket_picks": 5,
+          "pocket_wins": 3,
+          "cdps_pocket": 5,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Portuguese": {
+          "picks": 7,
+          "wins": 1,
+          "flank_picks": 7,
+          "flank_wins": 1,
+          "cdps_flank": 6,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Chinese": {
+          "picks": 3,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Celts": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 2,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khmer": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burmese": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Turks": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 3,
+          "pocket_wins": 2,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Britons": {
+          "picks": 3,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wei": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Persians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Magyars": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Romans": {
+          "picks": 4,
+          "wins": 3,
+          "flank_picks": 4,
+          "flank_wins": 3,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malians": {
+          "picks": 3,
+          "wins": 0,
+          "flank_picks": 3,
+          "flank_wins": 0,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Byzantines": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 3,
+          "pocket_wins": 1,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khitans": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Sicilians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Huns + Jurchens + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Georgians + Japanese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Huns + Japanese + Malay": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 1
+        },
+        "Armenians + Bengalis + Burgundians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Koreans + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Lithuanians + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Lithuanians + Shu + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Malay + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Italians + Shu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Dravidians + Wu": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 2
+        },
+        "Japanese + Lithuanians + Malay": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Dravidians + Italians": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Japanese + Wu": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 2
+        },
+        "Lithuanians + Portuguese + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Italians + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Georgians + Japanese + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Chinese + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Italians + Koreans + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Japanese + Lithuanians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Celts + Huns + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Italians + Khmer": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Dravidians + Japanese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Italians + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Berbers + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Koreans + Shu + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Italians + Lithuanians + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Jurchens + Shu + Wu": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 2
+        },
+        "Italians + Shu + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Dravidians + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Britons + Shu + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Turks + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Huns + Portuguese + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Japanese + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Huns + Koreans + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Japanese + Lithuanians + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Britons + Georgians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Malay + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Dravidians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Dravidians + Italians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Persians + Vikings + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Malay + Portuguese + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Britons + Shu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Huns + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Georgians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Italians + Magyars + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Lithuanians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Huns + Malay + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Burgundians + Japanese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Japanese + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Romans + Saracens + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Lithuanians + Magyars + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Japanese + Khmer + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Georgians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Italians + Japanese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Celts + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Celts + Koreans + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Italians + Japanese + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Byzantines + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Celts + Japanese + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Jurchens + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Huns + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Burgundians + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Byzantines + Japanese + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Italians + Khitans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Georgians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burgundians + Italians + Japanese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Japanese + Jurchens + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burgundians + Sicilians + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Romans + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Burgundians + Ethiopians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Byzantines + Shu + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Georgians + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Celts + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        }
+      }
+    },
+    "Fortress": {
+      "civs": {
+        "Danes": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Saracens": {
+          "picks": 15,
+          "wins": 7,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 13,
+          "pocket_wins": 6,
+          "cdps_pocket": 6,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Vietnamese": {
+          "picks": 17,
+          "wins": 7,
+          "flank_picks": 17,
+          "flank_wins": 7,
+          "cdps_flank": 8,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Dravidians": {
+          "picks": 7,
+          "wins": 6,
+          "flank_picks": 7,
+          "flank_wins": 6,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Gurjaras": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bengalis": {
+          "picks": 24,
+          "wins": 13,
+          "flank_picks": 22,
+          "flank_wins": 12,
+          "cdps_flank": 11,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Turks": {
+          "picks": 26,
+          "wins": 7,
+          "flank_picks": 25,
+          "flank_wins": 6,
+          "cdps_flank": 18,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Saxons": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burgundians": {
+          "picks": 10,
+          "wins": 5,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 8,
+          "pocket_wins": 4,
+          "cdps_pocket": 4,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malay": {
+          "picks": 8,
+          "wins": 4,
+          "flank_picks": 8,
+          "flank_wins": 4,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Hindustanis": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 5,
+          "pocket_wins": 2,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Goths": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Slavs": {
+          "picks": 13,
+          "wins": 9,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 13,
+          "pocket_wins": 9,
+          "cdps_pocket": 7,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Chinese": {
+          "picks": 11,
+          "wins": 8,
+          "flank_picks": 11,
+          "flank_wins": 8,
+          "cdps_flank": 7,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Portuguese": {
+          "picks": 11,
+          "wins": 4,
+          "flank_picks": 11,
+          "flank_wins": 4,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Shu": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burmese": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Celts": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Britons": {
+          "picks": 7,
+          "wins": 5,
+          "flank_picks": 7,
+          "flank_wins": 5,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khmer": {
+          "picks": 6,
+          "wins": 3,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 5,
+          "pocket_wins": 2,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bohemians": {
+          "picks": 24,
+          "wins": 14,
+          "flank_picks": 23,
+          "flank_wins": 14,
+          "cdps_flank": 9,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Persians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Jurchens": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 3,
+          "pocket_wins": 1,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Italians": {
+          "picks": 11,
+          "wins": 8,
+          "flank_picks": 11,
+          "flank_wins": 8,
+          "cdps_flank": 8,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Lithuanians": {
+          "picks": 14,
+          "wins": 11,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 14,
+          "pocket_wins": 11,
+          "cdps_pocket": 10,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Mongols": {
+          "picks": 7,
+          "wins": 3,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 2,
+          "pocket_picks": 4,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Berbers": {
+          "picks": 4,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wu": {
+          "picks": 4,
+          "wins": 0,
+          "flank_picks": 4,
+          "flank_wins": 0,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Koreans": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 5,
+          "flank_wins": 2,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Romans": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Magyars": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 3,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Spanish": {
+          "picks": 7,
+          "wins": 5,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 2,
+          "pocket_picks": 4,
+          "pocket_wins": 3,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Muisca": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Cumans": {
+          "picks": 5,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 2,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Poles": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Tatars": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Georgians": {
+          "picks": 3,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 2,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Teutons": {
+          "picks": 7,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 3,
+          "pocket_picks": 4,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Franks": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wei": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Huns": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Byzantines": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Sicilians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Danes + Saracens + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Dravidians + Gurjaras": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Saracens + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Burgundians + Saxons": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Hindustanis + Malay": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Goths + Saracens + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Slavs + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Saracens + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Portuguese + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Shu + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Britons + Celts + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Khmer + Turks": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bohemians + Persians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Saracens + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Italians + Jurchens + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Italians + Lithuanians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Malay + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Shu + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Dravidians + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Koreans + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Portuguese + Romans + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Jurchens + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Bohemians + Magyars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Jurchens + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bohemians + Chinese + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Ethiopians + Gurjaras + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Britons + Khmer": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Lithuanians + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Berbers + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burmese + Shu + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Lithuanians + Turks + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bohemians + Lithuanians + Turks": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 2
+        },
+        "Burmese + Hindustanis + Muisca": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Gurjaras + Italians + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Cumans + Poles": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Saracens + Turks + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Slavs + Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Dravidians + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Britons + Burgundians + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Saracens + Tatars + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Georgians + Jurchens + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Mongols + Teutons": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Britons + Italians + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Koreans + Saracens + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burgundians + Chinese + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Bohemians + Slavs": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 1
+        },
+        "Ethiopians + Hindustanis + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Franks + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Italians + Poles + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burgundians + Lithuanians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Khmer + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Lithuanians + Teutons + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Slavs + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Chinese + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Hindustanis + Malay + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Poles + Saracens + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Teutons + Turks + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Britons + Cumans + Huns": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Portuguese + Spanish + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Italians + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Byzantines + Gurjaras + Teutons": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Slavs + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Lithuanians + Malay + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Britons + Burgundians + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bohemians + Burgundians + Portuguese": {
+          "picks": 3,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Slavs + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Ethiopians + Mongols + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Hindustanis + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Cumans + Teutons": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Georgians + Khmer + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bohemians + Lithuanians + Malay": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Italians + Malay + Slavs": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Italians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Franks + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Mongols + Portuguese + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Koreans + Teutons": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Chinese + Spanish + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Cumans + Portuguese + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Chinese + Magyars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Berbers + Burgundians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Burgundians + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Georgians + Mongols": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Britons + Lithuanians + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Cumans + Turks + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Poles + Portuguese + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Italians + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Mongols + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Goths + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Magyars + Poles + Sicilians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Khmer + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Chinese + Slavs": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        }
+      }
+    },
+    "Grand Bara": {
+      "civs": {
+        "Tatars": {
+          "picks": 11,
+          "wins": 5,
+          "flank_picks": 11,
+          "flank_wins": 5,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Poles": {
+          "picks": 9,
+          "wins": 5,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 7,
+          "pocket_wins": 4,
+          "cdps_pocket": 5,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 3,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Tupi": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 5,
+          "flank_wins": 2,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Hindustanis": {
+          "picks": 8,
+          "wins": 3,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 7,
+          "pocket_wins": 2,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Saracens": {
+          "picks": 11,
+          "wins": 6,
+          "flank_picks": 11,
+          "flank_wins": 6,
+          "cdps_flank": 6,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bohemians": {
+          "picks": 3,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khmer": {
+          "picks": 11,
+          "wins": 7,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 9,
+          "pocket_wins": 6,
+          "cdps_pocket": 6,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Shu": {
+          "picks": 5,
+          "wins": 1,
+          "flank_picks": 5,
+          "flank_wins": 1,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Lithuanians": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Vietnamese": {
+          "picks": 6,
+          "wins": 3,
+          "flank_picks": 6,
+          "flank_wins": 3,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Cumans": {
+          "picks": 4,
+          "wins": 3,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 4,
+          "pocket_wins": 3,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Muisca": {
+          "picks": 5,
+          "wins": 4,
+          "flank_picks": 5,
+          "flank_wins": 4,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Britons": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burmese": {
+          "picks": 6,
+          "wins": 5,
+          "flank_picks": 5,
+          "flank_wins": 4,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Franks": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 5,
+          "pocket_wins": 2,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Portuguese": {
+          "picks": 8,
+          "wins": 5,
+          "flank_picks": 8,
+          "flank_wins": 5,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Magyars": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Armenians": {
+          "picks": 3,
+          "wins": 0,
+          "flank_picks": 3,
+          "flank_wins": 0,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malay": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 3,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Japanese": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burgundians": {
+          "picks": 7,
+          "wins": 4,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 7,
+          "pocket_wins": 4,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wei": {
+          "picks": 3,
+          "wins": 3,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Italians": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Koreans": {
+          "picks": 6,
+          "wins": 2,
+          "flank_picks": 6,
+          "flank_wins": 2,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Mongols": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Persians": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Gurjaras": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 2,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malians": {
+          "picks": 3,
+          "wins": 2,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Aztecs": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 2,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Georgians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Huns": {
+          "picks": 5,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 4,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Romans": {
+          "picks": 5,
+          "wins": 4,
+          "flank_picks": 4,
+          "flank_wins": 3,
+          "cdps_flank": 2,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Sicilians": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 2,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Berbers": {
+          "picks": 4,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Turks": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wu": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Chinese": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Byzantines": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Spanish": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Teutons": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Goths": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Slavs": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Dravidians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Celts": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Ethiopians + Poles + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Hindustanis + Saracens + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bohemians + Khmer + Shu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Ethiopians + Lithuanians + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Cumans + Muisca + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Britons + Burmese + Khmer": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Franks + Portuguese + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Khmer + Magyars + Shu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Malay + Poles": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Britons + Khmer + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burgundians + Japanese + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Hindustanis + Portuguese + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Khmer + Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Hindustanis + Koreans + Mongols": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Japanese + Khmer + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Persians + Portuguese + Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Gurjaras + Mongols + Muisca": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Aztecs + Malians + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Georgians + Koreans + Tatars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Malay + Poles + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Poles + Portuguese + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Franks + Shu + Tatars": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Huns + Shu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Khmer + Romans + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Cumans + Muisca + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Gurjaras + Malians + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Franks + Sicilians + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Hindustanis + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Khmer + Muisca + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burgundians + Muisca + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burmese + Poles + Romans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Huns + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Saracens + Wei + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Italians + Koreans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Hindustanis + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Aztecs + Burgundians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Byzantines + Malians + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Persians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Hindustanis + Huns + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Cumans + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Poles + Spanish + Teutons": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Hindustanis + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Khmer + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Goths + Poles + Tatars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burgundians + Khmer + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Koreans + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Burmese + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Huns + Tatars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Franks + Poles + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Slavs + Tatars + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Goths + Hindustanis": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Khmer + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Koreans + Romans + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Cumans + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Celts + Huns + Sicilians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Koreans + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Ethiopians + Poles + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        }
+      }
+    },
+    "Nomad": {
+      "civs": {
+        "Wei": {
+          "picks": 8,
+          "wins": 5,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 8,
+          "flex_wins": 5,
+          "cdps_flex": 6
+        },
+        "Muisca": {
+          "picks": 6,
+          "wins": 6,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 6,
+          "flex_wins": 6,
+          "cdps_flex": 5
+        },
+        "Jurchens": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 1,
+          "cdps_flex": 1
+        },
+        "Huns": {
+          "picks": 17,
+          "wins": 8,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 17,
+          "flex_wins": 8,
+          "cdps_flex": 11
+        },
+        "Bohemians": {
+          "picks": 11,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 11,
+          "flex_wins": 2,
+          "cdps_flex": 4
+        },
+        "Chinese": {
+          "picks": 14,
+          "wins": 8,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 14,
+          "flex_wins": 8,
+          "cdps_flex": 13
+        },
+        "Vietnamese": {
+          "picks": 65,
+          "wins": 22,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 65,
+          "flex_wins": 22,
+          "cdps_flex": 19
+        },
+        "Mongols": {
+          "picks": 25,
+          "wins": 11,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 25,
+          "flex_wins": 11,
+          "cdps_flex": 4
+        },
+        "Byzantines": {
+          "picks": 4,
+          "wins": 3,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 4,
+          "flex_wins": 3,
+          "cdps_flex": 1
+        },
+        "Vikings": {
+          "picks": 22,
+          "wins": 11,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 22,
+          "flex_wins": 11,
+          "cdps_flex": 8
+        },
+        "Malians": {
+          "picks": 80,
+          "wins": 40,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 80,
+          "flex_wins": 40,
+          "cdps_flex": 17
+        },
+        "Georgians": {
+          "picks": 12,
+          "wins": 7,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 12,
+          "flex_wins": 7,
+          "cdps_flex": 8
+        },
+        "Koreans": {
+          "picks": 52,
+          "wins": 34,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 52,
+          "flex_wins": 34,
+          "cdps_flex": 6
+        },
+        "Malay": {
+          "picks": 17,
+          "wins": 9,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 17,
+          "flex_wins": 9,
+          "cdps_flex": 5
+        },
+        "Portuguese": {
+          "picks": 22,
+          "wins": 13,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 22,
+          "flex_wins": 13,
+          "cdps_flex": 2
+        },
+        "Berbers": {
+          "picks": 58,
+          "wins": 25,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 58,
+          "flex_wins": 25,
+          "cdps_flex": 17
+        },
+        "Khitans": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 3,
+          "flex_wins": 1,
+          "cdps_flex": 2
+        },
+        "Lithuanians": {
+          "picks": 62,
+          "wins": 30,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 62,
+          "flex_wins": 30,
+          "cdps_flex": 16
+        },
+        "Persians": {
+          "picks": 64,
+          "wins": 30,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 64,
+          "flex_wins": 30,
+          "cdps_flex": 17
+        },
+        "Burmese": {
+          "picks": 23,
+          "wins": 14,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 23,
+          "flex_wins": 14,
+          "cdps_flex": 6
+        },
+        "Dravidians": {
+          "picks": 49,
+          "wins": 34,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 49,
+          "flex_wins": 34,
+          "cdps_flex": 10
+        },
+        "Spanish": {
+          "picks": 26,
+          "wins": 17,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 26,
+          "flex_wins": 17,
+          "cdps_flex": 4
+        },
+        "Armenians": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 5,
+          "flex_wins": 2,
+          "cdps_flex": 4
+        },
+        "Tupi": {
+          "picks": 8,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 8,
+          "flex_wins": 2,
+          "cdps_flex": 7
+        },
+        "Bengalis": {
+          "picks": 33,
+          "wins": 18,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 33,
+          "flex_wins": 18,
+          "cdps_flex": 15
+        },
+        "Romans": {
+          "picks": 6,
+          "wins": 3,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 6,
+          "flex_wins": 3,
+          "cdps_flex": 2
+        },
+        "Magyars": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 3,
+          "flex_wins": 1,
+          "cdps_flex": 2
+        },
+        "Teutons": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 4,
+          "flex_wins": 2,
+          "cdps_flex": 1
+        },
+        "Italians": {
+          "picks": 42,
+          "wins": 23,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 42,
+          "flex_wins": 23,
+          "cdps_flex": 9
+        },
+        "Mapuche": {
+          "picks": 4,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 4,
+          "flex_wins": 1,
+          "cdps_flex": 3
+        },
+        "Celts": {
+          "picks": 9,
+          "wins": 3,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 9,
+          "flex_wins": 3,
+          "cdps_flex": 2
+        },
+        "Tatars": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 2,
+          "flex_wins": 2,
+          "cdps_flex": 1
+        },
+        "Burgundians": {
+          "picks": 15,
+          "wins": 5,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 15,
+          "flex_wins": 5,
+          "cdps_flex": 1
+        },
+        "Japanese": {
+          "picks": 21,
+          "wins": 7,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 21,
+          "flex_wins": 7,
+          "cdps_flex": 8
+        },
+        "Turks": {
+          "picks": 10,
+          "wins": 4,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 10,
+          "flex_wins": 4,
+          "cdps_flex": 2
+        },
+        "Wu": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 4,
+          "flex_wins": 2,
+          "cdps_flex": 0
+        },
+        "Hindustanis": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 4,
+          "flex_wins": 2,
+          "cdps_flex": 0
+        },
+        "Shu": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 1,
+          "cdps_flex": 0
+        },
+        "Khmer": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 3,
+          "flex_wins": 1,
+          "cdps_flex": 0
+        },
+        "Saracens": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 3,
+          "flex_wins": 1,
+          "cdps_flex": 1
+        },
+        "Aztecs": {
+          "picks": 3,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 3,
+          "flex_wins": 1,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Goths": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 2,
+          "flex_wins": 1,
+          "cdps_flex": 0
+        },
+        "Sicilians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Gurjaras": {
+          "picks": 7,
+          "wins": 3,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 7,
+          "flex_wins": 3,
+          "cdps_flex": 0
+        },
+        "Britons": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 2,
+          "flex_wins": 2,
+          "cdps_flex": 0
+        },
+        "Franks": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 1,
+          "cdps_flex": 0
+        },
+        "Bulgarians": {
+          "picks": 3,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 3,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 1,
+          "cdps_flex": 0
+        },
+        "Cumans": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 1,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Jurchens + Muisca + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bohemians + Chinese + Huns": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Mongols + Vietnamese + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Byzantines + Chinese + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Malians + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Georgians + Koreans + Muisca": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Malay + Portuguese + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Chinese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Huns + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Khitans + Lithuanians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burmese + Lithuanians + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Georgians + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Persians + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Spanish + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Huns + Vietnamese + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Chinese + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Tupi + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Muisca + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Lithuanians + Magyars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burmese + Georgians + Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bohemians + Chinese + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Lithuanians + Teutons + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Lithuanians + Spanish + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Italians + Malians": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Tupi + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Lithuanians + Mapuche": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Huns + Mapuche": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Malians + Muisca": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Lithuanians + Muisca": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Huns + Vietnamese + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Khitans + Malians + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Magyars + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Celts + Huns + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Armenians + Malians + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Huns + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Burmese + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Koreans + Malians + Persians": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burgundians + Romans + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burmese + Dravidians + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Chinese + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Celts + Dravidians + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Georgians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Lithuanians + Malians + Vietnamese": {
+          "picks": 3,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Portuguese + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Huns + Lithuanians + Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Bohemians + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Burmese + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Chinese + Malay": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Georgians + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Malians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Persians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Lithuanians + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Khitans + Magyars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Celts + Georgians + Japanese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Italians + Persians + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Chinese + Dravidians + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Mapuche + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Chinese + Huns": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Lithuanians + Persians + Vikings": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Italians + Koreans + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Italians + Malians + Persians": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 1
+        },
+        "Bengalis + Dravidians + Persians": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Malians + Portuguese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Italians + Malay": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Malians + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Dravidians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Malians + Portuguese + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Italians + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burmese + Italians + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Koreans + Persians": {
+          "picks": 3,
+          "wins": 3,
+          "cdps": 1
+        },
+        "Dravidians + Lithuanians + Malians": {
+          "picks": 4,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Italians + Persians + Vikings": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Japanese + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Italians + Persians": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 2
+        },
+        "Italians + Lithuanians + Vikings": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 2
+        },
+        "Japanese + Malians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Japanese + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Burgundians + Romans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Italians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Muisca + Wei + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Vietnamese + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Hindustanis + Koreans + Malians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Persians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Persians + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Dravidians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Italians + Lithuanians + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Malians + Mongols": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Japanese + Lithuanians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Chinese + Koreans + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Celts + Koreans + Mongols": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Italians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Lithuanians + Persians + Tupi": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Malians + Mongols + Shu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Lithuanians + Mapuche": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Japanese + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Malians + Mongols + Spanish": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Huns + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Celts + Huns + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Khmer + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Lithuanians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Huns + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Koreans + Malians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Hindustanis + Italians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Portuguese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Lithuanians + Mongols": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Dravidians + Italians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Malay + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Malians + Vietnamese": {
+          "picks": 5,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Malay + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Italians + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Burmese + Malians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Burmese + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Lithuanians + Portuguese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Lithuanians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Japanese + Malians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Portuguese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Malians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Koreans + Lithuanians": {
+          "picks": 3,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Malians + Mongols + Vietnamese": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Italians + Koreans + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Persians + Vietnamese": {
+          "picks": 4,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Koreans + Malians": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Burmese + Byzantines + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Malay + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Malay + Saracens + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Khmer + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Aztecs + Celts + Mongols": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Huns + Koreans + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Malay + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Japanese + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Berbers + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Italians + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Dravidians + Persians": {
+          "picks": 3,
+          "wins": 2,
+          "cdps": 1
+        },
+        "Dravidians + Persians + Spanish": {
+          "picks": 4,
+          "wins": 3,
+          "cdps": 0
+        },
+        "Persians + Spanish + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Burgundians + Burmese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Ethiopians + Goths + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Huns + Persians": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 1
+        },
+        "Malay + Malians + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Italians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Koreans + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Lithuanians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Koreans + Lithuanians + Vietnamese": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Persians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Japanese + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Berbers + Malians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Georgians + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Italians + Lithuanians + Mongols": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Georgians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Dravidians + Koreans": {
+          "picks": 3,
+          "wins": 3,
+          "cdps": 0
+        },
+        "Malians + Mongols + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Berbers + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Georgians + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burgundians + Mongols + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Malians + Persians + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Celts + Gurjaras + Sicilians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Huns + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Britons + Franks + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Armenians + Georgians + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Saracens + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Koreans + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Japanese + Lithuanians + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Byzantines + Koreans + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Koreans + Persians": {
+          "picks": 3,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Malians + Vietnamese": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Berbers + Huns + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Koreans + Teutons": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Lithuanians + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Khmer + Koreans + Romans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Mongols + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Malians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Bohemians + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Dravidians + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Gurjaras + Koreans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Lithuanians + Malians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Hindustanis + Persians + Vietnamese": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bohemians + Malians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Bohemians + Georgians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bohemians + Dravidians + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Koreans + Lithuanians + Malians": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Burgundians + Italians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Koreans + Lithuanians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Dravidians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Aztecs + Bengalis + Lithuanians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Burmese + Koreans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Burgundians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Gurjaras + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burgundians + Italians + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Italians + Malians + Portuguese": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Italians + Teutons + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Malay + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Burgundians + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Japanese + Malians + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Romans + Turks": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Britons + Italians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Persians + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Burmese + Koreans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Malians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Malians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Koreans + Lithuanians + Portuguese": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Koreans + Lithuanians + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Aztecs + Italians + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Malians + Persians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Malians + Spanish": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Lithuanians + Turks + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Malay + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bulgarians + Byzantines + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Celts + Lithuanians + Mongols": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Koreans + Malians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Gurjaras + Mongols + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Lithuanians + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bulgarians + Lithuanians + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Celts + Dravidians + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Persians + Spanish + Teutons": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Lithuanians + Malians + Mongols": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Koreans + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Cumans + Koreans + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burmese + Dravidians + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Lithuanians + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Gurjaras + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Koreans + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Gurjaras + Malians + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bulgarians + Japanese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Persians + Portuguese + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Goths + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Koreans + Malians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burgundians + Dravidians + Vietnamese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Gurjaras + Persians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Malians + Portuguese + Turks": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Persians + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        }
+      }
+    },
+    "Socotra": {
+      "civs": {
+        "Bohemians": {
+          "picks": 7,
+          "wins": 6,
+          "flank_picks": 6,
+          "flank_wins": 5,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Gurjaras": {
+          "picks": 15,
+          "wins": 11,
+          "flank_picks": 5,
+          "flank_wins": 2,
+          "cdps_flank": 0,
+          "pocket_picks": 10,
+          "pocket_wins": 9,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Slavs": {
+          "picks": 15,
+          "wins": 11,
+          "flank_picks": 13,
+          "flank_wins": 10,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Sicilians": {
+          "picks": 5,
+          "wins": 4,
+          "flank_picks": 4,
+          "flank_wins": 4,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khitans": {
+          "picks": 9,
+          "wins": 1,
+          "flank_picks": 5,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 4,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Goths": {
+          "picks": 7,
+          "wins": 3,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 6,
+          "pocket_wins": 2,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Huns": {
+          "picks": 10,
+          "wins": 4,
+          "flank_picks": 8,
+          "flank_wins": 3,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Aztecs": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malay": {
+          "picks": 5,
+          "wins": 1,
+          "flank_picks": 4,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Cumans": {
+          "picks": 10,
+          "wins": 4,
+          "flank_picks": 10,
+          "flank_wins": 4,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burgundians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Armenians": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Poles": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Shu": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Mongols": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Chinese": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bulgarians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burmese": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wei": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 2,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Franks": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Bohemians + Gurjaras + Slavs": {
+          "picks": 7,
+          "wins": 6,
+          "cdps": 0
+        },
+        "Gurjaras + Sicilians + Slavs": {
+          "picks": 3,
+          "wins": 3,
+          "cdps": 0
+        },
+        "Goths + Huns + Khitans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Aztecs + Khitans + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Cumans + Goths + Huns": {
+          "picks": 3,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Aztecs + Huns + Khitans": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Gurjaras + Huns + Sicilians": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Cumans + Khitans + Slavs": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Burgundians + Khitans + Slavs": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Armenians + Malay + Poles": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Chinese + Mongols + Shu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Huns + Khitans + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bulgarians + Cumans + Malay": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Aztecs + Goths + Gurjaras": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Gurjaras + Huns": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Cumans + Ethiopians + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Khitans + Malay + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Cumans + Franks + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Aztecs + Goths + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Cumans + Goths + Gurjaras": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Cumans + Saracens + Slavs": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        }
+      }
+    },
+    "Tres Leches": {
+      "civs": {
+        "Byzantines": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Japanese": {
+          "picks": 11,
+          "wins": 3,
+          "flank_picks": 10,
+          "flank_wins": 3,
+          "cdps_flank": 7,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wei": {
+          "picks": 13,
+          "wins": 5,
+          "flank_picks": 11,
+          "flank_wins": 4,
+          "cdps_flank": 6,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Berbers": {
+          "picks": 11,
+          "wins": 8,
+          "flank_picks": 8,
+          "flank_wins": 5,
+          "cdps_flank": 7,
+          "pocket_picks": 3,
+          "pocket_wins": 3,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Wu": {
+          "picks": 6,
+          "wins": 4,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 5,
+          "pocket_wins": 3,
+          "cdps_pocket": 5,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Hindustanis": {
+          "picks": 7,
+          "wins": 4,
+          "flank_picks": 7,
+          "flank_wins": 4,
+          "cdps_flank": 6,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Jurchens": {
+          "picks": 7,
+          "wins": 3,
+          "flank_picks": 3,
+          "flank_wins": 1,
+          "cdps_flank": 2,
+          "pocket_picks": 4,
+          "pocket_wins": 2,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Dravidians": {
+          "picks": 12,
+          "wins": 7,
+          "flank_picks": 11,
+          "flank_wins": 7,
+          "cdps_flank": 8,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Romans": {
+          "picks": 5,
+          "wins": 1,
+          "flank_picks": 5,
+          "flank_wins": 1,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Vikings": {
+          "picks": 14,
+          "wins": 6,
+          "flank_picks": 12,
+          "flank_wins": 5,
+          "cdps_flank": 9,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bengalis": {
+          "picks": 7,
+          "wins": 4,
+          "flank_picks": 6,
+          "flank_wins": 3,
+          "cdps_flank": 4,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Tatars": {
+          "picks": 9,
+          "wins": 7,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 2,
+          "pocket_picks": 7,
+          "pocket_wins": 6,
+          "cdps_pocket": 4,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Turks": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Magyars": {
+          "picks": 11,
+          "wins": 6,
+          "flank_picks": 6,
+          "flank_wins": 4,
+          "cdps_flank": 5,
+          "pocket_picks": 5,
+          "pocket_wins": 2,
+          "cdps_pocket": 4,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Burmese": {
+          "picks": 6,
+          "wins": 1,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 6,
+          "pocket_wins": 1,
+          "cdps_pocket": 5,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Sicilians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Portuguese": {
+          "picks": 6,
+          "wins": 4,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 4,
+          "pocket_wins": 3,
+          "cdps_pocket": 4,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Koreans": {
+          "picks": 5,
+          "wins": 3,
+          "flank_picks": 4,
+          "flank_wins": 3,
+          "cdps_flank": 3,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Gurjaras": {
+          "picks": 14,
+          "wins": 7,
+          "flank_picks": 11,
+          "flank_wins": 4,
+          "cdps_flank": 8,
+          "pocket_picks": 3,
+          "pocket_wins": 3,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Shu": {
+          "picks": 3,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 3,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Georgians": {
+          "picks": 6,
+          "wins": 3,
+          "flank_picks": 6,
+          "flank_wins": 3,
+          "cdps_flank": 5,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Spanish": {
+          "picks": 7,
+          "wins": 4,
+          "flank_picks": 3,
+          "flank_wins": 2,
+          "cdps_flank": 3,
+          "pocket_picks": 4,
+          "pocket_wins": 2,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Lithuanians": {
+          "picks": 4,
+          "wins": 3,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 2,
+          "pocket_wins": 1,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Huns": {
+          "picks": 5,
+          "wins": 2,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 0,
+          "pocket_picks": 3,
+          "pocket_wins": 1,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Tupi": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 2,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Mapuche": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 4,
+          "flank_wins": 2,
+          "cdps_flank": 4,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Ethiopians": {
+          "picks": 4,
+          "wins": 2,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 4,
+          "pocket_wins": 2,
+          "cdps_pocket": 3,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Cumans": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Saracens": {
+          "picks": 10,
+          "wins": 3,
+          "flank_picks": 9,
+          "flank_wins": 3,
+          "cdps_flank": 7,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Armenians": {
+          "picks": 1,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Bohemians": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 0,
+          "flank_wins": 0,
+          "cdps_flank": 0,
+          "pocket_picks": 2,
+          "pocket_wins": 0,
+          "cdps_pocket": 2,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khmer": {
+          "picks": 3,
+          "wins": 3,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Persians": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 2,
+          "flank_wins": 0,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Muisca": {
+          "picks": 2,
+          "wins": 0,
+          "flank_picks": 1,
+          "flank_wins": 0,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 0,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malians": {
+          "picks": 8,
+          "wins": 4,
+          "flank_picks": 2,
+          "flank_wins": 2,
+          "cdps_flank": 1,
+          "pocket_picks": 6,
+          "pocket_wins": 2,
+          "cdps_pocket": 5,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Mongols": {
+          "picks": 2,
+          "wins": 2,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Italians": {
+          "picks": 8,
+          "wins": 5,
+          "flank_picks": 7,
+          "flank_wins": 4,
+          "cdps_flank": 5,
+          "pocket_picks": 1,
+          "pocket_wins": 1,
+          "cdps_pocket": 1,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Vietnamese": {
+          "picks": 2,
+          "wins": 1,
+          "flank_picks": 2,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Khitans": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Celts": {
+          "picks": 1,
+          "wins": 1,
+          "flank_picks": 1,
+          "flank_wins": 1,
+          "cdps_flank": 1,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        },
+        "Malay": {
+          "picks": 5,
+          "wins": 3,
+          "flank_picks": 5,
+          "flank_wins": 3,
+          "cdps_flank": 2,
+          "pocket_picks": 0,
+          "pocket_wins": 0,
+          "cdps_pocket": 0,
+          "flex_picks": 0,
+          "flex_wins": 0,
+          "cdps_flex": 0
+        }
+      },
+      "combos": {
+        "Byzantines + Japanese + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Hindustanis + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Jurchens + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Romans + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Dravidians + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Magyars + Turks + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Burmese + Sicilians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Koreans + Magyars + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Gurjaras + Shu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Byzantines + Tatars + Wei": {
+          "picks": 2,
+          "wins": 2,
+          "cdps": 0
+        },
+        "Lithuanians + Spanish + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Huns + Jurchens + Koreans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Tupi + Wei + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Berbers + Romans + Shu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Spanish + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Mapuche + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bengalis + Ethiopians + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Huns + Japanese + Jurchens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Magyars + Mapuche + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Cumans + Hindustanis + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Berbers + Saracens": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Armenians + Mapuche + Romans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burmese + Koreans + Lithuanians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bohemians + Japanese + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Hindustanis + Khmer + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Jurchens + Saracens + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Dravidians + Magyars + Persians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Hindustanis + Huns": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Berbers + Cumans + Magyars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Saracens + Wei + Wu": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Khmer + Tupi": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Mapuche + Muisca + Romans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Magyars + Malians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Huns + Japanese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Georgians + Koreans + Wei": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Byzantines + Persians + Tatars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Bengalis + Italians + Magyars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Hindustanis + Japanese + Koreans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Jurchens + Saracens + Vietnamese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Bohemians + Hindustanis + Muisca": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Magyars + Vietnamese + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Gurjaras + Jurchens + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Ethiopians + Georgians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Japanese + Wu": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Burmese + Magyars + Wei": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Celts + Ethiopians + Khitans": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Georgians + Shu + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Ethiopians + Romans": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Jurchens + Khmer + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Gurjaras + Italians + Portuguese": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 2
+        },
+        "Dravidians + Gurjaras + Tatars": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Gurjaras + Japanese + Malians": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Gurjaras + Saracens + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Japanese + Malians + Saracens": {
+          "picks": 2,
+          "wins": 0,
+          "cdps": 2
+        },
+        "Dravidians + Malians + Mongols": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Dravidians + Gurjaras + Vikings": {
+          "picks": 2,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Lithuanians + Malay + Spanish": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Hindustanis + Portuguese + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Gurjaras + Tatars + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Burmese + Gurjaras + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Gurjaras + Malians + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Italians + Lithuanians + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Gurjaras + Italians": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Japanese + Malians + Portuguese": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Italians + Japanese + Magyars": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Italians + Magyars + Malay": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        },
+        "Dravidians + Malians + Saracens": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Berbers + Italians + Malay": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Burmese + Malay + Portuguese": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Huns + Malay + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Bengalis + Saracens + Spanish": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 0
+        },
+        "Berbers + Dravidians + Gurjaras": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 0
+        },
+        "Bengalis + Burmese + Vikings": {
+          "picks": 1,
+          "wins": 0,
+          "cdps": 1
+        },
+        "Dravidians + Spanish + Vikings": {
+          "picks": 1,
+          "wins": 1,
+          "cdps": 1
+        }
+      }
+    }
+  }
+}

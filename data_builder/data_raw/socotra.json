@@ -1,0 +1,546 @@
+[
+  {
+    "date": "2025-11-22",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Yomi",
+        "Grinchy",
+        "Maldhar"
+      ],
+      "civs": [
+        "Bohemians",
+        "Gurjaras",
+        "Slavs"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Rodney_McKay",
+        "Oyacchan",
+        "Frost_9"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Sicilians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-11-16",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "EisenTOJI",
+        "Acro17",
+        "Kelar"
+      ],
+      "civs": [
+        "Khitans",
+        "Goths",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Rodney_McKay",
+        "Oyacchan",
+        "Frost_9"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Sicilians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-11-15",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Maldhar",
+        "Grinchy",
+        "Yomi"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "TwEpY",
+        "Tusky",
+        "Fanjita"
+      ],
+      "civs": [
+        "Aztecs",
+        "Malay",
+        "Khitans"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-11-07",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "L3af",
+        "Ranger",
+        "StrikeMuffin"
+      ],
+      "civs": [
+        "Huns",
+        "Goths",
+        "Cumans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Maldhar",
+        "Grinchy",
+        "Yomi"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-11-02",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "L3af",
+        "Ranger",
+        "VVaR_PaTh"
+      ],
+      "civs": [
+        "Huns",
+        "Aztecs",
+        "Khitans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Tusky",
+        "Fanjita",
+        "TwEpY"
+      ],
+      "civs": [
+        "Sicilians",
+        "Gurjaras",
+        "Huns"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-11-02",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Maldhar",
+        "Grinchy",
+        "Yomi"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Bohemians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "FreakinAndy",
+        "Huggieg",
+        "Admiral_Zhao"
+      ],
+      "civs": [
+        "Cumans",
+        "Khitans",
+        "Slavs"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-26",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "VVaR_PaTh",
+        "Ranger",
+        "L3af"
+      ],
+      "civs": [
+        "Khitans",
+        "Aztecs",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "BoOmstik",
+        "Snyper1",
+        "Lord_Turfux"
+      ],
+      "civs": [
+        "Slavs",
+        "Khitans",
+        "Burgundians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-26",
+    "tournament": "LingYuan Cup",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "TheViper",
+        "Yo",
+        "FreakinAndy"
+      ],
+      "civs": [
+        "Armenians",
+        "Poles",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "ACCM",
+        "Hearttt",
+        "Sebastian"
+      ],
+      "civs": [
+        "Shu",
+        "Mongols",
+        "Chinese"
+      ]
+    },
+    "hasVod": true,
+    "vodUrl": "https://www.youtube.com/live/4So1B-xcIzM?si=ihA5YodzYvcAoIkU&t=20766"
+  },
+  {
+    "date": "2025-10-25",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "The_Otter_One",
+        "ShiXo.",
+        "JadeArrowGamer"
+      ],
+      "civs": [
+        "Huns",
+        "Khitans",
+        "Malay"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Maldhar",
+        "Grinchy",
+        "Yomi"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-25",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "FreakinAndy",
+        "Admiral_Zhao",
+        "Huggieg"
+      ],
+      "civs": [
+        "Cumans",
+        "Slavs",
+        "Khitans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Frost_9",
+        "Oyacchan",
+        "Rodney_McKay"
+      ],
+      "civs": [
+        "Sicilians",
+        "Gurjaras",
+        "Slavs"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-19",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "StrikeMuffin",
+        "L3af",
+        "Ranger"
+      ],
+      "civs": [
+        "Cumans",
+        "Huns",
+        "Goths"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Kelar",
+        "Acro17",
+        "EisenTOJI"
+      ],
+      "civs": [
+        "Cumans",
+        "Bulgarians",
+        "Malay"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-18",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Spaden",
+        "Zaryab",
+        "Gripen"
+      ],
+      "civs": [
+        "Aztecs",
+        "Goths",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Slick12rick",
+        "Ffavorite_1",
+        "SmarttGuyy"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Huns",
+        "Burmese"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-18",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Nova_8",
+        "LSD",
+        "Legend"
+      ],
+      "civs": [
+        "Cumans",
+        "Japanese",
+        "Ethiopians"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Maldhar",
+        "Grinchy",
+        "Yomi"
+      ],
+      "civs": [
+        "Slavs",
+        "Gurjaras",
+        "Bohemians"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-16",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Hamza",
+        "Daehiise",
+        "Repard"
+      ],
+      "civs": [
+        "Malay",
+        "Khitans",
+        "Wei"
+      ]
+    },
+    "team2": {
+      "players": [
+        "FreakinAndy",
+        "Huggieg",
+        "Admiral_Zhao"
+      ],
+      "civs": [
+        "Cumans",
+        "Franks",
+        "Slavs"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-11",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "StrikeMuffin",
+        "Ranger",
+        "L3af"
+      ],
+      "civs": [
+        "Cumans",
+        "Goths",
+        "Huns"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Dai",
+        "Improvise",
+        "Mighty_Space_Fruit"
+      ],
+      "civs": [
+        "Wei",
+        "Goths",
+        "Aztecs"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-11",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 2,
+    "team1": {
+      "players": [
+        "Zaryab",
+        "Gripen",
+        "Spaden"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Goths",
+        "Cumans"
+      ]
+    },
+    "team2": {
+      "players": [
+        "FreakinAndy",
+        "Huggieg",
+        "Admiral_Zhao"
+      ],
+      "civs": [
+        "Cumans",
+        "Slavs",
+        "Saracens"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  },
+  {
+    "date": "2025-10-11",
+    "tournament": "Carry Me Or Die 2: United Front",
+    "map": "Socotra",
+    "winner": 1,
+    "team1": {
+      "players": [
+        "Maldhar",
+        "Yomi",
+        "Grinchy"
+      ],
+      "civs": [
+        "Slavs",
+        "Bohemians",
+        "Gurjaras"
+      ]
+    },
+    "team2": {
+      "players": [
+        "Frost_9",
+        "Rodney_McKay",
+        "Oyacchan"
+      ],
+      "civs": [
+        "Gurjaras",
+        "Sicilians",
+        "Huns"
+      ]
+    },
+    "hasVod": false,
+    "vodUrl": null
+  }
+]

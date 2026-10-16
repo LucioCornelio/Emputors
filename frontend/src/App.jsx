@@ -6,11 +6,11 @@ import BuildOrders from './pages/BuildOrders';
 import BuildOrderDetail from './pages/BuildOrderDetail';
 import Home from './pages/Home';
 import BuildOrderCreator from './pages/admin/BuildOrderCreator';
-
-// 1. Añadimos el import real
 import CurrentEvent from './pages/CurrentEvent'; 
 
-// 2. Borramos el placeholder de CurrentEvent y dejamos el resto:
+// 1. Añadimos el import de Clan Wars VII
+import ClanWarsVII from './pages/ClanWarsVII'; 
+
 const PastEvents = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>📚 Past Events</h2><p>Tournament archive in development...</p></div>;
 const HallOfFame = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>🏅 Hall of Fame</h2><p>Palmarés in development...</p></div>;
 const Roster = () => <div style={{ padding: '3rem', color: '#fff', textAlign: 'center' }}><h2>⚔️ Clan Roster</h2><p>Member list in development...</p></div>;
@@ -23,16 +23,22 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/tools/leat11" element={<Leat11Draft />} />
+          
+          {/* Rutas de Tools */}
           <Route path="/tools/advanced-search" element={<AdvancedSearch />} />
+          <Route path="/tools/clan-wars-vii" element={<ClanWarsVII />} />
+          <Route path="/tools/leat11" element={<Leat11Draft />} />
+          
+          {/* Rutas de Academy */}
           <Route path="/academy/build-orders" element={<BuildOrders />} />
           <Route path="/academy/build-orders/:buildId" element={<BuildOrderDetail />} />
           
-          {/* El elemento de la ruta ya está correcto, ahora cogerá el import real */}
+          {/* Rutas de Torneos */}
           <Route path="/tournaments/current" element={<CurrentEvent />} />
           <Route path="/tournaments/past-events" element={<PastEvents />} />
           <Route path="/tournaments/hall-of-fame" element={<HallOfFame />} />
           
+          {/* Rutas de Clan */}
           <Route path="/clan/roster" element={<Roster />} />
           <Route path="/clan/about" element={<About />} />
           <Route path="/admin/creator" element={<BuildOrderCreator />} />
