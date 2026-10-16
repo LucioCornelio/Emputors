@@ -29,7 +29,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-11-16",
@@ -61,7 +62,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-11-15",
@@ -93,7 +95,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-11-07",
@@ -125,7 +128,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-11-02",
@@ -157,7 +161,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-11-02",
@@ -189,7 +194,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-26",
@@ -221,7 +227,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-26",
@@ -253,7 +260,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/4So1B-xcIzM?si=ihA5YodzYvcAoIkU&t=20766"
+    "vodUrl": "https://www.youtube.com/live/4So1B-xcIzM?si=ihA5YodzYvcAoIkU&t=20766",
+    "game": "(G2)"
   },
   {
     "date": "2025-10-25",
@@ -285,7 +293,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-25",
@@ -317,7 +326,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-19",
@@ -349,7 +359,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-18",
@@ -381,7 +392,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-18",
@@ -413,7 +425,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-16",
@@ -445,7 +458,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-11",
@@ -477,7 +491,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-11",
@@ -509,7 +524,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-10-11",
@@ -541,6 +557,7 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   }
 ]

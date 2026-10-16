@@ -29,7 +29,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=vaCDC477q4E"
+    "vodUrl": "https://www.youtube.com/watch?v=vaCDC477q4E",
+    "game": "(G1)"
   },
   {
     "date": "2026-09-17",
@@ -60,7 +61,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=O9BlyCRAZKZrP2PO&t=13682"
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=O9BlyCRAZKZrP2PO&t=13682",
+    "game": "(G2)"
   },
   {
     "date": "2026-09-17",
@@ -91,7 +93,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=eGT6VWduhNX3p5Zq&t=928"
+    "vodUrl": "https://www.youtube.com/live/IICNRGG8DUU?si=eGT6VWduhNX3p5Zq&t=928",
+    "game": "(G1)"
   },
   {
     "date": "2026-09-13",
@@ -122,7 +125,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=Fr5EwrQ5xPY"
+    "vodUrl": "https://www.youtube.com/watch?v=Fr5EwrQ5xPY",
+    "game": "(G4)"
   },
   {
     "date": "2026-09-13",
@@ -153,7 +157,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-09-12",
@@ -185,7 +190,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=sGV6OjIYeQ8"
+    "vodUrl": "https://www.youtube.com/watch?v=sGV6OjIYeQ8",
+    "game": "(G3)"
   },
   {
     "date": "2026-09-08",
@@ -217,7 +223,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-09-06",
@@ -248,7 +255,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=9Aa14QRJIpM"
+    "vodUrl": "https://www.youtube.com/watch?v=9Aa14QRJIpM",
+    "game": "(G1)"
   },
   {
     "date": "2026-09-05",
@@ -279,7 +287,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/uYKUQU3lzMo?si=4T23y5-thvmQvUD0&t=544"
+    "vodUrl": "https://www.youtube.com/live/uYKUQU3lzMo?si=4T23y5-thvmQvUD0&t=544",
+    "game": "(G4)"
   },
   {
     "date": "2026-09-05",
@@ -310,7 +319,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/7b6jVD3r-Fs?si=mTwMBOhxb4gI0ygJ&t=520"
+    "vodUrl": "https://www.youtube.com/live/7b6jVD3r-Fs?si=mTwMBOhxb4gI0ygJ&t=520",
+    "game": "(G3)"
   },
   {
     "date": "2026-09-04",
@@ -341,7 +351,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-09-03",
@@ -373,7 +384,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=Fk7_3hij7dA"
+    "vodUrl": "https://www.youtube.com/watch?v=Fk7_3hij7dA",
+    "game": "(G4)"
   },
   {
     "date": "2026-09-03",
@@ -404,7 +416,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-09-03",
@@ -435,7 +448,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=7dcrUWqKpQk"
+    "vodUrl": "https://www.youtube.com/watch?v=7dcrUWqKpQk",
+    "game": "(G3)"
   },
   {
     "date": "2026-09-03",
@@ -466,7 +480,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-09-02",
@@ -497,7 +512,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/GRVDgtCF0wo?si=2bSjDdBsbDDJQg9X&t=479"
+    "vodUrl": "https://www.youtube.com/live/GRVDgtCF0wo?si=2bSjDdBsbDDJQg9X&t=479",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-29",
@@ -528,7 +544,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=65Xl3XFeEEw"
+    "vodUrl": "https://www.youtube.com/watch?v=65Xl3XFeEEw",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-28",
@@ -559,7 +576,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/WjwmqjT9EIg?si=zIFGrZxrc8NfAfGM&t=1474"
+    "vodUrl": "https://www.youtube.com/live/WjwmqjT9EIg?si=zIFGrZxrc8NfAfGM&t=1474",
+    "game": "(G1)"
   },
   {
     "date": "2026-08-26",
@@ -590,7 +608,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=dJbhFXH3HuU"
+    "vodUrl": "https://www.youtube.com/watch?v=dJbhFXH3HuU",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-24",
@@ -621,7 +640,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-08-23",
@@ -653,7 +673,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=Galxu_5Ga3w"
+    "vodUrl": "https://www.youtube.com/watch?v=Galxu_5Ga3w",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-22",
@@ -684,7 +705,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=GRZLzKMoViM"
+    "vodUrl": "https://www.youtube.com/watch?v=GRZLzKMoViM",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-22",
@@ -716,7 +738,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-08-20",
@@ -748,7 +771,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-08-18",
@@ -780,7 +804,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/aLK-eHBViNY?si=mixgpakn3OwlO3bS&t=270"
+    "vodUrl": "https://www.youtube.com/live/aLK-eHBViNY?si=mixgpakn3OwlO3bS&t=270",
+    "game": "(G1)"
   },
   {
     "date": "2026-08-16",
@@ -812,7 +837,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/1zplZnDIMXs?si=7MVpVTX5fB62oMM2&t=792"
+    "vodUrl": "https://www.youtube.com/live/1zplZnDIMXs?si=7MVpVTX5fB62oMM2&t=792",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-15",
@@ -844,7 +870,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=2Rah3r50jVg"
+    "vodUrl": "https://www.youtube.com/watch?v=2Rah3r50jVg",
+    "game": "(G4)"
   },
   {
     "date": "2026-08-02",
@@ -876,7 +903,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=TXtFKrVQejkFVHwi&t=744"
+    "vodUrl": "https://www.youtube.com/live/KMYBo7Vs2Wg?si=TXtFKrVQejkFVHwi&t=744",
+    "game": "(G2)"
   },
   {
     "date": "2026-08-01",
@@ -907,7 +935,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=ZTRAm7Gg3TPbclxL&t=32221"
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=ZTRAm7Gg3TPbclxL&t=32221",
+    "game": "(G3)"
   },
   {
     "date": "2026-08-01",
@@ -938,7 +967,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=7Ir7J7VKLDoC8_21&t=24783"
+    "vodUrl": "https://www.youtube.com/live/lsHvpfOXZSc?si=7Ir7J7VKLDoC8_21&t=24783",
+    "game": "(G5)"
   },
   {
     "date": "2026-07-31",
@@ -969,7 +999,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/nkXnAFmZamE?si=RL4JlZRjRqhg4YWQ&t=1909"
+    "vodUrl": "https://www.youtube.com/live/nkXnAFmZamE?si=RL4JlZRjRqhg4YWQ&t=1909",
+    "game": "(G2)"
   },
   {
     "date": "2026-07-26",
@@ -1001,7 +1032,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=P81V3CsA0ao"
+    "vodUrl": "https://www.youtube.com/watch?v=P81V3CsA0ao",
+    "game": "(G2)"
   },
   {
     "date": "2026-07-25",
@@ -1031,7 +1063,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=81j2H38uYNE"
+    "vodUrl": "https://www.youtube.com/watch?v=81j2H38uYNE",
+    "game": "(G3)"
   },
   {
     "date": "2026-07-23",
@@ -1063,7 +1096,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-07-23",
@@ -1094,7 +1128,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2026-07-23",
@@ -1126,7 +1161,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=p9U4t3pvF6Y"
+    "vodUrl": "https://www.youtube.com/watch?v=p9U4t3pvF6Y",
+    "game": "(G4)"
   },
   {
     "date": "2026-07-22",
@@ -1157,7 +1193,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=FHcFQlZhe80"
+    "vodUrl": "https://www.youtube.com/watch?v=FHcFQlZhe80",
+    "game": "(G1)"
   },
   {
     "date": "2026-07-19",
@@ -1189,7 +1226,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=7YIlv7l-uM8"
+    "vodUrl": "https://www.youtube.com/watch?v=7YIlv7l-uM8",
+    "game": "(G1)"
   },
   {
     "date": "2026-07-19",
@@ -1221,7 +1259,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=CvHnNGmczXU"
+    "vodUrl": "https://www.youtube.com/watch?v=CvHnNGmczXU",
+    "game": "(G1)"
   },
   {
     "date": "2026-07-10",
@@ -1252,7 +1291,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/watch?v=xV0pRQxGYzw"
+    "vodUrl": "https://www.youtube.com/watch?v=xV0pRQxGYzw",
+    "game": "(G1)"
   },
   {
     "date": "2026-05-28",
@@ -1284,7 +1324,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2025-02-18",
@@ -1314,7 +1355,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-11-02",
@@ -1344,7 +1386,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/OzCxpuxrcUY?si=43gv4vjYYJ49dB8c&t=10527"
+    "vodUrl": "https://www.youtube.com/live/OzCxpuxrcUY?si=43gv4vjYYJ49dB8c&t=10527",
+    "game": "(G5)"
   },
   {
     "date": "2024-11-01",
@@ -1374,7 +1417,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/UkiNX27t4IY?si=q_yLhuKSznLcpEtN&t=8175"
+    "vodUrl": "https://www.youtube.com/live/UkiNX27t4IY?si=q_yLhuKSznLcpEtN&t=8175",
+    "game": "(G3)"
   },
   {
     "date": "2024-11-01",
@@ -1405,7 +1449,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/UkiNX27t4IY?si=XZ_gM1nbKOkoavbK&t=713"
+    "vodUrl": "https://www.youtube.com/live/UkiNX27t4IY?si=XZ_gM1nbKOkoavbK&t=713",
+    "game": "(G3)"
   },
   {
     "date": "2024-10-27",
@@ -1437,7 +1482,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/PDFhD5BkMkE?si=zbzeLwVrQqWH4hwM&t=9107"
+    "vodUrl": "https://www.youtube.com/live/PDFhD5BkMkE?si=zbzeLwVrQqWH4hwM&t=9107",
+    "game": "(G3)"
   },
   {
     "date": "2024-10-27",
@@ -1468,7 +1514,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/PDFhD5BkMkE?si=MxRf8Mf_h10tPUbU&t=1764"
+    "vodUrl": "https://www.youtube.com/live/PDFhD5BkMkE?si=MxRf8Mf_h10tPUbU&t=1764",
+    "game": "(G1)"
   },
   {
     "date": "2024-10-26",
@@ -1499,7 +1546,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/p3zL_b5W7gk?si=vhSqBMe1IctzYKJC&t=11811"
+    "vodUrl": "https://www.youtube.com/live/p3zL_b5W7gk?si=vhSqBMe1IctzYKJC&t=11811",
+    "game": "(G3)"
   },
   {
     "date": "2024-10-26",
@@ -1530,7 +1578,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/p3zL_b5W7gk?si=YhHr4FUimRJDVGGm&t=1545"
+    "vodUrl": "https://www.youtube.com/live/p3zL_b5W7gk?si=YhHr4FUimRJDVGGm&t=1545",
+    "game": "(G3)"
   },
   {
     "date": "2024-10-13",
@@ -1561,7 +1610,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/xDkuSpJ64ho?si=_ryKbx8xR0Ag6to-&t=1314"
+    "vodUrl": "https://www.youtube.com/live/xDkuSpJ64ho?si=_ryKbx8xR0Ag6to-&t=1314",
+    "game": "(G5)"
   },
   {
     "date": "2024-10-12",
@@ -1592,7 +1642,8 @@
       ]
     },
     "hasVod": true,
-    "vodUrl": "https://www.youtube.com/live/z8nmLfITcFw?si=HAdG834ZwwpK646v&t=12434"
+    "vodUrl": "https://www.youtube.com/live/z8nmLfITcFw?si=HAdG834ZwwpK646v&t=12434",
+    "game": "(G5)"
   },
   {
     "date": "2024-05-05",
@@ -1624,7 +1675,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-05-05",
@@ -1656,7 +1708,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-04-21",
@@ -1688,7 +1741,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-03-25",
@@ -1720,7 +1774,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-21",
@@ -1752,7 +1807,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-20",
@@ -1783,7 +1839,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-14",
@@ -1815,7 +1872,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-10",
@@ -1847,7 +1905,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-09",
@@ -1878,7 +1937,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-07",
@@ -1910,7 +1970,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-04",
@@ -1942,7 +2003,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2024-02-02",
@@ -1974,7 +2036,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2023-10-07",
@@ -2005,7 +2068,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2023-09-30",
@@ -2037,7 +2101,8 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   },
   {
     "date": "2023-09-16",
@@ -2068,6 +2133,7 @@
       ]
     },
     "hasVod": false,
-    "vodUrl": null
+    "vodUrl": null,
+    "game": ""
   }
 ]
