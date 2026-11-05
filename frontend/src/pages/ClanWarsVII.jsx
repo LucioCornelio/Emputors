@@ -100,16 +100,29 @@ function ClanWarsVII() {
           <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Advanced 3v3 Map Meta & Matchup Explorer</p>
         </div>
 
-        {/* SELECTOR DE MAPA Y MUESTRA */}
-        <div style={{ backgroundColor: C.card, padding: '12px 20px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
-            <select value={selectedMap} onChange={(e) => setSelectedMap(e.target.value)} style={{ backgroundColor: '#1e212b', color: C.gold, border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', fontSize: '13px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
-              {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
-            </select>
-          </div>
-          <div style={{ color: '#a0aab5', fontSize: '11px', fontWeight: 'bold', backgroundColor: '#1e212b', padding: '6px 12px', borderRadius: '4px', border: '1px solid #333' }}>
-            Sample Size: <span style={{ color: totalMatches < 20 ? C.red : C.gold }}>{totalMatches} Matches</span>
+        {/* CONTENEDOR CENTRAL: MAPA + SELECTOR + MUESTRA */}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ backgroundColor: C.card, padding: '15px 25px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: '25px' }}>
+            
+            <img 
+              src={`/maps/${selectedMap.toLowerCase().replace(" ", "_")}.png`} 
+              alt={selectedMap}
+              style={{ width: '80px', height: '80px', borderRadius: '8px', border: `2px solid ${C.border}`, objectFit: 'cover', backgroundColor: '#161920' }}
+              onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
+            />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
+                <select value={selectedMap} onChange={(e) => setSelectedMap(e.target.value)} style={{ backgroundColor: '#1e212b', color: C.gold, border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+                  {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
+                </select>
+              </div>
+              <div style={{ color: '#a0aab5', fontSize: '11px', fontWeight: 'bold', backgroundColor: '#1e212b', padding: '6px 12px', borderRadius: '4px', border: '1px solid #333', textAlign: 'center' }}>
+                Sample Size: <span style={{ color: totalMatches < 20 ? C.red : C.gold }}>{totalMatches} Matches</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
