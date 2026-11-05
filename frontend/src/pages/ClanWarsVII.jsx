@@ -671,7 +671,7 @@ function ClanWarsVII() {
                 </div>
             </div>
           </div>
-        )}
+        )
 
         {/* --- VISTA: META EXPLORER --- */}
         <div style={{ display: activeTab === 'metaExplorer' ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
