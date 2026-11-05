@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { io } from 'socket.io-client';
+import DraftPlanCreator from './admin/DraftPlanCreator'; 
 
-const MAP_POOL = ["Arabia", "Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
+const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
 const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
@@ -10,13 +11,6 @@ const C = {
 };
 
 const DRAFT_PLAN = {
-  "Arabia": {
-    "Plan 1: Standard": [
-      { role: "Flank 1 Archers", priority: ["Britons", "Mayans", "Ethiopians", "Vietnamese", "Koreans", "Incas", "Italians"] },
-      { role: "Flank 2 Archers", priority: ["Britons", "Mayans", "Ethiopians", "Vietnamese", "Koreans", "Incas", "Italians"] },
-      { role: "Pocket Knights", priority: ["Franks", "Lithuanians", "Magyars", "Huns", "Berbers", "Persians", "Burgundians"] }
-    ]
-  },
   "Colosseum": {
     "Plan 1: Cobra del desierto": [
       { role: "Flank ArqueroATK", priority: ["Mayans", "Ethiopians", "Shu", "Mongols", "Britons", "Vietnamese", "Koreans"] },
@@ -392,9 +386,11 @@ function ClanWarsVII() {
         }
       `}</style>
 
+      {/* PESTAÑAS */}
       <div style={{ display: 'flex', borderBottom: '2px solid #2a2d36', backgroundColor: '#1e212b', padding: '0 1rem' }}>
         <div onClick={() => setActiveTab('executionDraft')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'executionDraft' ? C.gold : '#888', borderBottom: activeTab === 'executionDraft' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Execution Draft</div>
         <div onClick={() => setActiveTab('metaExplorer')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'metaExplorer' ? C.gold : '#888', borderBottom: activeTab === 'metaExplorer' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Meta Explorer</div>
+        <div onClick={() => setActiveTab('planCreator')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'planCreator' ? C.gold : '#888', borderBottom: activeTab === 'planCreator' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Plan Creator</div>
       </div>
 
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: activeTab === 'executionDraft' ? '50vh' : '20px' }}>
@@ -600,25 +596,33 @@ function ClanWarsVII() {
                                         }
 
                                         return (
-                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '3px', overflow: 'hidden' }}>
+                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
                                                 
-                                                <div style={{ display: 'grid', gridTemplateColumns: '90px 30px 1fr 35px', gap: '4px', alignItems: 'center', padding: '4px 6px', minHeight: '30px' }}>
-                                                    <div style={{ fontSize: '9px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
+                                                {/* Cuadrícula Estricta blindada contra anchos variables */}
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 95px) 36px minmax(0, 1fr) 40px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
+                                                    <div style={{ fontSize: '10.5px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
                                                         {roleData.role}
                                                     </div>
                                                     
+                                                    {/* El hueco de la urgencia ahora siempre tiene contenido para no romper la simetría */}
                                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                        {urgencyBadge}
+                                                        {status === 'LOCKED' ? (
+                                                            <span style={{fontSize: '12px', color: C.green, fontWeight: '900'}}>✓</span>
+                                                        ) : status === 'SNIPED' ? (
+                                                            <span style={{fontSize: '12px', color: C.red, fontWeight: '900'}}>✗</span>
+                                                        ) : (
+                                                            urgencyBadge
+                                                        )}
                                                     </div>
 
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', overflow: 'hidden' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', overflow: 'hidden' }}>
                                                         {civ ? (
                                                             <>
-                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '18px', height: '18px', borderRadius: '2px', border: `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '10px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
+                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '22px', height: '22px', borderRadius: '3px', border: `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '12px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
                                                             </>
                                                         ) : (
-                                                            <span style={{ fontSize: '9px', color: '#555', fontStyle: 'italic' }}>-</span>
+                                                            <span style={{ fontSize: '11px', color: '#555', fontStyle: 'italic' }}>-</span>
                                                         )}
                                                     </div>
                                                     
@@ -627,36 +631,36 @@ function ClanWarsVII() {
 
                                                 {(candidates?.length > 1 || backups?.length > 0) && (
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
-                                                        {candidates?.length > 1 && <span style={{ fontSize: '7px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
+                                                        {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
                                                         {candidates?.slice(1, 4).map((cand, ci) => (
                                                             <div 
                                                                 key={`cand-${ci}`} 
                                                                 onClick={() => confirmAssignment(mapName, roleData.role, cand.civ)}
                                                                 title={`Asignar ${cand.civ} a ${roleData.role}`}
-                                                                style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: 'pointer', transition: 'transform 0.1s' }}
+                                                                style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: 'pointer', transition: 'transform 0.1s' }}
                                                                 onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
                                                                 onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                                                             >
-                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '10px', height: '10px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '8px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                             </div>
                                                         ))}
                                                         
                                                         {backups?.length > 0 && (
                                                             <>
-                                                                {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '8px', margin: '0 2px' }}>|</span>}
-                                                                <span style={{ fontSize: '7px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
+                                                                {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '9px', margin: '0 2px' }}>|</span>}
+                                                                <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
                                                                 {backups.map((cand, ci) => (
                                                                     <div 
                                                                         key={`back-${ci}`} 
                                                                         onClick={() => confirmAssignment(mapName, roleData.role, cand.civ)}
                                                                         title={`Asignar ${cand.civ} a ${roleData.role}`}
-                                                                        style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: 'pointer', transition: 'transform 0.1s' }}
+                                                                        style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: 'pointer', transition: 'transform 0.1s' }}
                                                                         onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
                                                                         onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                                                                     >
-                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '10px', height: '10px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                        <span style={{ fontSize: '8px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                        <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                                     </div>
                                                                 ))}
                                                             </>
@@ -669,7 +673,9 @@ function ClanWarsVII() {
 
                                     {(() => {
                                         const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
-                                        const backupCivs = unassignedPicks.filter(c => roles.some(r => r.priority.includes(c)));
+                                        const backupCivs = unassignedPicks.filter(c => {
+                                            return roles.some(r => r.priority.includes(c));
+                                        });
 
                                         if (backupCivs.length === 0) return null;
                                         
@@ -725,6 +731,7 @@ function ClanWarsVII() {
                     <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>Faltan datos de Liquipedia.</div>
                 ) : (
                     <div ref={containerRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', width: '100%', marginTop: '10px' }}>
+                        
                         <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
                             <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 {isNomad ? 'Flex' : 'Flanks'}</h3>
                             <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
@@ -871,6 +878,13 @@ function ClanWarsVII() {
                         </div>
                     </div>
                 )}
+            </div>
+        )}
+
+        {/* --- VISTA: PLAN CREATOR --- */}
+        {activeTab === 'planCreator' && (
+            <div style={{ margin: '-20px' }}>
+                <DraftPlanCreator />
             </div>
         )}
       </div>
