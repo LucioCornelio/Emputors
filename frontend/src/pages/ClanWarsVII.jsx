@@ -75,6 +75,13 @@ function ClanWarsVII() {
     setActiveTooltip(prev => prev === id ? null : id);
   };
 
+  // Helper para obtener el nombre exacto del archivo de imagen
+  const getMapImageName = (mapName) => {
+    if (mapName === "Tres Leches") return "Tres_leches";
+    if (mapName === "Grand Bara") return "Grand_Bara";
+    return mapName;
+  };
+
   if (loading) return <div style={{ color: C.gold, textAlign: 'center', padding: '40px' }}>Cargando Motor 3v3...</div>;
 
   return (
@@ -102,19 +109,23 @@ function ClanWarsVII() {
 
         {/* CONTENEDOR CENTRAL: MAPA + SELECTOR + MUESTRA */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ backgroundColor: C.card, padding: '15px 25px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: '25px' }}>
+          <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', overflow: 'hidden' }}>
             
-            <img 
-              src={`/maps/${selectedMap.replace(" ", "_")}.png`}
-              alt={selectedMap}
-              style={{ width: '80px', height: '80px', borderRadius: '8px', border: `2px solid ${C.border}`, objectFit: 'cover', backgroundColor: '#161920' }}
-              onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
-            />
+            {/* Imagen del mapa */}
+            <div style={{ width: '120px', height: '100px', backgroundColor: '#0f1115', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: `1px solid ${C.border}` }}>
+              <img 
+                src={`/maps/${getMapImageName(selectedMap)}.png`} 
+                alt={selectedMap}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
+              />
+            </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Controles */}
+            <div style={{ padding: '15px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
-                <select value={selectedMap} onChange={(e) => setSelectedMap(e.target.value)} style={{ backgroundColor: '#1e212b', color: C.gold, border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+                <select value={selectedMap} onChange={(e) => setSelectedMap(e.target.value)} style={{ backgroundColor: '#1e212b', color: C.gold, border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', minWidth: '150px' }}>
                   {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
                 </select>
               </div>
