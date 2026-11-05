@@ -106,20 +106,20 @@ function ClanWarsVII() {
           <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Advanced 3v3 Map Meta & Matchup Explorer</p>
         </div>
 
-        {/* CONTENEDOR CENTRAL: MAPA RECORTADO + SELECTOR ESTILO PÍLDORA */}
+        {/* CONTENEDOR CENTRAL: MAPA EN VERDADERA MAGNITUD + SELECTOR */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginBottom: '10px' }}>
           
-          {/* Mapa Grande con recorte en Diamante (clip-path) y Sombra */}
-          <div style={{ filter: 'drop-shadow(0px 8px 15px rgba(0,0,0,0.8))' }}>
+          {/* Mapa Original sin recortes */}
+          <div style={{ filter: 'drop-shadow(0px 6px 12px rgba(0,0,0,0.6))' }}>
             <img 
               src={`/maps/${getMapImageName(selectedMap)}.png`} 
               alt={selectedMap}
               style={{ 
-                width: '240px', 
-                height: '240px', 
-                objectFit: 'cover',
-                clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-                transform: 'scale(1.05)' // Pequeño zoom para rellenar los bordes
+                maxWidth: '400px', // Tamaño máximo ancho
+                maxHeight: '250px', // Tamaño máximo alto
+                width: 'auto',
+                height: 'auto',
+                display: 'block'
               }}
               onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
             />
