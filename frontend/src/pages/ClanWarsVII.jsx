@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 const MAP_POOL = ["Arabia", "Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
+const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', textMain: '#e0e0e0',
@@ -9,16 +10,23 @@ const C = {
 };
 
 const DRAFT_PLAN = {
-  "Socotra": {
+  "Colosseum": {
     "Plan 1: Cobra del desierto": [
-      { role: "Flank Arquero ATK", priority: ["Mayans", "Ethiopians", "Shu", "Mongols", "Britons", "Koreans"] },
-      { role: "Flank HD Archers", priority: ["Japanese", "Malians", "Vikings", "Dravidians", "Celts"] },
-      { role: "Pocket Siege/Meat", priority: ["Persians", "Huns", "Lithuanians", "Slavs", "Bohemians", "Gurjaras"] }
+      { role: "Flank ArqueroATK", priority: ["Mayans", "Ethiopians", "Shu", "Mongols"] },
+      { role: "Flank HDArchers", priority: ["Japanese", "Malians", "Vikings"] },
+      { role: "Pocket", priority: ["Persians", "Huns", "Lithuanians"] }
     ],
     "Plan 2: Elefante rodante": [
-      { role: "Flank Arquero Def 1", priority: ["Mayans", "Ethiopians", "Shu", "Vietnamese", "Britons"] },
-      { role: "Flank Arquero Def 2", priority: ["Mayans", "Ethiopians", "Shu", "Vietnamese", "Britons"] },
-      { role: "Pocket UU", priority: ["Spanish", "Lithuanians", "Burmese", "Berbers", "Turks"] }
+      { role: "Flank ArqueroDef 1", priority: ["Mayans", "Ethiopians", "Shu"] },
+      { role: "Flank ArqueroDef 2", priority: ["Mayans", "Ethiopians", "Shu"] },
+      { role: "PocketUU", priority: ["Spanish", "Lithuanians", "Burmese"] }
+    ]
+  },
+  "Socotra": {
+    "Plan 1: Aggro": [
+      { role: "Flank Pure Archers", priority: ["Britons", "Mayans", "Ethiopians", "Vietnamese", "Koreans"] },
+      { role: "Flank MAA Archer", priority: ["Japanese", "Dravidians", "Vikings", "Malians", "Celts"] },
+      { role: "Pocket Siege/Meat", priority: ["Slavs", "Bohemians", "Gurjaras", "Celts", "Persians"] }
     ]
   },
   "Nomad": {
@@ -48,9 +56,9 @@ function ClanWarsVII() {
   const containerRef = useRef(null);
 
   // --- ESTADOS: EXECUTION DRAFT ---
-  const [draftMode, setDraftMode] = useState("PA3"); // "PA3" o "BO5"
-  const [selectedExecMaps, setSelectedExecMaps] = useState(["Nomad", "Socotra", "Tres Leches"]);
-  const [selectedPlans, setSelectedPlans] = useState({}); // { mapName: "planName" }
+  const [draftMode, setDraftMode] = useState("PA3"); 
+  const [selectedExecMaps, setSelectedExecMaps] = useState(["Nomad", "Colosseum", "Tres Leches"]);
+  const [selectedPlans, setSelectedPlans] = useState({}); 
 
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
@@ -96,7 +104,6 @@ function ClanWarsVII() {
       });
   }, []);
 
-  // Set default plans for maps
   useEffect(() => {
     const newPlans = { ...selectedPlans };
     let changed = false;
@@ -116,10 +123,8 @@ function ClanWarsVII() {
 
   const meta = useMemo(() => {
     if (!mapData) return { topFlanks: [], topPockets: [], topCombos: [], topFlex: [] };
-    
     const civsArray = Object.entries(mapData.civs).map(([name, stats]) => ({ name, ...stats }));
     const combosArray = Object.entries(mapData.combos).map(([name, stats]) => ({ name, ...stats }));
-
     const getScore = (picks, wins, cdps) => {
       if (picks === 0) return -1;
       const wr = wins / picks;
@@ -127,7 +132,6 @@ function ClanWarsVII() {
       if (picks > 0 && wins === 0) return -50; 
       return (cdps * wr) + (wins * 0.5);
     };
-
     return {
       topFlanks: civsArray.filter(c => c.flank_picks > 0 && getScore(c.flank_picks, c.flank_wins, c.cdps_flank) > 0).sort((a, b) => getScore(b.flank_picks, b.flank_wins, b.cdps_flank) - getScore(a.flank_picks, a.flank_wins, a.cdps_flank)).slice(0, 10),
       topPockets: civsArray.filter(c => c.pocket_picks > 0 && getScore(c.pocket_picks, c.pocket_wins, c.cdps_pocket) > 0).sort((a, b) => getScore(b.pocket_picks, b.pocket_wins, b.cdps_pocket) - getScore(a.pocket_picks, a.pocket_wins, a.cdps_pocket)).slice(0, 10),
@@ -250,29 +254,31 @@ function ClanWarsVII() {
 
       const confirmedList = getConfirmedCivs();
       const availablePicks = draft.picks.filter(c => !confirmedList.includes(c) && !draft.snipes.includes(c));
-      const unavailable = [...draft.bans, ...draft.oppPicks, ...draft.snipes, ...draft.picks];
+      const completelyUnavailable = [...draft.bans, ...draft.oppPicks, ...draft.snipes, ...confirmedList];
+
+      // Cálculo de urgencia: Civis que aún nos valen para este rol específico
+      const validCandidates = roleData.priority.filter(c => c === confirmedCiv || !completelyUnavailable.includes(c));
+      const urgencyCount = validCandidates.length;
 
       let candidates = [];
-      
       roleData.priority.forEach(c => {
           if (candidates.length >= 4) return;
-          
           if (availablePicks.includes(c)) {
               candidates.push({ civ: c, type: 'SUGGESTED' });
-          } else if (!unavailable.includes(c)) {
+          } else if (!completelyUnavailable.includes(c)) {
               candidates.push({ civ: c, type: 'TARGET' });
           }
       });
 
-      if (confirmedCiv && !isSniped) return { status: 'LOCKED', civ: confirmedCiv, candidates: [] };
-      if (confirmedCiv && isSniped) return { status: 'SNIPED', civ: confirmedCiv, candidates };
+      if (confirmedCiv && !isSniped) return { status: 'LOCKED', civ: confirmedCiv, candidates: [], urgencyCount };
+      if (confirmedCiv && isSniped) return { status: 'SNIPED', civ: confirmedCiv, candidates, urgencyCount };
 
       if (candidates.length > 0) {
           const mainType = candidates[0].type;
-          return { status: mainType, civ: candidates[0].civ, candidates };
+          return { status: mainType, civ: candidates[0].civ, candidates, urgencyCount };
       }
 
-      return { status: 'EMPTY', civ: null, candidates: [] };
+      return { status: 'EMPTY', civ: null, candidates: [], urgencyCount: 0 };
   };
 
   const confirmAssignment = (mapName, roleName, civ) => setAssigned(prev => ({ ...prev, [`${mapName}_${roleName}`]: civ }));
@@ -298,9 +304,9 @@ function ClanWarsVII() {
         .civ-tooltip::-webkit-scrollbar-track { background: #161920; }
         .civ-tooltip::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
         @keyframes pulseAlert {
-            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
         }
       `}</style>
 
@@ -312,7 +318,6 @@ function ClanWarsVII() {
 
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         
-        {/* HEADER COMÚN */}
         <div style={{ textAlign: 'center', marginBottom: '5px' }}>
           <h1 style={{ color: C.gold, fontSize: '24px', margin: '0 0 5px 0', textTransform: 'uppercase', letterSpacing: '2px' }}>Clan Wars VII Assistant</h1>
           <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Advanced 3v3 Map Meta & Execution</p>
@@ -348,7 +353,6 @@ function ClanWarsVII() {
                 ) : (
                     <div ref={containerRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', width: '100%', marginTop: '10px' }}>
                         
-                        {/* TABLA FLANCOS */}
                         <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
                             <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 {isNomad ? 'Flex' : 'Flanks'}</h3>
                             <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
@@ -398,7 +402,6 @@ function ClanWarsVII() {
                             </table>
                         </div>
 
-                        {/* TABLA POCKETS */}
                         {!isNomad && (
                             <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
                                 <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 Pockets</h3>
@@ -448,7 +451,6 @@ function ClanWarsVII() {
                             </div>
                         )}
 
-                        {/* TABLA COMBOS */}
                         <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px', gridColumn: isNomad ? 'span 2' : 'span 1' }}>
                             <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 Synergies</h3>
                             <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
@@ -507,7 +509,7 @@ function ClanWarsVII() {
             <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch' }}>
                 
                 {/* 1. SELECCIÓN DE MODALIDAD Y MAPAS */}
-                <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: '1 1 50%', width: '50%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h3 style={{ color: C.cyan, fontSize: '11px', margin: 0, textTransform: 'uppercase' }}>1. SELECT MAPS ({selectedExecMaps.length}/{draftMode === 'PA3' ? 3 : 5})</h3>
                         <div style={{ display: 'flex', backgroundColor: '#1e212b', borderRadius: '4px', border: '1px solid #444', overflow: 'hidden' }}>
@@ -530,7 +532,7 @@ function ClanWarsVII() {
                 </div>
 
                 {/* 2. CONEXIÓN CAPTAINS MODE */}
-                <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: 1 }}>
+                <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: '1 1 50%', width: '50%', minWidth: 0 }}>
                     <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <input type="text" placeholder="Draft URL or ID..." value={cmId} onChange={(e) => setCmId(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '12px', flex: 1, outline: 'none' }} />
@@ -555,13 +557,10 @@ function ClanWarsVII() {
                 </div>
             </div>
 
-            {/* DRAFT VISUAL EN VIVO (Replicado de Leat11Draft pero adaptado a PA3/BO5) */}
             <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
-                {/* MY PICKS */}
                 <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {/* Renderizamos slots fijos según PA3 o BO5 */}
                         {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
                             const c = draft.picks[i];
                             if (!c) {
@@ -578,7 +577,6 @@ function ClanWarsVII() {
                     </div>
                 </div>
 
-                {/* BANS (Fijos siempre son 5 globales para cada lado) */}
                 <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '220px' }}>
                     <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -591,7 +589,6 @@ function ClanWarsVII() {
                     </div>
                 </div>
 
-                {/* OPPONENT PICKS */}
                 <div style={{ order: isHost ? 3 : 1, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -612,13 +609,12 @@ function ClanWarsVII() {
                 </div>
             </div>
 
-            {/* TABLERO DE EJECUCIÓN (ANCHOS FIJOS Y BANQUILLO) */}
             {selectedExecMaps.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                     <h3 style={{ color: C.cyan, fontSize: '12px', margin: '0', textTransform: 'uppercase' }}>3. EXECUTION PLAN (LIVE)</h3>
                     
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                        {/* Contenedor Flex para que las tarjetas se repartan el ancho a partes iguales */}
+                    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${selectedExecMaps.length}, 1fr)`, gap: '15px' }}>
+                        
                         {selectedExecMaps.map(mapName => {
                             const plansAvailable = DRAFT_PLAN[mapName] ? Object.keys(DRAFT_PLAN[mapName]) : [];
                             const activePlanName = selectedPlans[mapName] || plansAvailable[0];
@@ -629,7 +625,6 @@ function ClanWarsVII() {
                             return (
                                 <div key={mapName} style={{ flex: 1, minWidth: 0, backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                                     
-                                    {/* Header Mapa y Selector de Plan */}
                                     <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#1e212b', borderBottom: '1px solid #333' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: '10px' }}>
                                             <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '32px', height: '32px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover' }} />
@@ -649,12 +644,33 @@ function ClanWarsVII() {
                                         )}
                                     </div>
                                     
-                                    {/* Roles y Sugerencias */}
                                     <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
                                         {roles.map((roleData, idx) => {
-                                            const { status, civ, candidates } = evaluateRole(mapName, roleData);
+                                            const { status, civ, candidates, urgencyCount } = evaluateRole(mapName, roleData);
                                             
                                             let bg = '#161920'; let bd = '#2a2d36'; let icon = ''; let titleColor = '#888'; let actionBtn = null;
+                                            let urgencyBorder = '4px solid transparent';
+                                            let urgencyText = null;
+
+                                            if (status !== 'LOCKED' && status !== 'SNIPED') {
+                                                if (urgencyCount >= 4) {
+                                                    urgencyBorder = `4px solid ${C.border}`;
+                                                } else if (urgencyCount === 3) {
+                                                    urgencyBorder = `4px solid #ffd700`; 
+                                                    urgencyText = <span style={{fontSize: '8px', color: '#ffd700', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: 'rgba(255,215,0,0.1)', borderRadius: '2px'}}>3 LEFT</span>;
+                                                } else if (urgencyCount === 2) {
+                                                    urgencyBorder = `4px solid #ff9800`; 
+                                                    urgencyText = <span style={{fontSize: '8px', color: '#ff9800', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: 'rgba(255,152,0,0.1)', borderRadius: '2px'}}>2 LEFT</span>;
+                                                } else if (urgencyCount === 1) {
+                                                    urgencyBorder = `4px solid #ff4444`; 
+                                                    urgencyText = <span style={{fontSize: '8px', color: '#ff4444', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: 'rgba(255,68,68,0.1)', borderRadius: '2px', animation: 'pulseAlert 1.5s infinite'}}>CRITICAL (1)</span>;
+                                                } else {
+                                                    urgencyBorder = `4px solid #555`; 
+                                                    urgencyText = <span style={{fontSize: '8px', color: '#888', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: '#333', borderRadius: '2px'}}>DEAD</span>;
+                                                }
+                                            } else {
+                                                urgencyBorder = `4px solid ${status === 'LOCKED' ? C.green : C.red}`;
+                                            }
                                             
                                             if (status === 'TARGET') { bd = '#555'; titleColor = '#aaa'; icon = '🎯'; }
                                             else if (status === 'SUGGESTED') {
@@ -669,13 +685,14 @@ function ClanWarsVII() {
                                             }
 
                                             return (
-                                                <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
-                                                    
-                                                    {/* Target Principal */}
+                                                <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderLeft: urgencyBorder, borderRadius: '4px', overflow: 'hidden' }}>
                                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 10px', minHeight: '40px' }}>
                                                         <div style={{ display: 'flex', flexDirection: 'column', width: '35%' }}>
                                                             <span style={{ fontSize: '8px', color: '#666', textTransform: 'uppercase', fontWeight: 'bold' }}>ROLE</span>
-                                                            <span style={{ fontSize: '10px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1.2' }}>{roleData.role}</span>
+                                                            <span style={{ fontSize: '10px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1.2', display: 'flex', alignItems: 'center' }}>
+                                                                {roleData.role}
+                                                                {urgencyText}
+                                                            </span>
                                                         </div>
 
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
@@ -697,7 +714,6 @@ function ClanWarsVII() {
                                                         <div style={{ display: 'flex', flexShrink: 0 }}>{actionBtn}</div>
                                                     </div>
 
-                                                    {/* Barra Expectantes (Próximos 3) */}
                                                     {candidates && candidates.length > 1 && (
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
                                                             <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>
@@ -713,11 +729,9 @@ function ClanWarsVII() {
                                             );
                                         })}
 
-                                        {/* Civis sin asignar pero pickeadas que aplican a este mapa */}
                                         {(() => {
                                             const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
                                             const backupCivs = unassignedPicks.filter(c => {
-                                                // Check if the civ is anywhere in this map's priorities
                                                 return roles.some(r => r.priority.includes(c));
                                             });
 
