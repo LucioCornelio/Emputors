@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 
-const MAP_POOL = ["Arabia", "Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
+const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
 const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
@@ -28,9 +28,12 @@ function DraftPlanCreator() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
 
-  // Nuevos estados para cargar planes de BBDD
+  // Estados para cargar planes de BBDD
   const [existingPlans, setExistingPlans] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState("");
+
+  // Estado para Drag & Drop
+  const [draggedItem, setDraggedItem] = useState(null);
 
   useEffect(() => {
     fetchPlans();
@@ -109,11 +112,9 @@ function DraftPlanCreator() {
     let error;
 
     if (selectedPlanId) {
-      // Actualizar existente
       const res = await supabase.from('cw7_draft_plans').update(payload).eq('id', selectedPlanId);
       error = res.error;
     } else {
-      // Insertar nuevo
       const res = await supabase.from('cw7_draft_plans').insert(payload);
       error = res.error;
     }
@@ -145,13 +146,50 @@ function DraftPlanCreator() {
     } else {
       setMessage({ text: "✅ Plan borrado con éxito", type: "success" });
       fetchPlans();
-      handleSelectPlan(""); // Reset a modo nuevo
+      handleSelectPlan(""); 
       setTimeout(() => setMessage({ text: "", type: "" }), 4000);
     }
   };
 
+  const handleDuplicate = () => {
+    setSelectedPlanId(""); 
+    setPlanName(planName + " (Copia)"); 
+    setMessage({ text: "Modo copia activado. Modifica lo que necesites y haz clic en Guardar Nuevo.", type: "success" });
+  };
+
+  // Funciones de Drag & Drop
+  const handleDragStart = (e, roleIdx, civIdx) => {
+    setDraggedItem({ roleIdx, civIdx });
+    e.dataTransfer.effectAllowed = "move";
+    setTimeout(() => e.target.style.opacity = '0.4', 0);
+  };
+
+  const handleDragEnd = (e) => {
+    e.target.style.opacity = '1';
+    setDraggedItem(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault(); 
+  };
+
+  const handleDrop = (e, targetRoleIdx, targetCivIdx) => {
+    e.preventDefault();
+    if (!draggedItem) return;
+    if (draggedItem.roleIdx !== targetRoleIdx) return; 
+    if (draggedItem.civIdx === targetCivIdx) return; 
+
+    const newRoles = [...roles];
+    const priorityList = [...newRoles[targetRoleIdx].priority];
+    const [draggedCiv] = priorityList.splice(draggedItem.civIdx, 1);
+    priorityList.splice(targetCivIdx, 0, draggedCiv);
+    
+    newRoles[targetRoleIdx].priority = priorityList;
+    setRoles(newRoles);
+  };
+
   return (
-    <div style={{ backgroundColor: C.bg, minHeight: '100vh', padding: '30px 20px', fontFamily: 'Segoe UI, sans-serif', color: C.textMain }}>
+    <div style={{ padding: '30px 20px', fontFamily: 'Segoe UI, sans-serif', color: C.textMain }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         
         <div style={{ textAlign: 'center', marginBottom: '10px' }}>
@@ -190,8 +228,8 @@ function DraftPlanCreator() {
         </div>
 
         {/* CONTROLES DEL PLAN (Nombre, Mapa, Guardar) */}
-        <div style={{ backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div style={{ backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '20px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '200px' }}>
             <label style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Nombre del Plan (Estrategia)</label>
             <input 
               type="text" 
@@ -202,7 +240,7 @@ function DraftPlanCreator() {
             />
           </div>
           
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '150px' }}>
             <label style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Mapa Destino</label>
             <select 
               value={selectedMap} 
@@ -213,13 +251,25 @@ function DraftPlanCreator() {
             </select>
           </div>
 
-          <button 
-            onClick={handleSave} 
-            disabled={saving}
-            style={{ backgroundColor: selectedPlanId ? C.blue : C.green, color: '#161920', border: 'none', padding: '10px 30px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
-          >
-            {saving ? 'GUARDANDO...' : selectedPlanId ? '🔄 ACTUALIZAR PLAN' : '💾 GUARDAR PLAN'}
-          </button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {selectedPlanId && (
+              <button 
+                onClick={handleDuplicate} 
+                disabled={saving}
+                title="Crea un plan nuevo usando este como plantilla"
+                style={{ backgroundColor: C.gold, color: '#161920', border: 'none', padding: '10px 15px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
+              >
+                📑 DUPLICAR
+              </button>
+            )}
+            <button 
+              onClick={handleSave} 
+              disabled={saving}
+              style={{ backgroundColor: selectedPlanId ? C.blue : C.green, color: '#161920', border: 'none', padding: '10px 25px', borderRadius: '4px', fontSize: '13px', fontWeight: 'bold', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
+            >
+              {saving ? 'GUARDANDO...' : selectedPlanId ? '🔄 ACTUALIZAR' : '💾 GUARDAR NUEVO'}
+            </button>
+          </div>
         </div>
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
@@ -242,17 +292,35 @@ function DraftPlanCreator() {
                       placeholder="Nombre del rol (Ej: Pocket Boom)"
                       style={{ flex: 1, backgroundColor: isActive ? '#161920' : '#1e212b', color: isActive ? C.gold : '#fff', border: `1px solid ${isActive ? '#555' : '#333'}`, padding: '6px 10px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', outline: 'none' }}
                     />
-                   <button onClick={(e) => { e.stopPropagation(); handleClearRole(idx); }} title="Limpiar Rol" style={{ backgroundColor: 'transparent', color: C.red, border: 'none', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }}>×</button>
+                    <button onClick={(e) => { e.stopPropagation(); handleClearRole(idx); }} title="Limpiar Rol" style={{ backgroundColor: 'transparent', color: C.red, border: 'none', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }}>×</button>
                   </div>
 
-                  <div style={{ minHeight: '40px', backgroundColor: '#161920', border: '1px dashed #444', borderRadius: '4px', padding: '8px', display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div 
+                    style={{ minHeight: '40px', backgroundColor: '#161920', border: '1px dashed #444', borderRadius: '4px', padding: '8px', display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => {
+                        if (draggedItem && draggedItem.roleIdx === idx) {
+                            handleDrop(e, idx, r.priority.length);
+                        }
+                    }}
+                  >
                     {r.priority.length === 0 ? (
-                      <span style={{ fontSize: '10px', color: '#666', fontStyle: 'italic' }}>{isActive ? "Haz clic en las civis de la derecha para añadirlas aquí..." : "Sin prioridad asignada"}</span>
+                      <span style={{ fontSize: '10px', color: '#666', fontStyle: 'italic', pointerEvents: 'none' }}>{isActive ? "Haz clic en las civis de la derecha para añadirlas aquí..." : "Sin prioridad asignada"}</span>
                     ) : (
                       r.priority.map((civ, civIdx) => (
-                        <div key={`${civ}-${civIdx}`} onClick={(e) => { e.stopPropagation(); removeCivFromRole(idx, civIdx); }} style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: '#2a2d36', padding: '2px 6px', borderRadius: '3px', border: '1px solid #555' }}>
+                        <div 
+                          key={`${civ}-${civIdx}`} 
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, idx, civIdx)}
+                          onDragEnd={handleDragEnd}
+                          onDragOver={handleDragOver}
+                          onDrop={(e) => { e.stopPropagation(); handleDrop(e, idx, civIdx); }}
+                          onClick={(e) => { e.stopPropagation(); removeCivFromRole(idx, civIdx); }} 
+                          style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: '#2a2d36', padding: '2px 6px', borderRadius: '3px', border: '1px solid #555', cursor: 'grab' }}
+                          title="Arrastra para reordenar, clic para eliminar"
+                        >
                           <span style={{ fontSize: '10px', color: '#888', fontWeight: 'bold' }}>{civIdx + 1}.</span>
-                          <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '14px', height: '14px', borderRadius: '2px' }} />
+                          <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '14px', height: '14px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
                           <span style={{ fontSize: '10px', color: '#fff', fontWeight: 'bold' }}>{civ}</span>
                         </div>
                       ))
