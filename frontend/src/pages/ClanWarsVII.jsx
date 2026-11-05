@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 const MAP_POOL = ["Arabia", "Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
-const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', textMain: '#e0e0e0',
@@ -46,7 +45,7 @@ const DRAFT_PLAN = {
 };
 
 function ClanWarsVII() {
-  const [activeTab, setActiveTab] = useState('metaExplorer');
+  const [activeTab, setActiveTab] = useState('executionDraft');
 
   // --- ESTADOS: META EXPLORER ---
   const [db, setDb] = useState(null);
@@ -256,7 +255,6 @@ function ClanWarsVII() {
       const availablePicks = draft.picks.filter(c => !confirmedList.includes(c) && !draft.snipes.includes(c));
       const completelyUnavailable = [...draft.bans, ...draft.oppPicks, ...draft.snipes, ...confirmedList];
 
-      // Cálculo de urgencia: Civis que aún nos valen para este rol específico
       const validCandidates = roleData.priority.filter(c => c === confirmedCiv || !completelyUnavailable.includes(c));
       const urgencyCount = validCandidates.length;
 
@@ -287,6 +285,8 @@ function ClanWarsVII() {
 
   const myColor = isHost ? C.blue : C.gold;
   const oppColor = isHost ? C.gold : C.blue;
+  const slotsCount = draftMode === "PA3" ? 3 : 5;
+  const execMapSlots = Array.from({ length: slotsCount });
 
   if (loading) return <div style={{ color: C.gold, textAlign: 'center', padding: '40px' }}>Loading Data...</div>;
 
@@ -312,16 +312,253 @@ function ClanWarsVII() {
 
       {/* PESTAÑAS */}
       <div style={{ display: 'flex', borderBottom: '2px solid #2a2d36', backgroundColor: '#1e212b', padding: '0 1rem' }}>
-        <div onClick={() => setActiveTab('metaExplorer')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'metaExplorer' ? C.gold : '#888', borderBottom: activeTab === 'metaExplorer' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Meta Explorer</div>
         <div onClick={() => setActiveTab('executionDraft')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'executionDraft' ? C.gold : '#888', borderBottom: activeTab === 'executionDraft' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Execution Draft</div>
+        <div onClick={() => setActiveTab('metaExplorer')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'metaExplorer' ? C.gold : '#888', borderBottom: activeTab === 'metaExplorer' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Meta Explorer</div>
       </div>
 
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         
-        <div style={{ textAlign: 'center', marginBottom: '5px' }}>
-          <h1 style={{ color: C.gold, fontSize: '24px', margin: '0 0 5px 0', textTransform: 'uppercase', letterSpacing: '2px' }}>Clan Wars VII Assistant</h1>
-          <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Advanced 3v3 Map Meta & Execution</p>
-        </div>
+        {/* --- VISTA: EXECUTION DRAFT --- */}
+        {activeTab === 'executionDraft' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch' }}>
+                
+                {/* 1. SELECCIÓN DE MODALIDAD Y MAPAS */}
+                <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: '1 1 50%', width: '50%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3 style={{ color: C.cyan, fontSize: '11px', margin: 0, textTransform: 'uppercase' }}>1. SELECT MAPS ({selectedExecMaps.length}/{slotsCount})</h3>
+                        <div style={{ display: 'flex', backgroundColor: '#1e212b', borderRadius: '4px', border: '1px solid #444', overflow: 'hidden' }}>
+                            <button onClick={() => handleModeChange('PA3')} style={{ backgroundColor: draftMode === 'PA3' ? C.cyan : 'transparent', color: draftMode === 'PA3' ? '#161920' : '#888', border: 'none', padding: '4px 10px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>PA3</button>
+                            <button onClick={() => handleModeChange('BO5')} style={{ backgroundColor: draftMode === 'BO5' ? C.cyan : 'transparent', color: draftMode === 'BO5' ? '#161920' : '#888', border: 'none', padding: '4px 10px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>BO5</button>
+                        </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        {MAP_POOL.filter(m => DRAFT_PLAN[m]).map(map => {
+                            const isSel = selectedExecMaps.includes(map);
+                            return (
+                                <div key={map} onClick={() => toggleExecMap(map)} style={{ position: 'relative', width: '60px', height: '60px', borderRadius: '4px', border: `2px solid ${isSel ? C.gold : '#444'}`, cursor: 'pointer', overflow: 'hidden', filter: isSel ? 'brightness(1.1)' : 'grayscale(0.6)' }}>
+                                    <img src={`/maps/${getMapImageName(map)}.png`} alt={map} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'rgba(0,0,0,0.8)', color: isSel ? C.gold : '#fff', fontSize: '9px', fontWeight: 'bold', textAlign: 'center' }}>{map}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* 2. CONEXIÓN CAPTAINS MODE */}
+                <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: '1 1 50%', width: '50%', minWidth: 0 }}>
+                    <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <input type="text" placeholder="Draft URL or ID..." value={cmId} onChange={(e) => setCmId(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '12px', flex: 1, outline: 'none' }} />
+                        
+                        {!roleAssigned ? (
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button onClick={() => { setIsHost(true); setRoleAssigned(true); }} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>HOST</button>
+                            <button onClick={() => { setIsHost(false); setRoleAssigned(true); }} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>GUEST</button>
+                        </div>
+                        ) : (
+                        <button onClick={() => setRoleAssigned(false)} style={{ backgroundColor: isHost ? C.blue : C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>ROLE: {isHost ? 'HOST' : 'GUEST'} ✎</button>
+                        )}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <button onClick={syncCaptainMode} disabled={syncing || !roleAssigned} style={{ backgroundColor: (!roleAssigned || syncing) ? '#555' : C.green, color: '#161920', border: 'none', padding: '6px 20px', borderRadius: '4px', cursor: (!roleAssigned || syncing) ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                            {syncing ? 'SYNCING...' : '↻ CONNECT'}
+                        </button>
+                        <button onClick={resetDraft} style={{ backgroundColor: '#cc3333', color: 'white', border: 'none', padding: '6px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', letterSpacing: '1px' }}>
+                            ↻ RESET DRAFT
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
+                <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
+                            const c = draft.picks[i];
+                            if (!c) {
+                                return <div key={`empty-my-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
+                            }
+                            
+                            const isAssigned = Object.values(assigned).includes(c);
+                            const isSniped = draft.snipes.includes(c);
+
+                            return (
+                                <div key={`my-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (isSniped || isAssigned) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
+                                    {isSniped && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                                    {isAssigned && !isSniped && <div style={{position: 'absolute', top:'-2px', right:'0px'}}><span style={{color:C.green, fontSize:'14px', fontWeight: '900', textShadow: '1px 1px 1px #000'}}>✓</span></div>}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '220px' }}>
+                    <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {draft.bans.map((c, i) => (
+                            <div key={`ban-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
+                                <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: C.red, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div style={{ order: isHost ? 3 : 1, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
+                            const c = draft.oppPicks[i];
+                            if (!c) {
+                                return <div key={`empty-opp-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
+                            }
+                            return (
+                                <div key={`opp-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
+                                    {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            {/* TABLERO DE EJECUCIÓN (CUADRÍCULA ESTRICTA) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <h3 style={{ color: C.cyan, fontSize: '12px', margin: '0', textTransform: 'uppercase' }}>3. EXECUTION PLAN (LIVE)</h3>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px' }}>
+                    
+                    {execMapSlots.map((_, i) => {
+                        const mapName = selectedExecMaps[i];
+                        
+                        if (!mapName) {
+                            return (
+                                <div key={`empty-card-${i}`} style={{ flex: 1, backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px dashed #333', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
+                                    <span style={{ color: '#555', fontSize: '12px', fontWeight: 'bold' }}>Waiting for Map Selection...</span>
+                                </div>
+                            );
+                        }
+
+                        const plansAvailable = DRAFT_PLAN[mapName] ? Object.keys(DRAFT_PLAN[mapName]) : [];
+                        const activePlanName = selectedPlans[mapName] || plansAvailable[0];
+                        const roles = activePlanName ? DRAFT_PLAN[mapName][activePlanName] : null;
+                        
+                        if (!roles) return null;
+                        
+                        return (
+                            <div key={mapName} style={{ flex: 1, backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                
+                                <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#1e212b', borderBottom: '1px solid #333' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: '10px' }}>
+                                        <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '32px', height: '32px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover' }} />
+                                        <h4 style={{ color: '#fff', margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
+                                    </div>
+                                    
+                                    <div style={{ padding: '0 12px 8px 12px', minHeight: '26px' }}>
+                                        {plansAvailable.length > 1 ? (
+                                            <select 
+                                                value={activePlanName} 
+                                                onChange={(e) => setSelectedPlans(prev => ({...prev, [mapName]: e.target.value}))}
+                                                style={{ width: '100%', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '4px 6px', borderRadius: '3px', fontSize: '10px', outline: 'none', cursor: 'pointer' }}
+                                            >
+                                                {plansAvailable.map(p => <option key={p} value={p}>{p}</option>)}
+                                            </select>
+                                        ) : (
+                                            <div style={{ height: '22px' }}></div> 
+                                        )}
+                                    </div>
+                                </div>
+                                
+                                <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                                    {roles.map((roleData, idx) => {
+                                        const { status, civ, candidates, urgencyCount } = evaluateRole(mapName, roleData);
+                                        
+                                        let bg = '#161920'; let bd = '#2a2d36'; let actionBtn = null;
+                                        let urgencyBadge = <div style={{width:'30px'}}/>;
+
+                                        if (status !== 'LOCKED' && status !== 'SNIPED') {
+                                            if (urgencyCount >= 4) {
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#888', fontWeight: 'bold', padding: '2px 4px', backgroundColor: '#2a2d36', borderRadius: '3px'}}>{urgencyCount} LFT</span>;
+                                            } else if (urgencyCount === 3) {
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ffd700', fontWeight: 'bold', padding: '2px 4px', backgroundColor: 'rgba(255,215,0,0.1)', border: '1px solid #ffd700', borderRadius: '3px'}}>3 LFT</span>;
+                                            } else if (urgencyCount === 2) {
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ff9800', fontWeight: 'bold', padding: '2px 4px', backgroundColor: 'rgba(255,152,0,0.1)', border: '1px solid #ff9800', borderRadius: '3px'}}>2 LFT</span>;
+                                            } else if (urgencyCount === 1) {
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ff4444', fontWeight: 'bold', padding: '2px 4px', backgroundColor: 'rgba(255,68,68,0.1)', border: '1px solid #ff4444', borderRadius: '3px', animation: 'pulseAlert 1.5s infinite'}}>1 LFT</span>;
+                                            } else {
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#888', fontWeight: 'bold', padding: '2px 4px', backgroundColor: '#333', borderRadius: '3px'}}>DEAD</span>;
+                                            }
+                                        }
+
+                                        if (status === 'TARGET') { bd = '#555'; }
+                                        else if (status === 'SUGGESTED') {
+                                            bg = 'rgba(102, 178, 255, 0.1)'; bd = C.blue; 
+                                            actionBtn = <button onClick={() => confirmAssignment(mapName, roleData.role, civ)} style={{ width: '100%', backgroundColor: C.blue, color: '#161920', border: 'none', padding: '4px 0', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer' }}>✓</button>;
+                                        } else if (status === 'LOCKED') {
+                                            bg = 'rgba(76, 175, 80, 0.1)'; bd = C.green;
+                                            actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ width: '100%', backgroundColor: 'transparent', color: '#888', border: '1px solid #555', padding: '3px 0', borderRadius: '3px', fontSize: '9px', cursor: 'pointer' }}>UNDO</button>;
+                                        } else if (status === 'SNIPED') {
+                                            bg = 'rgba(255, 68, 68, 0.1)'; bd = C.red;
+                                            actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ width: '100%', backgroundColor: C.red, color: '#161920', border: 'none', padding: '4px 0', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer' }}>CLEAR</button>;
+                                        }
+
+                                        return (
+                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
+                                                
+                                                {/* Cuadrícula Estricta */}
+                                                <div style={{ display: 'grid', gridTemplateColumns: '110px 40px 1fr 45px', gap: '8px', alignItems: 'center', padding: '6px 8px', minHeight: '36px' }}>
+                                                    <div style={{ fontSize: '10px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1.1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                        {roleData.role}
+                                                    </div>
+                                                    
+                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                        {urgencyBadge}
+                                                    </div>
+
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden' }}>
+                                                        {civ ? (
+                                                            <>
+                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '22px', height: '22px', borderRadius: '3px', border: `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '11px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
+                                                            </>
+                                                        ) : (
+                                                            <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>-</span>
+                                                        )}
+                                                    </div>
+                                                    
+                                                    <div>{actionBtn}</div>
+                                                </div>
+
+                                                {candidates && candidates.length > 1 && (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
+                                                        <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>
+                                                        {candidates.slice(1, 4).map((cand, ci) => (
+                                                            <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
+                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+          </div>
+        )}
 
         {/* --- VISTA: META EXPLORER --- */}
         {activeTab === 'metaExplorer' && (
@@ -500,265 +737,6 @@ function ClanWarsVII() {
                     </div>
                 )}
             </div>
-        )}
-
-        {/* --- VISTA: EXECUTION DRAFT --- */}
-        {activeTab === 'executionDraft' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            
-            <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch' }}>
-                
-                {/* 1. SELECCIÓN DE MODALIDAD Y MAPAS */}
-                <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: '1 1 50%', width: '50%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h3 style={{ color: C.cyan, fontSize: '11px', margin: 0, textTransform: 'uppercase' }}>1. SELECT MAPS ({selectedExecMaps.length}/{draftMode === 'PA3' ? 3 : 5})</h3>
-                        <div style={{ display: 'flex', backgroundColor: '#1e212b', borderRadius: '4px', border: '1px solid #444', overflow: 'hidden' }}>
-                            <button onClick={() => handleModeChange('PA3')} style={{ backgroundColor: draftMode === 'PA3' ? C.cyan : 'transparent', color: draftMode === 'PA3' ? '#161920' : '#888', border: 'none', padding: '4px 10px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>PA3</button>
-                            <button onClick={() => handleModeChange('BO5')} style={{ backgroundColor: draftMode === 'BO5' ? C.cyan : 'transparent', color: draftMode === 'BO5' ? '#161920' : '#888', border: 'none', padding: '4px 10px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>BO5</button>
-                        </div>
-                    </div>
-                    
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                        {MAP_POOL.filter(m => DRAFT_PLAN[m]).map(map => {
-                            const isSel = selectedExecMaps.includes(map);
-                            return (
-                                <div key={map} onClick={() => toggleExecMap(map)} style={{ position: 'relative', width: '60px', height: '60px', borderRadius: '4px', border: `2px solid ${isSel ? C.gold : '#444'}`, cursor: 'pointer', overflow: 'hidden', filter: isSel ? 'brightness(1.1)' : 'grayscale(0.6)' }}>
-                                    <img src={`/maps/${getMapImageName(map)}.png`} alt={map} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'rgba(0,0,0,0.8)', color: isSel ? C.gold : '#fff', fontSize: '9px', fontWeight: 'bold', textAlign: 'center' }}>{map}</div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-
-                {/* 2. CONEXIÓN CAPTAINS MODE */}
-                <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: '1 1 50%', width: '50%', minWidth: 0 }}>
-                    <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <input type="text" placeholder="Draft URL or ID..." value={cmId} onChange={(e) => setCmId(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '12px', flex: 1, outline: 'none' }} />
-                        
-                        {!roleAssigned ? (
-                        <div style={{ display: 'flex', gap: '5px' }}>
-                            <button onClick={() => { setIsHost(true); setRoleAssigned(true); }} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>HOST</button>
-                            <button onClick={() => { setIsHost(false); setRoleAssigned(true); }} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>GUEST</button>
-                        </div>
-                        ) : (
-                        <button onClick={() => setRoleAssigned(false)} style={{ backgroundColor: isHost ? C.blue : C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>ROLE: {isHost ? 'HOST' : 'GUEST'} ✎</button>
-                        )}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <button onClick={syncCaptainMode} disabled={syncing || !roleAssigned} style={{ backgroundColor: (!roleAssigned || syncing) ? '#555' : C.green, color: '#161920', border: 'none', padding: '6px 20px', borderRadius: '4px', cursor: (!roleAssigned || syncing) ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
-                            {syncing ? 'SYNCING...' : '↻ CONNECT'}
-                        </button>
-                        <button onClick={resetDraft} style={{ backgroundColor: '#cc3333', color: 'white', border: 'none', padding: '6px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', letterSpacing: '1px' }}>
-                            ↻ RESET DRAFT
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
-                <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
-                            const c = draft.picks[i];
-                            if (!c) {
-                                return <div key={`empty-my-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
-                            }
-                            return (
-                                <div key={`my-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                                    {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-
-                <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '220px' }}>
-                    <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {draft.bans.map((c, i) => (
-                            <div key={`ban-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
-                                <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: C.red, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div style={{ order: isHost ? 3 : 1, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
-                            const c = draft.oppPicks[i];
-                            if (!c) {
-                                return <div key={`empty-opp-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
-                            }
-                            return (
-                                <div key={`opp-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                                    {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-
-            {selectedExecMaps.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <h3 style={{ color: C.cyan, fontSize: '12px', margin: '0', textTransform: 'uppercase' }}>3. EXECUTION PLAN (LIVE)</h3>
-                    
-                    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${selectedExecMaps.length}, 1fr)`, gap: '15px' }}>
-                        
-                        {selectedExecMaps.map(mapName => {
-                            const plansAvailable = DRAFT_PLAN[mapName] ? Object.keys(DRAFT_PLAN[mapName]) : [];
-                            const activePlanName = selectedPlans[mapName] || plansAvailable[0];
-                            const roles = activePlanName ? DRAFT_PLAN[mapName][activePlanName] : null;
-                            
-                            if (!roles) return null;
-                            
-                            return (
-                                <div key={mapName} style={{ flex: 1, minWidth: 0, backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                                    
-                                    <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#1e212b', borderBottom: '1px solid #333' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: '10px' }}>
-                                            <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '32px', height: '32px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover' }} />
-                                            <h4 style={{ color: '#fff', margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
-                                        </div>
-                                        
-                                        {plansAvailable.length > 1 && (
-                                            <div style={{ padding: '0 12px 8px 12px' }}>
-                                                <select 
-                                                    value={activePlanName} 
-                                                    onChange={(e) => setSelectedPlans(prev => ({...prev, [mapName]: e.target.value}))}
-                                                    style={{ width: '100%', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '4px 6px', borderRadius: '3px', fontSize: '10px', outline: 'none', cursor: 'pointer' }}
-                                                >
-                                                    {plansAvailable.map(p => <option key={p} value={p}>{p}</option>)}
-                                                </select>
-                                            </div>
-                                        )}
-                                    </div>
-                                    
-                                    <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
-                                        {roles.map((roleData, idx) => {
-                                            const { status, civ, candidates, urgencyCount } = evaluateRole(mapName, roleData);
-                                            
-                                            let bg = '#161920'; let bd = '#2a2d36'; let icon = ''; let titleColor = '#888'; let actionBtn = null;
-                                            let urgencyBorder = '4px solid transparent';
-                                            let urgencyText = null;
-
-                                            if (status !== 'LOCKED' && status !== 'SNIPED') {
-                                                if (urgencyCount >= 4) {
-                                                    urgencyBorder = `4px solid ${C.border}`;
-                                                } else if (urgencyCount === 3) {
-                                                    urgencyBorder = `4px solid #ffd700`; 
-                                                    urgencyText = <span style={{fontSize: '8px', color: '#ffd700', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: 'rgba(255,215,0,0.1)', borderRadius: '2px'}}>3 LEFT</span>;
-                                                } else if (urgencyCount === 2) {
-                                                    urgencyBorder = `4px solid #ff9800`; 
-                                                    urgencyText = <span style={{fontSize: '8px', color: '#ff9800', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: 'rgba(255,152,0,0.1)', borderRadius: '2px'}}>2 LEFT</span>;
-                                                } else if (urgencyCount === 1) {
-                                                    urgencyBorder = `4px solid #ff4444`; 
-                                                    urgencyText = <span style={{fontSize: '8px', color: '#ff4444', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: 'rgba(255,68,68,0.1)', borderRadius: '2px', animation: 'pulseAlert 1.5s infinite'}}>CRITICAL (1)</span>;
-                                                } else {
-                                                    urgencyBorder = `4px solid #555`; 
-                                                    urgencyText = <span style={{fontSize: '8px', color: '#888', fontWeight: 'bold', marginLeft: '6px', padding: '2px 4px', backgroundColor: '#333', borderRadius: '2px'}}>DEAD</span>;
-                                                }
-                                            } else {
-                                                urgencyBorder = `4px solid ${status === 'LOCKED' ? C.green : C.red}`;
-                                            }
-                                            
-                                            if (status === 'TARGET') { bd = '#555'; titleColor = '#aaa'; icon = '🎯'; }
-                                            else if (status === 'SUGGESTED') {
-                                                bg = 'rgba(102, 178, 255, 0.1)'; bd = C.blue; titleColor = C.blue; icon = '💡';
-                                                actionBtn = <button onClick={() => confirmAssignment(mapName, roleData.role, civ)} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>✓ CONFIRM</button>;
-                                            } else if (status === 'LOCKED') {
-                                                bg = 'rgba(76, 175, 80, 0.1)'; bd = C.green; titleColor = C.green; icon = '🔒';
-                                                actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ backgroundColor: 'transparent', color: '#888', border: '1px solid #555', padding: '3px 6px', borderRadius: '3px', fontSize: '9px', cursor: 'pointer', whiteSpace: 'nowrap' }}>UNDO</button>;
-                                            } else if (status === 'SNIPED') {
-                                                bg = 'rgba(255, 68, 68, 0.1)'; bd = C.red; titleColor = C.red; icon = '☠️';
-                                                actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>CLEAR</button>;
-                                            }
-
-                                            return (
-                                                <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderLeft: urgencyBorder, borderRadius: '4px', overflow: 'hidden' }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 10px', minHeight: '40px' }}>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', width: '35%' }}>
-                                                            <span style={{ fontSize: '8px', color: '#666', textTransform: 'uppercase', fontWeight: 'bold' }}>ROLE</span>
-                                                            <span style={{ fontSize: '10px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1.2', display: 'flex', alignItems: 'center' }}>
-                                                                {roleData.role}
-                                                                {urgencyText}
-                                                            </span>
-                                                        </div>
-
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
-                                                            {civ ? (
-                                                                <>
-                                                                    <div style={{ width: '28px', height: '28px', borderRadius: '4px', border: `1px solid ${bd}`, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                                                                        <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
-                                                                        {status === 'SNIPED' && <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'16px'}}>✗</span></div>}
-                                                                    </div>
-                                                                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                                                                        <span style={{ fontSize: '9px', color: titleColor, fontWeight: 'bold' }}>{icon} {status}</span>
-                                                                        <span style={{ fontSize: '11px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
-                                                                    </div>
-                                                                </>
-                                                            ) : (
-                                                                <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>No options left...</span>
-                                                            )}
-                                                        </div>
-                                                        <div style={{ display: 'flex', flexShrink: 0 }}>{actionBtn}</div>
-                                                    </div>
-
-                                                    {candidates && candidates.length > 1 && (
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
-                                                            <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>
-                                                            {candidates.slice(1, 4).map((cand, ci) => (
-                                                                <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
-                                                                    <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                    <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-
-                                        {(() => {
-                                            const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
-                                            const backupCivs = unassignedPicks.filter(c => {
-                                                return roles.some(r => r.priority.includes(c));
-                                            });
-
-                                            if (backupCivs.length === 0) return null;
-                                            
-                                            return (
-                                                <div style={{ marginTop: 'auto', paddingTop: '10px', borderTop: '1px dashed #333' }}>
-                                                    <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>AVAILABLE BENCH (FITS MAP)</span>
-                                                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                                                        {backupCivs.map(c => (
-                                                            <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 4px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '3px' }}>
-                                                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '9px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })()}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
-          </div>
         )}
       </div>
     </div>
