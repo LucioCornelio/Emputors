@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { supabase } from '../supabaseClient';
 import DraftPlanCreator from './admin/DraftPlanCreator'; 
 
 const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
@@ -8,63 +9,6 @@ const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Briton
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', textMain: '#e0e0e0',
   gold: '#ffd700', cyan: '#00c8c8', red: '#ff6666', green: '#4caf50', blue: '#66b2ff'
-};
-
-const DRAFT_PLAN = {
-  "Colosseum": {
-    "Plan 1: Cobra del desierto": [
-      { role: "Flank ArqueroATK", priority: ["Mayans", "Ethiopians", "Shu", "Mongols", "Britons", "Vietnamese", "Koreans"] },
-      { role: "Flank HDArchers", priority: ["Japanese", "Malians", "Vikings", "Dravidians", "Celts", "Bulgarians"] },
-      { role: "Pocket", priority: ["Persians", "Huns", "Lithuanians", "Franks", "Magyars"] }
-    ],
-    "Plan 2: Elefante rodante": [
-      { role: "Flank ArqueroDef 1", priority: ["Mayans", "Ethiopians", "Shu", "Vietnamese", "Britons", "Koreans", "Incas"] },
-      { role: "Flank ArqueroDef 2", priority: ["Mayans", "Ethiopians", "Shu", "Vietnamese", "Britons", "Koreans", "Incas"] },
-      { role: "PocketUU", priority: ["Spanish", "Lithuanians", "Burmese", "Berbers", "Turks", "Portuguese", "Burgundians"] }
-    ]
-  },
-  "Crescent": {
-    "Plan 1: Hybrid Water": [
-      { role: "Flank Water", priority: ["Italians", "Persians", "Japanese", "Dravidians", "Vikings", "Malians"] },
-      { role: "Flank Land", priority: ["Britons", "Mayans", "Ethiopians", "Aztecs", "Incas", "Celts"] },
-      { role: "Pocket Flex", priority: ["Lithuanians", "Huns", "Franks", "Magyars", "Mongols", "Tatars"] }
-    ]
-  },
-  "Fortress": {
-    "Plan 1: Boom & Push": [
-      { role: "Flank Defensive", priority: ["Bohemians", "Britons", "Byzantines", "Koreans", "Teutons"] },
-      { role: "Flank Fast Imp", priority: ["Turks", "Italians", "Portuguese", "Condottiero", "Spanish"] },
-      { role: "Pocket Boom", priority: ["Cumans", "Khmer", "Burgundians", "Slavs", "Bengalis"] }
-    ]
-  },
-  "Grand Bara": {
-    "Plan 1: Open Aggro": [
-      { role: "Flank Aggro", priority: ["Mongols", "Tatars", "Huns", "Magyars", "Franks", "Lithuanians"] },
-      { role: "Flank Archers", priority: ["Britons", "Mayans", "Ethiopians", "Vietnamese", "Koreans", "Incas"] },
-      { role: "Pocket Knights", priority: ["Franks", "Lithuanians", "Magyars", "Huns", "Berbers", "Persians"] }
-    ]
-  },
-  "Nomad": {
-    "Plan 1: Control de Agua": [
-      { role: "Water Control", priority: ["Persians", "Italians", "Malians", "Dravidians", "Japanese", "Vikings", "Koreans"] },
-      { role: "FC UU Cav", priority: ["Spanish", "Berbers", "Portuguese", "Turks", "Burgundians", "Franks"] },
-      { role: "FC UU Arrow", priority: ["Koreans", "Mongols", "Vietnamese", "Burmese", "Britons", "Mayans"] }
-    ]
-  },
-  "Socotra": {
-    "Plan 1: Aggro": [
-      { role: "Flank Pure Archers", priority: ["Britons", "Mayans", "Ethiopians", "Vietnamese", "Koreans", "Incas"] },
-      { role: "Flank MAA Archer", priority: ["Japanese", "Dravidians", "Vikings", "Malians", "Celts", "Bulgarians"] },
-      { role: "Pocket Siege/Meat", priority: ["Slavs", "Bohemians", "Gurjaras", "Celts", "Persians", "Malians"] }
-    ]
-  },
-  "Tres Leches": {
-    "Plan 1: Standard": [
-      { role: "Flank 1", priority: ["Britons", "Mayans", "Italians", "Persians", "Vietnamese", "Ethiopians"] },
-      { role: "Flank 2", priority: ["Franks", "Lithuanians", "Magyars", "Burgundians", "Berbers", "Spanish"] },
-      { role: "Pocket", priority: ["Hindustanis", "Gurjaras", "Berbers", "Franks", "Persians", "Huns"] }
-    ]
-  }
 };
 
 function ClanWarsVII() {
@@ -79,7 +23,8 @@ function ClanWarsVII() {
 
   // --- ESTADOS: EXECUTION DRAFT ---
   const [draftMode, setDraftMode] = useState("PA3"); 
-  const [selectedExecMaps, setSelectedExecMaps] = useState([]); // Array vacío para inicio limpio
+  const [selectedExecMaps, setSelectedExecMaps] = useState([]); 
+  const [draftPlans, setDraftPlans] = useState({}); 
   const [selectedPlans, setSelectedPlans] = useState({}); 
 
   const [cmId, setCmId] = useState("");
@@ -109,36 +54,54 @@ function ClanWarsVII() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Carga inicial de Meta (JSON) y Planes (Supabase)
   useEffect(() => {
     document.title = 'Clan Wars VII Assistant | Emputors';
-    fetch('/db_3v3.json')
-      .then(res => res.json())
-      .then(data => {
+    
+    const fetchData = async () => {
+      // 1. Cargar Meta de Liquipedia
+      try {
+        const res = await fetch('/db_3v3.json');
+        const data = await res.json();
         setDb(data);
         if (data && data.maps) {
             const preferred = ["Fortress", "Tres Leches", "Grand Bara", "Crescent"];
             const defaultMap = preferred.find(m => data.maps[m]) || Object.keys(data.maps)[0];
             if (defaultMap) setSelectedMetaMap(defaultMap);
         }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error loading db:", err);
-        setLoading(false);
-      });
+      } catch (err) { console.error("Error loading db_3v3:", err); }
+
+      // 2. Cargar Planes desde Supabase
+      const { data: planData, error: planError } = await supabase.from('cw7_draft_plans').select('*');
+      if (planData) {
+        const formatted = {};
+        planData.forEach(row => {
+          if (!formatted[row.map_name]) formatted[row.map_name] = {};
+          formatted[row.map_name][row.plan_name] = row.roles;
+        });
+        setDraftPlans(formatted);
+      } else if (planError) {
+        console.error("Error loading plans:", planError);
+      }
+
+      setLoading(false);
+    };
+
+    fetchData();
   }, []);
 
+  // Auto-seleccionar el primer plan disponible cuando se elige un mapa
   useEffect(() => {
     const newPlans = { ...selectedPlans };
     let changed = false;
     selectedExecMaps.forEach(map => {
-        if (!newPlans[map] && DRAFT_PLAN[map]) {
-            newPlans[map] = Object.keys(DRAFT_PLAN[map])[0];
+        if (!newPlans[map] && draftPlans[map]) {
+            newPlans[map] = Object.keys(draftPlans[map])[0];
             changed = true;
         }
     });
     if (changed) setSelectedPlans(newPlans);
-  }, [selectedExecMaps]);
+  }, [selectedExecMaps, draftPlans]);
 
   // Si cambia el link de Captains Mode, reseteamos el estado de conexión visual
   useEffect(() => {
@@ -412,7 +375,7 @@ function ClanWarsVII() {
                     </div>
                     
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                        {MAP_POOL.filter(m => DRAFT_PLAN[m]).map(map => {
+                        {MAP_POOL.map(map => {
                             const isSel = selectedExecMaps.includes(map);
                             return (
                                 <div key={map} onClick={() => toggleExecMap(map)} style={{ position: 'relative', width: '60px', height: '60px', borderRadius: '4px', border: `2px solid ${isSel ? C.gold : '#444'}`, cursor: 'pointer', overflow: 'hidden', filter: isSel ? 'brightness(1.1)' : 'grayscale(0.6)' }}>
@@ -532,9 +495,21 @@ function ClanWarsVII() {
                             );
                         }
 
-                        const plansAvailable = DRAFT_PLAN[mapName] ? Object.keys(DRAFT_PLAN[mapName]) : [];
+                        const plansAvailable = draftPlans[mapName] ? Object.keys(draftPlans[mapName]) : [];
+                        
+                        if (plansAvailable.length === 0) {
+                            return (
+                                <div key={mapName} style={{ flex: 1, backgroundColor: C.card, borderRadius: '4px', border: `1px solid ${C.red}55`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '150px', padding: '20px', textAlign: 'center', gap: '8px' }}>
+                                    <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover', filter: 'grayscale(0.8)' }} />
+                                    <h4 style={{ color: '#fff', margin: 0, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
+                                    <span style={{ color: C.red, fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(255, 68, 68, 0.1)', padding: '4px 8px', borderRadius: '4px' }}>NO HAY PLANES CREADOS</span>
+                                    <span style={{ color: '#888', fontSize: '10px' }}>Ve al Plan Creator para configurar estrategias.</span>
+                                </div>
+                            );
+                        }
+
                         const activePlanName = selectedPlans[mapName] || plansAvailable[0];
-                        const roles = activePlanName ? DRAFT_PLAN[mapName][activePlanName] : null;
+                        const roles = activePlanName ? draftPlans[mapName][activePlanName] : null;
                         
                         if (!roles) return null;
                         
@@ -596,10 +571,10 @@ function ClanWarsVII() {
                                         }
 
                                         return (
-                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
+                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '3px', overflow: 'hidden' }}>
                                                 
-                                                {/* Cuadrícula Estricta blindada contra anchos variables */}
-                                                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 95px) 36px minmax(0, 1fr) 40px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
+                                                {/* Cuadrícula Estricta */}
+                                                <div style={{ display: 'grid', gridTemplateColumns: '95px 30px 1fr 35px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
                                                     <div style={{ fontSize: '10.5px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
                                                         {roleData.role}
                                                     </div>
@@ -671,22 +646,24 @@ function ClanWarsVII() {
                                         );
                                     })}
 
+                                    {/* Civis sin asignar pero pickeadas que aplican a este mapa */}
                                     {(() => {
                                         const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
                                         const backupCivs = unassignedPicks.filter(c => {
+                                            // Check if the civ is anywhere in this map's priorities
                                             return roles.some(r => r.priority.includes(c));
                                         });
 
                                         if (backupCivs.length === 0) return null;
                                         
                                         return (
-                                            <div style={{ marginTop: 'auto', paddingTop: '6px', borderTop: '1px dashed #333' }}>
-                                                <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '2px' }}>AVAILABLE BENCH (FITS MAP)</span>
-                                                <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
+                                            <div style={{ marginTop: 'auto', paddingTop: '10px', borderTop: '1px dashed #333' }}>
+                                                <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>AVAILABLE BENCH (FITS MAP)</span>
+                                                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                                                     {backupCivs.map(c => (
-                                                        <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '2px', padding: '1px 3px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '2px' }}>
-                                                            <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '10px', height: '10px', borderRadius: '1px' }} onError={(e) => e.target.style.display='none'} />
-                                                            <span style={{ fontSize: '8px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
+                                                        <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 4px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '3px' }}>
+                                                            <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                            <span style={{ fontSize: '9px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -731,7 +708,6 @@ function ClanWarsVII() {
                     <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>Faltan datos de Liquipedia.</div>
                 ) : (
                     <div ref={containerRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', width: '100%', marginTop: '10px' }}>
-                        
                         <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
                             <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 {isNomad ? 'Flex' : 'Flanks'}</h3>
                             <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
