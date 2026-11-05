@@ -75,7 +75,6 @@ function ClanWarsVII() {
     setActiveTooltip(prev => prev === id ? null : id);
   };
 
-  // Helper para obtener el nombre exacto del archivo de imagen
   const getMapImageName = (mapName) => {
     if (mapName === "Tres Leches") return "Tres_leches";
     if (mapName === "Grand Bara") return "Grand_Bara";
@@ -107,34 +106,39 @@ function ClanWarsVII() {
           <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Advanced 3v3 Map Meta & Matchup Explorer</p>
         </div>
 
-        {/* CONTENEDOR CENTRAL: MAPA + SELECTOR + MUESTRA */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', overflow: 'hidden' }}>
-            
-            {/* Imagen del mapa */}
-            <div style={{ width: '120px', height: '100px', backgroundColor: '#0f1115', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: `1px solid ${C.border}` }}>
-              <img 
-                src={`/maps/${getMapImageName(selectedMap)}.png`} 
-                alt={selectedMap}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
-              />
-            </div>
-
-            {/* Controles */}
-            <div style={{ padding: '15px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
-                <select value={selectedMap} onChange={(e) => setSelectedMap(e.target.value)} style={{ backgroundColor: '#1e212b', color: C.gold, border: '1px solid #444', padding: '6px 12px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', minWidth: '150px' }}>
-                  {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
-                </select>
-              </div>
-              <div style={{ color: '#a0aab5', fontSize: '11px', fontWeight: 'bold', backgroundColor: '#1e212b', padding: '6px 12px', borderRadius: '4px', border: '1px solid #333', textAlign: 'center' }}>
-                Sample Size: <span style={{ color: totalMatches < 20 ? C.red : C.gold }}>{totalMatches} Matches</span>
-              </div>
-            </div>
-
+        {/* CONTENEDOR CENTRAL: MAPA RECORTADO + SELECTOR ESTILO PÍLDORA */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginBottom: '10px' }}>
+          
+          {/* Mapa Grande con recorte en Diamante (clip-path) y Sombra */}
+          <div style={{ filter: 'drop-shadow(0px 8px 15px rgba(0,0,0,0.8))' }}>
+            <img 
+              src={`/maps/${getMapImageName(selectedMap)}.png`} 
+              alt={selectedMap}
+              style={{ 
+                width: '240px', 
+                height: '240px', 
+                objectFit: 'cover',
+                clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+                transform: 'scale(1.05)' // Pequeño zoom para rellenar los bordes
+              }}
+              onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
+            />
           </div>
+
+          {/* Selector estilo Píldora */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', backgroundColor: C.card, padding: '8px 25px', borderRadius: '50px', border: `1px solid ${C.border}`, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '12px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Map:</span>
+              <select value={selectedMap} onChange={(e) => setSelectedMap(e.target.value)} style={{ backgroundColor: 'transparent', color: C.gold, border: 'none', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
+              </select>
+            </div>
+            <div style={{ width: '1px', height: '20px', backgroundColor: '#333' }}></div>
+            <div style={{ color: '#a0aab5', fontSize: '12px', fontWeight: 'bold' }}>
+              Sample: <span style={{ color: totalMatches < 20 ? C.red : C.gold, marginLeft: '4px' }}>{totalMatches} Matches</span>
+            </div>
+          </div>
+
         </div>
 
         {!mapData ? (
