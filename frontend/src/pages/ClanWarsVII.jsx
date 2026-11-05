@@ -629,7 +629,14 @@ function ClanWarsVII() {
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
                                                         {candidates?.length > 1 && <span style={{ fontSize: '7px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
                                                         {candidates?.slice(1, 4).map((cand, ci) => (
-                                                            <div key={`cand-${ci}`} style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
+                                                            <div 
+                                                                key={`cand-${ci}`} 
+                                                                onClick={() => confirmAssignment(mapName, roleData.role, cand.civ)}
+                                                                title={`Asignar ${cand.civ} a ${roleData.role}`}
+                                                                style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: 'pointer', transition: 'transform 0.1s' }}
+                                                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
+                                                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                            >
                                                                 <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '10px', height: '10px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
                                                                 <span style={{ fontSize: '8px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                             </div>
@@ -640,7 +647,14 @@ function ClanWarsVII() {
                                                                 {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '8px', margin: '0 2px' }}>|</span>}
                                                                 <span style={{ fontSize: '7px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
                                                                 {backups.map((cand, ci) => (
-                                                                    <div key={`back-${ci}`} style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8 }}>
+                                                                    <div 
+                                                                        key={`back-${ci}`} 
+                                                                        onClick={() => confirmAssignment(mapName, roleData.role, cand.civ)}
+                                                                        title={`Asignar ${cand.civ} a ${roleData.role}`}
+                                                                        style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: 'pointer', transition: 'transform 0.1s' }}
+                                                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
+                                                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                                    >
                                                                         <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '10px', height: '10px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
                                                                         <span style={{ fontSize: '8px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                                     </div>
