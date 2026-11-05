@@ -44,32 +44,27 @@ function DraftPlanCreator() {
   const handleSelectPlan = (id) => {
     setSelectedPlanId(id);
     if (!id) {
-      // Modo Nuevo Plan
       setPlanName("");
       setRoles([{ role: "Flank 1", priority: [] }, { role: "Flank 2", priority: [] }, { role: "Pocket", priority: [] }]);
       setActiveRoleIndex(0);
       return;
     }
-    // Modo Edición
     const plan = existingPlans.find(p => p.id === id);
     if (plan) {
       setPlanName(plan.plan_name);
       setSelectedMap(plan.map_name);
-      setRoles(plan.roles);
+      // Forzamos estrictamente 3 roles en la interfaz
+      const loadedRoles = plan.roles.slice(0, 3);
+      while (loadedRoles.length < 3) loadedRoles.push({ role: `Rol ${loadedRoles.length + 1}`, priority: [] });
+      setRoles(loadedRoles);
       setActiveRoleIndex(0);
     }
   };
 
-  const handleAddRole = () => {
-    setRoles([...roles, { role: `Rol ${roles.length + 1}`, priority: [] }]);
-  };
-
-  const handleRemoveRole = (index) => {
-    const newRoles = roles.filter((_, i) => i !== index);
+  const handleClearRole = (index) => {
+    const newRoles = [...roles];
+    newRoles[index] = { role: `Rol ${index + 1}`, priority: [] };
     setRoles(newRoles);
-    if (activeRoleIndex >= newRoles.length) {
-      setActiveRoleIndex(Math.max(0, newRoles.length - 1));
-    }
   };
 
   const updateRoleName = (index, newName) => {
@@ -232,8 +227,7 @@ function DraftPlanCreator() {
           {/* COLUMNA IZQUIERDA: CONFIGURACIÓN DE ROLES */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ color: C.cyan, fontSize: '13px', margin: 0, textTransform: 'uppercase' }}>Estructura de Roles</h3>
-              <button onClick={handleAddRole} style={{ backgroundColor: '#2a2d36', color: '#e0e0e0', border: '1px solid #444', padding: '4px 10px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>+ AÑADIR ROL</button>
+              <h3 style={{ color: C.cyan, fontSize: '13px', margin: 0, textTransform: 'uppercase' }}>Estructura de Roles (Fijos)</h3>
             </div>
 
             {roles.map((r, idx) => {
@@ -248,7 +242,7 @@ function DraftPlanCreator() {
                       placeholder="Nombre del rol (Ej: Pocket Boom)"
                       style={{ flex: 1, backgroundColor: isActive ? '#161920' : '#1e212b', color: isActive ? C.gold : '#fff', border: `1px solid ${isActive ? '#555' : '#333'}`, padding: '6px 10px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', outline: 'none' }}
                     />
-                    <button onClick={(e) => { e.stopPropagation(); handleRemoveRole(idx); }} style={{ backgroundColor: 'transparent', color: C.red, border: 'none', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }}>×</button>
+                   <button onClick={(e) => { e.stopPropagation(); handleClearRole(idx); }} title="Limpiar Rol" style={{ backgroundColor: 'transparent', color: C.red, border: 'none', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }}>×</button>
                   </div>
 
                   <div style={{ minHeight: '40px', backgroundColor: '#161920', border: '1px dashed #444', borderRadius: '4px', padding: '8px', display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -283,7 +277,9 @@ function DraftPlanCreator() {
                     title={c}
                   >
                     <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display='none'} />
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.8)', color: '#fff', fontSize: '9px', textAlign: 'center', padding: '2px 0', fontWeight: 'bold' }}>{c.substring(0,4).toUpperCase()}</div>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0, 0, 0, 0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ color: '#fff', fontSize: '10px', textAlign: 'center', fontWeight: 'bold', fontFamily: '"Arial Narrow", "Segoe UI Condensed", sans-serif', letterSpacing: '-0.3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 2px' }}>{c}</span>
+                    </div>
                     {isSelectedInActive && <div style={{position: 'absolute', top:'-2px', right:'-2px'}}><span style={{color:C.blue, fontSize:'16px', fontWeight: '900', textShadow: '1px 1px 1px #000'}}>✓</span></div>}
                   </div>
                 );
