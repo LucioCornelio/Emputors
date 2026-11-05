@@ -359,8 +359,7 @@ function ClanWarsVII() {
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: activeTab === 'executionDraft' ? '50vh' : '20px' }}>
 
         {/* --- VISTA: EXECUTION DRAFT --- */}
-        {activeTab === 'executionDraft' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <div style={{ display: activeTab === 'executionDraft' ? 'flex' : 'none', flexDirection: 'column', gap: '15px' }}>
             
             <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch' }}>
                 
@@ -571,15 +570,13 @@ function ClanWarsVII() {
                                         }
 
                                         return (
-                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '3px', overflow: 'hidden' }}>
+                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
                                                 
-                                                {/* Cuadrícula Estricta */}
-                                                <div style={{ display: 'grid', gridTemplateColumns: '95px 30px 1fr 35px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 95px) 36px minmax(0, 1fr) 40px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
                                                     <div style={{ fontSize: '10.5px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
                                                         {roleData.role}
                                                     </div>
                                                     
-                                                    {/* El hueco de la urgencia ahora siempre tiene contenido para no romper la simetría */}
                                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                         {status === 'LOCKED' ? (
                                                             <span style={{fontSize: '12px', color: C.green, fontWeight: '900'}}>✓</span>
@@ -604,44 +601,42 @@ function ClanWarsVII() {
                                                     <div>{actionBtn}</div>
                                                 </div>
 
-                                                {(candidates?.length > 1 || backups?.length > 0) && (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
-                                                        {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
-                                                        {candidates?.slice(1, 4).map((cand, ci) => (
-                                                            <div 
-                                                                key={`cand-${ci}`} 
-                                                                onClick={() => confirmAssignment(mapName, roleData.role, cand.civ)}
-                                                                title={`Asignar ${cand.civ} a ${roleData.role}`}
-                                                                style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: 'pointer', transition: 'transform 0.1s' }}
-                                                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
-                                                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                                                            >
-                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                            </div>
-                                                        ))}
-                                                        
-                                                        {backups?.length > 0 && (
-                                                            <>
-                                                                {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '9px', margin: '0 2px' }}>|</span>}
-                                                                <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
-                                                                {backups.map((cand, ci) => (
-                                                                    <div 
-                                                                        key={`back-${ci}`} 
-                                                                        onClick={() => confirmAssignment(mapName, roleData.role, cand.civ)}
-                                                                        title={`Asignar ${cand.civ} a ${roleData.role}`}
-                                                                        style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: 'pointer', transition: 'transform 0.1s' }}
-                                                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
-                                                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                                                                    >
-                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                        <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                                    </div>
-                                                                ))}
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                )}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: (candidates?.length > 1 || backups?.length > 0) ? 'rgba(0,0,0,0.2)' : 'transparent', borderTop: (candidates?.length > 1 || backups?.length > 0) ? `1px solid ${bd}55` : '1px solid transparent', flexWrap: 'wrap', minHeight: '18px' }}>
+                                                    {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
+                                                    {candidates?.slice(1, 4).map((cand, ci) => (
+                                                        <div 
+                                                            key={`cand-${ci}`} 
+                                                            onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
+                                                            title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
+                                                            style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
+                                                            onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
+                                                            onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
+                                                        >
+                                                            <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                            <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                        </div>
+                                                    ))}
+                                                    
+                                                    {backups?.length > 0 && (
+                                                        <>
+                                                            {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '9px', margin: '0 2px' }}>|</span>}
+                                                            <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
+                                                            {backups.map((cand, ci) => (
+                                                                <div 
+                                                                    key={`back-${ci}`} 
+                                                                    onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
+                                                                    title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
+                                                                    style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
+                                                                    onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
+                                                                    onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
+                                                                >
+                                                                    <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                    <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                                </div>
+                                                            ))}
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -650,7 +645,6 @@ function ClanWarsVII() {
                                     {(() => {
                                         const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
                                         const backupCivs = unassignedPicks.filter(c => {
-                                            // Check if the civ is anywhere in this map's priorities
                                             return roles.some(r => r.priority.includes(c));
                                         });
 
@@ -680,43 +674,91 @@ function ClanWarsVII() {
         )}
 
         {/* --- VISTA: META EXPLORER --- */}
-        {activeTab === 'metaExplorer' && (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
-                <div style={{ filter: 'drop-shadow(0px 6px 12px rgba(0,0,0,0.6))' }}>
-                    <img 
-                        src={`/maps/${getMapImageName(selectedMetaMap)}.png`} 
-                        alt={selectedMetaMap}
-                        style={{ maxWidth: '400px', maxHeight: '250px', width: 'auto', height: 'auto', display: 'block' }}
-                        onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
-                    />
-                </div>
+        <div style={{ display: activeTab === 'metaExplorer' ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+            <div style={{ filter: 'drop-shadow(0px 6px 12px rgba(0,0,0,0.6))' }}>
+                <img 
+                    src={`/maps/${getMapImageName(selectedMetaMap)}.png`} 
+                    alt={selectedMetaMap}
+                    style={{ maxWidth: '400px', maxHeight: '250px', width: 'auto', height: 'auto', display: 'block' }}
+                    onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
+                />
+            </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', backgroundColor: C.card, padding: '8px 25px', borderRadius: '50px', border: `1px solid ${C.border}`, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '12px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
-                        <select value={selectedMetaMap} onChange={(e) => setSelectedMetaMap(e.target.value)} style={{ backgroundColor: 'transparent', color: C.gold, border: 'none', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
-                            {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
-                        </select>
-                    </div>
-                    <div style={{ width: '1px', height: '20px', backgroundColor: '#333' }}></div>
-                    <div style={{ color: '#a0aab5', fontSize: '12px', fontWeight: 'bold' }}>
-                        Sample: <span style={{ color: totalMatches < 20 ? C.red : C.gold, marginLeft: '4px' }}>{totalMatches} Matches</span>
-                    </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', backgroundColor: C.card, padding: '8px 25px', borderRadius: '50px', border: `1px solid ${C.border}`, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '12px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
+                    <select value={selectedMetaMap} onChange={(e) => setSelectedMetaMap(e.target.value)} style={{ backgroundColor: 'transparent', color: C.gold, border: 'none', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+                        {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
+                    </select>
                 </div>
+                <div style={{ width: '1px', height: '20px', backgroundColor: '#333' }}></div>
+                <div style={{ color: '#a0aab5', fontSize: '12px', fontWeight: 'bold' }}>
+                    Sample: <span style={{ color: totalMatches < 20 ? C.red : C.gold, marginLeft: '4px' }}>{totalMatches} Matches</span>
+                </div>
+            </div>
 
-                {!mapData ? (
-                    <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>Faltan datos de Liquipedia.</div>
-                ) : (
-                    <div ref={containerRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', width: '100%', marginTop: '10px' }}>
+            {!mapData ? (
+                <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>Faltan datos de Liquipedia.</div>
+            ) : (
+                <div ref={containerRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', width: '100%', marginTop: '10px' }}>
+                    
+                    <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
+                        <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 {isNomad ? 'Flex' : 'Flanks'}</h3>
+                        <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
+                            <thead><tr style={{ color: '#888', borderBottom: '1px solid #333' }}><th style={{padding:'4px'}}>Civ</th><th style={{padding:'4px'}}>Picks</th><th style={{padding:'4px'}}>WR</th><th style={{padding:'4px'}}>CDPS</th></tr></thead>
+                            <tbody>
+                                {(isNomad ? meta.topFlex : meta.topFlanks).map((c, i) => {
+                                    const picks = isNomad ? c.flex_picks : c.flank_picks;
+                                    const wins = isNomad ? c.flex_wins : c.flank_wins;
+                                    const tooltipId = `flank-${c.name}`;
+                                    return (
+                                        <tr key={c.name} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'#1e212b':'transparent' }}>
+                                            <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#fff', position: 'relative', cursor: 'pointer' }} onClick={(e) => toggleTooltip(tooltipId, e)}>
+                                                <span style={{ borderBottom: '1px dashed #66b2ff' }}>{c.name}</span>
+                                                {activeTooltip === tooltipId && (
+                                                    <div className="civ-tooltip" style={{ left: '105%' }} onClick={e => e.stopPropagation()}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
+                                                            <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>MATCHES</span>
+                                                            <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
+                                                        </div>
+                                                        {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
+                                                            c.history.map((h, idx) => (
+                                                                <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
+                                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                                                                        <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
+                                                                            <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
+                                                                            {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
+                                                                        </span>
+                                                                        {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
+                                                                    </div>
+                                                                    <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
+                                                                        <span style={{color:'#555'}}>w/</span> <span style={{ color: '#9abfe6' }}>{h.allies}</span><br/>
+                                                                        <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
+                                                                    </div>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td style={{ padding: '6px 4px', color: '#aaa' }}>{picks}</td>
+                                            <td style={{ padding: '6px 4px', color: (wins/picks) >= 0.5 ? C.green : C.red }}>{((wins/picks)*100).toFixed(0)}%</td>
+                                            <td style={{ padding: '6px 4px', color: C.gold, fontWeight: 'bold' }}>{isNomad ? c.cdps_flex : c.cdps_flank}</td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {!isNomad && (
                         <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
-                            <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 {isNomad ? 'Flex' : 'Flanks'}</h3>
+                            <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 Pockets</h3>
                             <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
                                 <thead><tr style={{ color: '#888', borderBottom: '1px solid #333' }}><th style={{padding:'4px'}}>Civ</th><th style={{padding:'4px'}}>Picks</th><th style={{padding:'4px'}}>WR</th><th style={{padding:'4px'}}>CDPS</th></tr></thead>
                                 <tbody>
-                                    {(isNomad ? meta.topFlex : meta.topFlanks).map((c, i) => {
-                                        const picks = isNomad ? c.flex_picks : c.flank_picks;
-                                        const wins = isNomad ? c.flex_wins : c.flank_wins;
-                                        const tooltipId = `flank-${c.name}`;
+                                    {meta.topPockets.map((c, i) => {
+                                        const tooltipId = `pocket-${c.name}`;
                                         return (
                                             <tr key={c.name} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'#1e212b':'transparent' }}>
                                                 <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#fff', position: 'relative', cursor: 'pointer' }} onClick={(e) => toggleTooltip(tooltipId, e)}>
@@ -747,122 +789,71 @@ function ClanWarsVII() {
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td style={{ padding: '6px 4px', color: '#aaa' }}>{picks}</td>
-                                                <td style={{ padding: '6px 4px', color: (wins/picks) >= 0.5 ? C.green : C.red }}>{((wins/picks)*100).toFixed(0)}%</td>
-                                                <td style={{ padding: '6px 4px', color: C.gold, fontWeight: 'bold' }}>{isNomad ? c.cdps_flex : c.cdps_flank}</td>
+                                                <td style={{ padding: '6px 4px', color: '#aaa' }}>{c.pocket_picks}</td>
+                                                <td style={{ padding: '6px 4px', color: (c.pocket_wins/c.pocket_picks) >= 0.5 ? C.green : C.red }}>{((c.pocket_wins/c.pocket_picks)*100).toFixed(0)}%</td>
+                                                <td style={{ padding: '6px 4px', color: C.gold, fontWeight: 'bold' }}>{c.cdps_pocket}</td>
                                             </tr>
                                         )
                                     })}
                                 </tbody>
                             </table>
                         </div>
+                    )}
 
-                        {!isNomad && (
-                            <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px' }}>
-                                <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 Pockets</h3>
-                                <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
-                                    <thead><tr style={{ color: '#888', borderBottom: '1px solid #333' }}><th style={{padding:'4px'}}>Civ</th><th style={{padding:'4px'}}>Picks</th><th style={{padding:'4px'}}>WR</th><th style={{padding:'4px'}}>CDPS</th></tr></thead>
-                                    <tbody>
-                                        {meta.topPockets.map((c, i) => {
-                                            const tooltipId = `pocket-${c.name}`;
-                                            return (
-                                                <tr key={c.name} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'#1e212b':'transparent' }}>
-                                                    <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#fff', position: 'relative', cursor: 'pointer' }} onClick={(e) => toggleTooltip(tooltipId, e)}>
-                                                        <span style={{ borderBottom: '1px dashed #66b2ff' }}>{c.name}</span>
-                                                        {activeTooltip === tooltipId && (
-                                                            <div className="civ-tooltip" style={{ left: '105%' }} onClick={e => e.stopPropagation()}>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
-                                                                    <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>MATCHES</span>
-                                                                    <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
-                                                                </div>
-                                                                {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
-                                                                    c.history.map((h, idx) => (
-                                                                        <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
-                                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-                                                                                <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
-                                                                                    <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
-                                                                                    {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
-                                                                                </span>
-                                                                                {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
-                                                                            </div>
-                                                                            <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
-                                                                                <span style={{color:'#555'}}>w/</span> <span style={{ color: '#9abfe6' }}>{h.allies}</span><br/>
-                                                                                <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    ))
-                                                                }
-                                                            </div>
-                                                        )}
-                                                    </td>
-                                                    <td style={{ padding: '6px 4px', color: '#aaa' }}>{c.pocket_picks}</td>
-                                                    <td style={{ padding: '6px 4px', color: (c.pocket_wins/c.pocket_picks) >= 0.5 ? C.green : C.red }}>{((c.pocket_wins/c.pocket_picks)*100).toFixed(0)}%</td>
-                                                    <td style={{ padding: '6px 4px', color: C.gold, fontWeight: 'bold' }}>{c.cdps_pocket}</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-
-                        <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px', gridColumn: isNomad ? 'span 2' : 'span 1' }}>
-                            <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 Synergies</h3>
-                            <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
-                                <thead><tr style={{ color: '#888', borderBottom: '1px solid #333' }}><th style={{padding:'4px'}}>Composition</th><th style={{padding:'4px'}}>Picks</th><th style={{padding:'4px'}}>WR</th><th style={{padding:'4px'}}>CDPS</th></tr></thead>
-                                <tbody>
-                                    {meta.topCombos.map((c, i) => {
-                                        const tooltipId = `combo-${c.name}`;
-                                        return (
-                                            <tr key={c.name} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'#1e212b':'transparent' }}>
-                                                <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#66b2ff', position: 'relative', cursor: 'pointer' }} onClick={(e) => toggleTooltip(tooltipId, e)}>
-                                                    <span style={{ borderBottom: '1px dashed #66b2ff' }}>{c.name}</span>
-                                                    {activeTooltip === tooltipId && (
-                                                        <div className="civ-tooltip" style={{ right: '105%', left: 'auto' }} onClick={e => e.stopPropagation()}>
-                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
-                                                                <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>COMBO MATCHES</span>
-                                                                <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
-                                                            </div>
-                                                            {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
-                                                                c.history.map((h, idx) => (
-                                                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
-                                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-                                                                            <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
-                                                                                <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
-                                                                                {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
-                                                                            </span>
-                                                                            {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
-                                                                        </div>
-                                                                        <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
-                                                                            <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                ))
-                                                            }
+                    <div style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, padding: '12px', gridColumn: isNomad ? 'span 2' : 'span 1' }}>
+                        <h3 style={{ color: '#a0aab5', margin: '0 0 8px 0', fontSize: '11px', textTransform: 'uppercase' }}>Top 10 Synergies</h3>
+                        <table style={{ width: '100%', fontSize: '11px', textAlign: 'left', borderCollapse: 'collapse' }}>
+                            <thead><tr style={{ color: '#888', borderBottom: '1px solid #333' }}><th style={{padding:'4px'}}>Composition</th><th style={{padding:'4px'}}>Picks</th><th style={{padding:'4px'}}>WR</th><th style={{padding:'4px'}}>CDPS</th></tr></thead>
+                            <tbody>
+                                {meta.topCombos.map((c, i) => {
+                                    const tooltipId = `combo-${c.name}`;
+                                    return (
+                                        <tr key={c.name} style={{ borderBottom: '1px solid #2a2d36', backgroundColor: i%2===0?'#1e212b':'transparent' }}>
+                                            <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#66b2ff', position: 'relative', cursor: 'pointer' }} onClick={(e) => toggleTooltip(tooltipId, e)}>
+                                                <span style={{ borderBottom: '1px dashed #66b2ff' }}>{c.name}</span>
+                                                {activeTooltip === tooltipId && (
+                                                    <div className="civ-tooltip" style={{ right: '105%', left: 'auto' }} onClick={e => e.stopPropagation()}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333', padding: '4px 6px', marginBottom: '2px', backgroundColor: '#1a1c23' }}>
+                                                            <span style={{color:C.gold, fontSize:'10px', fontWeight:'bold'}}>COMBO MATCHES</span>
+                                                            <span onClick={(e) => toggleTooltip(tooltipId, e)} style={{cursor: 'pointer', color: '#ff4444', fontWeight: 'bold', fontSize: '14px', lineHeight: '10px'}}>✕</span>
                                                         </div>
-                                                    )}
-                                                </td>
-                                                <td style={{ padding: '6px 4px', color: '#aaa' }}>{c.picks}</td>
-                                                <td style={{ padding: '6px 4px', color: (c.wins/c.picks) >= 0.5 ? C.green : C.red }}>{((c.wins/c.picks)*100).toFixed(0)}%</td>
-                                                <td style={{ padding: '6px 4px', color: C.gold, fontWeight: 'bold' }}>{c.cdps}</td>
-                                            </tr>
-                                        )
-                                    })}
-                                    {meta.topCombos.length === 0 && <tr><td colSpan="4" style={{ padding: '10px', textAlign: 'center', color: '#555' }}>No hay composiciones repetidas.</td></tr>}
-                                </tbody>
-                            </table>
-                        </div>
+                                                        {c.history.length === 0 ? <div style={{color:'#888', fontSize:'9px', padding: '6px'}}>No records</div> : 
+                                                            c.history.map((h, idx) => (
+                                                                <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '4px 6px', backgroundColor: idx % 2 === 0 ? '#1a1c23' : 'transparent', borderLeft: `3px solid ${h.won ? C.green : C.red}`}}>
+                                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+                                                                        <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }}>
+                                                                            <span style={{color: h.won ? C.green : C.red, marginRight: '4px'}}>{h.won ? 'W' : 'L'}</span>
+                                                                            {h.date} {h.game && <span style={{color:C.cyan, marginLeft:'2px'}}>{h.game}</span>}
+                                                                        </span>
+                                                                        {h.vod_url && <a href={h.vod_url} target="_blank" rel="noopener noreferrer" style={{color:'#ff4444', fontSize:'8px', textDecoration:'none', fontWeight:'bold', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px'}}>▶ VOD</a>}
+                                                                    </div>
+                                                                    <div style={{ fontSize: '9.5px', lineHeight: '1.25' }}>
+                                                                        <span style={{color:'#555'}}>vs</span> <span style={{ color: '#ff8888' }}>{h.opponents}</span>
+                                                                    </div>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td style={{ padding: '6px 4px', color: '#aaa' }}>{c.picks}</td>
+                                            <td style={{ padding: '6px 4px', color: (c.wins/c.picks) >= 0.5 ? C.green : C.red }}>{((c.wins/c.picks)*100).toFixed(0)}%</td>
+                                            <td style={{ padding: '6px 4px', color: C.gold, fontWeight: 'bold' }}>{c.cdps}</td>
+                                        </tr>
+                                    )
+                                })}
+                                {meta.topCombos.length === 0 && <tr><td colSpan="4" style={{ padding: '10px', textAlign: 'center', color: '#555' }}>No hay composiciones repetidas.</td></tr>}
+                            </tbody>
+                        </table>
                     </div>
-                )}
-            </div>
-        )}
+                </div>
+            )}
+        </div>
 
         {/* --- VISTA: PLAN CREATOR --- */}
-        {activeTab === 'planCreator' && (
-            <div style={{ margin: '-20px' }}>
-                <DraftPlanCreator />
-            </div>
-        )}
+        <div style={{ display: activeTab === 'planCreator' ? 'block' : 'none', margin: '-20px' }}>
+            <DraftPlanCreator />
+        </div>
       </div>
     </div>
   );

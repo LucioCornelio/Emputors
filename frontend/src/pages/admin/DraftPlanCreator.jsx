@@ -28,11 +28,9 @@ function DraftPlanCreator() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
 
-  // Estados para cargar planes de BBDD
   const [existingPlans, setExistingPlans] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState("");
 
-  // Estado para Drag & Drop
   const [draggedItem, setDraggedItem] = useState(null);
 
   useEffect(() => {
@@ -56,7 +54,6 @@ function DraftPlanCreator() {
     if (plan) {
       setPlanName(plan.plan_name);
       setSelectedMap(plan.map_name);
-      // Forzamos estrictamente 3 roles en la interfaz
       const loadedRoles = plan.roles.slice(0, 3);
       while (loadedRoles.length < 3) loadedRoles.push({ role: `Rol ${loadedRoles.length + 1}`, priority: [] });
       setRoles(loadedRoles);
@@ -157,11 +154,15 @@ function DraftPlanCreator() {
     setMessage({ text: "Modo copia activado. Modifica lo que necesites y haz clic en Guardar Nuevo.", type: "success" });
   };
 
-  // Funciones de Drag & Drop
   const handleDragStart = (e, roleIdx, civIdx) => {
-    setDraggedItem({ roleIdx, civIdx });
+    setDraggedItem({ type: 'INTERNAL', roleIdx, civIdx });
     e.dataTransfer.effectAllowed = "move";
     setTimeout(() => e.target.style.opacity = '0.4', 0);
+  };
+
+  const handleRosterDragStart = (e, civ) => {
+    setDraggedItem({ type: 'ROSTER', civ });
+    e.dataTransfer.effectAllowed = "copy";
   };
 
   const handleDragEnd = (e) => {
@@ -176,16 +177,28 @@ function DraftPlanCreator() {
   const handleDrop = (e, targetRoleIdx, targetCivIdx) => {
     e.preventDefault();
     if (!draggedItem) return;
-    if (draggedItem.roleIdx !== targetRoleIdx) return; 
-    if (draggedItem.civIdx === targetCivIdx) return; 
 
     const newRoles = [...roles];
     const priorityList = [...newRoles[targetRoleIdx].priority];
-    const [draggedCiv] = priorityList.splice(draggedItem.civIdx, 1);
-    priorityList.splice(targetCivIdx, 0, draggedCiv);
-    
-    newRoles[targetRoleIdx].priority = priorityList;
-    setRoles(newRoles);
+
+    if (draggedItem.type === 'ROSTER') {
+      const civ = draggedItem.civ;
+      if (!priorityList.includes(civ)) {
+        priorityList.splice(targetCivIdx, 0, civ);
+        newRoles[targetRoleIdx].priority = priorityList;
+        setRoles(newRoles);
+        setActiveRoleIndex(targetRoleIdx);
+      }
+    } else if (draggedItem.type === 'INTERNAL') {
+      if (draggedItem.roleIdx !== targetRoleIdx) return; 
+      if (draggedItem.civIdx === targetCivIdx) return; 
+
+      const [draggedCiv] = priorityList.splice(draggedItem.civIdx, 1);
+      priorityList.splice(targetCivIdx, 0, draggedCiv);
+      
+      newRoles[targetRoleIdx].priority = priorityList;
+      setRoles(newRoles);
+    }
   };
 
   return (
@@ -340,8 +353,11 @@ function DraftPlanCreator() {
                 return (
                   <div 
                     key={c} 
+                    draggable
+                    onDragStart={(e) => handleRosterDragStart(e, c)}
+                    onDragEnd={handleDragEnd}
                     onClick={() => toggleCivInActiveRole(c)}
-                    style={{ position: 'relative', cursor: 'pointer', border: `2px solid ${isSelectedInActive ? C.blue : 'transparent'}`, borderRadius: '4px', overflow: 'hidden', aspectRatio: '1/1', backgroundColor: '#1e212b', opacity: isSelectedInActive ? 0.5 : 1, transition: 'all 0.1s' }}
+                    style={{ position: 'relative', cursor: 'grab', border: `2px solid ${isSelectedInActive ? C.blue : 'transparent'}`, borderRadius: '4px', overflow: 'hidden', aspectRatio: '1/1', backgroundColor: '#1e212b', opacity: isSelectedInActive ? 0.5 : 1, transition: 'all 0.1s' }}
                     title={c}
                   >
                     <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display='none'} />
