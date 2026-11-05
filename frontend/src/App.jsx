@@ -6,6 +6,7 @@ import BuildOrders from './pages/BuildOrders';
 import BuildOrderDetail from './pages/BuildOrderDetail';
 import Home from './pages/Home';
 import BuildOrderCreator from './pages/admin/BuildOrderCreator';
+import DraftPlanCreator from './pages/admin/DraftPlanCreator';
 import CurrentEvent from './pages/CurrentEvent'; 
 
 // 1. Añadimos el import de Clan Wars VII
@@ -42,6 +43,7 @@ function App() {
           <Route path="/clan/roster" element={<Roster />} />
           <Route path="/clan/about" element={<About />} />
           <Route path="/admin/creator" element={<BuildOrderCreator />} />
+          <Route path="/admin/draft-plan-creator" element={<DraftPlanCreator />} />
         </Routes>
       </div>
     </BrowserRouter>
