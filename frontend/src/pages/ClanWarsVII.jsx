@@ -105,7 +105,7 @@ function ClanWarsVII() {
           <div style={{ backgroundColor: C.card, padding: '15px 25px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: '25px' }}>
             
             <img 
-              src={`/maps/${selectedMap.toLowerCase().replace(" ", "_")}.png`} 
+              src={`/maps/${selectedMap.replace(" ", "_")}.png`}
               alt={selectedMap}
               style={{ width: '80px', height: '80px', borderRadius: '8px', border: `2px solid ${C.border}`, objectFit: 'cover', backgroundColor: '#161920' }}
               onError={(e) => { e.target.src = 'https://liquipedia.net/commons/images/a/a2/Aoe2_random_map.png'; }}
