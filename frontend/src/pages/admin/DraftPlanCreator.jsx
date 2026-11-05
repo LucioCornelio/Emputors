@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 
-const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
+const MAP_POOL = ["Arabia", "Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
 const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
@@ -23,8 +23,42 @@ function DraftPlanCreator() {
     { role: "Pocket", priority: [] }
   ]);
   const [activeRoleIndex, setActiveRoleIndex] = useState(0);
+  
   const [saving, setSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
+
+  // Nuevos estados para cargar planes de BBDD
+  const [existingPlans, setExistingPlans] = useState([]);
+  const [selectedPlanId, setSelectedPlanId] = useState("");
+
+  useEffect(() => {
+    fetchPlans();
+  }, []);
+
+  const fetchPlans = async () => {
+    const { data, error } = await supabase.from('cw7_draft_plans').select('*').order('map_name');
+    if (data) setExistingPlans(data);
+  };
+
+  const handleSelectPlan = (id) => {
+    setSelectedPlanId(id);
+    if (!id) {
+      // Modo Nuevo Plan
+      setPlanName("");
+      setRoles([{ role: "Flank 1", priority: [] }, { role: "Flank 2", priority: [] }, { role: "Pocket", priority: [] }]);
+      setActiveRoleIndex(0);
+      return;
+    }
+    // Modo Edición
+    const plan = existingPlans.find(p => p.id === id);
+    if (plan) {
+      setPlanName(plan.plan_name);
+      setSelectedMap(plan.map_name);
+      setRoles(plan.roles);
+      setActiveRoleIndex(0);
+    }
+  };
 
   const handleAddRole = () => {
     setRoles([...roles, { role: `Rol ${roles.length + 1}`, priority: [] }]);
@@ -46,7 +80,6 @@ function DraftPlanCreator() {
 
   const toggleCivInActiveRole = (civ) => {
     if (activeRoleIndex === null || !roles[activeRoleIndex]) return;
-    
     const newRoles = [...roles];
     const currentPriority = newRoles[activeRoleIndex].priority;
     
@@ -77,24 +110,47 @@ function DraftPlanCreator() {
     setSaving(true);
     setMessage({ text: "", type: "" });
 
-    const { error } = await supabase
-      .from('cw7_draft_plans')
-      .insert({
-        map_name: selectedMap,
-        plan_name: planName.trim(),
-        roles: roles
-      });
+    const payload = { map_name: selectedMap, plan_name: planName.trim(), roles: roles };
+    let error;
+
+    if (selectedPlanId) {
+      // Actualizar existente
+      const res = await supabase.from('cw7_draft_plans').update(payload).eq('id', selectedPlanId);
+      error = res.error;
+    } else {
+      // Insertar nuevo
+      const res = await supabase.from('cw7_draft_plans').insert(payload);
+      error = res.error;
+    }
 
     setSaving(false);
 
     if (error) {
-      console.error(error);
       setMessage({ text: `❌ Error al guardar: ${error.message}`, type: "error" });
     } else {
-      setMessage({ text: "✅ Plan guardado con éxito en la base de datos", type: "success" });
-      setPlanName("");
-      setRoles([{ role: "Flank 1", priority: [] }, { role: "Flank 2", priority: [] }, { role: "Pocket", priority: [] }]);
-      setActiveRoleIndex(0);
+      setMessage({ text: selectedPlanId ? "✅ Plan actualizado con éxito" : "✅ Plan creado con éxito", type: "success" });
+      fetchPlans();
+      if (!selectedPlanId) {
+        setPlanName("");
+        setRoles([{ role: "Flank 1", priority: [] }, { role: "Flank 2", priority: [] }, { role: "Pocket", priority: [] }]);
+      }
+      setTimeout(() => setMessage({ text: "", type: "" }), 4000);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedPlanId || !window.confirm(`¿Seguro que quieres borrar permanentemente el plan "${planName}"?`)) return;
+    
+    setIsDeleting(true);
+    const { error } = await supabase.from('cw7_draft_plans').delete().eq('id', selectedPlanId);
+    setIsDeleting(false);
+
+    if (error) {
+      setMessage({ text: `❌ Error al borrar: ${error.message}`, type: "error" });
+    } else {
+      setMessage({ text: "✅ Plan borrado con éxito", type: "success" });
+      fetchPlans();
+      handleSelectPlan(""); // Reset a modo nuevo
       setTimeout(() => setMessage({ text: "", type: "" }), 4000);
     }
   };
@@ -114,7 +170,31 @@ function DraftPlanCreator() {
           </div>
         )}
 
-        {/* CONTROLES SUPERIORES */}
+        {/* SELECTOR DE PLANES EXISTENTES */}
+        <div style={{ backgroundColor: '#1e212b', padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '-10px' }}>
+          <span style={{ fontSize: '12px', color: C.gold, fontWeight: 'bold', textTransform: 'uppercase' }}>Editar Plan Existente:</span>
+          <select 
+            value={selectedPlanId} 
+            onChange={(e) => handleSelectPlan(e.target.value)}
+            style={{ flex: 1, backgroundColor: '#161920', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '13px', outline: 'none', cursor: 'pointer' }}
+          >
+            <option value="">-- ✨ Crear Nuevo Plan --</option>
+            {existingPlans.map(p => (
+              <option key={p.id} value={p.id}>[{p.map_name}] {p.plan_name}</option>
+            ))}
+          </select>
+          {selectedPlanId && (
+            <button 
+              onClick={handleDelete}
+              disabled={isDeleting}
+              style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', cursor: isDeleting ? 'not-allowed' : 'pointer' }}
+            >
+              {isDeleting ? '...' : '🗑️ BORRAR'}
+            </button>
+          )}
+        </div>
+
+        {/* CONTROLES DEL PLAN (Nombre, Mapa, Guardar) */}
         <div style={{ backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <label style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Nombre del Plan (Estrategia)</label>
@@ -141,9 +221,9 @@ function DraftPlanCreator() {
           <button 
             onClick={handleSave} 
             disabled={saving}
-            style={{ backgroundColor: C.green, color: '#161920', border: 'none', padding: '10px 30px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
+            style={{ backgroundColor: selectedPlanId ? C.blue : C.green, color: '#161920', border: 'none', padding: '10px 30px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
           >
-            {saving ? 'GUARDANDO...' : '💾 GUARDAR PLAN'}
+            {saving ? 'GUARDANDO...' : selectedPlanId ? '🔄 ACTUALIZAR PLAN' : '💾 GUARDAR PLAN'}
           </button>
         </div>
 
