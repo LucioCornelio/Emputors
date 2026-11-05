@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 const MAP_POOL = ["Arabia", "Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
-const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', textMain: '#e0e0e0',
@@ -10,21 +9,32 @@ const C = {
 };
 
 const DRAFT_PLAN = {
-  "Socotra": [
-    { role: "Flank Pure Archers", priority: ["Britons", "Mayans", "Ethiopians", "Vietnamese", "Koreans"] },
-    { role: "Flank MAA Archer", priority: ["Japanese", "Dravidians", "Vikings", "Malians", "Celts"] },
-    { role: "Pocket Siege/Meat", priority: ["Slavs", "Bohemians", "Gurjaras", "Celts", "Persians"] }
-  ],
-  "Nomad": [
-    { role: "Water Control", priority: ["Persians", "Italians", "Malians", "Dravidians", "Japanese"] },
-    { role: "FC UU Cav", priority: ["Spanish", "Berbers", "Portuguese", "Turks", "Burgundians"] },
-    { role: "FC UU Arrow", priority: ["Koreans", "Mongols", "Vietnamese", "Burmese", "Britons"] }
-  ],
-  "Tres Leches": [
-    { role: "Flank 1", priority: ["Britons", "Mayans", "Italians", "Persians", "Vietnamese"] },
-    { role: "Flank 2", priority: ["Franks", "Lithuanians", "Magyars", "Burgundians", "Berbers"] },
-    { role: "Pocket", priority: ["Hindustanis", "Gurjaras", "Berbers", "Franks", "Persians"] }
-  ]
+  "Socotra": {
+    "Plan 1: Cobra del desierto": [
+      { role: "Flank Arquero ATK", priority: ["Mayans", "Ethiopians", "Shu", "Mongols", "Britons", "Koreans"] },
+      { role: "Flank HD Archers", priority: ["Japanese", "Malians", "Vikings", "Dravidians", "Celts"] },
+      { role: "Pocket Siege/Meat", priority: ["Persians", "Huns", "Lithuanians", "Slavs", "Bohemians", "Gurjaras"] }
+    ],
+    "Plan 2: Elefante rodante": [
+      { role: "Flank Arquero Def 1", priority: ["Mayans", "Ethiopians", "Shu", "Vietnamese", "Britons"] },
+      { role: "Flank Arquero Def 2", priority: ["Mayans", "Ethiopians", "Shu", "Vietnamese", "Britons"] },
+      { role: "Pocket UU", priority: ["Spanish", "Lithuanians", "Burmese", "Berbers", "Turks"] }
+    ]
+  },
+  "Nomad": {
+    "Plan 1: Control de Agua": [
+      { role: "Water Control", priority: ["Persians", "Italians", "Malians", "Dravidians", "Japanese"] },
+      { role: "FC UU Cav", priority: ["Spanish", "Berbers", "Portuguese", "Turks", "Burgundians"] },
+      { role: "FC UU Arrow", priority: ["Koreans", "Mongols", "Vietnamese", "Burmese", "Britons"] }
+    ]
+  },
+  "Tres Leches": {
+    "Plan 1: Standard": [
+      { role: "Flank 1", priority: ["Britons", "Mayans", "Italians", "Persians", "Vietnamese"] },
+      { role: "Flank 2", priority: ["Franks", "Lithuanians", "Magyars", "Burgundians", "Berbers"] },
+      { role: "Pocket", priority: ["Hindustanis", "Gurjaras", "Berbers", "Franks", "Persians"] }
+    ]
+  }
 };
 
 function ClanWarsVII() {
@@ -38,16 +48,17 @@ function ClanWarsVII() {
   const containerRef = useRef(null);
 
   // --- ESTADOS: EXECUTION DRAFT ---
-  const [selectedExecMaps, setSelectedExecMaps] = useState(["Nomad", "Socotra", "Tres Leches"]); // PA3 por defecto
+  const [draftMode, setDraftMode] = useState("PA3"); // "PA3" o "BO5"
+  const [selectedExecMaps, setSelectedExecMaps] = useState(["Nomad", "Socotra", "Tres Leches"]);
+  const [selectedPlans, setSelectedPlans] = useState({}); // { mapName: "planName" }
+
   const [cmId, setCmId] = useState("");
   const [isHost, setIsHost] = useState(true);
   const [roleAssigned, setRoleAssigned] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [liveSocket, setLiveSocket] = useState(null);
   
-  // Estado del Draft Visual
   const [draft, setDraft] = useState({ picks: [], bans: [], oppPicks: [], snipes: [] });
-  // Asignaciones confirmadas: { "MapName_Role": "CivName" }
   const [assigned, setAssigned] = useState({});
   const isHostRef = useRef(isHost);
 
@@ -84,6 +95,19 @@ function ClanWarsVII() {
         setLoading(false);
       });
   }, []);
+
+  // Set default plans for maps
+  useEffect(() => {
+    const newPlans = { ...selectedPlans };
+    let changed = false;
+    selectedExecMaps.forEach(map => {
+        if (!newPlans[map] && DRAFT_PLAN[map]) {
+            newPlans[map] = Object.keys(DRAFT_PLAN[map])[0];
+            changed = true;
+        }
+    });
+    if (changed) setSelectedPlans(newPlans);
+  }, [selectedExecMaps]);
 
   // --- LÓGICA: META EXPLORER ---
   const mapData = db?.maps?.[selectedMetaMap];
@@ -123,9 +147,31 @@ function ClanWarsVII() {
     return mapName;
   };
 
+  const getCivImage = (civName) => {
+    const specials = {
+        "Danes": "danes.png",
+        "Saxons": "saxons.png",
+        "Varangians": "varangians.png"
+    };
+    return specials[civName] ? specials[civName] : `${civName.toLowerCase()}.png`;
+  };
+
   // --- LÓGICA: EXECUTION DRAFT ---
+  const handleModeChange = (mode) => {
+    setDraftMode(mode);
+    const count = mode === "PA3" ? 3 : 5;
+    if (selectedExecMaps.length > count) {
+        setSelectedExecMaps(selectedExecMaps.slice(0, count));
+    }
+  };
+
   const toggleExecMap = (map) => {
-    setSelectedExecMaps(prev => prev.includes(map) ? prev.filter(m => m !== map) : [...prev, map]);
+    const max = draftMode === "PA3" ? 3 : 5;
+    setSelectedExecMaps(prev => {
+        if (prev.includes(map)) return prev.filter(m => m !== map);
+        if (prev.length < max) return [...prev, map];
+        return prev;
+    });
   };
 
   const formatCiv = (c) => {
@@ -189,7 +235,6 @@ function ClanWarsVII() {
               if (isMyAction) { if (!temp.picks.includes(civRaw)) temp.picks.push(civRaw); }
               else { if (!temp.oppPicks.includes(civRaw)) temp.oppPicks.push(civRaw); }
           } else if (type === "snipe") {
-              // Todos los snipes los metemos en un solo array, luego visualmente tachamos
               if (!temp.snipes.includes(civRaw)) temp.snipes.push(civRaw);
           }
       });
@@ -207,7 +252,6 @@ function ClanWarsVII() {
       const availablePicks = draft.picks.filter(c => !confirmedList.includes(c) && !draft.snipes.includes(c));
       const unavailable = [...draft.bans, ...draft.oppPicks, ...draft.snipes, ...draft.picks];
 
-      // Construir la lista de los próximos 4 candidatos
       let candidates = [];
       
       roleData.priority.forEach(c => {
@@ -238,7 +282,7 @@ function ClanWarsVII() {
   const myColor = isHost ? C.blue : C.gold;
   const oppColor = isHost ? C.gold : C.blue;
 
-  if (loading) return <div style={{ color: C.gold, textAlign: 'center', padding: '40px' }}>Cargando...</div>;
+  if (loading) return <div style={{ color: C.gold, textAlign: 'center', padding: '40px' }}>Loading Data...</div>;
 
   return (
     <div style={{ backgroundColor: C.bg, minHeight: '100vh', padding: '0', fontFamily: 'Segoe UI, sans-serif' }}>
@@ -289,7 +333,7 @@ function ClanWarsVII() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px', backgroundColor: C.card, padding: '8px 25px', borderRadius: '50px', border: `1px solid ${C.border}`, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '12px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Map:</span>
-                        <select value={selectedMetaMap} onChange={(e) => setSelectedMetaMap(e.target.value)} style={{ backgroundColor: '#1e212b', color: C.gold, border: 'none', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
+                        <select value={selectedMetaMap} onChange={(e) => setSelectedMetaMap(e.target.value)} style={{ backgroundColor: 'transparent', color: C.gold, border: 'none', fontSize: '16px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}>
                             {MAP_POOL.map(m => <option key={m} value={m} disabled={!db?.maps?.[m]}>{m}</option>)}
                         </select>
                     </div>
@@ -460,10 +504,18 @@ function ClanWarsVII() {
         {activeTab === 'executionDraft' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             
-            {/* 1. SELECCIÓN MAPAS Y CONEXIÓN (Misma línea para ahorrar espacio) */}
             <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch' }}>
-                <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: 1 }}>
-                    <h3 style={{ color: C.cyan, fontSize: '11px', margin: '0 0 10px 0', textTransform: 'uppercase' }}>1. Selecciona los mapas a jugar ({selectedExecMaps.length})</h3>
+                
+                {/* 1. SELECCIÓN DE MODALIDAD Y MAPAS */}
+                <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3 style={{ color: C.cyan, fontSize: '11px', margin: 0, textTransform: 'uppercase' }}>1. SELECT MAPS ({selectedExecMaps.length}/{draftMode === 'PA3' ? 3 : 5})</h3>
+                        <div style={{ display: 'flex', backgroundColor: '#1e212b', borderRadius: '4px', border: '1px solid #444', overflow: 'hidden' }}>
+                            <button onClick={() => handleModeChange('PA3')} style={{ backgroundColor: draftMode === 'PA3' ? C.cyan : 'transparent', color: draftMode === 'PA3' ? '#161920' : '#888', border: 'none', padding: '4px 10px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>PA3</button>
+                            <button onClick={() => handleModeChange('BO5')} style={{ backgroundColor: draftMode === 'BO5' ? C.cyan : 'transparent', color: draftMode === 'BO5' ? '#161920' : '#888', border: 'none', padding: '4px 10px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer' }}>BO5</button>
+                        </div>
+                    </div>
+                    
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         {MAP_POOL.filter(m => DRAFT_PLAN[m]).map(map => {
                             const isSel = selectedExecMaps.includes(map);
@@ -477,15 +529,16 @@ function ClanWarsVII() {
                     </div>
                 </div>
 
+                {/* 2. CONEXIÓN CAPTAINS MODE */}
                 <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: 1 }}>
-                    <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CONEXIÓN CAPTAINS MODE:</span>
+                    <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
                     <div style={{ display: 'flex', gap: '10px' }}>
-                        <input type="text" placeholder="URL o ID del Draft..." value={cmId} onChange={(e) => setCmId(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '12px', flex: 1, outline: 'none' }} />
+                        <input type="text" placeholder="Draft URL or ID..." value={cmId} onChange={(e) => setCmId(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '12px', flex: 1, outline: 'none' }} />
                         
                         {!roleAssigned ? (
                         <div style={{ display: 'flex', gap: '5px' }}>
-                            <button onClick={() => { setIsHost(true); setRoleAssigned(true); }} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>SOY HOST</button>
-                            <button onClick={() => { setIsHost(false); setRoleAssigned(true); }} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>SOY GUEST</button>
+                            <button onClick={() => { setIsHost(true); setRoleAssigned(true); }} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>HOST</button>
+                            <button onClick={() => { setIsHost(false); setRoleAssigned(true); }} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>GUEST</button>
                         </div>
                         ) : (
                         <button onClick={() => setRoleAssigned(false)} style={{ backgroundColor: isHost ? C.blue : C.red, color: '#161920', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>ROLE: {isHost ? 'HOST' : 'GUEST'} ✎</button>
@@ -493,7 +546,7 @@ function ClanWarsVII() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <button onClick={syncCaptainMode} disabled={syncing || !roleAssigned} style={{ backgroundColor: (!roleAssigned || syncing) ? '#555' : C.green, color: '#161920', border: 'none', padding: '6px 20px', borderRadius: '4px', cursor: (!roleAssigned || syncing) ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
-                            {syncing ? 'SYNCING...' : '↻ CONECTAR'}
+                            {syncing ? 'SYNCING...' : '↻ CONNECT'}
                         </button>
                         <button onClick={resetDraft} style={{ backgroundColor: '#cc3333', color: 'white', border: 'none', padding: '6px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', letterSpacing: '1px' }}>
                             ↻ RESET DRAFT
@@ -502,66 +555,101 @@ function ClanWarsVII() {
                 </div>
             </div>
 
-            {/* HEADER DEL DRAFT COMPRIMIDO (Replicando Leat11Draft) */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr', gap: '10px' }}>
-              <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
-                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
-                  {draft.picks.map((c, i) => (
-                    <div key={`${c}-${i}`} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                      {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} />}
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                      {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+            {/* DRAFT VISUAL EN VIVO (Replicado de Leat11Draft pero adaptado a PA3/BO5) */}
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
+                {/* MY PICKS */}
+                <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {/* Renderizamos slots fijos según PA3 o BO5 */}
+                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
+                            const c = draft.picks[i];
+                            if (!c) {
+                                return <div key={`empty-my-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
+                            }
+                            return (
+                                <div key={`my-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
+                                    {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                                </div>
+                            );
+                        })}
                     </div>
-                  ))}
                 </div>
-              </div>
 
-              <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
-                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
-                  {draft.bans.map((c, i) => (
-                    <div key={`${c}-${i}`} style={{ position: 'relative', width: '36px', height: '36px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                      <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
-                      <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: C.red, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
+                {/* BANS (Fijos siempre son 5 globales para cada lado) */}
+                <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '220px' }}>
+                    <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {draft.bans.map((c, i) => (
+                            <div key={`ban-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
+                                <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: C.red, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
+                            </div>
+                        ))}
                     </div>
-                  ))}
                 </div>
-              </div>
 
-              <div style={{ order: isHost ? 3 : 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
-                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', minHeight: '36px' }}>
-                  {draft.oppPicks.map((c, i) => (
-                    <div key={`${c}-${i}`} style={{ position: 'relative', width: '36px', height: '36px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                      {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${c.toLowerCase()}.png`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} />}
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '14px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                      {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                {/* OPPONENT PICKS */}
+                <div style={{ order: isHost ? 3 : 1, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
+                            const c = draft.oppPicks[i];
+                            if (!c) {
+                                return <div key={`empty-opp-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
+                            }
+                            return (
+                                <div key={`opp-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
+                                    {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                                </div>
+                            );
+                        })}
                     </div>
-                  ))}
                 </div>
-              </div>
             </div>
 
-            {/* TABLERO DE EJECUCIÓN CON ANCHOS FIJOS Y EXPECTANTES */}
+            {/* TABLERO DE EJECUCIÓN (ANCHOS FIJOS Y BANQUILLO) */}
             {selectedExecMaps.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <h3 style={{ color: C.cyan, fontSize: '12px', margin: '0', textTransform: 'uppercase' }}>3. Plan de Ejecución (En Vivo)</h3>
+                    <h3 style={{ color: C.cyan, fontSize: '12px', margin: '0', textTransform: 'uppercase' }}>3. EXECUTION PLAN (LIVE)</h3>
                     
-                    {/* El grid ahora se divide equitativamente según el número de mapas, usando fr = fracciones */}
-                    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${selectedExecMaps.length}, 1fr)`, gap: '15px' }}>
-                        
+                    <div style={{ display: 'flex', gap: '15px' }}>
+                        {/* Contenedor Flex para que las tarjetas se repartan el ancho a partes iguales */}
                         {selectedExecMaps.map(mapName => {
-                            const roles = DRAFT_PLAN[mapName];
+                            const plansAvailable = DRAFT_PLAN[mapName] ? Object.keys(DRAFT_PLAN[mapName]) : [];
+                            const activePlanName = selectedPlans[mapName] || plansAvailable[0];
+                            const roles = activePlanName ? DRAFT_PLAN[mapName][activePlanName] : null;
+                            
                             if (!roles) return null;
                             
                             return (
-                                <div key={mapName} style={{ backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e212b', borderBottom: '1px solid #333', padding: '8px 12px', gap: '10px' }}>
-                                        <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '32px', height: '32px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover' }} />
-                                        <h4 style={{ color: '#fff', margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
+                                <div key={mapName} style={{ flex: 1, minWidth: 0, backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                    
+                                    {/* Header Mapa y Selector de Plan */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#1e212b', borderBottom: '1px solid #333' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: '10px' }}>
+                                            <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '32px', height: '32px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover' }} />
+                                            <h4 style={{ color: '#fff', margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
+                                        </div>
+                                        
+                                        {plansAvailable.length > 1 && (
+                                            <div style={{ padding: '0 12px 8px 12px' }}>
+                                                <select 
+                                                    value={activePlanName} 
+                                                    onChange={(e) => setSelectedPlans(prev => ({...prev, [mapName]: e.target.value}))}
+                                                    style={{ width: '100%', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '4px 6px', borderRadius: '3px', fontSize: '10px', outline: 'none', cursor: 'pointer' }}
+                                                >
+                                                    {plansAvailable.map(p => <option key={p} value={p}>{p}</option>)}
+                                                </select>
+                                            </div>
+                                        )}
                                     </div>
                                     
+                                    {/* Roles y Sugerencias */}
                                     <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
                                         {roles.map((roleData, idx) => {
                                             const { status, civ, candidates } = evaluateRole(mapName, roleData);
@@ -571,13 +659,13 @@ function ClanWarsVII() {
                                             if (status === 'TARGET') { bd = '#555'; titleColor = '#aaa'; icon = '🎯'; }
                                             else if (status === 'SUGGESTED') {
                                                 bg = 'rgba(102, 178, 255, 0.1)'; bd = C.blue; titleColor = C.blue; icon = '💡';
-                                                actionBtn = <button onClick={() => confirmAssignment(mapName, roleData.role, civ)} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>✓ CONFIRMAR</button>;
+                                                actionBtn = <button onClick={() => confirmAssignment(mapName, roleData.role, civ)} style={{ backgroundColor: C.blue, color: '#161920', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>✓ CONFIRM</button>;
                                             } else if (status === 'LOCKED') {
                                                 bg = 'rgba(76, 175, 80, 0.1)'; bd = C.green; titleColor = C.green; icon = '🔒';
-                                                actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ backgroundColor: 'transparent', color: '#888', border: '1px solid #555', padding: '3px 6px', borderRadius: '3px', fontSize: '9px', cursor: 'pointer', whiteSpace: 'nowrap' }}>Deshacer</button>;
+                                                actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ backgroundColor: 'transparent', color: '#888', border: '1px solid #555', padding: '3px 6px', borderRadius: '3px', fontSize: '9px', cursor: 'pointer', whiteSpace: 'nowrap' }}>UNDO</button>;
                                             } else if (status === 'SNIPED') {
                                                 bg = 'rgba(255, 68, 68, 0.1)'; bd = C.red; titleColor = C.red; icon = '☠️';
-                                                actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>LIMPIAR</button>;
+                                                actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ backgroundColor: C.red, color: '#161920', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>CLEAR</button>;
                                             }
 
                                             return (
@@ -594,7 +682,7 @@ function ClanWarsVII() {
                                                             {civ ? (
                                                                 <>
                                                                     <div style={{ width: '28px', height: '28px', borderRadius: '4px', border: `1px solid ${bd}`, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                                                                        <img src={`/civs/${civ.toLowerCase()}.png`} alt={civ} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: status === 'SNIPED' ? 0.3 : 1 }} />
+                                                                        <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
                                                                         {status === 'SNIPED' && <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'16px'}}>✗</span></div>}
                                                                     </div>
                                                                     <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -603,7 +691,7 @@ function ClanWarsVII() {
                                                                     </div>
                                                                 </>
                                                             ) : (
-                                                                <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>Sin opciones...</span>
+                                                                <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>No options left...</span>
                                                             )}
                                                         </div>
                                                         <div style={{ display: 'flex', flexShrink: 0 }}>{actionBtn}</div>
@@ -611,12 +699,12 @@ function ClanWarsVII() {
 
                                                     {/* Barra Expectantes (Próximos 3) */}
                                                     {candidates && candidates.length > 1 && (
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55` }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
                                                             <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>
-                                                            {candidates.slice(1).map((cand, ci) => (
-                                                                <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.6 : 1 }}>
-                                                                    <img src={`/civs/${cand.civ.toLowerCase()}.png`} alt={cand.civ} style={{ width: '12px', height: '12px', borderRadius: '2px' }} />
-                                                                    <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3)}</span>
+                                                            {candidates.slice(1, 4).map((cand, ci) => (
+                                                                <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
+                                                                    <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                    <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -624,6 +712,31 @@ function ClanWarsVII() {
                                                 </div>
                                             );
                                         })}
+
+                                        {/* Civis sin asignar pero pickeadas que aplican a este mapa */}
+                                        {(() => {
+                                            const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
+                                            const backupCivs = unassignedPicks.filter(c => {
+                                                // Check if the civ is anywhere in this map's priorities
+                                                return roles.some(r => r.priority.includes(c));
+                                            });
+
+                                            if (backupCivs.length === 0) return null;
+                                            
+                                            return (
+                                                <div style={{ marginTop: 'auto', paddingTop: '10px', borderTop: '1px dashed #333' }}>
+                                                    <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>AVAILABLE BENCH (FITS MAP)</span>
+                                                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                                        {backupCivs.map(c => (
+                                                            <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 4px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '3px' }}>
+                                                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '9px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                             );
