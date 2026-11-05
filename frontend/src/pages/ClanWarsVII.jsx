@@ -524,14 +524,14 @@ function ClanWarsVII() {
 
             {/* TABLERO DE EJECUCIÓN (CUADRÍCULA ESTRICTA A 3 COLUMNAS) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                     {execMapSlots.map((_, i) => {
                         const mapName = selectedExecMaps[i];
                         
                         if (!mapName) {
                             return (
-                                <div key={`empty-card-${i}`} style={{ flex: 1, backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px dashed #333', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
-                                    <span style={{ color: '#555', fontSize: '12px', fontWeight: 'bold' }}>Waiting for Map Selection...</span>
+                                <div key={`empty-card-${i}`} style={{ flex: 1, backgroundColor: '#1a1c23', borderRadius: '4px', border: '1px dashed #333', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px' }}>
+                                    <span style={{ color: '#555', fontSize: '11px', fontWeight: 'bold' }}>Waiting for Map Selection...</span>
                                 </div>
                             );
                         }
@@ -543,30 +543,30 @@ function ClanWarsVII() {
                         if (!roles) return null;
                         
                         return (
-                            <div key={mapName} style={{ flex: 1, backgroundColor: C.card, borderRadius: '6px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                            <div key={mapName} style={{ flex: 1, backgroundColor: C.card, borderRadius: '4px', border: `1px solid ${C.border}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                                 
                                 <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#1e212b', borderBottom: '1px solid #333' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: '10px' }}>
-                                        <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '32px', height: '32px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover' }} />
-                                        <h4 style={{ color: '#fff', margin: 0, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
+                                    <div style={{ display: 'flex', alignItems: 'center', padding: '4px 8px', gap: '8px' }}>
+                                        <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '24px', height: '24px', borderRadius: '3px', border: '1px solid #444', objectFit: 'cover' }} />
+                                        <h4 style={{ color: '#fff', margin: 0, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
                                     </div>
                                     
-                                    <div style={{ padding: '0 12px 8px 12px', minHeight: '26px' }}>
+                                    <div style={{ padding: '0 8px 4px 8px', minHeight: '20px' }}>
                                         {plansAvailable.length > 1 ? (
                                             <select 
                                                 value={activePlanName} 
                                                 onChange={(e) => setSelectedPlans(prev => ({...prev, [mapName]: e.target.value}))}
-                                                style={{ width: '100%', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '4px 6px', borderRadius: '3px', fontSize: '10px', outline: 'none', cursor: 'pointer' }}
+                                                style={{ width: '100%', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '2px 4px', borderRadius: '3px', fontSize: '9px', outline: 'none', cursor: 'pointer' }}
                                             >
                                                 {plansAvailable.map(p => <option key={p} value={p}>{p}</option>)}
                                             </select>
                                         ) : (
-                                            <div style={{ height: '22px' }}></div> 
+                                            <div style={{ height: '18px' }}></div> 
                                         )}
                                     </div>
                                 </div>
                                 
-                                <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                                <div style={{ padding: '6px', display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
                                     {roles.map((roleData, idx) => {
                                         const { status, civ, candidates, backups, urgencyCount } = evaluateRole(mapName, roleData);
                                         
@@ -575,36 +575,35 @@ function ClanWarsVII() {
 
                                         if (status !== 'LOCKED' && status !== 'SNIPED') {
                                             if (urgencyCount >= 4) {
-                                                urgencyBadge = <span style={{fontSize: '9px', color: '#888', fontWeight: 'bold', padding: '2px 4px', backgroundColor: '#2a2d36', borderRadius: '3px'}}>{urgencyCount} LFT</span>;
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#888', fontWeight: 'bold', padding: '1px 3px', backgroundColor: '#2a2d36', borderRadius: '2px'}}>{urgencyCount} LFT</span>;
                                             } else if (urgencyCount === 3) {
-                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ffd700', fontWeight: 'bold', padding: '2px 4px', backgroundColor: 'rgba(255,215,0,0.1)', border: '1px solid #ffd700', borderRadius: '3px'}}>3 LFT</span>;
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ffd700', fontWeight: 'bold', padding: '1px 3px', backgroundColor: 'rgba(255,215,0,0.1)', border: '1px solid #ffd700', borderRadius: '2px'}}>3 LFT</span>;
                                             } else if (urgencyCount === 2) {
-                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ff9800', fontWeight: 'bold', padding: '2px 4px', backgroundColor: 'rgba(255,152,0,0.1)', border: '1px solid #ff9800', borderRadius: '3px'}}>2 LFT</span>;
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ff9800', fontWeight: 'bold', padding: '1px 3px', backgroundColor: 'rgba(255,152,0,0.1)', border: '1px solid #ff9800', borderRadius: '2px'}}>2 LFT</span>;
                                             } else if (urgencyCount === 1) {
-                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ff4444', fontWeight: 'bold', padding: '2px 4px', backgroundColor: 'rgba(255,68,68,0.1)', border: '1px solid #ff4444', borderRadius: '3px', animation: 'pulseAlertRed 1.5s infinite'}}>1 LFT</span>;
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#ff4444', fontWeight: 'bold', padding: '1px 3px', backgroundColor: 'rgba(255,68,68,0.1)', border: '1px solid #ff4444', borderRadius: '2px', animation: 'pulseAlertRed 1.5s infinite'}}>1 LFT</span>;
                                             } else {
-                                                urgencyBadge = <span style={{fontSize: '9px', color: '#888', fontWeight: 'bold', padding: '2px 4px', backgroundColor: '#333', borderRadius: '3px'}}>DEAD</span>;
+                                                urgencyBadge = <span style={{fontSize: '9px', color: '#888', fontWeight: 'bold', padding: '1px 3px', backgroundColor: '#333', borderRadius: '2px'}}>DEAD</span>;
                                             }
                                         }
 
                                         if (status === 'TARGET') { bd = '#555'; }
                                         else if (status === 'SUGGESTED') {
                                             bg = 'rgba(102, 178, 255, 0.1)'; bd = C.blue; 
-                                            actionBtn = <button onClick={() => confirmAssignment(mapName, roleData.role, civ)} style={{ width: '100%', backgroundColor: C.blue, color: '#161920', border: 'none', padding: '4px 0', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>✓</button>;
+                                            actionBtn = <button onClick={() => confirmAssignment(mapName, roleData.role, civ)} style={{ width: '100%', backgroundColor: C.blue, color: '#161920', border: 'none', padding: '3px 0', borderRadius: '2px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>✓</button>;
                                         } else if (status === 'LOCKED') {
                                             bg = 'rgba(76, 175, 80, 0.1)'; bd = C.green;
-                                            actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ width: '100%', backgroundColor: 'transparent', color: '#888', border: '1px solid #555', padding: '3px 0', borderRadius: '3px', fontSize: '9px', cursor: 'pointer', whiteSpace: 'nowrap' }}>UNDO</button>;
+                                            actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ width: '100%', backgroundColor: 'transparent', color: '#888', border: '1px solid #555', padding: '2px 0', borderRadius: '2px', fontSize: '9px', cursor: 'pointer', whiteSpace: 'nowrap' }}>UNDO</button>;
                                         } else if (status === 'SNIPED') {
                                             bg = 'rgba(255, 68, 68, 0.1)'; bd = C.red;
-                                            actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ width: '100%', backgroundColor: C.red, color: '#161920', border: 'none', padding: '4px 0', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>CLEAR</button>;
+                                            actionBtn = <button onClick={() => clearAssignment(mapName, roleData.role)} style={{ width: '100%', backgroundColor: C.red, color: '#161920', border: 'none', padding: '3px 0', borderRadius: '2px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap' }}>CLEAR</button>;
                                         }
 
                                         return (
-                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
+                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '3px', overflow: 'hidden' }}>
                                                 
-                                                {/* Cuadrícula Estricta */}
-                                                <div style={{ display: 'grid', gridTemplateColumns: '110px 40px 1fr 45px', gap: '8px', alignItems: 'center', padding: '6px 8px', minHeight: '36px' }}>
-                                                    <div style={{ fontSize: '10px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1.1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                <div style={{ display: 'grid', gridTemplateColumns: '90px 30px 1fr 35px', gap: '4px', alignItems: 'center', padding: '4px 6px', minHeight: '30px' }}>
+                                                    <div style={{ fontSize: '9px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
                                                         {roleData.role}
                                                     </div>
                                                     
@@ -612,64 +611,62 @@ function ClanWarsVII() {
                                                         {urgencyBadge}
                                                     </div>
 
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', overflow: 'hidden' }}>
                                                         {civ ? (
                                                             <>
-                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '22px', height: '22px', borderRadius: '3px', border: `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '11px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
+                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '18px', height: '18px', borderRadius: '2px', border: `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '10px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
                                                             </>
                                                         ) : (
-                                                            <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>-</span>
+                                                            <span style={{ fontSize: '9px', color: '#555', fontStyle: 'italic' }}>-</span>
                                                         )}
                                                     </div>
                                                     
                                                     <div>{actionBtn}</div>
                                                 </div>
 
-                                                {candidates && candidates.length > 1 && (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
-                                                        <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>
-                                                        {candidates.slice(1, 4).map((cand, ci) => (
-                                                            <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
-                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                {(candidates?.length > 1 || backups?.length > 0) && (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
+                                                        {candidates?.length > 1 && <span style={{ fontSize: '7px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
+                                                        {candidates?.slice(1, 4).map((cand, ci) => (
+                                                            <div key={`cand-${ci}`} style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
+                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '10px', height: '10px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '8px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                             </div>
                                                         ))}
-                                                    </div>
-                                                )}
-
-                                                {backups && backups.length > 0 && (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', backgroundColor: 'rgba(0,0,0,0.3)', borderTop: `1px solid ${bd}33`, flexWrap: 'wrap' }}>
-                                                        <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
-                                                        {backups.map((cand, ci) => (
-                                                            <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1 }}>
-                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                            </div>
-                                                        ))}
+                                                        
+                                                        {backups?.length > 0 && (
+                                                            <>
+                                                                {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '8px', margin: '0 2px' }}>|</span>}
+                                                                <span style={{ fontSize: '7px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
+                                                                {backups.map((cand, ci) => (
+                                                                    <div key={`back-${ci}`} style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8 }}>
+                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '10px', height: '10px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                        <span style={{ fontSize: '8px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
                                         );
                                     })}
 
-                                    {/* Civis sin asignar pero pickeadas que aplican a este mapa */}
                                     {(() => {
                                         const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
-                                        const backupCivs = unassignedPicks.filter(c => {
-                                            return roles.some(r => r.priority.includes(c));
-                                        });
+                                        const backupCivs = unassignedPicks.filter(c => roles.some(r => r.priority.includes(c)));
 
                                         if (backupCivs.length === 0) return null;
                                         
                                         return (
-                                            <div style={{ marginTop: 'auto', paddingTop: '10px', borderTop: '1px dashed #333' }}>
-                                                <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>AVAILABLE BENCH (FITS MAP)</span>
-                                                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                            <div style={{ marginTop: 'auto', paddingTop: '6px', borderTop: '1px dashed #333' }}>
+                                                <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '2px' }}>AVAILABLE BENCH (FITS MAP)</span>
+                                                <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
                                                     {backupCivs.map(c => (
-                                                        <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 4px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '3px' }}>
-                                                            <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                            <span style={{ fontSize: '9px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
+                                                        <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '2px', padding: '1px 3px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '2px' }}>
+                                                            <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '10px', height: '10px', borderRadius: '1px' }} onError={(e) => e.target.style.display='none'} />
+                                                            <span style={{ fontSize: '8px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
                                                         </div>
                                                     ))}
                                                 </div>
