@@ -458,17 +458,32 @@ function AdvancedSearch() {
             {results.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: '#555', fontSize: '12px', fontStyle: 'italic' }}>No civilizations match all criteria.</div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
-                {results.map(civ => (
-                  <div key={civ} title={civtags[civ] ? [civtags[civ].focus_text, ...civtags[civ].bonuses.map(b => '• ' + b), civtags[civ].unique_units.length ? 'UU: ' + civtags[civ].unique_units.map(u => `${u.name} (${u.class})`).join(', ') : '', civtags[civ].team_bonus ? 'Team: ' + civtags[civ].team_bonus : '', civtags[civ].full_tree?.length ? 'Full tree: ' + civtags[civ].full_tree.join(', ') + (civtags[civ].full_tree_notes.length ? ' [' + civtags[civ].full_tree_notes.join('; ') + ']' : '') : ''].filter(Boolean).join('\n') : ''} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#161920', padding: '8px 10px', borderRadius: '4px', border: '1px solid #2a2d36', transition: 'border-color 0.2s' }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = '#2a2d36'}>
-                    <img src={`/civs/${civ.toLowerCase()}.png`} alt={civ} style={{ width: '28px', height: '28px', borderRadius: '3px', objectFit: 'cover' }} onError={e => e.target.style.display = 'none'} />
-                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                      <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e0e0e0' }}>{civ}</span>
-                      {civtags[civ] && <span style={{ fontSize: '9px', color: '#888', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civtags[civ].focus_text.replace(' civilization', '')}</span>}
-                      {civtags[civ]?.full_tree?.length > 0 && <span style={{ fontSize: '9px', color: TAG_COLOR }}>Full: {civtags[civ].full_tree.filter(x => x !== 'Cavalry').map(x => x === 'Cavalry (Paladin optional)' ? 'Cav' : x === 'Foot Archer' ? 'FA' : 'CA').join(' · ')}{civtags[civ].full_tree_notes.includes('no Paladin') ? ' (no Pal)' : ''}</span>}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '6px' }}>
+                {results.map(civ => {
+                  const ct = civtags[civ]
+                  const full = ct?.full_tree || []
+                  const noPal = ct?.full_tree_notes?.includes('no Paladin')
+                  const badges = []
+                  if (full.includes('Cavalry (Paladin optional)')) badges.push({ label: noPal ? 'Cav*' : 'Cav', help: noPal ? 'Full cavalry except Paladin' : 'Full cavalry' })
+                  if (full.includes('Foot Archer')) badges.push({ label: 'FA', help: 'Full foot archer' })
+                  if (full.includes('Cavalry Archer')) badges.push({ label: 'CA', help: 'Full cavalry archer' })
+                  const tooltip = ct ? [ct.focus_text, ...ct.bonuses.map(x => '• ' + x), ct.unique_units.length ? 'UU: ' + ct.unique_units.map(u => `${u.name} (${u.class})`).join(', ') : '', ct.team_bonus ? 'Team: ' + ct.team_bonus : '', full.length ? 'Full tree: ' + full.join(', ') + (ct.full_tree_notes.length ? ' [' + ct.full_tree_notes.join('; ') + ']' : '') : ''].filter(Boolean).join('\n') : ''
+                  return (
+                    <div key={civ} title={tooltip} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#161920', padding: '6px 8px', borderRadius: '4px', border: '1px solid #2a2d36', transition: 'border-color 0.2s', textAlign: 'left', lineHeight: 1.25 }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = '#2a2d36'}>
+                      <img src={`/civs/${civ.toLowerCase()}.png`} alt={civ} style={{ width: '32px', height: '32px', flexShrink: 0, objectFit: 'contain' }} onError={e => e.target.style.display = 'none'} />
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e0e0e0', whiteSpace: 'nowrap' }}>{civ}</span>
+                          <span style={{ flex: 1 }}></span>
+                          {badges.map(bd => (
+                            <span key={bd.label} title={bd.help} style={{ fontSize: '9px', fontWeight: 'bold', color: TAG_COLOR, backgroundColor: TAG_COLOR + '1a', border: `1px solid ${TAG_COLOR}44`, borderRadius: '3px', padding: '0 4px', whiteSpace: 'nowrap' }}>{bd.label}</span>
+                          ))}
+                        </div>
+                        {ct && <span style={{ fontSize: '10px', color: '#888' }}>{ct.focus_text.replace(' civilization', '')}</span>}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
 
