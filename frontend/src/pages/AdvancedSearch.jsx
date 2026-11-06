@@ -21,6 +21,14 @@ const QUICK_TAGS = [
   { name: "Thumb Ring", type: "tech" }
 ];
 
+// MODOS DE FILTRO: MUST = obligatorio, ANY = al menos uno de este grupo, NOT = excluir
+const MODES = {
+  MUST: { color: '#4caf50', help: 'Required: the civ must have it' },
+  ANY: { color: '#66b2ff', help: 'Any of: the civ must have at least one of the ANY filters' },
+  NOT: { color: '#ff4444', help: 'Excluded: the civ must not have it' }
+}
+const NEXT_MODE = { MUST: 'ANY', ANY: 'NOT', NOT: 'MUST' }
+
 // TAGS DE CIVILIZACIÓN (desde civtags.json)
 const TAG_COLOR = '#e0a040'
 const CIV_TAG_CHIPS = [
@@ -103,7 +111,7 @@ function AdvancedSearch() {
     try { localStorage.setItem('emputors_used_civs', JSON.stringify(usedCivs)) } catch { /* sin almacenamiento */ }
   }, [usedCivs])
   const toggleUsed = (civ) => setUsedCivs(prev => prev.includes(civ) ? prev.filter(c => c !== civ) : [...prev, civ])
-  const excludeCiv = (civ) => setFilters(prev => prev.some(f => f.type === 'civ' && f.id === civ) ? prev : [...prev, { type: 'civ', id: civ, name: civ, not: true, operator: prev.length === 0 ? null : 'AND' }])
+  const excludeCiv = (civ) => setFilters(prev => prev.some(f => f.type === 'civ' && f.id === civ) ? prev : [...prev, { type: 'civ', id: civ, name: civ, mode: 'NOT' }])
   const [filters, setFilters] = useState([])
   
   // Estados para el Autocompletado
@@ -113,8 +121,7 @@ function AdvancedSearch() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
 
-  const [pendingNot, setPendingNot] = useState(false)
-  const [pendingOperator, setPendingOperator] = useState('AND')
+  const [pendingMode, setPendingMode] = useState('MUST')
 
   useEffect(() => {
     fetch('/techtree.json')
@@ -200,21 +207,14 @@ function AdvancedSearch() {
 
     return allCivs.filter(civ => {
       const civData = techtree.civs[civ] || { units: [], techs: [] }
-      let result = null
-
-      for (let i = 0; i < filters.length; i++) {
-        const f = filters[i]
+      const hasIt = (f) => {
         const list = f.type === 'civ' ? [civ] : f.type === 'unit' ? civData.units : f.type === 'tag' ? (civtags[civ]?.tags || []) : civData.techs
-        let match = list.includes(f.id)
-        if (f.not) match = !match
-
-        if (i === 0) {
-          result = match
-        } else {
-          if (f.operator === 'AND') result = result && match
-          else result = result || match
-        }
+        return list.includes(f.id)
       }
+      const must = filters.filter(f => f.mode === 'MUST')
+      const any = filters.filter(f => f.mode === 'ANY')
+      const not = filters.filter(f => f.mode === 'NOT')
+      const result = must.every(hasIt) && (any.length === 0 || any.some(hasIt)) && !not.some(hasIt)
       return result
     }).sort()
   }, [techtree, filters, allCivs, civtags])
@@ -243,8 +243,7 @@ function AdvancedSearch() {
             type: tag.type,
             id: id,
             name: exactName,
-            not: false,
-            operator: prev.length === 0 ? null : 'AND'
+            mode: 'MUST'
           }];
         });
       }
@@ -253,7 +252,7 @@ function AdvancedSearch() {
   const handleCivTagClick = (id) => {
     setFilters(prev => {
       if (prev.some(f => f.type === 'tag' && f.id === id)) return prev
-      return [...prev, { type: 'tag', id, name: tagLabel(id), not: false, operator: prev.length === 0 ? null : 'AND' }]
+      return [...prev, { type: 'tag', id, name: tagLabel(id), mode: 'MUST' }]
     })
   }
 
@@ -264,32 +263,20 @@ function AdvancedSearch() {
       type: pendingType,
       id: selectedItem.id,
       name: selectedItem.name,
-      not: pendingNot,
-      operator: prev.length === 0 ? null : pendingOperator
+      mode: pendingMode
     }])
     
     // Resetear campos tras añadir
     setSelectedItem(null)
     setSearchTerm('')
-    setPendingNot(false)
   }
 
-  const toggleOperator = (index) => {
-    setFilters(prev => prev.map((f, i) => i === index && f.operator ? { ...f, operator: f.operator === 'AND' ? 'OR' : 'AND' } : f))
-  }
-
-  const toggleNot = (index) => {
-    setFilters(prev => prev.map((f, i) => i === index ? { ...f, not: !f.not } : f))
+  const cycleMode = (index) => {
+    setFilters(prev => prev.map((f, i) => i === index ? { ...f, mode: NEXT_MODE[f.mode] || 'MUST' } : f))
   }
 
   const removeFilter = (index) => {
-    setFilters(prev => {
-      const newFilters = prev.filter((_, i) => i !== index)
-      if (newFilters.length > 0 && newFilters[0].operator !== null) {
-        newFilters[0] = { ...newFilters[0], operator: null }
-      }
-      return newFilters
-    })
+    setFilters(prev => prev.filter((_, i) => i !== index))
   }
 
   const clearAll = () => setFilters([])
@@ -315,20 +302,19 @@ function AdvancedSearch() {
           {/* Active filters */}
           {filters.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '12px' }}>
-              {filters.map((f, i) => (
+              <div style={{ fontSize: '10px', color: '#666', marginBottom: '2px' }}>
+                Result = all <b style={{ color: MODES.MUST.color }}>MUST</b> · at least one <b style={{ color: MODES.ANY.color }}>ANY</b> · no <b style={{ color: MODES.NOT.color }}>NOT</b>. Click a badge to change it.
+              </div>
+              {filters.map((f, i) => ({ f, i })).sort((a, b) => ['MUST', 'ANY', 'NOT'].indexOf(a.f.mode) - ['MUST', 'ANY', 'NOT'].indexOf(b.f.mode)).map(({ f, i }) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
-                  {f.operator && (
-                    <span onClick={() => toggleOperator(i)} title="Click to switch AND / OR" style={{ fontSize: '10px', fontWeight: 'bold', color: f.operator === 'AND' ? '#4caf50' : '#66b2ff', backgroundColor: f.operator === 'AND' ? '#4caf5022' : '#66b2ff22', border: `1px solid ${f.operator === 'AND' ? '#4caf5066' : '#66b2ff66'}`, padding: '2px 6px', borderRadius: '3px', minWidth: '30px', textAlign: 'center', cursor: 'pointer', userSelect: 'none' }}>{f.operator} ⇄</span>
-                  )}
-                  {!f.operator && <span style={{ minWidth: '30px' }}></span>}
-                  
+                  <span onClick={() => cycleMode(i)} title={MODES[f.mode].help + ' (click to change)'} style={{ fontSize: '10px', fontWeight: 'bold', color: MODES[f.mode].color, backgroundColor: MODES[f.mode].color + '22', border: `1px solid ${MODES[f.mode].color}66`, padding: '2px 6px', borderRadius: '3px', minWidth: '38px', textAlign: 'center', cursor: 'pointer', userSelect: 'none' }}>{f.mode}</span>
+
                   {/* ICONO DEL FILTRO ACTIVO */}
                   {getIconPath(f.name, f.type) && (
                     <img src={getIconPath(f.name, f.type)} alt={f.name} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                   )}
 
                   <span style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', minWidth: '35px' }}>{f.type}</span>
-                  <span onClick={() => toggleNot(i)} title="Click to switch NOT on/off" style={{ fontSize: '9px', fontWeight: 'bold', color: f.not ? '#ff4444' : '#444', backgroundColor: f.not ? '#ff444422' : 'transparent', border: `1px solid ${f.not ? '#ff444466' : '#333'}`, padding: '1px 4px', borderRadius: '2px', cursor: 'pointer', userSelect: 'none' }}>NOT</span>
                   <span style={{ fontSize: '12px', fontWeight: 'bold', color: f.type === 'unit' ? '#66b2ff' : f.type === 'tag' ? TAG_COLOR : f.type === 'civ' ? '#e0e0e0' : '#4caf50' }}>{f.name}</span>
                   <span style={{ flex: 1 }}></span>
                   <span onClick={() => removeFilter(i)} style={{ color: '#ff4444', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', padding: '0 4px' }}>✗</span>
@@ -339,16 +325,12 @@ function AdvancedSearch() {
 
           {/* New filter row */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-            {/* Operator (only if not first filter) */}
-            {filters.length > 0 && (
-              <select value={pendingOperator} onChange={e => setPendingOperator(e.target.value)} style={{ backgroundColor: '#1e212b', color: pendingOperator === 'AND' ? '#4caf50' : '#66b2ff', border: '1px solid #444', padding: '6px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', width: '65px' }}>
-                <option value="AND">AND</option>
-                <option value="OR">OR</option>
-              </select>
-            )}
-
-            {/* NOT toggle */}
-            <button onClick={() => setPendingNot(!pendingNot)} style={{ backgroundColor: pendingNot ? '#ff444433' : '#1e212b', color: pendingNot ? '#ff4444' : '#555', border: `1px solid ${pendingNot ? '#ff4444' : '#444'}`, padding: '6px 10px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}>NOT</button>
+            {/* Mode selector */}
+            <select value={pendingMode} onChange={e => setPendingMode(e.target.value)} title={MODES[pendingMode].help} style={{ backgroundColor: '#1e212b', color: MODES[pendingMode].color, border: `1px solid ${MODES[pendingMode].color}55`, padding: '6px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', width: '75px' }}>
+              <option value="MUST">MUST</option>
+              <option value="ANY">ANY</option>
+              <option value="NOT">NOT</option>
+            </select>
 
             {/* Type selector */}
             <select value={pendingType} onChange={e => { 
