@@ -64,7 +64,7 @@ const tagHelp = (id) => {
 
 // Función para encontrar el icono que mejor coincida
 const getIconPath = (name, type) => {
-  if (!name || type === 'tag') return null;
+  if (!name || type === 'tag' || type === 'civ') return null;
   const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
   const folder = type === 'unit' ? '/units/' : '/techs/';
 
@@ -94,6 +94,16 @@ function AdvancedSearch() {
   }, []);
   const [techtree, setTechtree] = useState(null)
   const [civtags, setCivtags] = useState({})
+  // Civs marcadas como ya usadas (se guardan en el navegador)
+  const [usedCivs, setUsedCivs] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('emputors_used_civs') || '[]') } catch { return [] }
+  })
+  const [hideUsed, setHideUsed] = useState(false)
+  useEffect(() => {
+    try { localStorage.setItem('emputors_used_civs', JSON.stringify(usedCivs)) } catch { /* sin almacenamiento */ }
+  }, [usedCivs])
+  const toggleUsed = (civ) => setUsedCivs(prev => prev.includes(civ) ? prev.filter(c => c !== civ) : [...prev, civ])
+  const excludeCiv = (civ) => setFilters(prev => prev.some(f => f.type === 'civ' && f.id === civ) ? prev : [...prev, { type: 'civ', id: civ, name: civ, not: true, operator: prev.length === 0 ? null : 'AND' }])
   const [filters, setFilters] = useState([])
   
   // Estados para el Autocompletado
@@ -194,7 +204,7 @@ function AdvancedSearch() {
 
       for (let i = 0; i < filters.length; i++) {
         const f = filters[i]
-        const list = f.type === 'unit' ? civData.units : f.type === 'tag' ? (civtags[civ]?.tags || []) : civData.techs
+        const list = f.type === 'civ' ? [civ] : f.type === 'unit' ? civData.units : f.type === 'tag' ? (civtags[civ]?.tags || []) : civData.techs
         let match = list.includes(f.id)
         if (f.not) match = !match
 
@@ -264,6 +274,14 @@ function AdvancedSearch() {
     setPendingNot(false)
   }
 
+  const toggleOperator = (index) => {
+    setFilters(prev => prev.map((f, i) => i === index && f.operator ? { ...f, operator: f.operator === 'AND' ? 'OR' : 'AND' } : f))
+  }
+
+  const toggleNot = (index) => {
+    setFilters(prev => prev.map((f, i) => i === index ? { ...f, not: !f.not } : f))
+  }
+
   const removeFilter = (index) => {
     setFilters(prev => {
       const newFilters = prev.filter((_, i) => i !== index)
@@ -300,7 +318,7 @@ function AdvancedSearch() {
               {filters.map((f, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#161920', padding: '6px 10px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
                   {f.operator && (
-                    <span style={{ fontSize: '10px', fontWeight: 'bold', color: f.operator === 'AND' ? '#4caf50' : '#66b2ff', backgroundColor: f.operator === 'AND' ? '#4caf5022' : '#66b2ff22', padding: '2px 6px', borderRadius: '3px', minWidth: '30px', textAlign: 'center' }}>{f.operator}</span>
+                    <span onClick={() => toggleOperator(i)} title="Click to switch AND / OR" style={{ fontSize: '10px', fontWeight: 'bold', color: f.operator === 'AND' ? '#4caf50' : '#66b2ff', backgroundColor: f.operator === 'AND' ? '#4caf5022' : '#66b2ff22', border: `1px solid ${f.operator === 'AND' ? '#4caf5066' : '#66b2ff66'}`, padding: '2px 6px', borderRadius: '3px', minWidth: '30px', textAlign: 'center', cursor: 'pointer', userSelect: 'none' }}>{f.operator} ⇄</span>
                   )}
                   {!f.operator && <span style={{ minWidth: '30px' }}></span>}
                   
@@ -310,8 +328,8 @@ function AdvancedSearch() {
                   )}
 
                   <span style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', minWidth: '35px' }}>{f.type}</span>
-                  {f.not && <span style={{ fontSize: '9px', fontWeight: 'bold', color: '#ff4444', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px' }}>NOT</span>}
-                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: f.type === 'unit' ? '#66b2ff' : f.type === 'tag' ? TAG_COLOR : '#4caf50' }}>{f.name}</span>
+                  <span onClick={() => toggleNot(i)} title="Click to switch NOT on/off" style={{ fontSize: '9px', fontWeight: 'bold', color: f.not ? '#ff4444' : '#444', backgroundColor: f.not ? '#ff444422' : 'transparent', border: `1px solid ${f.not ? '#ff444466' : '#333'}`, padding: '1px 4px', borderRadius: '2px', cursor: 'pointer', userSelect: 'none' }}>NOT</span>
+                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: f.type === 'unit' ? '#66b2ff' : f.type === 'tag' ? TAG_COLOR : f.type === 'civ' ? '#e0e0e0' : '#4caf50' }}>{f.name}</span>
                   <span style={{ flex: 1 }}></span>
                   <span onClick={() => removeFilter(i)} style={{ color: '#ff4444', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', padding: '0 4px' }}>✗</span>
                 </div>
@@ -450,16 +468,25 @@ function AdvancedSearch() {
           <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', padding: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #444', paddingBottom: '8px', marginBottom: '12px' }}>
               <h3 style={{ color: '#ffd700', fontSize: '11px', margin: 0, textTransform: 'uppercase', letterSpacing: '1px' }}>Results</h3>
-              <span style={{ fontSize: '12px', color: results.length > 0 ? '#4caf50' : '#ff4444', fontWeight: 'bold' }}>
-                {results.length} / {allCivs.length} civilizations
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {usedCivs.length > 0 && (
+                  <>
+                    <span onClick={() => setHideUsed(!hideUsed)} style={{ fontSize: '10px', color: hideUsed ? '#ffd700' : '#888', border: `1px solid ${hideUsed ? '#ffd70066' : '#444'}`, padding: '2px 6px', borderRadius: '3px', cursor: 'pointer', userSelect: 'none' }}>{hideUsed ? 'Show used' : 'Hide used'}</span>
+                    <span onClick={() => setUsedCivs([])} style={{ fontSize: '10px', color: '#ff4444', border: '1px solid #ff444444', padding: '2px 6px', borderRadius: '3px', cursor: 'pointer', userSelect: 'none' }}>Clear used ({usedCivs.length})</span>
+                  </>
+                )}
+                <span style={{ fontSize: '12px', color: results.length > 0 ? '#4caf50' : '#ff4444', fontWeight: 'bold' }}>
+                  {results.filter(c => !usedCivs.includes(c)).length} available · {results.length} / {allCivs.length} civilizations
+                </span>
+              </div>
             </div>
 
             {results.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: '#555', fontSize: '12px', fontStyle: 'italic' }}>No civilizations match all criteria.</div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '6px' }}>
-                {results.map(civ => {
+                {[...results.filter(c => !usedCivs.includes(c)), ...(hideUsed ? [] : results.filter(c => usedCivs.includes(c)))].map(civ => {
+                  const used = usedCivs.includes(civ)
                   const ct = civtags[civ]
                   const full = ct?.full_tree || []
                   const noPal = ct?.full_tree_notes?.includes('no Paladin')
@@ -469,18 +496,20 @@ function AdvancedSearch() {
                   if (full.includes('Cavalry Archer')) badges.push({ label: 'CA', help: 'Full cavalry archer' })
                   const tooltip = ct ? [ct.focus_text, ...ct.bonuses.map(x => '• ' + x), ct.unique_units.length ? 'UU: ' + ct.unique_units.map(u => `${u.name} (${u.class})`).join(', ') : '', ct.team_bonus ? 'Team: ' + ct.team_bonus : '', full.length ? 'Full tree: ' + full.join(', ') + (ct.full_tree_notes.length ? ' [' + ct.full_tree_notes.join('; ') + ']' : '') : ''].filter(Boolean).join('\n') : ''
                   return (
-                    <div key={civ} title={tooltip} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#161920', padding: '6px 8px', borderRadius: '4px', border: '1px solid #2a2d36', transition: 'border-color 0.2s', textAlign: 'left', lineHeight: 1.25 }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = '#2a2d36'}>
+                    <div key={civ} title={(used ? 'USED (click to unmark)' : 'Click to mark as used') + '\n\n' + tooltip} onClick={() => toggleUsed(civ)} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: used ? '#13161b' : '#161920', padding: '6px 8px', borderRadius: '4px', border: `1px solid ${used ? '#4caf5055' : '#2a2d36'}`, transition: 'border-color 0.2s, opacity 0.2s', textAlign: 'left', lineHeight: 1.25, cursor: 'pointer', userSelect: 'none', opacity: used ? 0.45 : 1 }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = used ? '#4caf5055' : '#2a2d36'}>
                       <img src={`/civs/${civ.toLowerCase()}.png`} alt={civ} style={{ width: '32px', height: '32px', flexShrink: 0, objectFit: 'contain' }} onError={e => e.target.style.display = 'none'} />
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e0e0e0', whiteSpace: 'nowrap' }}>{civ}</span>
                           <span style={{ flex: 1 }}></span>
+                          {used && <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#4caf50' }}>✓</span>}
                           {badges.map(bd => (
                             <span key={bd.label} title={bd.help} style={{ fontSize: '9px', fontWeight: 'bold', color: TAG_COLOR, backgroundColor: TAG_COLOR + '1a', border: `1px solid ${TAG_COLOR}44`, borderRadius: '3px', padding: '0 4px', whiteSpace: 'nowrap' }}>{bd.label}</span>
                           ))}
                         </div>
                         {ct && <span style={{ fontSize: '10px', color: '#888' }}>{ct.focus_text.replace(' civilization', '')}</span>}
                       </div>
+                      <span onClick={e => { e.stopPropagation(); excludeCiv(civ) }} title={`Exclude ${civ} (adds NOT ${civ} filter)`} style={{ color: '#555', fontSize: '12px', fontWeight: 'bold', padding: '0 2px', cursor: 'pointer', alignSelf: 'flex-start' }} onMouseEnter={e => e.currentTarget.style.color = '#ff4444'} onMouseLeave={e => e.currentTarget.style.color = '#555'}>✗</span>
                     </div>
                   )
                 })}
