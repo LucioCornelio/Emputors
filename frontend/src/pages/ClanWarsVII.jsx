@@ -11,6 +11,17 @@ const C = {
   gold: '#ffd700', cyan: '#00c8c8', red: '#ff6666', green: '#4caf50', blue: '#66b2ff'
 };
 
+const getMapImageName = (mapName) => {
+  if (mapName === "Tres Leches") return "Tres_leches";
+  if (mapName === "Grand Bara") return "Grand_Bara";
+  return mapName;
+};
+
+const getCivImage = (civName) => {
+  const specials = { "Danes": "danes.png", "Saxons": "saxons.png", "Varangians": "varangians.png" };
+  return specials[civName] ? specials[civName] : `${civName.toLowerCase()}.png`;
+};
+
 function ClanWarsVII() {
   const [activeTab, setActiveTab] = useState('executionDraft');
 
@@ -59,7 +70,6 @@ function ClanWarsVII() {
     document.title = 'Clan Wars VII Assistant | Emputors';
     
     const fetchData = async () => {
-      // 1. Cargar Meta de Liquipedia
       try {
         const res = await fetch('/db_3v3.json');
         const data = await res.json();
@@ -71,7 +81,6 @@ function ClanWarsVII() {
         }
       } catch (err) { console.error("Error loading db_3v3:", err); }
 
-      // 2. Cargar Planes desde Supabase
       const { data: planData, error: planError } = await supabase.from('cw7_draft_plans').select('*');
       if (planData) {
         const formatted = {};
@@ -90,7 +99,6 @@ function ClanWarsVII() {
     fetchData();
   }, []);
 
-  // Auto-seleccionar el primer plan disponible cuando se elige un mapa
   useEffect(() => {
     const newPlans = { ...selectedPlans };
     let changed = false;
@@ -103,7 +111,6 @@ function ClanWarsVII() {
     if (changed) setSelectedPlans(newPlans);
   }, [selectedExecMaps, draftPlans]);
 
-  // Si cambia el link de Captains Mode, reseteamos el estado de conexión visual
   useEffect(() => {
     setIsConnected(false);
   }, [cmId]);
@@ -135,17 +142,6 @@ function ClanWarsVII() {
   const toggleTooltip = (id, e) => {
     e.stopPropagation();
     setActiveTooltip(prev => prev === id ? null : id);
-  };
-
-  const getMapImageName = (mapName) => {
-    if (mapName === "Tres Leches") return "Tres_leches";
-    if (mapName === "Grand Bara") return "Grand_Bara";
-    return mapName;
-  };
-
-  const getCivImage = (civName) => {
-    const specials = { "Danes": "danes.png", "Saxons": "saxons.png", "Varangians": "varangians.png" };
-    return specials[civName] ? specials[civName] : `${civName.toLowerCase()}.png`;
   };
 
   // --- LÓGICA: EXECUTION DRAFT ---
@@ -216,14 +212,8 @@ function ClanWarsVII() {
           }, 500);
       });
 
-      socket.on('disconnect', () => {
-          setIsConnected(false);
-      });
-
-      socket.on('connect_error', () => {
-          setSyncing(false);
-          setIsConnected(false);
-      });
+      socket.on('disconnect', () => setIsConnected(false));
+      socket.on('connect_error', () => { setSyncing(false); setIsConnected(false); });
 
       setLiveSocket(socket);
     } catch (e) { setSyncing(false); setIsConnected(false); }
@@ -284,15 +274,8 @@ function ClanWarsVII() {
       if (confirmedCiv && !isSniped) return { status: 'LOCKED', civ: confirmedCiv, candidates: [], backups: [], urgencyCount };
       if (confirmedCiv && isSniped) return { status: 'SNIPED', civ: confirmedCiv, candidates, backups, urgencyCount };
 
-      if (candidates.length > 0) {
-          const mainType = candidates[0].type;
-          return { status: mainType, civ: candidates[0].civ, candidates, backups, urgencyCount };
-      }
-
-      if (backups.length > 0) {
-          const mainType = backups[0].type;
-          return { status: mainType, civ: backups[0].civ, candidates: [], backups, urgencyCount: 0 };
-      }
+      if (candidates.length > 0) return { status: candidates[0].type, civ: candidates[0].civ, candidates, backups, urgencyCount };
+      if (backups.length > 0) return { status: backups[0].type, civ: backups[0].civ, candidates: [], backups, urgencyCount: 0 };
 
       return { status: 'EMPTY', civ: null, candidates: [], backups: [], urgencyCount: 0 };
   };
@@ -572,11 +555,13 @@ function ClanWarsVII() {
                                         return (
                                             <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
                                                 
+                                                {/* Cuadrícula Estricta blindada contra anchos variables */}
                                                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 95px) 36px minmax(0, 1fr) 40px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
                                                     <div style={{ fontSize: '10.5px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
                                                         {roleData.role}
                                                     </div>
                                                     
+                                                    {/* El hueco de la urgencia ahora siempre tiene contenido para no romper la simetría */}
                                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                         {status === 'LOCKED' ? (
                                                             <span style={{fontSize: '12px', color: C.green, fontWeight: '900'}}>✓</span>
@@ -601,42 +586,44 @@ function ClanWarsVII() {
                                                     <div>{actionBtn}</div>
                                                 </div>
 
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: (candidates?.length > 1 || backups?.length > 0) ? 'rgba(0,0,0,0.2)' : 'transparent', borderTop: (candidates?.length > 1 || backups?.length > 0) ? `1px solid ${bd}55` : '1px solid transparent', flexWrap: 'wrap', minHeight: '18px' }}>
-                                                    {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
-                                                    {candidates?.slice(1, 4).map((cand, ci) => (
-                                                        <div 
-                                                            key={`cand-${ci}`} 
-                                                            onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
-                                                            title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
-                                                            style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
-                                                            onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
-                                                            onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
-                                                        >
-                                                            <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                            <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                        </div>
-                                                    ))}
-                                                    
-                                                    {backups?.length > 0 && (
-                                                        <>
-                                                            {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '9px', margin: '0 2px' }}>|</span>}
-                                                            <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
-                                                            {backups.map((cand, ci) => (
-                                                                <div 
-                                                                    key={`back-${ci}`} 
-                                                                    onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
-                                                                    title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
-                                                                    style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
-                                                                    onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
-                                                                    onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
-                                                                >
-                                                                    <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                                    <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                                </div>
-                                                            ))}
-                                                        </>
-                                                    )}
-                                                </div>
+                                                {(candidates?.length > 1 || backups?.length > 0) && (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
+                                                        {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
+                                                        {candidates?.slice(1, 4).map((cand, ci) => (
+                                                            <div 
+                                                                key={`cand-${ci}`} 
+                                                                onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
+                                                                title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
+                                                                style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
+                                                                onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
+                                                                onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
+                                                            >
+                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                            </div>
+                                                        ))}
+                                                        
+                                                        {backups?.length > 0 && (
+                                                            <>
+                                                                {candidates?.length > 1 && <span style={{ color: '#444', fontSize: '9px', margin: '0 2px' }}>|</span>}
+                                                                <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>BACKUPS:</span>
+                                                                {backups.map((cand, ci) => (
+                                                                    <div 
+                                                                        key={`back-${ci}`} 
+                                                                        onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
+                                                                        title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
+                                                                        style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
+                                                                        onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
+                                                                        onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
+                                                                    >
+                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                        <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -670,8 +657,7 @@ function ClanWarsVII() {
                     })}
                 </div>
             </div>
-          </div>
-        )
+        </div>
 
         {/* --- VISTA: META EXPLORER --- */}
         <div style={{ display: activeTab === 'metaExplorer' ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
