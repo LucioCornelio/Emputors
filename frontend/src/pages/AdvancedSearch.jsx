@@ -21,9 +21,50 @@ const QUICK_TAGS = [
   { name: "Thumb Ring", type: "tech" }
 ];
 
+// TAGS DE CIVILIZACIÓN (desde civtags.json)
+const TAG_COLOR = '#e0a040'
+const CIV_TAG_CHIPS = [
+  { group: 'Official or full tree', items: ['broad:Cavalry', 'broad:Foot Archer', 'broad:Cavalry Archer'] },
+  { group: 'Full tech tree', items: ['tree:Cavalry', 'tree:Cavalry (Paladin optional)', 'tree:Foot Archer', 'tree:Cavalry Archer'] },
+  { group: 'Official focus', items: ['family:Infantry', 'family:Cavalry', 'family:Camel', 'family:Foot Archer', 'family:Cavalry Archer', 'family:Naval', 'family:Gunpowder'] },
+  { group: 'Water', items: ['water:yes'] },
+  { group: 'Civ bonus for', items: ['bonus:Infantry', 'bonus:Cavalry', 'bonus:Camel', 'bonus:Foot Archer', 'bonus:Cavalry Archer'] },
+  { group: 'Unique unit', items: ['uu:Infantry', 'uu:Cavalry', 'uu:Camel', 'uu:Foot Archer', 'uu:Mounted Archer'] }
+]
+const tagLabel = (id) => {
+  const [kind, value] = id.split(':')
+  if (kind === 'family') return `${value} Civilization`
+  if (kind === 'official') return `Official tag: ${value}`
+  if (kind === 'bonus') return `${value} bonus`
+  if (kind === 'uu') return `UU: ${value}`
+  if (kind === 'water') return 'Water civ (Naval tag or naval bonus)'
+  if (kind === 'tree') return `Full ${value}`
+  if (kind === 'broad') return `${value} (official or full tree)`
+  return id
+}
+const tagHelp = (id) => {
+  if (id === 'tree:Foot Archer') return 'Arbalester + Thumb Ring + Bracer'
+  if (id === 'tree:Cavalry Archer') return 'Heavy Cavalry Archer (or Heavy Mounted Crossbowman) + Thumb Ring + Parthian Tactics'
+  if (id === 'tree:Cavalry') return 'Paladin (or Savar) + Bloodlines (or equivalent HP bonus) + Husbandry + Plate Barding Armor'
+  if (id === 'tree:Cavalry (Paladin optional)') return 'Cavalier + Bloodlines (or equivalent HP bonus) + Husbandry + Plate Barding Armor; Paladin not required'
+  if (id.startsWith('broad:')) return 'Official focus tag OR full tech tree for this branch'
+  if (id === 'family:Foot Archer') return 'Official tag Foot Archer, or generic Archer (counts for both archer types)'
+  if (id === 'family:Cavalry Archer') return 'Official tag Cavalry Archer, or generic Archer (counts for both archer types)'
+  if (id === 'family:Cavalry') return 'Official tag Cavalry (camels are separate)'
+  if (id === 'family:Camel') return 'Official tag Camel'
+  if (id === 'water:yes') return 'Official Naval tag, or at least one civ/team/UT bonus about ships, docks or fishing'
+  if (id === 'bonus:Foot Archer' || id === 'bonus:Cavalry Archer') return 'Civ bonus for this archer type; generic archer or Archery Range bonuses count for both'
+  if (id === 'bonus:Camel') return 'Civ bonus that mentions camels explicitly'
+  if (id === 'bonus:Cavalry') return 'Civ bonus for cavalry, mounted units, knights, scouts or Stable (camel-only bonuses are separate)'
+  if (id.startsWith('bonus:')) return 'At least one civilization bonus (not UT, not team) about this branch'
+  if (id === 'uu:Camel') return 'Unique unit that is a camel'
+  if (id.startsWith('uu:')) return 'Class of the unique unit as given by aoe2techtree'
+  return ''
+}
+
 // Función para encontrar el icono que mejor coincida
 const getIconPath = (name, type) => {
-  if (!name) return null;
+  if (!name || type === 'tag') return null;
   const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
   const folder = type === 'unit' ? '/units/' : '/techs/';
 
@@ -52,6 +93,7 @@ function AdvancedSearch() {
     document.title = 'Advanced Search | Emputors';
   }, []);
   const [techtree, setTechtree] = useState(null)
+  const [civtags, setCivtags] = useState({})
   const [filters, setFilters] = useState([])
   
   // Estados para el Autocompletado
@@ -69,7 +111,26 @@ function AdvancedSearch() {
       .then(res => res.json())
       .then(data => setTechtree(data))
       .catch(() => console.error('Could not load techtree.json'))
+    fetch('/civtags.json')
+      .then(res => res.json())
+      .then(data => setCivtags(data))
+      .catch(() => console.error('Could not load civtags.json'))
   }, [])
+
+  // Todas las civs (techtree + civtags)
+  const allCivs = useMemo(() => {
+    const set = new Set([...Object.keys(techtree?.civs || {}), ...Object.keys(civtags)])
+    return [...set].sort()
+  }, [techtree, civtags])
+
+  // Catálogo de tags con número de civs
+  const tagOptions = useMemo(() => {
+    const counts = {}
+    Object.values(civtags).forEach(c => (c.tags || []).forEach(t => counts[t] = (counts[t] || 0) + 1))
+    return Object.keys(counts)
+      .map(id => ({ id, name: tagLabel(id), count: counts[id] }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }, [civtags])
 
   // Cierra el dropdown si haces clic fuera
   useEffect(() => {
@@ -118,24 +179,22 @@ function AdvancedSearch() {
 
   // Filtrado de opciones mientras se escribe
   const filteredOptions = useMemo(() => {
-    const options = pendingType === 'unit' ? unitOptions : techOptions;
+    const options = pendingType === 'unit' ? unitOptions : pendingType === 'tag' ? tagOptions : techOptions;
     if (!searchTerm) return options;
     return options.filter(opt => opt.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [searchTerm, pendingType, unitOptions, techOptions])
+  }, [searchTerm, pendingType, unitOptions, techOptions, tagOptions])
 
   // Compute results
   const results = useMemo(() => {
     if (!techtree || filters.length === 0) return null
 
-    const civNames = Object.keys(techtree.civs)
-    
-    return civNames.filter(civ => {
-      const civData = techtree.civs[civ]
+    return allCivs.filter(civ => {
+      const civData = techtree.civs[civ] || { units: [], techs: [] }
       let result = null
 
       for (let i = 0; i < filters.length; i++) {
         const f = filters[i]
-        const list = f.type === 'unit' ? civData.units : civData.techs
+        const list = f.type === 'unit' ? civData.units : f.type === 'tag' ? (civtags[civ]?.tags || []) : civData.techs
         let match = list.includes(f.id)
         if (f.not) match = !match
 
@@ -148,7 +207,7 @@ function AdvancedSearch() {
       }
       return result
     }).sort()
-  }, [techtree, filters])
+  }, [techtree, filters, allCivs, civtags])
 
   const handleSelectOption = (opt) => {
     setSelectedItem(opt)
@@ -180,6 +239,13 @@ function AdvancedSearch() {
         });
       }
     };
+
+  const handleCivTagClick = (id) => {
+    setFilters(prev => {
+      if (prev.some(f => f.type === 'tag' && f.id === id)) return prev
+      return [...prev, { type: 'tag', id, name: tagLabel(id), not: false, operator: prev.length === 0 ? null : 'AND' }]
+    })
+  }
 
   const addFilter = () => {
     if (!selectedItem) return
@@ -221,7 +287,7 @@ function AdvancedSearch() {
         {/* HEADER */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <h1 style={{ color: '#ffd700', fontSize: '20px', fontWeight: 'bold', margin: '0 0 4px 0', letterSpacing: '2px', textTransform: 'uppercase' }}>Advanced Search</h1>
-          <p style={{ color: '#888', fontSize: '12px', margin: 0 }}>Find civilizations by unit and technology availability</p>
+          <p style={{ color: '#888', fontSize: '12px', margin: 0 }}>Find civilizations by unit, technology and civ tags</p>
         </div>
 
         {/* FILTER BUILDER */}
@@ -245,7 +311,7 @@ function AdvancedSearch() {
 
                   <span style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', minWidth: '35px' }}>{f.type}</span>
                   {f.not && <span style={{ fontSize: '9px', fontWeight: 'bold', color: '#ff4444', backgroundColor: '#ff444422', padding: '1px 4px', borderRadius: '2px' }}>NOT</span>}
-                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: f.type === 'unit' ? '#66b2ff' : '#4caf50' }}>{f.name}</span>
+                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: f.type === 'unit' ? '#66b2ff' : f.type === 'tag' ? TAG_COLOR : '#4caf50' }}>{f.name}</span>
                   <span style={{ flex: 1 }}></span>
                   <span onClick={() => removeFilter(i)} style={{ color: '#ff4444', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', padding: '0 4px' }}>✗</span>
                 </div>
@@ -272,9 +338,10 @@ function AdvancedSearch() {
                 setSelectedItem(null); 
                 setSearchTerm(''); 
               }} 
-              style={{ backgroundColor: '#1e212b', color: pendingType === 'unit' ? '#66b2ff' : '#4caf50', border: `1px solid ${pendingType === 'unit' ? '#66b2ff55' : '#4caf5055'}`, padding: '6px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', width: '80px' }}>
+              style={{ backgroundColor: '#1e212b', color: pendingType === 'unit' ? '#66b2ff' : pendingType === 'tag' ? TAG_COLOR : '#4caf50', border: `1px solid ${pendingType === 'unit' ? '#66b2ff55' : pendingType === 'tag' ? TAG_COLOR + '55' : '#4caf5055'}`, padding: '6px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', outline: 'none', cursor: 'pointer', width: '80px' }}>
               <option value="unit">Unit</option>
               <option value="tech">Tech</option>
+              <option value="tag">Civ tag</option>
             </select>
 
             {/* Autocomplete Input */}
@@ -315,6 +382,7 @@ function AdvancedSearch() {
                         <img src={getIconPath(opt.name, pendingType)} alt="icon" style={{ width: '20px', height: '20px' }} />
                       )}
                       {opt.name}
+                      {opt.count !== undefined && <span style={{ marginLeft: 'auto', color: '#666', fontSize: '10px' }}>{opt.count} civs</span>}
                     </div>
                   ))}
                 </div>
@@ -353,13 +421,37 @@ function AdvancedSearch() {
             </div>
           </div>
 
+        {/* CIV TAGS (Quick Filters) */}
+        {Object.keys(civtags).length > 0 && (
+          <div style={{ marginTop: '8px', paddingTop: '12px', paddingBottom: '16px', borderTop: '1px solid #2a2d36', marginBottom: '16px' }}>
+            <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px', marginBottom: '8px' }}>Civ Tags</div>
+            {CIV_TAG_CHIPS.map(g => (
+              <div key={g.group} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                <span style={{ fontSize: '10px', color: '#666', minWidth: '95px' }}>{g.group}</span>
+                {g.items.filter(id => tagOptions.some(t => t.id === id)).map(id => {
+                  const n = tagOptions.find(t => t.id === id)?.count || 0
+                  return (
+                    <div key={id} title={tagHelp(id)} onClick={() => handleCivTagClick(id)}
+                      style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#1e212b', border: `1px solid ${TAG_COLOR}44`, padding: '4px 8px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s' }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = '#2a2d36'}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1e212b'}>
+                      <span style={{ fontSize: '11px', color: TAG_COLOR, fontWeight: '500' }}>{tagLabel(id)}</span>
+                      <span style={{ fontSize: '9px', color: '#666' }}>{n}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* RESULTS */}
         {results !== null && (
           <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', padding: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #444', paddingBottom: '8px', marginBottom: '12px' }}>
               <h3 style={{ color: '#ffd700', fontSize: '11px', margin: 0, textTransform: 'uppercase', letterSpacing: '1px' }}>Results</h3>
               <span style={{ fontSize: '12px', color: results.length > 0 ? '#4caf50' : '#ff4444', fontWeight: 'bold' }}>
-                {results.length} / {Object.keys(techtree.civs).length} civilizations
+                {results.length} / {allCivs.length} civilizations
               </span>
             </div>
 
@@ -368,20 +460,24 @@ function AdvancedSearch() {
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
                 {results.map(civ => (
-                  <div key={civ} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#161920', padding: '8px 10px', borderRadius: '4px', border: '1px solid #2a2d36', transition: 'border-color 0.2s' }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = '#2a2d36'}>
+                  <div key={civ} title={civtags[civ] ? [civtags[civ].focus_text, ...civtags[civ].bonuses.map(b => '• ' + b), civtags[civ].unique_units.length ? 'UU: ' + civtags[civ].unique_units.map(u => `${u.name} (${u.class})`).join(', ') : '', civtags[civ].team_bonus ? 'Team: ' + civtags[civ].team_bonus : '', civtags[civ].full_tree?.length ? 'Full tree: ' + civtags[civ].full_tree.join(', ') + (civtags[civ].full_tree_notes.length ? ' [' + civtags[civ].full_tree_notes.join('; ') + ']' : '') : ''].filter(Boolean).join('\n') : ''} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#161920', padding: '8px 10px', borderRadius: '4px', border: '1px solid #2a2d36', transition: 'border-color 0.2s' }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = '#2a2d36'}>
                     <img src={`/civs/${civ.toLowerCase()}.png`} alt={civ} style={{ width: '28px', height: '28px', borderRadius: '3px', objectFit: 'cover' }} onError={e => e.target.style.display = 'none'} />
-                    <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e0e0e0' }}>{civ}</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                      <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e0e0e0' }}>{civ}</span>
+                      {civtags[civ] && <span style={{ fontSize: '9px', color: '#888', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civtags[civ].focus_text.replace(' civilization', '')}</span>}
+                      {civtags[civ]?.full_tree?.length > 0 && <span style={{ fontSize: '9px', color: TAG_COLOR }}>Full: {civtags[civ].full_tree.filter(x => x !== 'Cavalry').map(x => x === 'Cavalry (Paladin optional)' ? 'Cav' : x === 'Foot Archer' ? 'FA' : 'CA').join(' · ')}{civtags[civ].full_tree_notes.includes('no Paladin') ? ' (no Pal)' : ''}</span>}
+                    </div>
                   </div>
                 ))}
               </div>
             )}
 
             {/* Excluded civs */}
-            {results.length > 0 && results.length < Object.keys(techtree.civs).length && (
+            {results.length > 0 && results.length < allCivs.length && (
               <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #2a2d36' }}>
                 <div style={{ fontSize: '10px', color: '#555', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '1px', marginBottom: '6px' }}>Excluded</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                  {Object.keys(techtree.civs).filter(c => !results.includes(c)).sort().map(civ => (
+                  {allCivs.filter(c => !results.includes(c)).map(civ => (
                     <span key={civ} style={{ fontSize: '10px', color: '#555', padding: '2px 6px', backgroundColor: '#1e212b', borderRadius: '3px' }}>{civ}</span>
                   ))}
                 </div>

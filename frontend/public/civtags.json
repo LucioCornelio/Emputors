@@ -1,0 +1,2529 @@
+{
+ "Armenians": {
+  "focus_text": "Infantry and Naval civilization",
+  "official": [
+   "Infantry",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Composite Bowman",
+    "class": "Foot Archer"
+   },
+   {
+    "name": "Warrior Priest",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Galley-line and Dromons fire an additional projectile",
+   "Cilician Fleet (Demolition Ships +20% blast radius; Galley-line and Dromons +1 range)"
+  ],
+  "bonuses": [
+   "Mule Carts cost -25%",
+   "Mule Cart technology effects +40%",
+   "Spearman- and Militia-line upgrades (except Man-at-Arms) available one age earlier",
+   "First Fortified Church receives a free Relic",
+   "Galley-line and Dromons fire an additional projectile"
+  ],
+  "unique_techs": [
+   "Cilician Fleet (Demolition Ships +20% blast radius; Galley-line and Dromons +1 range)",
+   "Fereters (Infantry (except Spearman-line) +30 HP; Warrior Priests heal +100% faster)"
+  ],
+  "team_bonus": "Infantry +2 line of sight",
+  "tags": [
+   "bonus:Infantry",
+   "family:Infantry",
+   "family:Naval",
+   "official:Infantry",
+   "official:Naval",
+   "uu:Foot Archer",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Aztecs": {
+  "focus_text": "Infantry and Monk civilization",
+  "official": [
+   "Infantry",
+   "Monk"
+  ],
+  "unique_units": [
+   {
+    "name": "Jaguar Warrior",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Start with +50 gold",
+   "Villagers carry +3",
+   "Military Units train +15% faster",
+   "Monks gain +5 HP for each researched Monastery technology"
+  ],
+  "unique_techs": [
+   "Atlatl (Skirmishers +1 attack, +1 range)",
+   "Garland Wars (Infantry +4 attack)"
+  ],
+  "team_bonus": "Relics generate +33% gold",
+  "tags": [
+   "family:Infantry",
+   "family:Monk",
+   "official:Infantry",
+   "official:Monk",
+   "uu:Infantry"
+  ]
+ },
+ "Bengalis": {
+  "focus_text": "Elephant and Naval civilization",
+  "official": [
+   "Elephant",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Ratha",
+    "class": "Mounted Archer"
+   }
+  ],
+  "water": true,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Ships regenerate 15 HP per minute"
+  ],
+  "bonuses": [
+   "Town Centers spawn 2 Villagers when the next Age is reached",
+   "Cavalry +2 attack vs. Skirmishers",
+   "Elephant Units receive -25% bonus damage and are more resistant to conversion",
+   "Monks +3 melee/+3 pierce armor",
+   "Ships regenerate 15 HP per minute"
+  ],
+  "unique_techs": [
+   "Paiks (Rathas and Elephant Units attack +20% faster)",
+   "Mahayana (Villagers and Monks take -10% population space)"
+  ],
+  "team_bonus": "Trade Units generate +10% food in addition to gold",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Foot Archer",
+   "family:Elephant",
+   "family:Naval",
+   "official:Elephant",
+   "official:Naval",
+   "uu:Mounted Archer",
+   "water:yes"
+  ]
+ },
+ "Berbers": {
+  "focus_text": "Cavalry and Naval civilization",
+  "official": [
+   "Cavalry",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Camel Archer",
+    "class": "Mounted Archer"
+   },
+   {
+    "name": "Genitour",
+    "class": "Mounted Skirmisher"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": true,
+  "naval_bonuses": [
+   "Ships move +10% faster"
+  ],
+  "bonuses": [
+   "Villagers move +5% faster in Dark Age, +10% faster starting in Feudal Age",
+   "Stable Units cost -15/20% in Castle/Imperial Age",
+   "Ships move +10% faster"
+  ],
+  "unique_techs": [
+   "Kasbah (Team Castles work +25% faster)",
+   "Maghrebi Camels (Camel Units regenerate 15 HP per minute)"
+  ],
+  "team_bonus": "Genitour available at the Archery Range starting in Castle Age",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Naval",
+   "official:Cavalry",
+   "official:Naval",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Camel",
+   "uu:Mounted Archer",
+   "uu:Mounted Skirmisher",
+   "water:yes"
+  ]
+ },
+ "Bohemians": {
+  "focus_text": "Gunpowder and Monk civilization",
+  "official": [
+   "Gunpowder",
+   "Monk"
+  ],
+  "unique_units": [
+   {
+    "name": "Hussite Wagon",
+    "class": "Siege Gunpowder Unit"
+   },
+   {
+    "name": "Houfnice",
+    "class": "Siege Gunpowder Unit"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Mining Camp technologies free",
+   "Blacksmiths and Universities cost -100 wood",
+   "Spearman-line deals +25% bonus damage",
+   "Fervor and Sanctity affect Villagers",
+   "Chemistry and Hand Cannoneer available in Castle Age"
+  ],
+  "unique_techs": [
+   "Wagenburg Tactics (Gunpowder Units move +10% faster)",
+   "Hussite Reforms (Monks and Monastery technologies gold cost is replaced by food cost)"
+  ],
+  "team_bonus": "Markets work +80% faster",
+  "tags": [
+   "bonus:Infantry",
+   "family:Gunpowder",
+   "family:Monk",
+   "official:Gunpowder",
+   "official:Monk",
+   "uu:Siege Gunpowder Unit"
+  ]
+ },
+ "Britons": {
+  "focus_text": "Foot Archer civilization",
+  "official": [
+   "Foot Archer"
+  ],
+  "unique_units": [
+   {
+    "name": "Longbowman",
+    "class": "Foot Archer"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Shepherds work +25% faster",
+   "Town Centers cost -50% wood starting in Castle Age",
+   "Foot Archers +1/+2 range in Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Yeomen (Foot Archers and Skirmisher-line +1 range; Watch Tower-line +2 attack)",
+   "Warwolf (Trebuchets deal blast damage and are more accurate)"
+  ],
+  "team_bonus": "Archery Ranges work +10% faster",
+  "tags": [
+   "bonus:Foot Archer",
+   "broad:Foot Archer",
+   "family:Foot Archer",
+   "official:Foot Archer",
+   "uu:Foot Archer"
+  ]
+ },
+ "Bulgarians": {
+  "focus_text": "Infantry and Cavalry civilization",
+  "official": [
+   "Infantry",
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Konnik",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Militia-line upgrades free",
+   "Blacksmith and Siege Workshop technologies cost -50% food",
+   "Town Centers cost -50% stone",
+   "Can build Krepost in Castle Age"
+  ],
+  "unique_techs": [
+   "Stirrups (Cavalry attacks +33% faster)",
+   "Bagains (Militia-line +5 melee armor)"
+  ],
+  "team_bonus": "Blacksmiths work +80% faster",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Cavalry",
+   "family:Infantry",
+   "official:Cavalry",
+   "official:Infantry",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Cavalry Archer",
+   "uu:Cavalry"
+  ]
+ },
+ "Burgundians": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Coustillier",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Flemish Militia",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Economic upgrades available one age earlier and cost -40% food",
+   "Stable technologies cost -50%",
+   "Cavalier upgrade available in Castle Age",
+   "Gunpowder Units +25% attack"
+  ],
+  "unique_techs": [
+   "Burgundian Vineyards (Farmers slowly generate gold in addition to food)",
+   "Flemish Revolution (All existing Villagers are transformed to Flemish Militia)"
+  ],
+  "team_bonus": "Relics generate food in addition to gold",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "official:Cavalry",
+   "uu:Cavalry",
+   "uu:Infantry"
+  ]
+ },
+ "Burmese": {
+  "focus_text": "Infantry and Cavalry civilization",
+  "official": [
+   "Infantry",
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Arambai",
+    "class": "Ranged Mounted Unit"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Lumber Camp technologies free",
+   "Infantry +1/+2/+3 attack in Feudal/Castle/Imperial Age",
+   "Battle Elephants +1 melee/+1 pierce armor",
+   "Monastery technologies cost -50%"
+  ],
+  "unique_techs": [
+   "Manipur Cavalry (Cavalry +4 attack vs. Ranged Soldiers)",
+   "Howdah (Battle Elephants +1 melee/+1 pierce armor)"
+  ],
+  "team_bonus": "Relics visible on the map at the start of the game",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Infantry",
+   "official:Cavalry",
+   "official:Infantry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Ranged Mounted Unit"
+  ]
+ },
+ "Byzantines": {
+  "focus_text": "Defensive civilization",
+  "official": [
+   "Defensive"
+  ],
+  "unique_units": [
+   {
+    "name": "Cataphract",
+    "class": "Cavalry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [
+   "Fire Ships and Dromons attack +25% faster",
+   "Greek Fire (Fire Ships +1 range; Dromons and Bombard Towers increased blast radius)"
+  ],
+  "bonuses": [
+   "Buildings +10/20/30/40% HP in Dark/Feudal/",
+   "Camel Riders, Skirmishers and Spearman-line cost -25%",
+   "Town Watch, Town Patrol free",
+   "Advancing to Imperial Age costs -33%",
+   "Fire Ships and Dromons attack +25% faster"
+  ],
+  "unique_techs": [
+   "Greek Fire (Fire Ships +1 range; Dromons and Bombard Towers increased blast radius)",
+   "Logistica (Cataphracts and Varangian Guards deal trample damage)"
+  ],
+  "team_bonus": "Monks heal +100% faster",
+  "tags": [
+   "bonus:Camel",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Foot Archer",
+   "family:Defensive",
+   "official:Defensive",
+   "tree:Foot Archer",
+   "uu:Cavalry",
+   "water:yes"
+  ]
+ },
+ "Celts": {
+  "focus_text": "Infantry and Siege civilization",
+  "official": [
+   "Infantry",
+   "Siege"
+  ],
+  "unique_units": [
+   {
+    "name": "Woad Raider",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Lumberjacks work +15% faster",
+   "Livestock animals within Celt unit line of sight cannot be stolen",
+   "Infantry moves +5/10/15/20% faster in Dark/Feudal/",
+   "Siege Weapons attack +25% faster"
+  ],
+  "unique_techs": [
+   "Stronghold (Castles and Watch Tower-line attack +33% faster; Castles heal allied Infantry in a 7 tile radius)",
+   "Furor Celtica (Siege Weapons +40% HP)"
+  ],
+  "team_bonus": "Siege Workshops work +20% faster",
+  "tags": [
+   "bonus:Infantry",
+   "family:Infantry",
+   "family:Siege",
+   "official:Infantry",
+   "official:Siege",
+   "uu:Infantry"
+  ]
+ },
+ "Chinese": {
+  "focus_text": "Archer and Gunpowder civilization",
+  "official": [
+   "Archer",
+   "Gunpowder"
+  ],
+  "unique_units": [
+   {
+    "name": "Chu Ko Nu",
+    "class": "Foot Archer"
+   },
+   {
+    "name": "Dragon Ship",
+    "class": "Warship"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [
+   "Fire Lancers and Fire Ships move +5/10% faster in Castle/Imperial Age"
+  ],
+  "bonuses": [
+   "Start with +3 Villagers, but -50 wood and -200 food",
+   "Technologies cost -5/10/15% in Feudal/Castle/Imperial Age",
+   "Town Centers +7 line of sight and provide +15 population space",
+   "Fire Lancers and Fire Ships move +5/10% faster in Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Great Wall (Walls, Watch Tower-line and Bombard Towers +30% HP)",
+   "Rocketry (Scorpions, Rocket Carts and Lou Chuans +25% attack; Lou Chuans fire rockets)"
+  ],
+  "team_bonus": "Farms +10% food",
+  "tags": [
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "family:Gunpowder",
+   "official:Archer",
+   "official:Gunpowder",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Foot Archer",
+   "uu:Foot Archer",
+   "uu:Warship",
+   "water:yes"
+  ]
+ },
+ "Cumans": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Kipchak",
+    "class": "Mounted Archer"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "One additional Town Center can be built in Feudal Age",
+   "Mounted Units move +5/10/15% faster in Feudal/",
+   "Archery Ranges and Stables cost -75 wood",
+   "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
+  ],
+  "unique_techs": [
+   "Steppe Husbandry (Scout Cavalry-line, Steppe Lancers and Cavalry Archers train +100% faster)",
+   "Cuman Mercenaries (All team members can train 5 free Elite Kipchaks per Castle)"
+  ],
+  "team_bonus": "Palisade Walls +33% HP",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Cavalry",
+   "official:Cavalry",
+   "tree:Cavalry Archer",
+   "uu:Mounted Archer"
+  ]
+ },
+ "Danes": {
+  "focus_text": "Infantry and Siege civilization",
+  "official": [
+   "Infantry",
+   "Siege"
+  ],
+  "unique_units": [
+   {
+    "name": "Jomsviking",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [
+   "Fishing Ships and Villagers drop off +5% food",
+   "Varangian Guards and Longships move +10% faster",
+   "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)"
+  ],
+  "bonuses": [
+   "Fishing Ships and Villagers drop off +5% food",
+   "Loot 25% of the resource cost of each destroyed building",
+   "Barracks and Siege Workshop upgrades cost -66% gold",
+   "Varangian Guards and Longships move +10% faster"
+  ],
+  "unique_techs": [
+   "Hamask (Infantry deal more damage as they lose HP)",
+   "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)"
+  ],
+  "team_bonus": "Siege Weapons +2 line of sight",
+  "tags": [
+   "bonus:Infantry",
+   "family:Infantry",
+   "family:Siege",
+   "official:Infantry",
+   "official:Siege",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Dravidians": {
+  "focus_text": "Infantry and Naval civilization",
+  "official": [
+   "Infantry",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Urumi Swordsman",
+    "class": "Infantry"
+   },
+   {
+    "name": "Thirisadai",
+    "class": "Warship"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Fishermen and Fishing Ships carry +15",
+   "Docks provide +5 population space"
+  ],
+  "bonuses": [
+   "Fishermen and Fishing Ships carry +15",
+   "Receive +200 wood when advancing to the next Age",
+   "Skirmishers and Elephant Archers attack +25% faster",
+   "Barracks technologies cost -50%",
+   "Siege Weapons cost -33% wood"
+  ],
+  "unique_techs": [
+   "Medical Corps (Elephant Units regenerate 30 HP per minute)",
+   "Wootz Steel (Infantry and Cavalry attacks ignore armor)"
+  ],
+  "team_bonus": "Docks provide +5 population space",
+  "tags": [
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Foot Archer",
+   "family:Infantry",
+   "family:Naval",
+   "official:Infantry",
+   "official:Naval",
+   "tree:Foot Archer",
+   "uu:Infantry",
+   "uu:Warship",
+   "water:yes"
+  ]
+ },
+ "Ethiopians": {
+  "focus_text": "Archer civilization",
+  "official": [
+   "Archer"
+  ],
+  "unique_units": [
+   {
+    "name": "Shotel Warrior",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Receive +100 gold and +100 food when advancing to the next Age",
+   "Foot Archers attack +18% faster",
+   "Pikeman upgrade free"
+  ],
+  "unique_techs": [
+   "Royal Heirs (Shotel Warriors and Camel Riders receive -3 damage from Mounted Units)",
+   "Torsion Engines (Siege Workshop Units' blast radius increased)"
+  ],
+  "team_bonus": "Outposts +3 line of sight and cost no stone",
+  "tags": [
+   "bonus:Foot Archer",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "official:Archer",
+   "tree:Foot Archer",
+   "uu:Infantry"
+  ]
+ },
+ "Franks": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Throwing Axeman",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry",
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "Bloodlines via civ bonus"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Foragers work +15% faster",
+   "Mill technologies free",
+   "Mounted Units +20% HP starting in Feudal Age",
+   "Castles cost -15/25% in Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Ordonnance Companies (Mounted Crossbowmen cost -40% gold)",
+   "Chivalry (Stables work +40% faster)"
+  ],
+  "team_bonus": "Knight-line +2 line of sight",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "official:Cavalry",
+   "tree:Cavalry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Infantry"
+  ]
+ },
+ "Georgians": {
+  "focus_text": "Defensive and Cavalry civilization",
+  "official": [
+   "Defensive",
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Monaspa",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Start with a Mule Cart",
+   "Units and buildings receive -15% damage when located on higher elevation",
+   "Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age",
+   "Fortified Churches provide Villagers in a 9 tiles radius with +10% work rate"
+  ],
+  "unique_techs": [
+   "Svan Towers (Fortifications +2 attack; Watch Tower-line deals pass through damage)",
+   "Aznauri Cavalry (Mounted Units take -20% population space)"
+  ],
+  "team_bonus": "Building repairs cost -25%",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Defensive",
+   "official:Cavalry",
+   "official:Defensive",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Cavalry"
+  ]
+ },
+ "Goths": {
+  "focus_text": "Infantry civilization",
+  "official": [
+   "Infantry"
+  ],
+  "unique_units": [
+   {
+    "name": "Huskarl",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Loom is researched instantly",
+   "Hunters carry +15; hunted animals last +20% longer",
+   "Infantry costs -15/20/25/30% in Dark/Feudal/Castle/",
+   "Infantry +1/+2/+3 attack vs. buildings in Feudal/",
+   "+10 population space in Imperial Age"
+  ],
+  "unique_techs": [
+   "Anarchy (Huskarls can be trained at Barracks)",
+   "Perfusion (Barracks work +100% faster)"
+  ],
+  "team_bonus": "Barracks work +20% faster",
+  "tags": [
+   "bonus:Infantry",
+   "family:Infantry",
+   "official:Infantry",
+   "uu:Infantry"
+  ]
+ },
+ "Gurjaras": {
+  "focus_text": "Cavalry and Camel civilization",
+  "official": [
+   "Cavalry",
+   "Camel"
+  ],
+  "unique_units": [
+   {
+    "name": "Chakram Thrower",
+    "class": "Infantry"
+   },
+   {
+    "name": "Shrivamsha Rider",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Camel Scout",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Start with 2 Forage Bushes",
+   "Can garrison livestock in Mills to passively produce food",
+   "Mounted Units deal +20/30/40% bonus damage in Feudal/Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Kshatriyas (Military Units cost -25% food)",
+   "Frontier Guards (Camel Riders and Elephant Archers +4 melee armor)"
+  ],
+  "team_bonus": "Camel and Elephant Units train +25% faster",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Camel",
+   "family:Cavalry",
+   "official:Camel",
+   "official:Cavalry",
+   "uu:Camel",
+   "uu:Cavalry",
+   "uu:Infantry"
+  ]
+ },
+ "Hindustanis": {
+  "focus_text": "Camel and Gunpowder civilization",
+  "official": [
+   "Camel",
+   "Gunpowder"
+  ],
+  "unique_units": [
+   {
+    "name": "Ghulam",
+    "class": "Infantry"
+   },
+   {
+    "name": "Imperial Camel Rider",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Villagers cost -8/13/18/23% in Dark/Feudal/Castle/",
+   "Camel Riders attack +20% faster",
+   "Gunpowder Units +1 melee/+1 pierce armor",
+   "Can build Caravanserai in Imperial Age"
+  ],
+  "unique_techs": [
+   "Grand Trunk Road (All gold income +10% faster; Market trading fee reduced to 10%)",
+   "Shatagni (Hand Cannoneers +2 range)"
+  ],
+  "team_bonus": "Scout Cavalry-line and Camel Units +2 attack vs. buildings",
+  "tags": [
+   "bonus:Camel",
+   "family:Camel",
+   "family:Gunpowder",
+   "official:Camel",
+   "official:Gunpowder",
+   "uu:Camel",
+   "uu:Cavalry",
+   "uu:Infantry"
+  ]
+ },
+ "Huns": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Tarkan",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry",
+   "Cavalry (Paladin optional)",
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Do not need houses, but start with -100 wood",
+   "Cavalry Archers cost -10/20% in Castle/Imperial Age",
+   "Trebuchets fire more accurately at units and small targets",
+   "On Nomadic maps, the first Town Center spawns a scouting Horse"
+  ],
+  "unique_techs": [
+   "Marauders (Tarkans can be trained at Stables)",
+   "Atheism (Enemy Relics generate -50% resources; Wonder and Relic victory takes +100 years)"
+  ],
+  "team_bonus": "Stables work +20% faster",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Cavalry Archer",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Cavalry",
+   "official:Cavalry",
+   "tree:Cavalry",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Cavalry Archer",
+   "uu:Cavalry"
+  ]
+ },
+ "Incas": {
+  "focus_text": "Infantry civilization",
+  "official": [
+   "Infantry"
+  ],
+  "unique_units": [
+   {
+    "name": "Kamayuk",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Houses and Settlements provide +5 population space",
+   "Buildings cost -15% stone",
+   "Military Units cost -15/20/25/30% food in Dark/Feudal/Castle/Imperial Age",
+   "Villagers affected by Infantry Blacksmith upgrades starting in Castle Age"
+  ],
+  "unique_techs": [
+   "Andean Sling (Skirmishers and Slingers no minimum range; Slingers +1 attack)",
+   "Fabric Shields (Kamayuks, Slingers and Champi Warriors +1 melee/+1 pierce armor)"
+  ],
+  "team_bonus": "Start with a free Llama",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Foot Archer",
+   "family:Infantry",
+   "official:Infantry",
+   "tree:Foot Archer",
+   "uu:Infantry"
+  ]
+ },
+ "Italians": {
+  "focus_text": "Archer and Naval civilization",
+  "official": [
+   "Archer",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Genoese Crossbowman",
+    "class": "Foot Archer"
+   },
+   {
+    "name": "Condottiero",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": true,
+  "naval_bonuses": [
+   "Dock and University technologies cost -25%",
+   "Fishing Ships cost -15%"
+  ],
+  "bonuses": [
+   "Advancing to the next Age costs -15%",
+   "Foot Archers and Condottieri +1 melee/+1 pierce armor",
+   "Dock and University technologies cost -25%",
+   "Gunpowder Units cost -20%",
+   "Fishing Ships cost -15%"
+  ],
+  "unique_techs": [
+   "Silk Road (Trade Units cost -50%)",
+   "Pirotechnia (Hand Cannoneers deal +15% pass through damage and are more accurate)"
+  ],
+  "team_bonus": "Condottiero available at the Barracks in Imperial Age",
+  "tags": [
+   "bonus:Foot Archer",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "family:Naval",
+   "official:Archer",
+   "official:Naval",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Foot Archer",
+   "uu:Foot Archer",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Japanese": {
+  "focus_text": "Infantry civilization",
+  "official": [
+   "Infantry"
+  ],
+  "unique_units": [
+   {
+    "name": "Samurai",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry Archer",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [
+   "Fishing Ships work +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age; +100% HP",
+   "Galley-line +4 line of sight"
+  ],
+  "bonuses": [
+   "Mills, Lumber- and Mining Camps cost -50%",
+   "Infantry attacks +33% faster starting in Feudal Age",
+   "Cavalry Archers +2 attack vs. Ranged Soldiers (except Skirmishers)",
+   "Fishing Ships work +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age; +100% HP"
+  ],
+  "unique_techs": [
+   "Yasama (Watch Tower-line fires additional arrows)",
+   "Kataparuto (Trebuchets attack and pack/unpack faster)"
+  ],
+  "team_bonus": "Galley-line +4 line of sight",
+  "tags": [
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Infantry",
+   "official:Infantry",
+   "tree:Cavalry Archer",
+   "tree:Foot Archer",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Jurchens": {
+  "focus_text": "Cavalry and Gunpowder civilization",
+  "official": [
+   "Cavalry",
+   "Gunpowder"
+  ],
+  "unique_units": [
+   {
+    "name": "Iron Pagoda",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Grenadier",
+    "class": "Gunpowder Unit"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Meat of hunted and livestock animals doesn't decay",
+   "Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age",
+   "Siege Engineers available in Castle Age",
+   "Siege and Fortification upgrades cost -75% wood and research +100% faster",
+   "Units receive -50% friendly fire damage"
+  ],
+  "unique_techs": [
+   "Fortified Bastions (Fortifications regenerate 500 HP per minute)",
+   "Thunderclap Bombs (Rocket Carts, Grenadiers and Lou Chuans detonate when defeated; projectiles produce additional explosions)"
+  ],
+  "team_bonus": "Gunpowder Units +2 line of sight",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Gunpowder",
+   "official:Cavalry",
+   "official:Gunpowder",
+   "uu:Cavalry",
+   "uu:Gunpowder Unit"
+  ]
+ },
+ "Khitans": {
+  "focus_text": "Infantry and Cavalry civilization",
+  "official": [
+   "Infantry",
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Liao Dao",
+    "class": "Infantry"
+   },
+   {
+    "name": "Mounted Trebuchet",
+    "class": "Siege Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Pastures replace Farms",
+   "Melee attack upgrade effects are doubled",
+   "Skirmishers, Spearman-, and Scout Cavalry-line train and upgrade +15% faster",
+   "Heavy Cavalry Archer upgrade available in Castle Age and costs -50%"
+  ],
+  "unique_techs": [
+   "Lamellar Armor (Infantry and Skirmishers reflect 25% melee damage back to the attacker)",
+   "Ordo Cavalry (Cavalry regenerates HP in combat)"
+  ],
+  "team_bonus": "Infantry +2 attack vs. Ranged Soldiers",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Cavalry",
+   "family:Infantry",
+   "official:Cavalry",
+   "official:Infantry",
+   "tree:Cavalry Archer",
+   "uu:Infantry",
+   "uu:Siege Cavalry"
+  ]
+ },
+ "Khmer": {
+  "focus_text": "Siege and Elephant civilization",
+  "official": [
+   "Siege",
+   "Elephant"
+  ],
+  "unique_units": [
+   {
+    "name": "Ballista Elephant",
+    "class": "Siege Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "No buildings required to advance to the next Age or to unlock other buildings",
+   "Farmers don't require Mills or Town Centers to drop off food",
+   "Villagers can garrison in Houses",
+   "Battle Elephants move +10% faster"
+  ],
+  "unique_techs": [
+   "Tusk Swords (Battle Elephants +3 attack)",
+   "Double Crossbow (Ballista Elephants and Scorpions fire an additional projectile)"
+  ],
+  "team_bonus": "Scorpions +1 range",
+  "tags": [
+   "broad:Cavalry",
+   "family:Elephant",
+   "family:Siege",
+   "official:Elephant",
+   "official:Siege",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Siege Cavalry"
+  ]
+ },
+ "Koreans": {
+  "focus_text": "Defensive and Naval civilization",
+  "official": [
+   "Defensive",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "War Wagon",
+    "class": "Mounted Archer"
+   },
+   {
+    "name": "Turtle Ship",
+    "class": "Warship"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Warships cost -20% wood",
+   "Shinkichon (Rocket Carts and Turtle Ships +1 range, fire additional projectiles)"
+  ],
+  "bonuses": [
+   "Stone miners work +20% faster",
+   "Ranged Soldiers and Infantry cost -50% wood",
+   "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)",
+   "Warships cost -20% wood"
+  ],
+  "unique_techs": [
+   "Eupseong (Watch Tower-line +2 range)",
+   "Shinkichon (Rocket Carts and Turtle Ships +1 range, fire additional projectiles)"
+  ],
+  "team_bonus": "Villagers +3 line of sight",
+  "tags": [
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Foot Archer",
+   "family:Defensive",
+   "family:Naval",
+   "official:Defensive",
+   "official:Naval",
+   "tree:Foot Archer",
+   "uu:Mounted Archer",
+   "uu:Warship",
+   "water:yes"
+  ]
+ },
+ "Lithuanians": {
+  "focus_text": "Cavalry and Monk civilization",
+  "official": [
+   "Cavalry",
+   "Monk"
+  ],
+  "unique_units": [
+   {
+    "name": "Leitis",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Winged Hussar",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry",
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Each Town Center provides +100 food",
+   "Spearman-line and Skirmisher-line move +10% faster",
+   "Each garrisoned Relic provides +1 attack to Knight-line and Leitis (maximum +4)"
+  ],
+  "unique_techs": [
+   "Hill Forts (Town Centers +3 range)",
+   "Tower Shields (Spearman-line and Skirmishers +2 pierce armor)"
+  ],
+  "team_bonus": "Monasteries work +20% faster",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Monk",
+   "official:Cavalry",
+   "official:Monk",
+   "tree:Cavalry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Cavalry"
+  ]
+ },
+ "Magyars": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Magyar Huszar",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry",
+   "Cavalry (Paladin optional)",
+   "Cavalry Archer",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Villagers defeat wolves with one strike",
+   "Scout Cavalry-line costs -15%",
+   "Melee attack upgrades free"
+  ],
+  "unique_techs": [
+   "Corvinian Army (Magyar Huszar gold cost is replaced by additional food cost)",
+   "Recurve Bow (Mounted Archers +1 attack, +1 range)"
+  ],
+  "team_bonus": "Mounted Archers train +25% faster",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry",
+   "official:Cavalry",
+   "tree:Cavalry",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Cavalry Archer",
+   "tree:Foot Archer",
+   "uu:Cavalry"
+  ]
+ },
+ "Malay": {
+  "focus_text": "Naval civilization",
+  "official": [
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Karambit Warrior",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Fish Traps cost -33% and provide +200% food",
+   "Docks +6 line of sight",
+   "Thalassocracy (Docks are upgraded to Harbors)"
+  ],
+  "bonuses": [
+   "Advancing to the next Age is +66% faster",
+   "Infantry armor upgrades free",
+   "Battle Elephants cost -25/35% in Castle/Imperial Age",
+   "Fish Traps cost -33% and provide +200% food"
+  ],
+  "unique_techs": [
+   "Thalassocracy (Docks are upgraded to Harbors)",
+   "Forced Levy (Militia-line gold cost is replaced by additional food cost)"
+  ],
+  "team_bonus": "Docks +6 line of sight",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Foot Archer",
+   "family:Naval",
+   "official:Naval",
+   "tree:Foot Archer",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Malians": {
+  "focus_text": "Infantry civilization",
+  "official": [
+   "Infantry"
+  ],
+  "unique_units": [
+   {
+    "name": "Gbeto",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Buildings cost -15% wood",
+   "Villagers drop off +10% more gold",
+   "Barracks Units +1/+2/+3 pierce armor in Feudal/"
+  ],
+  "unique_techs": [
+   "Tigui (Town Centers fire arrows without garrison)",
+   "Farimba (Cavalry +5 attack)"
+  ],
+  "team_bonus": "Universities work +80% faster",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "family:Infantry",
+   "official:Infantry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Infantry"
+  ]
+ },
+ "Mapuche": {
+  "focus_text": "Cavalry and Counter-Units civilization",
+  "official": [
+   "Cavalry",
+   "Counter-Units"
+  ],
+  "unique_units": [
+   {
+    "name": "Kona",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Bolas Rider",
+    "class": "Mounted Archer"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Foragers drop off +25% food",
+   "Settlements can train Spearman-line and Skirmishers",
+   "Infantry, Slingers and Skirmishers +5/10/15 HP in Feudal/Castle/Imperial Age",
+   "Mounted Units generate +3 gold when defeating military units",
+   "Enemy Castles are revealed on the map"
+  ],
+  "unique_techs": [
+   "Malon (Bolas Riders, Slingers, and Skirmishers deal pass through damage)",
+   "Butalmapu (Team Castle Unique Units and Bolas Riders cost -15%)"
+  ],
+  "team_bonus": "Spearman-line and Skirmishers +2 line of sight",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Counter-Units",
+   "official:Cavalry",
+   "official:Counter-Units",
+   "uu:Cavalry",
+   "uu:Mounted Archer"
+  ]
+ },
+ "Mayans": {
+  "focus_text": "Archer civilization",
+  "official": [
+   "Archer"
+  ],
+  "unique_units": [
+   {
+    "name": "Plumed Archer",
+    "class": "Foot Archer"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Start with +1 Villager, but -50 food",
+   "Resources last +15% longer",
+   "Foot Archers cost -10/20/30% in Feudal/Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Hul'che Javelineers (Skirmishers fire an additional projectile)",
+   "Holcans (Eagle Warriors +40 HP)"
+  ],
+  "team_bonus": "Walls cost -50%",
+  "tags": [
+   "bonus:Foot Archer",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "official:Archer",
+   "tree:Foot Archer",
+   "uu:Foot Archer"
+  ]
+ },
+ "Mongols": {
+  "focus_text": "Cavalry Archer civilization",
+  "official": [
+   "Cavalry Archer"
+  ],
+  "unique_units": [
+   {
+    "name": "Mangudai",
+    "class": "Mounted Archer"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry Archer",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Hunters work +40% faster",
+   "Cavalry Archers attack +25% faster",
+   "Scout Cavalry-line and Steppe Lancers +20/30% HP in Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Nomads (Lost Houses do not decrease population space)",
+   "Drill (Siege Workshop Units move +50% faster)"
+  ],
+  "team_bonus": "Scout Cavalry-line +2 line of sight",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Cavalry Archer",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "official:Cavalry Archer",
+   "tree:Cavalry Archer",
+   "tree:Foot Archer",
+   "uu:Mounted Archer"
+  ]
+ },
+ "Muisca": {
+  "focus_text": "Archer and Monk civilization",
+  "official": [
+   "Archer",
+   "Monk"
+  ],
+  "unique_units": [
+   {
+    "name": "Guecha Warrior",
+    "class": "Skirmisher"
+   },
+   {
+    "name": "Temple Guard",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Advancing to the next Age costs -50% gold",
+   "Settlements cost -33% and heal nearby units",
+   "Champi Warriors and Archery Range Units +1/2/3 melee armor in Feudal/Castle/Imperial Age",
+   "Monks regain faith +50% faster",
+   "Caravan, Guilds free"
+  ],
+  "unique_techs": [
+   "Herbalism (Archer-line and Champi Warriors move +15% faster)",
+   "Huaracas (Slingers +1 range; train +50% faster)"
+  ],
+  "team_bonus": "Natural gold sources last +15% longer",
+  "tags": [
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "family:Monk",
+   "official:Archer",
+   "official:Monk",
+   "tree:Foot Archer",
+   "uu:Infantry",
+   "uu:Skirmisher"
+  ]
+ },
+ "Persians": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "War Elephant",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Savar",
+    "class": "Cavalry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry",
+   "Cavalry (Paladin optional)",
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [
+   "Savar instead of Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [
+   "Town Centers and Docks +100% HP and work +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age"
+  ],
+  "bonuses": [
+   "Start with +50 wood and +50 food",
+   "Town Centers and Docks +100% HP and work +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age",
+   "Parthian Tactics available in Castle Age",
+   "Can build Caravanserai in Imperial Age"
+  ],
+  "unique_techs": [
+   "Kamandaran (Archer-line gold cost replaced by additional wood cost)",
+   "Citadels (Castles +4 attack, +3 vs. Rams, +3 vs. Infantry and receive -25% bonus damage)"
+  ],
+  "team_bonus": "Knight-line +2 attack vs. Ranged Soldiers",
+  "tags": [
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Cavalry",
+   "official:Cavalry",
+   "tree:Cavalry",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Cavalry Archer",
+   "uu:Cavalry",
+   "water:yes"
+  ]
+ },
+ "Poles": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Obuch",
+    "class": "Infantry"
+   },
+   {
+    "name": "Winged Hussar",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Folwark replaces Mill",
+   "Villagers regenerate 10/15/20 HP in Feudal/Castle/Imperial Age",
+   "Stone Miners generate gold in addition to stone",
+   "Bloodlines and Scout Cavalry-line upgrades cost -50% food"
+  ],
+  "unique_techs": [
+   "Szlachta Privileges (Knight-line costs -60% gold)",
+   "Lechitic Legacy (Scout Cavalry-line deals trample damage)"
+  ],
+  "team_bonus": "Scout Cavalry-line +1 attack vs. Ranged Soldiers",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "broad:Foot Archer",
+   "family:Cavalry",
+   "official:Cavalry",
+   "tree:Foot Archer",
+   "uu:Cavalry",
+   "uu:Infantry"
+  ]
+ },
+ "Portuguese": {
+  "focus_text": "Naval and Gunpowder civilization",
+  "official": [
+   "Naval",
+   "Gunpowder"
+  ],
+  "unique_units": [
+   {
+    "name": "Organ Gun",
+    "class": "Siege Gunpowder Unit"
+   },
+   {
+    "name": "Caravel",
+    "class": "Warship"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": true,
+  "naval_bonuses": [
+   "Ships +10/15/20% HP in Feudal/Castle/Imperial Age",
+   "Circumnavigation (Sets the entire map to explored; Ships train +33% faster)"
+  ],
+  "bonuses": [
+   "Foragers generate wood in addition to food",
+   "All units cost -20% gold",
+   "Can build Feitoria in Imperial Age",
+   "Ships +10/15/20% HP in Feudal/Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Circumnavigation (Sets the entire map to explored; Ships train +33% faster)",
+   "Arquebus (Gunpowder Units fire more accurately at moving targets)"
+  ],
+  "team_bonus": "Technologies research +25% faster",
+  "tags": [
+   "broad:Cavalry",
+   "broad:Foot Archer",
+   "family:Gunpowder",
+   "family:Naval",
+   "official:Gunpowder",
+   "official:Naval",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Foot Archer",
+   "uu:Siege Gunpowder Unit",
+   "uu:Warship",
+   "water:yes"
+  ]
+ },
+ "Romans": {
+  "focus_text": "Infantry and Cavalry civilization",
+  "official": [
+   "Infantry",
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Centurion",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Legionary",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [
+   "Galley-line and Dromons +1 melee/+1 pierce armor",
+   "Ballistas (Scorpions attack +33% faster; Galley-line +2 attack)"
+  ],
+  "bonuses": [
+   "Villagers gather, build, and repair +5% faster",
+   "Infantry armor upgrade effects are doubled",
+   "Scorpions cost -50% gold",
+   "Galley-line and Dromons +1 melee/+1 pierce armor"
+  ],
+  "unique_techs": [
+   "Ballistas (Scorpions attack +33% faster; Galley-line +2 attack)",
+   "Comitatenses (Militia-line, Knight-line, and Centurions train +50% faster and receive a charge attack)"
+  ],
+  "team_bonus": "Scorpions minimum range reduced",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Infantry",
+   "official:Cavalry",
+   "official:Infantry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Cavalry",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Saracens": {
+  "focus_text": "Camel and Naval civilization",
+  "official": [
+   "Camel",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Mameluke",
+    "class": "Cavalry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry Archer",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Galley-line attacks +25% faster",
+   "Transport Ships +100% HP, +20 carry capacity"
+  ],
+  "bonuses": [
+   "Market trading fee only 5%; Markets cost -100 wood",
+   "Camel Units +25% HP",
+   "Galley-line attacks +25% faster",
+   "Transport Ships +100% HP, +20 carry capacity"
+  ],
+  "unique_techs": [
+   "Bimaristan (Monks passively heal multiple nearby units)",
+   "Counterweights (Trebuchets and Mangonel-line +15% attack)"
+  ],
+  "team_bonus": "Foot Archers and Skirmishers +2 attack vs. buildings",
+  "tags": [
+   "bonus:Camel",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Camel",
+   "family:Naval",
+   "official:Camel",
+   "official:Naval",
+   "tree:Cavalry Archer",
+   "tree:Foot Archer",
+   "uu:Camel",
+   "uu:Cavalry",
+   "water:yes"
+  ]
+ },
+ "Saxons": {
+  "focus_text": "Infantry and Defensive civilization",
+  "official": [
+   "Infantry",
+   "Defensive"
+  ],
+  "unique_units": [
+   {
+    "name": "Hearth Troop",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [
+   "Longships and Catapult Galleons +20% HP"
+  ],
+  "bonuses": [
+   "Mills, Lumber- and Mining Camps provide +35 food and +10 stone when built",
+   "Foot Soldiers cost -5% per Town Center or Castle controlled (maximum -20%)",
+   "Towers and Castles fire +100% base arrows starting in Castle Age",
+   "Longships and Catapult Galleons +20% HP"
+  ],
+  "unique_techs": [
+   "Clerical Recruitment (Monks +1 conversion range; train +33% faster)",
+   "Shield Wall (Infantry gain additional armor when massed)"
+  ],
+  "team_bonus": "Repairers work +25% faster",
+  "tags": [
+   "bonus:Infantry",
+   "broad:Foot Archer",
+   "family:Defensive",
+   "family:Infantry",
+   "official:Defensive",
+   "official:Infantry",
+   "tree:Foot Archer",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Shu": {
+  "focus_text": "Archer and Siege civilization",
+  "official": [
+   "Archer",
+   "Siege"
+  ],
+  "unique_units": [
+   {
+    "name": "White Feather Guard",
+    "class": "Infantry"
+   },
+   {
+    "name": "War Chariot",
+    "class": "Siege Weapon"
+   },
+   {
+    "name": "Liu Bei",
+    "class": "Hero"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Foot Archer"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [
+   "Siege Weapons and Siege Warships move +10/15% faster in Castle/Imperial Age"
+  ],
+  "bonuses": [
+   "Lumberjacks generate food in addition to wood",
+   "Archery Unit technologies at the Archery Range and Blacksmith cost -25%",
+   "Siege Weapons and Siege Warships move +10/15% faster in Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Coiled Serpent Array (Spearman-line and White Feather Guards gain additional HP when near each other)",
+   "Bolt Magazine (Archer-line, War Chariots and Lou Chuans fire additional projectiles)"
+  ],
+  "team_bonus": "Foot Archers +2 line of sight",
+  "tags": [
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "family:Siege",
+   "official:Archer",
+   "official:Siege",
+   "tree:Foot Archer",
+   "uu:Hero",
+   "uu:Infantry",
+   "uu:Siege Weapon",
+   "water:yes"
+  ]
+ },
+ "Sicilians": {
+  "focus_text": "Infantry and Cavalry civilization",
+  "official": [
+   "Infantry",
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Serjeant",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [
+   "Transport Ships +5 line of sight and cost -50%"
+  ],
+  "bonuses": [
+   "Start with +100 stone",
+   "Farm upgrades provide +125% additional food",
+   "Soldiers receive -40% bonus damage",
+   "Can build Donjon in Dark Age, replaces Watch Tower-line",
+   "Fortifications built +50% faster; Town Centers built +100% faster"
+  ],
+  "unique_techs": [
+   "First Crusade (Up to 5 Town Centers spawn 5 Serjeants each; units more resistant to conversion)",
+   "Hauberk (Knight-line +1 melee/+2 pierce armor)"
+  ],
+  "team_bonus": "Transport Ships +5 line of sight and cost -50%",
+  "tags": [
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Infantry",
+   "official:Cavalry",
+   "official:Infantry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Slavs": {
+  "focus_text": "Infantry and Siege civilization",
+  "official": [
+   "Infantry",
+   "Siege"
+  ],
+  "unique_units": [
+   {
+    "name": "Boyar",
+    "class": "Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Farmers work +15% faster",
+   "Arson, Gambesons free",
+   "Siege Workshop Units cost -15%",
+   "Monks move +20% faster"
+  ],
+  "unique_techs": [
+   "Detinets (Replaces 40% of Castle and Watch Tower-line stone cost with additional wood cost)",
+   "Druzhina (Infantry deals trample damage)"
+  ],
+  "team_bonus": "Military buildings (except Castles) provide +5 population space",
+  "tags": [
+   "broad:Cavalry",
+   "family:Infantry",
+   "family:Siege",
+   "official:Infantry",
+   "official:Siege",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Cavalry"
+  ]
+ },
+ "Spanish": {
+  "focus_text": "Gunpowder and Monk civilization",
+  "official": [
+   "Gunpowder",
+   "Monk"
+  ],
+  "unique_units": [
+   {
+    "name": "Conquistador",
+    "class": "Mounted Gunner"
+   },
+   {
+    "name": "Missionary",
+    "class": "Mounted Monk"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry",
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Builders work +30% faster",
+   "Receive +20 gold for each technology researched",
+   "Blacksmith upgrades cost no gold",
+   "Gunpowder Units attack +18% faster",
+   "Cannon Galleons fire more accurately at moving targets"
+  ],
+  "unique_techs": [
+   "Inquisition (Monks and Missionaries convert faster; Missionaries +1 range)",
+   "Supremacy (Villagers +40 HP, +6 attack, +2 melee/+2 pierce armor)"
+  ],
+  "team_bonus": "Trade Units generate +25% gold",
+  "tags": [
+   "broad:Cavalry",
+   "family:Gunpowder",
+   "family:Monk",
+   "official:Gunpowder",
+   "official:Monk",
+   "tree:Cavalry",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Mounted Gunner",
+   "uu:Mounted Monk"
+  ]
+ },
+ "Tatars": {
+  "focus_text": "Cavalry Archer civilization",
+  "official": [
+   "Cavalry Archer"
+  ],
+  "unique_units": [
+   {
+    "name": "Keshik",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Flaming Camel",
+    "class": "Siege Cavalry"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Livestock animals last +50% longer",
+   "Units deal +25% damage when fighting from higher elevation",
+   "New Town Centers spawn 2 Sheep starting in Castle Age",
+   "Thumb Ring, Parthian Tactics free"
+  ],
+  "unique_techs": [
+   "Silk Armor (Scout Cavalry-line, Steppe Lancers and Cavalry Archers +1 melee/+1 pierce armor)",
+   "Timurid Siegecraft (Trebuchets +2 range)"
+  ],
+  "team_bonus": "Mounted Archers +2 line of sight",
+  "tags": [
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Cavalry Archer",
+   "official:Cavalry Archer",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Cavalry Archer",
+   "uu:Camel",
+   "uu:Cavalry",
+   "uu:Siege Cavalry"
+  ]
+ },
+ "Teutons": {
+  "focus_text": "Infantry and Defensive civilization",
+  "official": [
+   "Infantry",
+   "Defensive"
+  ],
+  "unique_units": [
+   {
+    "name": "Teutonic Knight",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Farms cost -40%",
+   "Town Centers +10 garrison capacity; Towers +5 garrison capacity",
+   "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age",
+   "Monks +100% healing range",
+   "Murder Holes, Herbal Medicine free"
+  ],
+  "unique_techs": [
+   "Ironclad (Siege Weapons +4 melee armor)",
+   "Crenellations (Castles +3 range, garrisoned Infantry fires arrows)"
+  ],
+  "team_bonus": "Units more resistant to conversion",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Infantry",
+   "family:Defensive",
+   "family:Infantry",
+   "official:Defensive",
+   "official:Infantry",
+   "uu:Infantry"
+  ]
+ },
+ "Tupi": {
+  "focus_text": "Archer and Infantry civilization",
+  "official": [
+   "Archer",
+   "Infantry"
+  ],
+  "unique_units": [
+   {
+    "name": "Blackwood Archer",
+    "class": "Foot Archer"
+   },
+   {
+    "name": "Ibirapema Warrior",
+    "class": "Infantry"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Start with +25 of each resource",
+   "Villagers can garrison in Settlements",
+   "Fallen units return 15% of their cost",
+   "Archery Range and Barracks upgrades cost -50% food"
+  ],
+  "unique_techs": [
+   "Caciques (Champi Warriors and Slingers attack +25% faster)",
+   "Curare (Foot Archers and Fortifications deal poison damage)"
+  ],
+  "team_bonus": "Towers and Castles provide +10 population space",
+  "tags": [
+   "bonus:Cavalry Archer",
+   "bonus:Foot Archer",
+   "bonus:Infantry",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "family:Infantry",
+   "official:Archer",
+   "official:Infantry",
+   "uu:Foot Archer",
+   "uu:Infantry"
+  ]
+ },
+ "Turks": {
+  "focus_text": "Gunpowder civilization",
+  "official": [
+   "Gunpowder"
+  ],
+  "unique_units": [
+   {
+    "name": "Janissary",
+    "class": "Foot Gunner"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Cavalry Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Gold miners work +25% faster",
+   "Scout Cavalry-line +1 pierce armor and upgrades free",
+   "Chemistry free; Gunpowder technologies costs -50%",
+   "Gunpowder Units +25% HP"
+  ],
+  "unique_techs": [
+   "Sipahi (Mounted Archers +20 HP)",
+   "Artillery (Bombard Towers, Bombard Cannons, Cannon Galleons +2 range)"
+  ],
+  "team_bonus": "Gunpowder Units train +25% faster",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "family:Gunpowder",
+   "official:Gunpowder",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Cavalry Archer",
+   "uu:Foot Gunner"
+  ]
+ },
+ "Varangians": {
+  "focus_text": "Cavalry and Naval civilization",
+  "official": [
+   "Cavalry",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Jarl",
+    "class": "Cavalry"
+   }
+  ],
+  "water": true,
+  "full_tree": [
+   "Cavalry (Paladin optional)"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": true,
+  "naval_bonuses": [
+   "Shepherding, fishing, and hunting also generate gold",
+   "Longships and Catapult Galleons attack +15% faster"
+  ],
+  "bonuses": [
+   "Shepherding, fishing, and hunting also generate gold",
+   "Bloodlines and Caravan effects +50%",
+   "Varangian Guards attack +25% faster and generate +50% gold",
+   "Longships and Catapult Galleons attack +15% faster"
+  ],
+  "unique_techs": [
+   "Vendel Legacy (Knight-line deals trample damage)",
+   "Gothikon (Varangian Guards throw axes periodically)"
+  ],
+  "team_bonus": "Knight-line +1 attack vs. Infantry",
+  "tags": [
+   "broad:Cavalry",
+   "family:Cavalry",
+   "family:Naval",
+   "official:Cavalry",
+   "official:Naval",
+   "tree:Cavalry (Paladin optional)",
+   "uu:Cavalry",
+   "water:yes"
+  ]
+ },
+ "Vietnamese": {
+  "focus_text": "Archer civilization",
+  "official": [
+   "Archer"
+  ],
+  "unique_units": [
+   {
+    "name": "Rattan Archer",
+    "class": "Foot Archer"
+   },
+   {
+    "name": "Imperial Skirmisher",
+    "class": "Skirmisher"
+   }
+  ],
+  "water": false,
+  "full_tree": [
+   "Cavalry (Paladin optional)",
+   "Foot Archer"
+  ],
+  "full_tree_notes": [
+   "no Paladin"
+  ],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Enemy Town Centers are revealed at the start of the game",
+   "Economic upgrades cost no wood and research +100% faster",
+   "Foot Archers and Skirmishers +20% HP",
+   "Conscription free"
+  ],
+  "unique_techs": [
+   "Chatras (Battle Elephants +100 HP)",
+   "Paper Money (Lumberjacks slowly generate gold in addition to wood)"
+  ],
+  "team_bonus": "Imperial Skirmisher upgrade available in Imperial Age",
+  "tags": [
+   "bonus:Foot Archer",
+   "broad:Cavalry",
+   "broad:Cavalry Archer",
+   "broad:Foot Archer",
+   "family:Cavalry Archer",
+   "family:Foot Archer",
+   "official:Archer",
+   "tree:Cavalry (Paladin optional)",
+   "tree:Foot Archer",
+   "uu:Foot Archer",
+   "uu:Skirmisher"
+  ]
+ },
+ "Vikings": {
+  "focus_text": "Infantry and Naval civilization",
+  "official": [
+   "Infantry",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Berserk",
+    "class": "Infantry"
+   }
+  ],
+  "water": true,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Warships cost -10/15/20% in Feudal/Castle/Imperial Age",
+   "Docks cost -15%",
+   "Bogsveigar (Archer-line and Longships +1 attack)"
+  ],
+  "bonuses": [
+   "Wheelbarrow, Hand Cart free",
+   "Infantry +20% HP starting in Feudal Age",
+   "Warships cost -10/15/20% in Feudal/Castle/Imperial Age"
+  ],
+  "unique_techs": [
+   "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units)",
+   "Bogsveigar (Archer-line and Longships +1 attack)"
+  ],
+  "team_bonus": "Docks cost -15%",
+  "tags": [
+   "bonus:Infantry",
+   "family:Infantry",
+   "family:Naval",
+   "official:Infantry",
+   "official:Naval",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ },
+ "Wei": {
+  "focus_text": "Cavalry civilization",
+  "official": [
+   "Cavalry"
+  ],
+  "unique_units": [
+   {
+    "name": "Tiger Cavalry",
+    "class": "Cavalry"
+   },
+   {
+    "name": "Xianbei Raider",
+    "class": "Mounted Archer"
+   },
+   {
+    "name": "Cao Cao",
+    "class": "Hero"
+   }
+  ],
+  "water": false,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": false,
+  "naval_bonuses": [],
+  "bonuses": [
+   "Receive one free Villager for each economic upgrade researched",
+   "Hei Guang Cavalry and Xianbei Raider +20/30% HP in Castle/Imperial Age",
+   "Traction Trebuchets and Lou Chuans cost -25%"
+  ],
+  "unique_techs": [
+   "Tuntian (Soldiers passively produce food)",
+   "Ming Guang Armor (Mounted Units +4 melee armor)"
+  ],
+  "team_bonus": "Cavalry +2 attack vs. Siege Weapons",
+  "tags": [
+   "bonus:Cavalry",
+   "broad:Cavalry",
+   "family:Cavalry",
+   "official:Cavalry",
+   "uu:Cavalry",
+   "uu:Hero",
+   "uu:Mounted Archer"
+  ]
+ },
+ "Wu": {
+  "focus_text": "Infantry and Naval civilization",
+  "official": [
+   "Infantry",
+   "Naval"
+  ],
+  "unique_units": [
+   {
+    "name": "Fire Archer",
+    "class": "Foot Archer"
+   },
+   {
+    "name": "Jian Swordsman",
+    "class": "Infantry"
+   },
+   {
+    "name": "Sun Jian",
+    "class": "Hero"
+   }
+  ],
+  "water": true,
+  "full_tree": [],
+  "full_tree_notes": [],
+  "water_official": true,
+  "naval_bonuses": [
+   "Military production buildings and Docks provide +55 food when built",
+   "Careening, Dry Dock free",
+   "Red Cliffs Tactics (Demolition Ships and Fire Archers deal fire damage to ships and buildings)",
+   "Sitting Tiger (Traction Trebuchets and Lou Chuan trebuchet weapons fire additional projectiles)"
+  ],
+  "bonuses": [
+   "Military production buildings and Docks provide +55 food when built",
+   "Infantry regenerates 10/15/30 HP per minute in Feudal/Castle/Imperial Age",
+   "Jian Swordsmen and Hei Guang Cavalry +2 attack in Imperial Age",
+   "Careening, Dry Dock free"
+  ],
+  "unique_techs": [
+   "Red Cliffs Tactics (Demolition Ships and Fire Archers deal fire damage to ships and buildings)",
+   "Sitting Tiger (Traction Trebuchets and Lou Chuan trebuchet weapons fire additional projectiles)"
+  ],
+  "team_bonus": "Houses built +100% faster",
+  "tags": [
+   "bonus:Cavalry",
+   "bonus:Infantry",
+   "family:Infantry",
+   "family:Naval",
+   "official:Infantry",
+   "official:Naval",
+   "uu:Foot Archer",
+   "uu:Hero",
+   "uu:Infantry",
+   "water:yes"
+  ]
+ }
+}
