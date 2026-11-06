@@ -36,6 +36,8 @@
   ],
   "team_bonus": "Infantry +2 line of sight",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "bonus:Infantry",
    "bonus:Trash",
    "family:Infantry",
@@ -76,6 +78,9 @@
   ],
   "team_bonus": "Relics generate +33% gold",
   "tags": [
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "family:Infantry",
    "family:Monk",
    "official:Infantry",
@@ -115,8 +120,9 @@
   ],
   "team_bonus": "Trade Units generate +10% food in addition to gold",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Cavalry",
-   "bonus:Trash",
    "family:Elephant",
    "family:Naval",
    "official:Elephant",
@@ -163,6 +169,9 @@
   ],
   "team_bonus": "Genitour available at the Archery Range starting in Castle Age",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Cavalry",
    "broad:Cavalry",
    "family:Cavalry",
@@ -210,6 +219,9 @@
   ],
   "team_bonus": "Markets work +80% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Trash",
    "family:Gunpowder",
    "family:Monk",
@@ -245,10 +257,13 @@
   ],
   "team_bonus": "Archery Ranges work +10% faster",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Foot Archer",
    "broad:Foot Archer",
    "family:Foot Archer",
    "official:Foot Archer",
+   "ut:Siege",
    "uu:Foot Archer"
   ]
  },
@@ -286,7 +301,12 @@
   ],
   "team_bonus": "Blacksmiths work +80% faster",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "bonus:Infantry",
+   "bonus:Siege",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "family:Cavalry",
@@ -330,6 +350,7 @@
   ],
   "team_bonus": "Relics generate food in addition to gold",
   "tags": [
+   "avail:Bombard Cannon",
    "bonus:Cavalry",
    "broad:Cavalry",
    "family:Cavalry",
@@ -371,6 +392,9 @@
   ],
   "team_bonus": "Relics visible on the map at the start of the game",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Infantry",
    "broad:Cavalry",
    "family:Cavalry",
@@ -415,6 +439,8 @@
   ],
   "team_bonus": "Monks heal +100% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Ram",
    "bonus:Camel",
    "bonus:Trash",
    "broad:Foot Archer",
@@ -454,11 +480,18 @@
   ],
   "team_bonus": "Siege Workshops work +20% faster",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "bonus:Infantry",
+   "bonus:Siege",
    "family:Infantry",
    "family:Siege",
    "official:Infantry",
    "official:Siege",
+   "team:Siege",
+   "ut:Siege",
    "uu:Infantry"
   ]
  },
@@ -502,6 +535,8 @@
   ],
   "team_bonus": "Farms +10% food",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
@@ -512,6 +547,7 @@
    "official:Gunpowder",
    "tree:Cavalry (Paladin optional)",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Foot Archer",
    "uu:Warship",
    "water:yes"
@@ -547,9 +583,12 @@
   ],
   "team_bonus": "Palisade Walls +33% HP",
   "tags": [
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "bonus:Cavalry Archer",
    "bonus:Foot Archer",
+   "bonus:Siege",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "family:Cavalry",
@@ -591,11 +630,19 @@
   ],
   "team_bonus": "Siege Weapons +2 line of sight",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
+   "bonus:Anti-building",
    "bonus:Infantry",
+   "bonus:Siege",
    "family:Infantry",
    "family:Siege",
    "official:Infantry",
    "official:Siege",
+   "team:Siege",
+   "ut:Siege",
    "uu:Infantry",
    "water:yes"
   ]
@@ -639,8 +686,12 @@
   ],
   "team_bonus": "Docks provide +5 population space",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Onager",
    "bonus:Cavalry Archer",
    "bonus:Infantry",
+   "bonus:Siege",
    "bonus:Trash",
    "broad:Foot Archer",
    "family:Infantry",
@@ -682,6 +733,11 @@
   ],
   "team_bonus": "Outposts +3 line of sight and cost no stone",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "bonus:Foot Archer",
    "bonus:Trash",
    "broad:Cavalry Archer",
@@ -690,6 +746,7 @@
    "family:Foot Archer",
    "official:Archer",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Infantry"
   ]
  },
@@ -726,6 +783,9 @@
   ],
   "team_bonus": "Knight-line +2 line of sight",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Cavalry",
    "broad:Cavalry",
    "family:Cavalry",
@@ -768,6 +828,10 @@
   ],
   "team_bonus": "Building repairs cost -25%",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "broad:Cavalry",
    "family:Cavalry",
@@ -807,6 +871,9 @@
   ],
   "team_bonus": "Barracks work +20% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "bonus:Anti-building",
    "bonus:Infantry",
    "family:Infantry",
    "official:Infantry",
@@ -849,6 +916,8 @@
   ],
   "team_bonus": "Camel and Elephant Units train +25% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
    "bonus:Cavalry",
    "broad:Cavalry",
    "family:Camel",
@@ -893,6 +962,9 @@
   ],
   "team_bonus": "Scout Cavalry-line and Camel Units +2 attack vs. buildings",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Engineers",
+   "bonus:Anti-building",
    "bonus:Camel",
    "family:Camel",
    "family:Gunpowder",
@@ -935,8 +1007,10 @@
   ],
   "team_bonus": "Stables work +20% faster",
   "tags": [
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "bonus:Cavalry Archer",
+   "bonus:Siege",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "family:Cavalry",
@@ -977,6 +1051,9 @@
   ],
   "team_bonus": "Start with a free Llama",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Infantry",
    "broad:Foot Archer",
    "family:Infantry",
@@ -1027,6 +1104,7 @@
   ],
   "team_bonus": "Condottiero available at the Barracks in Imperial Age",
   "tags": [
+   "avail:Bombard Cannon",
    "bonus:Foot Archer",
    "broad:Cavalry",
    "broad:Cavalry Archer",
@@ -1077,6 +1155,8 @@
   ],
   "team_bonus": "Galley-line +4 line of sight",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Cavalry Archer",
    "bonus:Infantry",
    "broad:Cavalry Archer",
@@ -1085,6 +1165,7 @@
    "official:Infantry",
    "tree:Cavalry Archer",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Infantry",
    "water:yes"
   ]
@@ -1123,12 +1204,17 @@
   ],
   "team_bonus": "Gunpowder Units +2 line of sight",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "broad:Cavalry",
    "family:Cavalry",
    "family:Gunpowder",
    "official:Cavalry",
    "official:Gunpowder",
+   "ut:Siege",
    "uu:Cavalry",
    "uu:Gunpowder Unit"
   ]
@@ -1168,6 +1254,8 @@
   ],
   "team_bonus": "Infantry +2 attack vs. Ranged Soldiers",
   "tags": [
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "bonus:Cavalry Archer",
    "bonus:Trash",
@@ -1215,12 +1303,17 @@
   ],
   "team_bonus": "Scorpions +1 range",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "family:Elephant",
    "family:Siege",
    "official:Elephant",
    "official:Siege",
+   "team:Siege",
    "tree:Cavalry (Paladin optional)",
+   "ut:Siege",
    "uu:Siege Cavalry"
   ]
  },
@@ -1262,6 +1355,8 @@
   ],
   "team_bonus": "Villagers +3 line of sight",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Engineers",
    "bonus:Cavalry Archer",
    "bonus:Foot Archer",
    "bonus:Infantry",
@@ -1271,6 +1366,7 @@
    "official:Defensive",
    "official:Naval",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Mounted Archer",
    "uu:Warship",
    "water:yes"
@@ -1311,6 +1407,7 @@
   ],
   "team_bonus": "Monasteries work +20% faster",
   "tags": [
+   "avail:Bombard Cannon",
    "bonus:Cavalry",
    "bonus:Trash",
    "broad:Cavalry",
@@ -1355,6 +1452,8 @@
   ],
   "team_bonus": "Mounted Archers train +25% faster",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Cavalry",
    "broad:Cavalry",
    "broad:Cavalry Archer",
@@ -1402,6 +1501,9 @@
   ],
   "team_bonus": "Docks +6 line of sight",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Infantry",
    "broad:Foot Archer",
    "family:Naval",
@@ -1442,6 +1544,8 @@
   ],
   "team_bonus": "Universities work +80% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Onager",
    "bonus:Infantry",
    "broad:Cavalry",
    "family:Infantry",
@@ -1484,6 +1588,8 @@
   ],
   "team_bonus": "Spearman-line and Skirmishers +2 line of sight",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
    "bonus:Cavalry",
    "bonus:Infantry",
    "bonus:Trash",
@@ -1525,6 +1631,8 @@
   ],
   "team_bonus": "Walls cost -50%",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "bonus:Foot Archer",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
@@ -1565,6 +1673,10 @@
   ],
   "team_bonus": "Scout Cavalry-line +2 line of sight",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "bonus:Cavalry Archer",
    "broad:Cavalry Archer",
@@ -1573,6 +1685,7 @@
    "official:Cavalry Archer",
    "tree:Cavalry Archer",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Mounted Archer"
   ]
  },
@@ -1612,6 +1725,9 @@
   ],
   "team_bonus": "Natural gold sources last +15% longer",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
    "bonus:Cavalry Archer",
    "bonus:Foot Archer",
    "broad:Cavalry Archer",
@@ -1666,6 +1782,9 @@
   ],
   "team_bonus": "Knight-line +2 attack vs. Ranged Soldiers",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "family:Cavalry",
@@ -1711,6 +1830,9 @@
   ],
   "team_bonus": "Scout Cavalry-line +1 attack vs. Ranged Soldiers",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "broad:Cavalry",
    "broad:Foot Archer",
@@ -1762,6 +1884,8 @@
   ],
   "team_bonus": "Technologies research +25% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Engineers",
    "broad:Cavalry",
    "broad:Foot Archer",
    "family:Gunpowder",
@@ -1815,13 +1939,19 @@
   ],
   "team_bonus": "Scorpions minimum range reduced",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Infantry",
+   "bonus:Siege",
    "broad:Cavalry",
    "family:Cavalry",
    "family:Infantry",
    "official:Cavalry",
    "official:Infantry",
+   "team:Siege",
    "tree:Cavalry (Paladin optional)",
+   "ut:Siege",
    "uu:Cavalry",
    "uu:Infantry",
    "water:yes"
@@ -1862,6 +1992,11 @@
   ],
   "team_bonus": "Foot Archers and Skirmishers +2 attack vs. buildings",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
+   "bonus:Anti-building",
    "bonus:Camel",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
@@ -1871,6 +2006,7 @@
    "official:Naval",
    "tree:Cavalry Archer",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Camel",
    "uu:Cavalry",
    "water:yes"
@@ -1909,6 +2045,9 @@
   ],
   "team_bonus": "Repairers work +25% faster",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Infantry",
    "broad:Foot Archer",
    "family:Defensive",
@@ -1960,8 +2099,11 @@
   ],
   "team_bonus": "Foot Archers +2 line of sight",
   "tags": [
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Cavalry Archer",
    "bonus:Foot Archer",
+   "bonus:Siege",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
    "family:Cavalry Archer",
@@ -1970,6 +2112,7 @@
    "official:Archer",
    "official:Siege",
    "tree:Foot Archer",
+   "ut:Siege",
    "uu:Hero",
    "uu:Infantry",
    "uu:Siege Weapon",
@@ -2012,6 +2155,10 @@
   ],
   "team_bonus": "Transport Ships +5 line of sight and cost -50%",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "family:Cavalry",
    "family:Infantry",
@@ -2055,6 +2202,11 @@
   ],
   "team_bonus": "Military buildings (except Castles) provide +5 population space",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
+   "avail:Siege Ram",
+   "bonus:Siege",
    "broad:Cavalry",
    "family:Infantry",
    "family:Siege",
@@ -2101,6 +2253,8 @@
   ],
   "team_bonus": "Trade Units generate +25% gold",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "family:Gunpowder",
    "family:Monk",
@@ -2149,12 +2303,16 @@
   ],
   "team_bonus": "Mounted Archers +2 line of sight",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "family:Cavalry Archer",
    "official:Cavalry Archer",
    "tree:Cavalry (Paladin optional)",
    "tree:Cavalry Archer",
+   "ut:Siege",
    "uu:Camel",
    "uu:Cavalry",
    "uu:Siege Cavalry"
@@ -2190,12 +2348,17 @@
   ],
   "team_bonus": "Units more resistant to conversion",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Onager",
    "bonus:Cavalry",
    "bonus:Infantry",
    "family:Defensive",
    "family:Infantry",
    "official:Defensive",
    "official:Infantry",
+   "ut:Siege",
    "uu:Infantry"
   ]
  },
@@ -2232,6 +2395,8 @@
   ],
   "team_bonus": "Towers and Castles provide +10 population space",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "bonus:Cavalry Archer",
    "bonus:Foot Archer",
    "bonus:Infantry",
@@ -2279,6 +2444,9 @@
   ],
   "team_bonus": "Gunpowder Units train +25% faster",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "bonus:Cavalry",
    "broad:Cavalry",
    "broad:Cavalry Archer",
@@ -2286,6 +2454,7 @@
    "official:Gunpowder",
    "tree:Cavalry (Paladin optional)",
    "tree:Cavalry Archer",
+   "ut:Siege",
    "uu:Foot Gunner"
   ]
  },
@@ -2325,6 +2494,9 @@
   ],
   "team_bonus": "Knight-line +1 attack vs. Infantry",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "broad:Cavalry",
    "family:Cavalry",
    "family:Naval",
@@ -2372,6 +2544,8 @@
   ],
   "team_bonus": "Imperial Skirmisher upgrade available in Imperial Age",
   "tags": [
+   "avail:Bombard Cannon",
+   "avail:Siege Engineers",
    "bonus:Foot Archer",
    "bonus:Trash",
    "broad:Cavalry",
@@ -2418,6 +2592,9 @@
   ],
   "team_bonus": "Docks cost -15%",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Engineers",
+   "avail:Siege Ram",
    "bonus:Infantry",
    "family:Infantry",
    "family:Naval",
@@ -2462,7 +2639,10 @@
   ],
   "team_bonus": "Cavalry +2 attack vs. Siege Weapons",
   "tags": [
+   "avail:Heavy Scorpion",
+   "avail:Siege Ram",
    "bonus:Cavalry",
+   "bonus:Siege",
    "broad:Cavalry",
    "family:Cavalry",
    "official:Cavalry",
@@ -2513,12 +2693,14 @@
   ],
   "team_bonus": "Houses built +100% faster",
   "tags": [
+   "avail:Heavy Scorpion",
    "bonus:Cavalry",
    "bonus:Infantry",
    "family:Infantry",
    "family:Naval",
    "official:Infantry",
    "official:Naval",
+   "ut:Siege",
    "uu:Foot Archer",
    "uu:Hero",
    "uu:Infantry",

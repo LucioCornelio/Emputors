@@ -76,6 +76,12 @@ def full_tree(civ, bonuses):
         if has_unit(civ, "Savar"): notes.append("Savar instead of Paladin")
     return res, notes
 
+SIEGE = re.compile(r"siege (weapons?|workshop|units?)|battering ram|\brams?\b|mangonel|onager|scorpion|trebuchet|bombard cannon|rocket cart|war chariot|ballista|petard", re.I)
+ANTIBUILD = re.compile(r"(attack|damage)[^;]*?(vs\.?|against) buildings|loot[^;]*destroyed building", re.I)
+SIEGE_AVAIL = [("Siege Ram", "unit", "Siege Ram"), ("Siege Onager", "unit", "Siege Onager"),
+               ("Heavy Scorpion", "unit", "Heavy Scorpion"), ("Bombard Cannon", "unit", "Bombard Cannon"),
+               ("Siege Engineers", "tech", "Siege Engineers")]
+
 # Para clasificar un bonus solo cuenta la unidad que lo recibe, no a quien ataca ni las excepciones:
 # "Cavalry +2 attack vs. Skirmishers" -> "Cavalry +2 attack"
 def subject(line):
@@ -117,6 +123,15 @@ for civ, v in data["civs"].items():
         if TRASH.search(sb):
             tags.add("bonus:Trash")
         tags |= set(f"bonus:{x}" for x in archer_branches(TRASH.sub("", sb)))
+    # Asedio: bonus de civ, tecnologias unicas y bonus de equipo por separado; y bonus contra edificios
+    for origin, lines in [("bonus", bonuses), ("ut", uts), ("team", [team] if team else [])]:
+        if any(SIEGE.search(subject(l)) for l in lines):
+            tags.add(f"{origin}:Siege")
+    if any(ANTIBUILD.search(l) for l in bonuses + uts + ([team] if team else [])):
+        tags.add("bonus:Anti-building")
+    for label, kind, nm in SIEGE_AVAIL:
+        if (has_unit(civ, nm) if kind == "unit" else has_tech(civ, nm)):
+            tags.add(f"avail:{label}")
     full, full_notes = full_tree(civ, bonuses)
     tags |= set(f"tree:{x}" for x in full)
     # Amplio: foco oficial o arbol completo

@@ -37,6 +37,7 @@ const CIV_TAG_CHIPS = [
   { group: 'Official focus', items: ['family:Infantry', 'family:Cavalry', 'family:Camel', 'family:Foot Archer', 'family:Cavalry Archer', 'family:Naval', 'family:Gunpowder'] },
   { group: 'Water', items: ['water:yes'] },
   { group: 'Civ bonus for', items: ['bonus:Infantry', 'bonus:Cavalry', 'bonus:Camel', 'bonus:Foot Archer', 'bonus:Cavalry Archer', 'bonus:Trash'] },
+  { group: 'Siege', items: ['bonus:Siege', 'ut:Siege', 'team:Siege', 'bonus:Anti-building', 'avail:Siege Ram', 'avail:Siege Onager', 'avail:Heavy Scorpion', 'avail:Bombard Cannon', 'avail:Siege Engineers'] },
   { group: 'Unique unit', items: ['uu:Infantry', 'uu:Cavalry', 'uu:Camel', 'uu:Foot Archer', 'uu:Mounted Archer'] }
 ]
 const tagLabel = (id) => {
@@ -47,6 +48,9 @@ const tagLabel = (id) => {
   if (kind === 'uu') return `UU: ${value}`
   if (kind === 'water') return 'Water civ (Naval tag or naval bonus)'
   if (kind === 'tree') return `Full ${value}`
+  if (kind === 'ut') return `${value} UT`
+  if (kind === 'team') return `${value} team bonus`
+  if (kind === 'avail') return `Has ${value}`
   if (kind === 'broad') return `${value} (official or full tree)`
   return id
 }
@@ -62,6 +66,11 @@ const tagHelp = (id) => {
   if (id === 'family:Camel') return 'Official tag Camel'
   if (id === 'water:yes') return 'Official Naval tag, or at least one civ/team/UT bonus about ships, docks or fishing'
   if (id === 'bonus:Foot Archer' || id === 'bonus:Cavalry Archer') return 'Civ bonus for this archer type; generic archer or Archery Range bonuses count for both. Skirmishers do not count (see Trash bonus)'
+  if (id === 'bonus:Siege') return 'Civ bonus for siege weapons, rams, mangonels, scorpions, trebuchets or Siege Workshop'
+  if (id === 'ut:Siege') return 'At least one unique technology that improves siege'
+  if (id === 'team:Siege') return 'Team bonus that improves siege (helps your allies too)'
+  if (id === 'bonus:Anti-building') return 'Civ bonus, UT or team bonus with extra attack against buildings (or loot from destroyed buildings)'
+  if (id.startsWith('avail:')) return 'Available in the tech tree'
   if (id === 'bonus:Trash') return 'Civ bonus for Skirmishers or Spearman-line (not counted as archer or infantry bonus)'
   if (id === 'bonus:Camel') return 'Civ bonus that mentions camels explicitly'
   if (id === 'bonus:Cavalry') return 'Civ bonus for cavalry, mounted units, knights, scouts or Stable (camel-only bonuses are separate)'
@@ -477,7 +486,7 @@ function AdvancedSearch() {
                   if (full.includes('Cavalry (Paladin optional)')) badges.push({ label: noPal ? 'Cav*' : 'Cav', help: noPal ? 'Full cavalry except Paladin' : 'Full cavalry' })
                   if (full.includes('Foot Archer')) badges.push({ label: 'FA', help: 'Full foot archer' })
                   if (full.includes('Cavalry Archer')) badges.push({ label: 'CA', help: 'Full cavalry archer' })
-                  const tooltip = ct ? [ct.focus_text, ...ct.bonuses.map(x => '• ' + x), ct.unique_units.length ? 'UU: ' + ct.unique_units.map(u => `${u.name} (${u.class})`).join(', ') : '', ct.team_bonus ? 'Team: ' + ct.team_bonus : '', full.length ? 'Full tree: ' + full.join(', ') + (ct.full_tree_notes.length ? ' [' + ct.full_tree_notes.join('; ') + ']' : '') : ''].filter(Boolean).join('\n') : ''
+                  const tooltip = ct ? [ct.focus_text, ...ct.bonuses.map(x => '• ' + x), ct.unique_units.length ? 'UU: ' + ct.unique_units.map(u => `${u.name} (${u.class})`).join(', ') : '', ...(ct.unique_techs || []).map(x => 'UT: ' + x), ct.team_bonus ? 'Team: ' + ct.team_bonus : '', full.length ? 'Full tree: ' + full.join(', ') + (ct.full_tree_notes.length ? ' [' + ct.full_tree_notes.join('; ') + ']' : '') : ''].filter(Boolean).join('\n') : ''
                   return (
                     <div key={civ} title={(used ? 'USED (click to unmark)' : 'Click to mark as used') + '\n\n' + tooltip} onClick={() => toggleUsed(civ)} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: used ? '#13161b' : '#161920', padding: '6px 8px', borderRadius: '4px', border: `1px solid ${used ? '#4caf5055' : '#2a2d36'}`, transition: 'border-color 0.2s, opacity 0.2s', textAlign: 'left', lineHeight: 1.25, cursor: 'pointer', userSelect: 'none', opacity: used ? 0.45 : 1 }} onMouseEnter={e => e.currentTarget.style.borderColor = '#ffd70055'} onMouseLeave={e => e.currentTarget.style.borderColor = used ? '#4caf5055' : '#2a2d36'}>
                       <img src={`/civs/${civ.toLowerCase()}.png`} alt={civ} style={{ width: '32px', height: '32px', flexShrink: 0, objectFit: 'contain' }} onError={e => e.target.style.display = 'none'} />
