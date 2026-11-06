@@ -154,6 +154,24 @@ function DraftPlanCreator() {
     setMessage({ text: "Modo copia activado. Modifica lo que necesites y haz clic en Guardar Nuevo.", type: "success" });
   };
 
+  const handleExportWhatsApp = () => {
+    let text = `🗺️ *Mapa:* ${selectedMap}\n📋 *Plan:* ${planName || 'Sin título'}\n\n`;
+    roles.forEach((r, idx) => {
+      text += `*${r.role}*\n`;
+      if (r.priority.length > 0) {
+        text += r.priority.map((c, i) => `${i + 1}. ${c}`).join('\n') + '\n';
+      } else {
+        text += `_(Sin civilizaciones)_\n`;
+      }
+      if (idx < roles.length - 1) text += '\n';
+    });
+
+    navigator.clipboard.writeText(text);
+    setMessage({ text: "📋 ¡Copiado al portapapeles! Listo para pegar en WhatsApp.", type: "success" });
+    setTimeout(() => setMessage({ text: "", type: "" }), 4000);
+  };
+
+  // Funciones de Drag & Drop
   const handleDragStart = (e, roleIdx, civIdx) => {
     setDraggedItem({ type: 'INTERNAL', roleIdx, civIdx });
     e.dataTransfer.effectAllowed = "move";
@@ -187,7 +205,7 @@ function DraftPlanCreator() {
         priorityList.splice(targetCivIdx, 0, civ);
         newRoles[targetRoleIdx].priority = priorityList;
         setRoles(newRoles);
-        setActiveRoleIndex(targetRoleIdx);
+        setActiveRoleIndex(targetRoleIdx); // Auto-selecciona el rol al que hemos arrastrado
       }
     } else if (draggedItem.type === 'INTERNAL') {
       if (draggedItem.roleIdx !== targetRoleIdx) return; 
@@ -199,10 +217,12 @@ function DraftPlanCreator() {
       newRoles[targetRoleIdx].priority = priorityList;
       setRoles(newRoles);
     }
+    setDraggedItem(null);
   };
 
   return (
-    <div style={{ padding: '30px 20px', fontFamily: 'Segoe UI, sans-serif', color: C.textMain }}>
+    // El onClick aquí permite desmarcar el rol activo si pinchas en una zona neutra
+    <div style={{ padding: '30px 20px', fontFamily: 'Segoe UI, sans-serif', color: C.textMain }} onClick={() => setActiveRoleIndex(null)}>
       <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         
         <div style={{ textAlign: 'center', marginBottom: '10px' }}>
@@ -217,7 +237,7 @@ function DraftPlanCreator() {
         )}
 
         {/* SELECTOR DE PLANES EXISTENTES */}
-        <div style={{ backgroundColor: '#1e212b', padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '-10px' }}>
+        <div onClick={(e) => e.stopPropagation()} style={{ backgroundColor: '#1e212b', padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '-10px' }}>
           <span style={{ fontSize: '12px', color: C.gold, fontWeight: 'bold', textTransform: 'uppercase' }}>Editar Plan Existente:</span>
           <select 
             value={selectedPlanId} 
@@ -240,9 +260,9 @@ function DraftPlanCreator() {
           )}
         </div>
 
-        {/* CONTROLES DEL PLAN (Nombre, Mapa, Guardar) */}
-        <div style={{ backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '20px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '200px' }}>
+        {/* CONTROLES DEL PLAN (Nombre, Mapa, Guardar, WhatsApp) */}
+        <div onClick={(e) => e.stopPropagation()} style={{ backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', gap: '20px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '150px' }}>
             <label style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Nombre del Plan (Estrategia)</label>
             <input 
               type="text" 
@@ -253,7 +273,7 @@ function DraftPlanCreator() {
             />
           </div>
           
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '150px' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '120px' }}>
             <label style={{ fontSize: '11px', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Mapa Destino</label>
             <select 
               value={selectedMap} 
@@ -265,6 +285,13 @@ function DraftPlanCreator() {
           </div>
 
           <div style={{ display: 'flex', gap: '10px' }}>
+            <button 
+              onClick={handleExportWhatsApp} 
+              title="Copiar al portapapeles para WhatsApp"
+              style={{ backgroundColor: '#25D366', color: '#161920', border: 'none', padding: '10px 15px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              📲 EXPORTAR
+            </button>
             {selectedPlanId && (
               <button 
                 onClick={handleDuplicate} 
@@ -296,7 +323,7 @@ function DraftPlanCreator() {
             {roles.map((r, idx) => {
               const isActive = activeRoleIndex === idx;
               return (
-                <div key={idx} onClick={() => setActiveRoleIndex(idx)} style={{ backgroundColor: isActive ? 'rgba(102, 178, 255, 0.05)' : C.card, padding: '12px', borderRadius: '6px', border: `1px solid ${isActive ? C.blue : C.border}`, cursor: 'pointer', transition: 'all 0.2s', boxShadow: isActive ? `0 0 0 1px ${C.blue}` : 'none' }}>
+                <div key={idx} onClick={(e) => { e.stopPropagation(); setActiveRoleIndex(idx); }} style={{ backgroundColor: isActive ? 'rgba(102, 178, 255, 0.05)' : C.card, padding: '12px', borderRadius: '6px', border: `1px solid ${isActive ? C.blue : C.border}`, cursor: 'pointer', transition: 'all 0.2s', boxShadow: isActive ? `0 0 0 1px ${C.blue}` : 'none' }}>
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
                     <input 
                       type="text" 
@@ -312,13 +339,15 @@ function DraftPlanCreator() {
                     style={{ minHeight: '40px', backgroundColor: '#161920', border: '1px dashed #444', borderRadius: '4px', padding: '8px', display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}
                     onDragOver={handleDragOver}
                     onDrop={(e) => {
-                        if (draggedItem && draggedItem.roleIdx === idx) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (draggedItem) {
                             handleDrop(e, idx, r.priority.length);
                         }
                     }}
                   >
                     {r.priority.length === 0 ? (
-                      <span style={{ fontSize: '10px', color: '#666', fontStyle: 'italic', pointerEvents: 'none' }}>{isActive ? "Haz clic en las civis de la derecha para añadirlas aquí..." : "Sin prioridad asignada"}</span>
+                      <span style={{ fontSize: '10px', color: '#666', fontStyle: 'italic', pointerEvents: 'none' }}>{isActive ? "Haz clic en el roster o arrastra aquí..." : "Sin prioridad asignada"}</span>
                     ) : (
                       r.priority.map((civ, civIdx) => (
                         <div 
@@ -345,18 +374,18 @@ function DraftPlanCreator() {
           </div>
 
           {/* COLUMNA DERECHA: ROSTER COMPLETO */}
-          <div style={{ flex: 1, backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, position: 'sticky', top: '20px' }}>
-            <h3 style={{ color: C.gold, fontSize: '13px', margin: '0 0 15px 0', textTransform: 'uppercase' }}>Civilizaciones (Añadir a: {roles[activeRoleIndex]?.role || 'Ninguno'})</h3>
+          <div onClick={(e) => e.stopPropagation()} style={{ flex: 1, backgroundColor: C.card, padding: '20px', borderRadius: '6px', border: `1px solid ${C.border}`, position: 'sticky', top: '20px' }}>
+            <h3 style={{ color: C.gold, fontSize: '13px', margin: '0 0 15px 0', textTransform: 'uppercase' }}>Civilizaciones (Añadir a: {activeRoleIndex !== null ? roles[activeRoleIndex]?.role || 'Ninguno' : '---'})</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px' }}>
               {CIVS.map(c => {
-                const isSelectedInActive = roles[activeRoleIndex]?.priority.includes(c);
+                const isSelectedInActive = activeRoleIndex !== null && roles[activeRoleIndex]?.priority.includes(c);
                 return (
                   <div 
                     key={c} 
                     draggable
                     onDragStart={(e) => handleRosterDragStart(e, c)}
                     onDragEnd={handleDragEnd}
-                    onClick={() => toggleCivInActiveRole(c)}
+                    onClick={(e) => { e.stopPropagation(); toggleCivInActiveRole(c); }}
                     style={{ position: 'relative', cursor: 'grab', border: `2px solid ${isSelectedInActive ? C.blue : 'transparent'}`, borderRadius: '4px', overflow: 'hidden', aspectRatio: '1/1', backgroundColor: '#1e212b', opacity: isSelectedInActive ? 0.5 : 1, transition: 'all 0.1s' }}
                     title={c}
                   >
