@@ -36,7 +36,7 @@ const CIV_TAG_CHIPS = [
   { group: 'Full tech tree', items: ['tree:Cavalry', 'tree:Cavalry (Paladin optional)', 'tree:Foot Archer', 'tree:Cavalry Archer'] },
   { group: 'Official focus', items: ['family:Infantry', 'family:Cavalry', 'family:Camel', 'family:Foot Archer', 'family:Cavalry Archer', 'family:Naval', 'family:Gunpowder'] },
   { group: 'Water', items: ['water:yes'] },
-  { group: 'Civ bonus for', items: ['bonus:Infantry', 'bonus:Cavalry', 'bonus:Camel', 'bonus:Foot Archer', 'bonus:Cavalry Archer'] },
+  { group: 'Civ bonus for', items: ['bonus:Infantry', 'bonus:Cavalry', 'bonus:Camel', 'bonus:Foot Archer', 'bonus:Cavalry Archer', 'bonus:Trash'] },
   { group: 'Unique unit', items: ['uu:Infantry', 'uu:Cavalry', 'uu:Camel', 'uu:Foot Archer', 'uu:Mounted Archer'] }
 ]
 const tagLabel = (id) => {
@@ -61,7 +61,8 @@ const tagHelp = (id) => {
   if (id === 'family:Cavalry') return 'Official tag Cavalry (camels are separate)'
   if (id === 'family:Camel') return 'Official tag Camel'
   if (id === 'water:yes') return 'Official Naval tag, or at least one civ/team/UT bonus about ships, docks or fishing'
-  if (id === 'bonus:Foot Archer' || id === 'bonus:Cavalry Archer') return 'Civ bonus for this archer type; generic archer or Archery Range bonuses count for both'
+  if (id === 'bonus:Foot Archer' || id === 'bonus:Cavalry Archer') return 'Civ bonus for this archer type; generic archer or Archery Range bonuses count for both. Skirmishers do not count (see Trash bonus)'
+  if (id === 'bonus:Trash') return 'Civ bonus for Skirmishers or Spearman-line (not counted as archer or infantry bonus)'
   if (id === 'bonus:Camel') return 'Civ bonus that mentions camels explicitly'
   if (id === 'bonus:Cavalry') return 'Civ bonus for cavalry, mounted units, knights, scouts or Stable (camel-only bonuses are separate)'
   if (id.startsWith('bonus:')) return 'At least one civilization bonus (not UT, not team) about this branch'

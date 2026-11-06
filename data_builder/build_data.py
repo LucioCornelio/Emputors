@@ -28,8 +28,10 @@ NAVAL = re.compile(r"\b(ship|ships|galley|galleys|galleon|dock|docks|fishing|fis
                    r"warship|warships|dromon|longship|longships|longboat|caravel|turtle|lou chuan|hulk|"
                    r"carrack|cog|cogs|whale|shipwright|careening|dry dock)\b", re.I)
 # Ramas de bonus. Un bonus generico de "archers" o de la Archery Range suma en Foot Archer y en Cavalry Archer.
-FOOT = re.compile(r"foot archer|archer-line|crossbow|arbalest|skirmisher", re.I)
-CAVARCH = re.compile(r"cavalry archer|mounted archer|horse archer|mounted ranged", re.I)
+# Unidades "trash" (hostigadores y lanceros): rama propia, no cuentan como arquero ni como infanteria
+TRASH = re.compile(r"(elite |imperial )?skirmishers?|spearm[ae]n(-line)?|pikem[ae]n|halberdiers?", re.I)
+FOOT = re.compile(r"foot archer|archer-line|crossbow|arbalest", re.I)
+CAVARCH = re.compile(r"cavalry archer|mounted archer|horse archer|mounted ranged|elephant archer", re.I)
 ARCH_GENERIC = re.compile(r"\barchers?\b(?!-line)|archery range|ranged units", re.I)
 def archer_branches(line):
     out = set()
@@ -39,7 +41,7 @@ def archer_branches(line):
     if ARCH_GENERIC.search(stripped): out |= {"Foot Archer", "Cavalry Archer"}
     return out
 BRANCH = {
-    "Infantry": re.compile(r"infantry|militia|man-at-arms|men-at-arms|foot soldiers|barracks|spearm|swordsm|champion|halberd", re.I),
+    "Infantry": re.compile(r"infantry|militia|man-at-arms|men-at-arms|foot soldiers|barracks|swordsm|champion", re.I),
     "Cavalry": re.compile(r"cavalry(?! archer)|mounted units|knight|scout|stable|steppe lancer|hussar|paladin", re.I),
     "Camel": re.compile(r"camel", re.I),
 }
@@ -74,6 +76,13 @@ def full_tree(civ, bonuses):
         if has_unit(civ, "Savar"): notes.append("Savar instead of Paladin")
     return res, notes
 
+# Para clasificar un bonus solo cuenta la unidad que lo recibe, no a quien ataca ni las excepciones:
+# "Cavalry +2 attack vs. Skirmishers" -> "Cavalry +2 attack"
+def subject(line):
+    line = re.sub(r"\(except[^)]*\)", "", line, flags=re.I)
+    line = re.sub(r"\b(vs\.?|versus|against)\s[^,;]*", "", line, flags=re.I)
+    return line
+
 out = {}
 for civ, v in data["civs"].items():
     raw = name(v["help_string_id"])
@@ -101,10 +110,13 @@ for civ, v in data["civs"].items():
     if any("camel" in u["name"].lower() or u["name"] == "Mameluke" for u in uus):
         tags.add("uu:Camel")
     for branch, rx in BRANCH.items():
-        if any(rx.search(b) for b in bonuses):
+        if any(rx.search(TRASH.sub("", subject(b))) for b in bonuses):
             tags.add(f"bonus:{branch}")
     for b in bonuses:
-        tags |= set(f"bonus:{x}" for x in archer_branches(b))
+        sb = subject(b)
+        if TRASH.search(sb):
+            tags.add("bonus:Trash")
+        tags |= set(f"bonus:{x}" for x in archer_branches(TRASH.sub("", sb)))
     full, full_notes = full_tree(civ, bonuses)
     tags |= set(f"tree:{x}" for x in full)
     # Amplio: foco oficial o arbol completo

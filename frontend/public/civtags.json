@@ -37,6 +37,7 @@
   "team_bonus": "Infantry +2 line of sight",
   "tags": [
    "bonus:Infantry",
+   "bonus:Trash",
    "family:Infantry",
    "family:Naval",
    "official:Infantry",
@@ -115,7 +116,7 @@
   "team_bonus": "Trade Units generate +10% food in addition to gold",
   "tags": [
    "bonus:Cavalry",
-   "bonus:Foot Archer",
+   "bonus:Trash",
    "family:Elephant",
    "family:Naval",
    "official:Elephant",
@@ -209,7 +210,7 @@
   ],
   "team_bonus": "Markets work +80% faster",
   "tags": [
-   "bonus:Infantry",
+   "bonus:Trash",
    "family:Gunpowder",
    "family:Monk",
    "official:Gunpowder",
@@ -415,8 +416,7 @@
   "team_bonus": "Monks heal +100% faster",
   "tags": [
    "bonus:Camel",
-   "bonus:Foot Archer",
-   "bonus:Infantry",
+   "bonus:Trash",
    "broad:Foot Archer",
    "family:Defensive",
    "official:Defensive",
@@ -640,8 +640,8 @@
   "team_bonus": "Docks provide +5 population space",
   "tags": [
    "bonus:Cavalry Archer",
-   "bonus:Foot Archer",
    "bonus:Infantry",
+   "bonus:Trash",
    "broad:Foot Archer",
    "family:Infantry",
    "family:Naval",
@@ -683,6 +683,7 @@
   "team_bonus": "Outposts +3 line of sight and cost no stone",
   "tags": [
    "bonus:Foot Archer",
+   "bonus:Trash",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
    "family:Cavalry Archer",
@@ -1077,7 +1078,6 @@
   "team_bonus": "Galley-line +4 line of sight",
   "tags": [
    "bonus:Cavalry Archer",
-   "bonus:Foot Archer",
    "bonus:Infantry",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
@@ -1170,8 +1170,7 @@
   "tags": [
    "bonus:Cavalry",
    "bonus:Cavalry Archer",
-   "bonus:Foot Archer",
-   "bonus:Infantry",
+   "bonus:Trash",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "family:Cavalry",
@@ -1313,8 +1312,7 @@
   "team_bonus": "Monasteries work +20% faster",
   "tags": [
    "bonus:Cavalry",
-   "bonus:Foot Archer",
-   "bonus:Infantry",
+   "bonus:Trash",
    "broad:Cavalry",
    "family:Cavalry",
    "family:Monk",
@@ -1487,8 +1485,8 @@
   "team_bonus": "Spearman-line and Skirmishers +2 line of sight",
   "tags": [
    "bonus:Cavalry",
-   "bonus:Foot Archer",
    "bonus:Infantry",
+   "bonus:Trash",
    "broad:Cavalry",
    "family:Cavalry",
    "family:Counter-Units",
@@ -2375,6 +2373,7 @@
   "team_bonus": "Imperial Skirmisher upgrade available in Imperial Age",
   "tags": [
    "bonus:Foot Archer",
+   "bonus:Trash",
    "broad:Cavalry",
    "broad:Cavalry Archer",
    "broad:Foot Archer",
