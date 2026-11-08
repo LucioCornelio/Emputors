@@ -522,6 +522,8 @@ function ClanWarsVII() {
                                 <div style={{ padding: '6px', display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
                                     {roles.map((roleData, idx) => {
                                         const { status, civ, candidates, backups, urgencyCount } = evaluateRole(mapName, roleData);
+                                        const freePicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
+                                        const canPickAny = status !== 'LOCKED' && freePicks.length > 0;
                                         
                                         let bg = '#161920'; let bd = '#2a2d36'; let actionBtn = null;
                                         let urgencyBadge = <div style={{width:'30px'}}/>;
@@ -586,7 +588,7 @@ function ClanWarsVII() {
                                                     <div>{actionBtn}</div>
                                                 </div>
 
-                                                {(candidates?.length > 1 || backups?.length > 0) && (
+                                                {(candidates?.length > 1 || backups?.length > 0 || canPickAny) && (
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
                                                         {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
                                                         {candidates?.slice(1, 4).map((cand, ci) => (
@@ -621,6 +623,17 @@ function ClanWarsVII() {
                                                                     </div>
                                                                 ))}
                                                             </>
+                                                        )}
+                                                        {canPickAny && (
+                                                            <select
+                                                                value=""
+                                                                onChange={(e) => { if (e.target.value) confirmAssignment(mapName, roleData.role, e.target.value); }}
+                                                                title="Asignar cualquier civ pickeada a este rol, aunque no esté en el plan"
+                                                                style={{ marginLeft: 'auto', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '1px 2px', borderRadius: '3px', fontSize: '9px', outline: 'none', cursor: 'pointer', maxWidth: '90px' }}
+                                                            >
+                                                                <option value="">+ Otra</option>
+                                                                {freePicks.map(c => <option key={c} value={c}>{c}{roleData.priority.includes(c) ? '' : ' (fuera de plan)'}</option>)}
+                                                            </select>
                                                         )}
                                                     </div>
                                                 )}
