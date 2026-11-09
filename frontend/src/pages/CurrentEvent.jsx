@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../supabaseClient';
 
-// Diccionario de jugadores por equipo (nicks de Discord en minúsculas)
+// Players per team (Discord nicks in lowercase)
 const TEAM_MEMBERS = {
   "RaiSquad": ["squadrano", "ryzenvelos"],
   "CostalCanela": ["costalceleste", "ruizcanela"],
@@ -25,18 +25,18 @@ const CurrentEvent = () => {
   const [highlightTeam, setHighlightTeam] = useState(null);
   const [expandedImage, setExpandedImage] = useState(null);
 
-  // SUPABASE: Estados de Usuario
+  // SUPABASE: user state
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState(null);
 
-  // ESTADO CIVILIZACIONES DINÁMICAS
+  // DYNAMIC CIVILIZATIONS STATE
   const [civs, setCivs] = useState([]);
 
-  // SUPABASE: Estados de Base de Datos para Standings y Matches
+  // SUPABASE: database state for standings and matches
   const [matchResults, setMatchResults] = useState([]);
   const [calculatedStandings, setCalculatedStandings] = useState([]);
 
-  // SUPABASE: Estados del formulario de logueo
+  // SUPABASE: login form state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMatchModal, setSelectedMatchModal] = useState(null);
   const [logStage, setLogStage] = useState('group');
@@ -50,7 +50,7 @@ const CurrentEvent = () => {
     { map: "", civA: "", civB: "", winner: "" }
   ]);
 
-  // Cargar civilizaciones desde techtree.json
+  // Load civilizations from techtree.json
   useEffect(() => {
     fetch('/techtree.json')
       .then(res => res.json())
@@ -62,7 +62,7 @@ const CurrentEvent = () => {
       .catch(() => console.error('Could not load techtree.json'));
   }, []);
 
-  // Cargar Partidos desde Supabase y Calcular Standings
+  // Load matches from Supabase and compute standings
   const fetchMatches = async () => {
     const { data, error } = await supabase.from('match_results').select('*');
     if (error) {
@@ -72,7 +72,7 @@ const CurrentEvent = () => {
     
     setMatchResults(data);
 
-    // Calcular clasificación base (Solo cuenta Fase de Grupos)
+    // Compute base standings (group stage only)
     let initialStandings = {
       "RaiSquad": { id: "raisquad", name: "RaiSquad", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
       "CostalCanela": { id: "costalcanela", name: "CostalCanela", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
@@ -114,7 +114,7 @@ const CurrentEvent = () => {
     setCalculatedStandings(sortedStandings);
   };
 
-  // Ejecutar carga inicial de partidos y chequear usuario
+  // Initial load of matches and user check
   useEffect(() => {
     fetchMatches();
 
@@ -132,7 +132,7 @@ const CurrentEvent = () => {
     checkUser();
   }, []);
 
-  // Lógica de Permisos
+  // Permission logic
   const rawNickForAuth = user?.user_metadata?.preferred_username || user?.user_metadata?.name || '';
   const discordNick = rawNickForAuth.split('#')[0].toLowerCase();
   const isAdmin = userRole === 'admin';
@@ -149,7 +149,7 @@ const CurrentEvent = () => {
     );
   }, [teamA, teamB, logStage, matchResults]);
 
-  // AUTORELLENADO DE DATOS SI EL PARTIDO EXISTE
+  // AUTOFILL DATA IF THE MATCH EXISTS
   useEffect(() => {
     if (existingMatch) {
       setYoutubeLink(existingMatch.youtube_link || "");
@@ -298,7 +298,7 @@ const CurrentEvent = () => {
     { id: "sarcornelio", name: "SarCornelio", player1: "LucioCornelio", player2: "Panete" }
   ].sort((a, b) => a.name.localeCompare(b.name));
 
-  // Generar la lista visual de partidos cruzando el calendario fijo con los resultados reales
+  // Build the visual match list by crossing the fixed schedule with the real results
   const generateGroupMatchesUI = () => {
     return GROUP_SCHEDULE.map(match => {
       const playedMatch = matchResults.find(m => 
@@ -324,7 +324,7 @@ const CurrentEvent = () => {
   return (
     <div style={containerStyle}>
       
-      {/* BLOQUE DE ESTILOS PARA ANIMACIONES Y HOVERS */}
+      {/* STYLE BLOCK FOR ANIMATIONS AND HOVERS */}
       <style>{`
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 rgba(255, 215, 0, 0.4); border-color: #ffd700; transform: scale(1); } 50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); border-color: #fff; transform: scale(1.03); } 100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); border-color: #333; transform: scale(1); } }
         @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -659,7 +659,7 @@ const CurrentEvent = () => {
         </div>
       )}
 
-      {/* MODAL PARA AMPLIAR IMAGEN DE EQUIPO */}
+      {/* MODAL TO ENLARGE TEAM IMAGE */}
       {expandedImage && (
         <div onClick={() => setExpandedImage(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.85)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
           <img src={expandedImage} alt="Expanded Team Logo" style={{ maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain', animation: 'zoomIn 0.3s ease-out' }} />

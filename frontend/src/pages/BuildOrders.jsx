@@ -49,13 +49,13 @@ const BuildOrders = () => {
     document.title = 'Build Orders | Emputors';
     
     const fetchBuilds = async () => {
-      // Cambiamos .eq(false) por .neq(true) para que incluya los NULL
+      // Use .neq(true) instead of .eq(false) so NULLs are included
       const { data, error } = await supabase.from('build_orders').select('*').neq('is_deleted', true);
       
       if (data) {
         const formattedBuilds = data.map(b => ({
           ...b,
-          // Añadimos compatibilidad para camelCase y un valor por defecto (99) para no romper el sort
+          // Support camelCase and a default value (99) so the sort does not break
           popCount: b.pop_count ?? b.popCount ?? 99,
           strategyIcons: b.strategy_icons ?? b.strategyIcons ?? [],
           whatsNext: b.whats_next ?? b.whatsNext ?? []

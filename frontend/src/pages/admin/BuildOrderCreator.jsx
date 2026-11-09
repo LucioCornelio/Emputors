@@ -139,7 +139,7 @@ const BuildOrderCreator = () => {
         let finalTask = step.task || 'action';
         let finalVil = null;
 
-        // Unificamos sheep y boar en underTC INTERNAMENTE para evitar fallos matemáticos al reasignar
+        // Merge sheep and boar into underTC INTERNALLY to avoid math errors when reassigning
         let actualTarget = step.resTarget;
         if (actualTarget === 'sheep' || actualTarget === 'boar') actualTarget = 'underTC';
         
@@ -180,13 +180,13 @@ const BuildOrderCreator = () => {
             runningRes = { ...stepRes }; 
           }
           finalVil = currentTotalVils; 
-          // Si el destino es builder forzamos la tarea a build, si vuelve de builder le ponemos la que toque
+          // If the target is builder, force the task to build; if it comes back from builder, give it the right task
           if (step.resTo === 'builder') finalTask = 'build';
           else if (step.resFrom === 'builder') finalTask = TASK_MAPPING[step.resTo] || 'reallocate';
           else finalTask = 'reallocate';
         }
         else {
-           // Si es una acción genérica, entrenamiento o tecnología, ocultamos el total de aldeanos
+           // For generic actions, training or technology, hide the villager total
            if (['research', 'age_up', 'action', 'train'].includes(step.task) || (step.task === 'build' && step.actionType === 'action')) {
                finalVil = null; 
            } else {

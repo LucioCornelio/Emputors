@@ -25,14 +25,14 @@ const getCivImage = (civName) => {
 function ClanWarsVII() {
   const [activeTab, setActiveTab] = useState('executionDraft');
 
-  // --- ESTADOS: META EXPLORER ---
+  // --- STATE: META EXPLORER ---
   const [db, setDb] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedMetaMap, setSelectedMetaMap] = useState("Fortress");
   const [activeTooltip, setActiveTooltip] = useState(null);
   const containerRef = useRef(null);
 
-  // --- ESTADOS: EXECUTION DRAFT ---
+  // --- STATE: EXECUTION DRAFT ---
   const [draftMode, setDraftMode] = useState("PA3"); 
   const [selectedExecMaps, setSelectedExecMaps] = useState([]); 
   const [draftPlans, setDraftPlans] = useState({}); 
@@ -47,6 +47,10 @@ function ClanWarsVII() {
   
   const [draft, setDraft] = useState({ picks: [], bans: [], oppPicks: [], snipes: [] });
   const [assigned, setAssigned] = useState({});
+  const [essentialOverrides, setEssentialOverrides] = useState({});
+  const [syncMessage, setSyncMessage] = useState("");
+  const [isReplay, setIsReplay] = useState(false);
+  const pollRef = useRef(null);
   const isHostRef = useRef(isHost);
   const draftBoardRef = useRef(null);
 
@@ -65,7 +69,7 @@ function ClanWarsVII() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Carga inicial de Meta (JSON) y Planes (Supabase)
+  // Initial load: meta (JSON) and plans (Supabase)
   useEffect(() => {
     document.title = 'Clan Wars VII Assistant | Emputors';
     
@@ -115,9 +119,9 @@ function ClanWarsVII() {
     setIsConnected(false);
   }, [cmId]);
 
-  // --- LÓGICA: META EXPLORER ---
+  // --- LOGIC: META EXPLORER ---
   const mapData = db?.maps?.[selectedMetaMap];
-  const isNomad = selectedMetaMap.toLowerCase() === "nomad" || selectedMetaMap.toLowerCase() === "nómada";
+  const isNomad = selectedMetaMap.toLowerCase() === "nomad";
   const totalMatches = mapData ? mapData.total_matches : 0;
 
   const meta = useMemo(() => {
@@ -144,7 +148,7 @@ function ClanWarsVII() {
     setActiveTooltip(prev => prev === id ? null : id);
   };
 
-  // --- LÓGICA: EXECUTION DRAFT ---
+  // --- LOGIC: EXECUTION DRAFT ---
   const requiredMapCount = draftMode === "PA3" ? 3 : 5;
   const isMapSelectionComplete = selectedExecMaps.length === requiredMapCount;
   const canConnect = isMapSelectionComplete && roleAssigned && cmId.trim().length > 0;
@@ -183,6 +187,10 @@ function ClanWarsVII() {
       const cleanId = match ? match[1] : cmId.trim();
 
       if (liveSocket) liveSocket.disconnect();
+      if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+      setIsReplay(false);
+      setSyncMessage("");
+      let replayLoaded = false;
 
       const socket = io('https://aoe2cm.net', { query: { draftId: cleanId }, transports: ['websocket'] });
       
@@ -200,10 +208,25 @@ function ClanWarsVII() {
               });
           };
           fetchState();
-          setInterval(fetchState, 3000);
+          pollRef.current = setInterval(fetchState, 3000);
       });
 
-      socket.on('playerEvent', (payload) => {
+      // Finished drafts are not live: the server sends the whole draft once as a 'replay' and disconnects
+      socket.on('replay', (data) => {
+          replayLoaded = true;
+          if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+          if (data && data.events) processEvents(data.events);
+          setSyncing(false);
+          setIsConnected(true);
+          setIsReplay(true);
+          setSyncMessage("Finished draft loaded");
+      });
+
+      socket.on('message', (msg) => {
+          if (typeof msg === 'string') setSyncMessage(msg);
+      });
+
+      socket.on('playerEvent', () => {
           setTimeout(() => {
               socket.emit('set_role', { name: "LEAT11_Exec", role: "SPECTATOR" }, (res) => {
                   const data = Array.isArray(res) ? res[0] : res;
@@ -212,11 +235,14 @@ function ClanWarsVII() {
           }, 500);
       });
 
-      socket.on('disconnect', () => setIsConnected(false));
+      socket.on('disconnect', () => {
+          if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+          if (!replayLoaded) setIsConnected(false);
+      });
       socket.on('connect_error', () => { setSyncing(false); setIsConnected(false); });
 
       setLiveSocket(socket);
-    } catch (e) { setSyncing(false); setIsConnected(false); }
+    } catch { setSyncing(false); setIsConnected(false); }
   };
 
   const processEvents = (events) => {
@@ -280,11 +306,24 @@ function ClanWarsVII() {
       return { status: 'EMPTY', civ: null, candidates: [], backups: [], urgencyCount: 0 };
   };
 
+  // ESSENTIAL civs: defined per role in the plan, can be changed for this match with Ctrl+click
+  const getEssentials = (mapName, roleData) => essentialOverrides[`${mapName}_${roleData.role}`] ?? (roleData.essential || []);
+  const toggleEssentialInDraft = (mapName, roleData, civ) => setEssentialOverrides(prev => {
+      const key = `${mapName}_${roleData.role}`;
+      const current = prev[key] ?? (roleData.essential || []);
+      return { ...prev, [key]: current.includes(civ) ? current.filter(c => c !== civ) : [...current, civ] };
+  });
+  const isCtrl = (e) => e.ctrlKey || e.metaKey;
+
   const confirmAssignment = (mapName, roleName, civ) => setAssigned(prev => ({ ...prev, [`${mapName}_${roleName}`]: civ }));
   const clearAssignment = (mapName, roleName) => setAssigned(prev => { const next = { ...prev }; delete next[`${mapName}_${roleName}`]; return next; });
   const resetDraft = () => { 
     setDraft({ picks: [], bans: [], oppPicks: [], snipes: [] }); 
     setAssigned({}); 
+    setEssentialOverrides({});
+    setIsReplay(false);
+    setSyncMessage("");
+    if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
     setSelectedExecMaps([]); 
     setCmId(""); 
     setIsConnected(false);
@@ -332,7 +371,7 @@ function ClanWarsVII() {
         }
       `}</style>
 
-      {/* PESTAÑAS */}
+      {/* TABS */}
       <div style={{ display: 'flex', borderBottom: '2px solid #2a2d36', backgroundColor: '#1e212b', padding: '0 1rem' }}>
         <div onClick={() => setActiveTab('executionDraft')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'executionDraft' ? C.gold : '#888', borderBottom: activeTab === 'executionDraft' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Execution Draft</div>
         <div onClick={() => setActiveTab('metaExplorer')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'metaExplorer' ? C.gold : '#888', borderBottom: activeTab === 'metaExplorer' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Meta Explorer</div>
@@ -341,12 +380,12 @@ function ClanWarsVII() {
 
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: activeTab === 'executionDraft' ? '50vh' : '20px' }}>
 
-        {/* --- VISTA: EXECUTION DRAFT --- */}
+        {/* --- VIEW: EXECUTION DRAFT --- */}
         <div style={{ display: activeTab === 'executionDraft' ? 'flex' : 'none', flexDirection: 'column', gap: '15px' }}>
             
             <div style={{ display: 'flex', gap: '20px', alignItems: 'stretch' }}>
                 
-                {/* 1. SELECCIÓN DE MODALIDAD Y MAPAS */}
+                {/* 1. MODE AND MAP SELECTION */}
                 <div style={{ backgroundColor: C.card, padding: '15px', borderRadius: '6px', border: `1px solid ${C.border}`, flex: '1 1 50%', width: '50%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px', animation: !isMapSelectionComplete ? 'pulseGold 2s infinite' : 'none' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h3 style={{ color: C.cyan, fontSize: '11px', margin: 0, textTransform: 'uppercase' }}>1. SELECT MAPS ({selectedExecMaps.length}/{requiredMapCount})</h3>
@@ -369,7 +408,7 @@ function ClanWarsVII() {
                     </div>
                 </div>
 
-                {/* 2. CONEXIÓN CAPTAINS MODE */}
+                {/* 2. CAPTAINS MODE CONNECTION */}
                 <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: `1px solid ${C.borderMed}`, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: '1 1 50%', width: '50%', minWidth: 0, animation: (isMapSelectionComplete && !roleAssigned) ? 'pulseCyan 2s infinite' : 'none' }}>
                     <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -397,8 +436,9 @@ function ClanWarsVII() {
                             fontSize: '12px', fontWeight: 'bold', 
                             animation: (canConnect && !syncing && !isConnected) ? 'pulseGreen 1.5s infinite' : 'none' 
                           }}>
-                            {syncing ? 'SYNCING...' : isConnected ? '✓ CONNECTED' : '↻ CONNECT'}
+                            {syncing ? 'SYNCING...' : isConnected ? (isReplay ? '✓ LOADED' : '✓ CONNECTED') : '↻ CONNECT'}
                         </button>
+                        {syncMessage && <span style={{ alignSelf: 'center', fontSize: '10px', color: isReplay ? C.green : C.red, fontWeight: 'bold' }}>{syncMessage}</span>}
                         <button onClick={resetDraft} style={{ backgroundColor: '#cc3333', color: 'white', border: 'none', padding: '6px 15px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', letterSpacing: '1px' }}>
                             ↻ RESET DRAFT
                         </button>
@@ -406,7 +446,7 @@ function ClanWarsVII() {
                 </div>
             </div>
 
-            {/* DRAFT VISUAL EN VIVO (Ancla para el scroll) */}
+            {/* LIVE DRAFT BOARD (scroll anchor) */}
             <div ref={draftBoardRef} style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px', scrollMarginTop: '20px' }}>
                 <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
@@ -463,8 +503,12 @@ function ClanWarsVII() {
                 </div>
             </div>
 
-            {/* TABLERO DE EJECUCIÓN (CUADRÍCULA ESTRICTA A 3 COLUMNAS) */}
+            {/* EXECUTION BOARD (STRICT 3-COLUMN GRID) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '10px', color: '#888' }}>
+                    <span style={{ width: '12px', height: '12px', border: '2px solid #ff4444', borderRadius: '2px', backgroundColor: 'rgba(255, 68, 68, 0.15)' }}></span>
+                    <span><strong style={{ color: '#ff6666' }}>Ctrl+click</strong> any civ in a role (or use "+ Essential") to mark or unmark it as <strong style={{ color: '#ff6666' }}>ESSENTIAL</strong> for this match. Plan essentials load automatically.</span>
+                </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                     {execMapSlots.map((_, i) => {
                         const mapName = selectedExecMaps[i];
@@ -484,8 +528,8 @@ function ClanWarsVII() {
                                 <div key={mapName} style={{ flex: 1, backgroundColor: C.card, borderRadius: '4px', border: `1px solid ${C.red}55`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '150px', padding: '20px', textAlign: 'center', gap: '8px' }}>
                                     <img src={`/maps/${getMapImageName(mapName)}.png`} alt={mapName} style={{ width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #444', objectFit: 'cover', filter: 'grayscale(0.8)' }} />
                                     <h4 style={{ color: '#fff', margin: 0, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px' }}>{mapName}</h4>
-                                    <span style={{ color: C.red, fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(255, 68, 68, 0.1)', padding: '4px 8px', borderRadius: '4px' }}>NO HAY PLANES CREADOS</span>
-                                    <span style={{ color: '#888', fontSize: '10px' }}>Ve al Plan Creator para configurar estrategias.</span>
+                                    <span style={{ color: C.red, fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(255, 68, 68, 0.1)', padding: '4px 8px', borderRadius: '4px' }}>NO PLANS CREATED</span>
+                                    <span style={{ color: '#888', fontSize: '10px' }}>Go to Plan Creator to set up strategies.</span>
                                 </div>
                             );
                         }
@@ -524,6 +568,10 @@ function ClanWarsVII() {
                                         const { status, civ, candidates, backups, urgencyCount } = evaluateRole(mapName, roleData);
                                         const freePicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
                                         const canPickAny = status !== 'LOCKED' && freePicks.length > 0;
+                                        const essentials = getEssentials(mapName, roleData);
+                                        const lostCivs = [...draft.bans, ...draft.oppPicks, ...draft.snipes];
+                                        const essentialCandidates = roleData.priority.filter(c => !essentials.includes(c));
+                                        const essFrame = (c) => essentials.includes(c) ? '2px solid #ff4444' : 'none';
                                         
                                         let bg = '#161920'; let bd = '#2a2d36'; let actionBtn = null;
                                         let urgencyBadge = <div style={{width:'30px'}}/>;
@@ -557,13 +605,13 @@ function ClanWarsVII() {
                                         return (
                                             <div key={idx} style={{ display: 'flex', flexDirection: 'column', backgroundColor: bg, border: `1px solid ${bd}`, borderRadius: '4px', overflow: 'hidden' }}>
                                                 
-                                                {/* Cuadrícula Estricta blindada contra anchos variables */}
+                                                {/* Strict grid, safe against variable widths */}
                                                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 95px) 36px minmax(0, 1fr) 40px', gap: '6px', alignItems: 'center', padding: '4px 6px', minHeight: '34px' }}>
                                                     <div style={{ fontSize: '10.5px', color: '#e0e0e0', fontWeight: 'bold', lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={roleData.role}>
                                                         {roleData.role}
                                                     </div>
                                                     
-                                                    {/* El hueco de la urgencia ahora siempre tiene contenido para no romper la simetría */}
+                                                    {/* The urgency slot always has content to keep the layout symmetric */}
                                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                         {status === 'LOCKED' ? (
                                                             <span style={{fontSize: '12px', color: C.green, fontWeight: '900'}}>✓</span>
@@ -574,10 +622,10 @@ function ClanWarsVII() {
                                                         )}
                                                     </div>
 
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', overflow: 'hidden' }}>
+                                                    <div onClick={(e) => { if (civ && isCtrl(e)) toggleEssentialInDraft(mapName, roleData, civ); }} title={civ ? 'Ctrl+click to mark or unmark as ESSENTIAL' : undefined} style={{ display: 'flex', alignItems: 'center', gap: '5px', overflow: 'hidden' }}>
                                                         {civ ? (
                                                             <>
-                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '22px', height: '22px', borderRadius: '3px', border: `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
+                                                                <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '22px', height: '22px', borderRadius: '3px', border: essentials.includes(civ) ? '2px solid #ff4444' : `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
                                                                 <span style={{ fontSize: '12px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
                                                             </>
                                                         ) : (
@@ -588,19 +636,19 @@ function ClanWarsVII() {
                                                     <div>{actionBtn}</div>
                                                 </div>
 
-                                                {(candidates?.length > 1 || backups?.length > 0 || canPickAny) && (
+                                                {(candidates?.length > 1 || backups?.length > 0 || status !== 'LOCKED') && (
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(0,0,0,0.2)', borderTop: `1px solid ${bd}55`, flexWrap: 'wrap' }}>
                                                         {candidates?.length > 1 && <span style={{ fontSize: '8px', color: '#666', fontWeight: 'bold' }}>NEXT:</span>}
                                                         {candidates?.slice(1, 4).map((cand, ci) => (
                                                             <div 
                                                                 key={`cand-${ci}`} 
-                                                                onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
-                                                                title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
+                                                                onClick={(e) => { if (isCtrl(e)) { toggleEssentialInDraft(mapName, roleData, cand.civ); return; } if (cand.type === 'SUGGESTED') confirmAssignment(mapName, roleData.role, cand.civ); }}
+                                                                title={cand.type === 'SUGGESTED' ? `Assign ${cand.civ} to ${roleData.role} (Ctrl+click: ESSENTIAL)` : `${cand.civ} not drafted yet (Ctrl+click: ESSENTIAL)`}
                                                                 style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.5 : 1, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
                                                                 onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
                                                                 onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
                                                             >
-                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px', outline: essFrame(cand.civ) }} onError={(e) => e.target.style.display='none'} />
                                                                 <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                             </div>
                                                         ))}
@@ -612,36 +660,63 @@ function ClanWarsVII() {
                                                                 {backups.map((cand, ci) => (
                                                                     <div 
                                                                         key={`back-${ci}`} 
-                                                                        onClick={() => cand.type === 'SUGGESTED' ? confirmAssignment(mapName, roleData.role, cand.civ) : null}
-                                                                        title={cand.type === 'SUGGESTED' ? `Asignar ${cand.civ} a ${roleData.role}` : `${cand.civ} aún no ha sido drafteada`}
+                                                                        onClick={(e) => { if (isCtrl(e)) { toggleEssentialInDraft(mapName, roleData, cand.civ); return; } if (cand.type === 'SUGGESTED') confirmAssignment(mapName, roleData.role, cand.civ); }}
+                                                                        title={cand.type === 'SUGGESTED' ? `Assign ${cand.civ} to ${roleData.role} (Ctrl+click: ESSENTIAL)` : `${cand.civ} not drafted yet (Ctrl+click: ESSENTIAL)`}
                                                                         style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: cand.type === 'TARGET' ? 0.4 : 0.8, cursor: cand.type === 'SUGGESTED' ? 'pointer' : 'default', transition: 'transform 0.1s' }}
                                                                         onMouseEnter={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1.15)' }}
                                                                         onMouseLeave={(e) => { if(cand.type === 'SUGGESTED') e.currentTarget.style.transform = 'scale(1)' }}
                                                                     >
-                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                        <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px', outline: essFrame(cand.civ) }} onError={(e) => e.target.style.display='none'} />
                                                                         <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#666', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
                                                                     </div>
                                                                 ))}
                                                             </>
                                                         )}
+                                                        {status !== 'LOCKED' && essentialCandidates.length > 0 && (
+                                                            <select
+                                                                value=""
+                                                                onChange={(e) => { if (e.target.value) toggleEssentialInDraft(mapName, roleData, e.target.value); }}
+                                                                title="Mark a civ of this role as ESSENTIAL for this match"
+                                                                style={{ marginLeft: 'auto', backgroundColor: '#161920', color: '#ff6666', border: '1px solid #ff444466', padding: '1px 2px', borderRadius: '3px', fontSize: '9px', outline: 'none', cursor: 'pointer', maxWidth: '90px' }}
+                                                            >
+                                                                <option value="">+ Essential</option>
+                                                                {essentialCandidates.map(c => <option key={c} value={c}>{c}</option>)}
+                                                            </select>
+                                                        )}
                                                         {canPickAny && (
                                                             <select
                                                                 value=""
                                                                 onChange={(e) => { if (e.target.value) confirmAssignment(mapName, roleData.role, e.target.value); }}
-                                                                title="Asignar cualquier civ pickeada a este rol, aunque no esté en el plan"
-                                                                style={{ marginLeft: 'auto', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '1px 2px', borderRadius: '3px', fontSize: '9px', outline: 'none', cursor: 'pointer', maxWidth: '90px' }}
+                                                                title="Assign any of our picked civs to this role, even if it is not in the plan"
+                                                                style={{ marginLeft: essentialCandidates.length > 0 ? 0 : 'auto', backgroundColor: '#161920', color: C.cyan, border: '1px solid #444', padding: '1px 2px', borderRadius: '3px', fontSize: '9px', outline: 'none', cursor: 'pointer', maxWidth: '90px' }}
                                                             >
-                                                                <option value="">+ Otra</option>
-                                                                {freePicks.map(c => <option key={c} value={c}>{c}{roleData.priority.includes(c) ? '' : ' (fuera de plan)'}</option>)}
+                                                                <option value="">+ Other</option>
+                                                                {freePicks.map(c => <option key={c} value={c}>{c}{roleData.priority.includes(c) ? '' : ' (off-plan)'}</option>)}
                                                             </select>
                                                         )}
+                                                    </div>
+                                                )}
+
+                                                {essentials.length > 0 && status !== 'LOCKED' && (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(255, 68, 68, 0.06)', borderTop: '1px solid #ff444444', flexWrap: 'wrap' }}>
+                                                        <span style={{ fontSize: '8px', color: '#ff6666', fontWeight: 'bold' }}>ESSENTIAL:</span>
+                                                        {essentials.map(c => {
+                                                            const picked = draft.picks.includes(c) && !draft.snipes.includes(c);
+                                                            const lost = lostCivs.includes(c);
+                                                            return (
+                                                                <div key={`ess-${c}`} onClick={(e) => { if (isCtrl(e)) toggleEssentialInDraft(mapName, roleData, c); }} title={picked ? `${c}: secured (Ctrl+click to unmark)` : lost ? `${c}: lost (Ctrl+click to unmark)` : `${c}: still open, secure it early (Ctrl+click to unmark)`} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '1px 3px', borderRadius: '2px', border: `1px solid ${picked ? C.blue : lost ? '#555' : '#ff4444'}`, opacity: lost ? 0.45 : 1, animation: (!picked && !lost) ? 'pulseAlertRed 1.5s infinite' : 'none' }}>
+                                                                    <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '13px', height: '13px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                                                    <span style={{ fontSize: '9px', fontWeight: 'bold', color: picked ? C.blue : lost ? '#888' : '#ff6666', textDecoration: lost ? 'line-through' : 'none' }}>{c.substring(0,3).toUpperCase()}{picked ? ' ✓' : ''}</span>
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                 )}
                                             </div>
                                         );
                                     })}
 
-                                    {/* Civis sin asignar pero pickeadas que aplican a este mapa */}
+                                    {/* Picked but unassigned civs that fit this map */}
                                     {(() => {
                                         const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
                                         const backupCivs = unassignedPicks.filter(c => {
@@ -672,7 +747,7 @@ function ClanWarsVII() {
             </div>
         </div>
 
-        {/* --- VISTA: META EXPLORER --- */}
+        {/* --- VIEW: META EXPLORER --- */}
         <div style={{ display: activeTab === 'metaExplorer' ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
             <div style={{ filter: 'drop-shadow(0px 6px 12px rgba(0,0,0,0.6))' }}>
                 <img 
@@ -697,7 +772,7 @@ function ClanWarsVII() {
             </div>
 
             {!mapData ? (
-                <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>Faltan datos de Liquipedia.</div>
+                <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>Liquipedia data missing.</div>
             ) : (
                 <div ref={containerRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', width: '100%', marginTop: '10px' }}>
                     
@@ -849,7 +924,7 @@ function ClanWarsVII() {
             )}
         </div>
 
-        {/* --- VISTA: PLAN CREATOR --- */}
+        {/* --- VIEW: PLAN CREATOR --- */}
         <div style={{ display: activeTab === 'planCreator' ? 'block' : 'none', margin: '-20px' }}>
             <DraftPlanCreator />
         </div>

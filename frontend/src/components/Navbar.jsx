@@ -1,19 +1,19 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient'; // Importamos la conexión a Supabase
+import { supabase } from '../supabaseClient'; // Supabase connection
 
 const Navbar = () => {
   const [dropdown, setDropdown] = useState(null);
-  const [user, setUser] = useState(null); // Estado para guardar el usuario
+  const [user, setUser] = useState(null); // State that holds the user
 
-  // Efecto para escuchar si el usuario inicia o cierra sesión
+  // Effect that listens for the user logging in or out
   useEffect(() => {
-    // Buscar la sesión inicial
+    // Get the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
 
-    // Escuchar cambios (cuando hace click en login o logout)
+    // Listen for changes (login or logout clicks)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
@@ -91,7 +91,7 @@ const Navbar = () => {
     transition: 'background 0.2s, color 0.2s'
   };
 
-  // Estilos para la sección de Autenticación
+  // Styles for the authentication section
   const authContainerStyle = {
     display: 'flex',
     alignItems: 'center',
@@ -114,7 +114,7 @@ const Navbar = () => {
 
   const logoutBtnStyle = {
     backgroundColor: 'transparent',
-    color: '#a0aab5', // Gris azulado discreto como el resto del menú
+    color: '#a0aab5', // Subtle blue-grey like the rest of the menu
     border: 'none',
     padding: '0',
     cursor: 'pointer',
@@ -135,7 +135,7 @@ const Navbar = () => {
 
   return (
     <nav style={navStyle}>
-      {/* Logo y Nombre */}
+      {/* Logo and name */}
       <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', minWidth: '150px' }}>
         <img 
           src="/logo_emputors.png" 
@@ -144,7 +144,7 @@ const Navbar = () => {
         />
       </Link>
 
-      {/* Navegación Estructurada */}
+      {/* Structured navigation */}
       <div style={menuContainerStyle}>
         
         {/* Home */}
@@ -199,8 +199,8 @@ const Navbar = () => {
         
       </div>
 
-      {/* Sección de Autenticación (Usuario / Login) */}
-      {/* Sección de Autenticación (Usuario / Login) */}
+      {/* Authentication section (User / Login) */}
+      {/* Authentication section (User / Login) */}
       <div style={authContainerStyle}>
         {!user ? (
           <button 

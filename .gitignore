@@ -13,3 +13,6 @@ backend/venv/
 Thumbs.db
 .vercel
 .env*.local
+
+# Local backups
+_backup_*/

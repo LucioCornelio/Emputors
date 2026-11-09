@@ -53,7 +53,7 @@ const RES_ICON = {
 };
 const RES_COLOR = {
   sheep: '#ef4444', boar: '#ef4444', underTC: '#ef4444', hunt: '#ef4444',
-  chicken: '#ef4444', berries: '#ef4444', farm: '#ef4444', fish: '#ef4444', // Granja en rojo
+  chicken: '#ef4444', berries: '#ef4444', farm: '#ef4444', fish: '#ef4444', // Farm in red
   wood: '#cd7f32', gold: '#fbbf24', stone: '#94a3b8', builder: '#94a3b8',
   ship: '#3b82f6', ship_gold: '#fbbf24', 
 };
@@ -116,7 +116,7 @@ const ICON_MAP = {
   'FletchingDE': '/techs/FletchingDE.png',
   'BodkinArrowDE': '/techs/BodkinArrowDE.png',
   'WheelbarrowDE': '/techs/WheelbarrowDE.png',
-  'Gold_mining_aoe2de': '/techs/Gold_mining_aoe2de.png', // Icono de minería de oro
+  'Gold_mining_aoe2de': '/techs/Gold_mining_aoe2de.png', // Gold mining icon
   
   'ManAtArmsUpgDE': '/techs/ManAtArmsUpgDE.png',
   'LongSwordsmanUpgDE': '/techs/LongSwordmanUpgDE.png', 
@@ -159,7 +159,7 @@ const CAT_BG = {
   food:      { bg: 'rgba(239,68,68,0.18)',   bd: 'rgba(239,68,68,0.35)' },
   berries:   { bg: 'rgba(168,85,247,0.18)',  bd: 'rgba(168,85,247,0.35)' },
   fish:      { bg: 'rgba(59,130,246,0.18)',  bd: 'rgba(59,130,246,0.35)' },
-  farm:      { bg: 'rgba(239,68,68,0.18)',   bd: 'rgba(239,68,68,0.35)' }, // Granja en rojo
+  farm:      { bg: 'rgba(239,68,68,0.18)',   bd: 'rgba(239,68,68,0.35)' }, // Farm in red
   chicken:   { bg: 'rgba(251,191,36,0.18)',  bd: 'rgba(251,191,36,0.35)' },
   wood:      { bg: 'rgba(205,127,50,0.18)',  bd: 'rgba(205,127,50,0.35)' },
   gold:      { bg: 'rgba(251,191,36,0.18)',  bd: 'rgba(251,191,36,0.35)' },
@@ -221,7 +221,7 @@ const Badge = ({ resKey, value, isGrowing }) => {
       fontSize: '10px', fontWeight: isGrowing ? '800' : '600', fontVariantNumeric: 'tabular-nums',
       backgroundColor: isGrowing ? `${color}33` : (zero ? 'transparent' : `${color}15`),
       border: `1px solid ${isGrowing ? color : 'transparent'}`,
-      // CAMBIO AQUÍ: Ahora usa siempre 'color' en lugar de '#fff' si no es cero.
+      // Always uses 'color' instead of '#fff' when not zero.
       color: zero ? C.resZero : color,
       transition: 'all 0.2s ease',
       boxSizing: 'border-box'
@@ -232,11 +232,11 @@ const Badge = ({ resKey, value, isGrowing }) => {
 };
 
 const ResBadges = ({ step, prevRes }) => {
-  // OCULTAMOS LAS BADGES PARA ACCIONES, TRENES Y TECNOLOGÍAS
+  // HIDE BADGES FOR ACTIONS, TRAINING AND TECHNOLOGIES
   if (['research', 'age_up', 'action', 'train'].includes(step.task)) {
     return <div style={{ minWidth: '96px' }} />;
   }
-  // Y ocultamos para los 'build' genéricos que NO envían vils fijos al recurso constructor
+  // Also hide them for generic 'build' steps that do NOT send fixed vils to the builder resource
   if (step.task === 'build' && !(step.res && step.res.builder > 0)) {
     return <div style={{ minWidth: '96px' }} />;
   }
@@ -244,7 +244,7 @@ const ResBadges = ({ step, prevRes }) => {
   const res = step.res || {};
   const safePrev = prevRes || {};
 
-  // TRUCO VISUAL: Agrupamos ovejas y jabalíes en "underTC" solo para la UI de la derecha
+  // VISUAL TRICK: group sheep and boar into "underTC" only for the right-hand UI
   const visualRes = { ...res };
   visualRes.underTC = (visualRes.underTC || 0) + (visualRes.sheep || 0) + (visualRes.boar || 0);
   delete visualRes.sheep;
@@ -285,7 +285,7 @@ const ResBadges = ({ step, prevRes }) => {
 
 const TaskIcon = ({ step, meta, cc }) => {
   if (Array.isArray(step.icon)) {
-    // Solo mostramos "OR" si la descripción dice explícitamente " or "
+    // Only show "OR" if the description explicitly says " or "
     const isChoice = step.desc && step.desc.toLowerCase().includes(' or ');
     const isReallocate = meta.cat === 'reallocate';
 

@@ -22,12 +22,12 @@ function Leat11Draft() {
   const [civB, setCivB] = useState('');
   const [civAnalysis, setCivAnalysis] = useState(null);
   
-  // ESTADOS DEL OPP ANALYZER
+  // OPP ANALYZER STATE
   const [draftPairs, setDraftPairs] = useState([{ id: Date.now(), mapUrl: "", civUrl: "", mapDetails: null, civDetails: null }]);
   const [oppAnalysis, setOppAnalysis] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [debugLogs, setDebugLogs] = useState([]); // <-- ¡Faltaba declarar esto!
+  const [debugLogs, setDebugLogs] = useState([]); // <-- This declaration was missing!
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
@@ -52,7 +52,7 @@ function Leat11Draft() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // COLORES DE CAPTAIN MODE
+  // CAPTAINS MODE COLORS
   const colorHost = '#00c8c8'; // Cyan 
   const colorGuest = '#ffb400'; // Amarillo 
   const myColor = isHost ? colorHost : colorGuest;
@@ -88,13 +88,13 @@ function Leat11Draft() {
           : clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
 
       if (type === "ban") {
-          // Si ambos tienen 5 picks y la civ baneada está en un roster, es un SNIPE
+          // If both have 5 picks and the banned civ is in a roster, it is a SNIPE
           const isSnipe = currentDraft.p1_picks.length === 5 && currentDraft.p2_picks.length === 5;
           if (isSnipe && currentDraft.p1_picks.includes(actualCiv)) {
-              // Alguien ha snipeado una civ de p1 → es el rival (p2) quien snipea
+              // Someone sniped a p1 civ → the opponent (p2) is sniping
               currentDraft.p2_snipe = actualCiv;
           } else if (isSnipe && currentDraft.p2_picks.includes(actualCiv)) {
-              // Alguien ha snipeado una civ de p2 → es el usuario (p1) quien snipea
+              // Someone sniped a p2 civ → the user (p1) is sniping
               currentDraft.p1_snipe = actualCiv;
           } else {
               if (!currentDraft.bans.includes(actualCiv)) currentDraft.bans.push(actualCiv);
@@ -107,10 +107,10 @@ function Leat11Draft() {
           if (actualCiv !== "Hidden") {
               if (targetArray) {
                   const hIdx = targetArray.indexOf("Hidden");
-                  if (hIdx !== -1) targetArray[hIdx] = actualCiv; // Sobrescribe el Hidden
-                  else if (!targetArray.includes(actualCiv)) targetArray.push(actualCiv); // O añade si es nuevo
+                  if (hIdx !== -1) targetArray[hIdx] = actualCiv; // Overwrite the Hidden
+                  else if (!targetArray.includes(actualCiv)) targetArray.push(actualCiv); // Or add it if new
               } else {
-                  // Salvavidas: si CM no dice de quién es el reveal, buscamos el primer Hidden libre
+                  // Fallback: if CM does not say whose reveal it is, take the first free Hidden
                   const p1Idx = currentDraft.p1_picks.indexOf("Hidden");
                   const p2Idx = currentDraft.p2_picks.indexOf("Hidden");
                   if (p1Idx !== -1) currentDraft.p1_picks[p1Idx] = actualCiv;
@@ -134,7 +134,7 @@ function Leat11Draft() {
       setDraft(prev => ({ ...prev, ...tempDraft }));
   };
 
-  // Auto-SYNC cuando hay snipes ocultos: intentos a ~9s, ~18s, ~27s y ~33s
+  // Auto-SYNC when there are hidden snipes: attempts at ~9s, ~18s, ~27s and ~33s
   const autoSyncCount = useRef(0);
   const autoSyncDelays = [9000, 9000, 9000, 6000];
   useEffect(() => {
@@ -151,7 +151,7 @@ function Leat11Draft() {
     }
   }, [draft.p1_snipe, draft.p2_snipe, syncing]);
 
-  // --- LÓGICA OPP ANALYZER ---
+  // --- OPP ANALYZER LOGIC ---
   const extractCmId = (url) => {
     if (!url) return "";
     const match = url.match(/draft\/([a-zA-Z0-9_-]+)/);
@@ -172,7 +172,7 @@ function Leat11Draft() {
         return raw && String(raw).trim() !== "" ? String(raw).trim() : (isHost ? "Host" : "Guest");
       };
 
-      // Extraer datos del Mapa
+      // Extract map data
       const mId = extractCmId(pair.mapUrl);
       if (mId && pair.mapUrl !== pair._lastFetchedMapUrl) {
         try {
@@ -188,7 +188,7 @@ function Leat11Draft() {
         } catch (err) { console.error(err); }
       }
 
-      // Extraer datos de Civis
+      // Extract civ data
       const cId = extractCmId(pair.civUrl);
       if (cId && pair.civUrl !== pair._lastFetchedCivUrl) {
         try {
@@ -216,7 +216,7 @@ function Leat11Draft() {
 
     const updated = [...draftPairs];
 
-    // Si deseleccionamos, solo afecta a la celda actual (no propaga borrados)
+    // Deselecting only affects the current cell (deletions are not propagated)
     if (!role) {
       if (type === 'map') updated[sourceIndex].mapDetails.selectedRole = "";
       else updated[sourceIndex].civDetails.selectedRole = "";
@@ -228,11 +228,11 @@ function Leat11Draft() {
     const details = type === 'map' ? sourcePair.mapDetails : sourcePair.civDetails;
     const targetName = role === 'HOST' ? details?.hostName : details?.guestName;
 
-    // Asignamos el rol a la celda clickada
+    // Assign the role to the clicked cell
     if (type === 'map') updated[sourceIndex].mapDetails.selectedRole = role;
     else updated[sourceIndex].civDetails.selectedRole = role;
 
-    // Si el draft era anónimo ("Host" / "Guest"), no autopropagamos para evitar pisar otros drafts anónimos
+    // If the draft was anonymous ("Host" / "Guest"), do not auto-propagate to avoid overwriting other anonymous drafts
     if (!targetName || targetName.toLowerCase() === "host" || targetName.toLowerCase() === "guest") {
       setDraftPairs(updated);
       return;
@@ -240,11 +240,11 @@ function Leat11Draft() {
 
     const normalizedTarget = targetName.toLowerCase();
 
-    // Propagación en CASCADA (Solo la fila actual y las de abajo)
+    // CASCADE propagation (current row and the rows below only)
     for (let i = sourceIndex; i < updated.length; i++) {
       const p = updated[i];
       
-      // En la fila actual, si marcamos mapa, autocompleta su civ (y viceversa)
+      // In the current row, selecting the map autocompletes its civ (and vice versa)
       if (i === sourceIndex) {
         if (type === 'map' && p.civDetails) {
           if (p.civDetails.hostName?.toLowerCase() === normalizedTarget) p.civDetails.selectedRole = 'HOST';
@@ -256,7 +256,7 @@ function Leat11Draft() {
         continue;
       }
 
-      // En las filas siguientes, completamos todo lo que coincida
+      // In the following rows, fill in everything that matches
       if (p.mapDetails) {
         if (p.mapDetails.hostName?.toLowerCase() === normalizedTarget) p.mapDetails.selectedRole = 'HOST';
         else if (p.mapDetails.guestName?.toLowerCase() === normalizedTarget) p.mapDetails.selectedRole = 'GUEST';
@@ -337,7 +337,7 @@ function Leat11Draft() {
 
       if (liveSocket) liveSocket.disconnect();
 
-      // 1. Cargar historial
+      // 1. Load history
       const apiRes = await fetch(`/api/draft?id=${cleanId}`);
       if (apiRes.ok) {
           const apiData = await apiRes.json();
@@ -349,7 +349,7 @@ function Leat11Draft() {
           }
       }
 
-      // 2. Conectar en vivo
+      // 2. Connect live
       const socket = io('https://aoe2cm.net', {
           query: { draftId: cleanId },
           transports: ['websocket'] 
@@ -365,18 +365,18 @@ function Leat11Draft() {
               });
           };
           
-          fetchState(); // Carga inicial al conectar
+          fetchState(); // Initial load on connect
           
-          // LATIDO DE SEGURIDAD: Pedimos el estado cada 2 segundos.
-          // Caza eventos del servidor (como Reveals automáticos o Aborts) que no disparan clics.
+          // SAFETY HEARTBEAT: request the state every 2 seconds.
+          // Catches server events (like automatic Reveals or Aborts) that do not trigger clicks.
           const pollInterval = setInterval(fetchState, 2000);
           
-          // Limpieza: apagamos el latido si nos desconectamos
+          // Cleanup: stop the heartbeat on disconnect
           socket.on('disconnect', () => clearInterval(pollInterval));
       });
 
       socket.on('playerEvent', (payload) => {
-          // 1. REACCIÓN INSTANTÁNEA (Optimista)
+          // 1. INSTANT REACTION (optimistic)
           const type = String(payload.actionType || payload.type || "").toLowerCase();
           const player = String(payload.player || payload.executingPlayer || "").toUpperCase();
           const civRaw = payload.chosenOptionId || payload.drafted || payload.civ || payload.optionId || "";
@@ -409,7 +409,7 @@ function Leat11Draft() {
               });
           }
 
-          // 2. CONFIRMACIÓN DEFINITIVA (800ms después para cazar los Reveals de CM)
+          // 2. FINAL CONFIRMATION (800ms later to catch CM Reveals)
           setTimeout(() => {
               socket.emit('set_role', { name: "LEAT11_Live", role: "SPECTATOR" }, (response) => {
                   const data = Array.isArray(response) ? response[0] : response;
@@ -419,7 +419,7 @@ function Leat11Draft() {
       });
 
       socket.on('connect_error', (err) => {
-          setSyncError("Fallo de conexión");
+          setSyncError("Connection failed");
           setSyncing(false);
       });
 
@@ -527,7 +527,7 @@ function Leat11Draft() {
     }
   }, [draft.p1_picks, draft.p2_picks, draft.bans, draft.maps, activeTab, db]);
 
-  // Limpiar del Matchup Planner las civs que han sido snipeadas
+  // Remove sniped civs from the Matchup Planner
   useEffect(() => {
     if (draft.p1_snipe || draft.p2_snipe) {
       setDraft(prev => {
@@ -691,24 +691,24 @@ const getGoodMapsForCiv = (civ) => {
     return goodMaps.length > 0 ? ` (${goodMaps.join(', ')})` : "";
   };
 
-  // Helper: Top 12 civs de un mapa desde datos brutos del db (sin filtrar por excluded)
+  // Helper: Top 12 civs of a map from raw db data (not filtered by excluded)
   const getRawTop12 = (mapName) => {
     if (!db || !mapName) return { wr: [], cdps: [] };
     const allData = db.maps_all?.[mapName] || [];
     const vodData = db.maps_vod?.[mapName] || [];
     const parseNum = (v) => { if (!v) return 0; let n = parseFloat(String(v).replace(',','.').replace('%','')); return isNaN(n) ? 0 : (n > 1 ? n/100 : n); };
     const parseCd = (v) => { if (!v) return 0; let n = parseFloat(String(v).replace(',','.')); return isNaN(n) ? 0 : n; };
-    // WR del counters (ladder) — usar maps_all para WR
+    // Counters WR (ladder): use maps_all for WR
     const wrRows = allData.filter(r => r['Civ List']).map(r => ({ civ: String(r['Civ List']).trim().toLowerCase(), wr: parseNum(r['Win Rate']) }));
     const wrSorted = wrRows.sort((a,b) => b.wr - a.wr).slice(0, 12).map(r => r.civ.substring(0,4));
-    // CDPS de los VODs
+    // CDPS from the VODs
     const cdpsSource = vodData.length > 0 ? vodData : allData;
     const cdpsRows = cdpsSource.filter(r => r['Civ List'] && r['CDPS Score']).map(r => ({ civ: String(r['Civ List']).trim().toLowerCase(), cdps: parseCd(r['CDPS Score']) }));
     const cdpsSorted = cdpsRows.sort((a,b) => b.cdps - a.cdps).slice(0, 12).map(r => r.civ.substring(0,4));
     return { wr: wrSorted, cdps: cdpsSorted };
   };
 
-  // Detalle por mapa: devuelve { map, tier } donde tier = 'top7' | 'top12' | null
+  // Per-map detail: returns { map, tier } where tier = 'top7' | 'top12' | null
   const getCivMapTiers = (civ) => {
     if (!db || !civ || isHidden(civ)) return [];
     const civPrefix = civ.substring(0, 4).toLowerCase();
@@ -725,7 +725,7 @@ const getGoodMapsForCiv = (civ) => {
     return tiers;
   };
 
-  // Cobertura por mapa: cuántas civs de p1_picks están en Top 12 (datos brutos, sin filtrar)
+  // Per-map coverage: how many p1_picks civs are in the Top 12 (raw data, unfiltered)
   const getMapCoverage = (mapName) => {
     if (!db || !mapName) return { count: 0, civs: [] };
     const raw = getRawTop12(mapName);
@@ -843,7 +843,7 @@ const getGoodMapsForCiv = (civ) => {
         if (bestMapScore < 15) bestMap = flexMaps.map(m => m.length > 10 ? m.substring(0, 4) + '.' : m).join(' / ');
       }
 
-      // MAP SAVER: tras el 4º pick, bonus si esta civ cubre mapas con cobertura débil
+      // MAP SAVER: after the 4th pick, bonus if this civ covers maps with weak coverage
       if (draft.p1_picks.length >= 4) {
         const weakMaps = draft.maps.filter(m => m && getMapCoverage(m).count < 2);
         const savesMaps = weakMaps.filter(m => {
@@ -957,7 +957,7 @@ const getGoodMapsForCiv = (civ) => {
   }
 
   const generateLiquipediaUrl = (mapName, civName) => {
-    // Regla de traducción específica para Liquipedia
+    // Liquipedia-specific translation rule
     let queryMapName = mapName;
     if (mapName === "Stranded") {
       queryMapName = "Stranded (2020)";
@@ -1232,7 +1232,7 @@ const getGoodMapsForCiv = (civ) => {
                 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
               }
             `}</style>
-            {/* BARRA DE SINCRONIZACIÓN CAPTAIN MODE */}
+            {/* CAPTAINS MODE SYNC BAR */}
             <div style={{ backgroundColor: '#1a1c23', padding: '10px 15px', borderRadius: '6px', border: '1px solid #333', display: 'flex', gap: '15px', alignItems: 'center' }}>
               <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold' }}>CAPTAIN MODE:</span>
               <input 
@@ -1270,7 +1270,7 @@ const getGoodMapsForCiv = (civ) => {
               </button>
             </div>
 
-            {/* 1. BARRA DE CONTROLES */}
+            {/* 1. CONTROLS BAR */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1c23', padding: '6px 15px', borderRadius: '6px', border: '1px solid #333' }}>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <span style={{ color: '#ffd700', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px' }}>MAPS:</span>
@@ -1288,7 +1288,7 @@ const getGoodMapsForCiv = (civ) => {
               </button>
             </div>
 
-            {/* 2. HEADER DEL DRAFT COMPRIMIDO */}
+            {/* 2. COMPACT DRAFT HEADER */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr', gap: '10px' }}>
               
               <div style={{ order: isHost ? 1 : 3, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, minHeight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -1373,7 +1373,7 @@ const getGoodMapsForCiv = (civ) => {
                     const coverageBorder = coverage ? (coverage.count === 0 ? '#ff4444' : coverage.count === 1 ? '#ffb400' : '#2a2d36') : '#2a2d36';
                     const showAlarm = coverage && coverage.count <= 1 && mapName;
                     
-                    // Aseguramos que p1 siempre sea "My Pick" (Host) en el plan, y p2 "Opp Pick" (Guest)
+                    // Make sure p1 is always "My Pick" (Host) in the plan and p2 "Opp Pick" (Guest)
                     const p1_civ = draft.plan_p1[i]?.toLowerCase(); // Host
                     const p2_civ = draft.plan_p2[i]?.toLowerCase(); // Guest
                     
@@ -1382,7 +1382,7 @@ const getGoodMapsForCiv = (civ) => {
                         m_stats = draft.analysis?.matchups?.[mapName]?.[`${p1_civ}_${p2_civ}`];
                     }
 
-                    // Determinar qué civilización evaluar basándose en el rol
+                    // Decide which civ to evaluate based on the role
                     let displayStats = null;
                     if (m_stats) {
                         displayStats = {
@@ -1400,7 +1400,7 @@ const getGoodMapsForCiv = (civ) => {
                         
                         <div style={{ display: 'flex', flexDirection: isHost ? 'row' : 'row-reverse', gap: '6px', alignItems: 'center', marginTop: '2px' }}>
                           
-                          {/* Selector del Host (Siempre p1) */}
+                          {/* Host selector (always p1) */}
                           <select value={draft.plan_p1[i]} onChange={e => { const np = [...draft.plan_p1]; np[i] = e.target.value; setDraft({...draft, plan_p1: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorHost, border: `1px solid ${colorHost}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- My Pick -</option>
                             {draft.p1_picks.filter(c => !isHidden(c) && c !== draft.p2_snipe).map(c => (
@@ -1408,12 +1408,12 @@ const getGoodMapsForCiv = (civ) => {
                             ))}
                           </select>
 
-                          {/* Estadísticas de la partida (dependen del rol) */}
+                          {/* Match stats (depend on the role) */}
                           <div style={{ fontSize: '10px', fontWeight: 'bold', width: '38px', textAlign: 'center', color: displayStats ? (displayStats.wr >= 0.5 ? '#4caf50' : '#ff4444') : '#555' }}>
                             {displayStats ? `${(displayStats.wr * 100).toFixed(1)}%` : 'VS'}
                           </div>
                           
-                          {/* Selector del Guest (Siempre p2) */}
+                          {/* Guest selector (always p2) */}
                           <select value={draft.plan_p2[i]} onChange={e => { const np = [...draft.plan_p2]; np[i] = e.target.value; setDraft({...draft, plan_p2: np}) }} style={{ flex: 1, backgroundColor: '#1e212b', color: colorGuest, border: `1px solid ${colorGuest}55`, borderRadius: '3px', fontSize: '10px', padding: '2px 2px', outline: 'none' }}>
                             <option value="">- Opp Pick -</option>
                             {draft.p2_picks.filter(c => !isHidden(c) && c !== draft.p1_snipe).map(c => {
@@ -1470,7 +1470,7 @@ const getGoodMapsForCiv = (civ) => {
               </div>
             </div>
 
-            {/* SUGERENCIAS DEL DRAFT / SNIPE */}
+            {/* DRAFT / SNIPE SUGGESTIONS */}
             {!isDraftFinished && (
               <div style={{ backgroundColor: isSnipePhase ? '#2a1616' : '#1a1c23', padding: '6px 8px', borderRadius: '6px', border: `1px solid ${isSnipePhase ? '#ff4444' : '#ffd700'}`, marginTop: '10px', marginBottom: '10px', transition: 'all 0.3s' }}>
                 <h3 style={{ color: isSnipePhase ? '#ff4444' : '#ffd700', fontSize: '11px', margin: '0 0 4px 0', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: `1px solid ${isSnipePhase ? '#662222' : '#444'}`, paddingBottom: '2px' }}>
@@ -1508,7 +1508,7 @@ const getGoodMapsForCiv = (civ) => {
               <Top7Table title="TOP 7 CDPS" subtitle="(Score | matches)" dataKey="top_cdps" isCDPS={true} />
             </div>
 
-            {/* 6. TABLAS DE COUNTERS TRANSPESTAS */}
+            {/* 6. TRANSPOSED COUNTER TABLES */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <CountersTable title="TOP 3 COUNTERS (LADDER)" dataKey="counters_ladder" />
               <CountersTable title="TOP 3 COUNTERS (PROS)" dataKey="counters_pros" />
@@ -1575,7 +1575,7 @@ const getGoodMapsForCiv = (civ) => {
 
             </div>
 
-            {/* TABLA DINÁMICA */}
+            {/* DYNAMIC TABLE */}
             {civAnalysis && civA && (
               <div style={{ backgroundColor: '#1a1c23', borderRadius: '6px', border: '1px solid #333', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '10px', tableLayout: 'fixed' }}>
@@ -1679,7 +1679,7 @@ const getGoodMapsForCiv = (civ) => {
         {activeTab === 'oppAnalyzer' && (
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             
-            {/* CONTROLES EN DOS FASES */}
+            {/* TWO-PHASE CONTROLS */}
             <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '4px', border: '1px solid #333', display: 'flex', flexDirection: 'column', gap: '15px' }}>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -1687,7 +1687,7 @@ const getGoodMapsForCiv = (civ) => {
                   <div key={pair.id} style={{ display: 'flex', gap: '10px', alignItems: 'center', backgroundColor: '#161920', padding: '8px', borderRadius: '4px', border: '1px solid #2a2d36' }}>
                     <span style={{ color: '#555', fontSize: '11px', fontWeight: 'bold' }}>#{index + 1}</span>
                     
-                    {/* INPUT MAPA */}
+                    {/* MAP INPUT */}
                     <div style={{ display: 'flex', flex: 1, gap: '5px' }}>
                       <input 
                         type="text" placeholder="Map Draft URL" value={pair.mapUrl} 
@@ -1783,10 +1783,10 @@ const getGoodMapsForCiv = (civ) => {
                 })}
               </div>
             )}
-            {/* CAJA DE LOGS PARA DEBUG */}
+            {/* DEBUG LOG BOX */}
             {debugLogs.length > 0 && (
               <div style={{ marginTop: '10px', backgroundColor: '#111', padding: '10px', borderRadius: '4px', border: '1px solid #ff4444', color: '#0f0', fontFamily: 'monospace', fontSize: '10px', maxHeight: '200px', overflowY: 'auto' }}>
-                <div style={{ color: '#ff4444', marginBottom: '5px', fontWeight: 'bold' }}>DEBUG LOGS (Revisa qué nombres detecta y cómo los asigna):</div>
+                <div style={{ color: '#ff4444', marginBottom: '5px', fontWeight: 'bold' }}>DEBUG LOGS (check which names are detected and how they are assigned):</div>
                 {debugLogs.map((log, i) => <div key={i}>{log}</div>)}
               </div>
             )}
