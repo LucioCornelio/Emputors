@@ -581,9 +581,12 @@ function ClanWarsVII() {
                     <span><strong style={{ color: '#ff6666' }}>Ctrl+click</strong> any civ in a role (or use "+ Essential") to mark or unmark it as <strong style={{ color: '#ff6666' }}>ESSENTIAL</strong> for this match. Plan essentials load automatically.</span>
                 </div>
 
-                {/* NEXT PICK QUEUE: civs we still need, ranked by forecast risk x importance */}
+                {/* NEXT PICK QUEUE: our own priority leads, rival pressure only reorders it */}
                 {forecastOn && (() => {
+                    const POSITION_VALUE = [1, 0.6, 0.4, 0.3, 0.2];
+                    const pressure = (c) => pickWindow > 0 ? Math.min(1.4, Math.max(0.7, 0.6 + 0.2 * civRatio(c))) : 0.7;
                     const queue = {};
+                    const headsUp = {};
                     selectedExecMaps.forEach(mapName => {
                         const plans = draftPlans[mapName];
                         if (!plans) return;
@@ -593,25 +596,33 @@ function ClanWarsVII() {
                             const ev = evaluateRole(mapName, roleData);
                             if (ev.status === 'LOCKED') return;
                             const essentials = getEssentials(mapName, roleData);
-                            // Only our main priorities (top 5 of each role) compete for a pick; backups never do
-                            (ev.candidates || []).forEach(cand => {
+                            // Position among the civs still possible for this role (main priorities only, never backups)
+                            (ev.candidates || []).forEach((cand, pos) => {
                                 if (cand.type !== 'TARGET') return;
-                                const idx = roleData.priority.indexOf(cand.civ);
-                                const importance = (essentials.includes(cand.civ) ? 2 : 1) * Math.max(0.3, 1 - 0.15 * Math.max(0, idx)) * (ev.urgencyCount <= 2 ? 1.4 : 1);
-                                const score = (pickWindow > 0 ? civRatio(cand.civ) : 0) * importance;
-                                const entry = queue[cand.civ] || { civ: cand.civ, score: 0, roles: [], essential: false };
-                                entry.score = Math.max(entry.score, score);
-                                entry.roles.push(`${mapName}: ${roleData.role}`);
-                                entry.essential = entry.essential || essentials.includes(cand.civ);
+                                const isEss = essentials.includes(cand.civ);
+                                const roleTag = `${mapName}: ${roleData.role} (#${pos + 1}${isEss ? ', essential' : ''})`;
+                                if (pos >= 1 && !isEss && civLabel(cand.civ).label === 'NOW') {
+                                    const h = headsUp[cand.civ] || { civ: cand.civ, roles: [] };
+                                    h.roles.push(roleTag);
+                                    headsUp[cand.civ] = h;
+                                }
+                                const value = (POSITION_VALUE[pos] ?? 0.2) * (isEss ? 2 : 1) * (ev.urgencyCount <= 2 ? 1.4 : 1);
+                                const entry = queue[cand.civ] || { civ: cand.civ, best: 0, roles: [], essential: false };
+                                entry.best = Math.max(entry.best, value);
+                                entry.roles.push(roleTag);
+                                entry.essential = entry.essential || isEss;
                                 queue[cand.civ] = entry;
                             });
                         });
                     });
+                    Object.values(queue).forEach(q => { q.score = (q.best + 0.15 * (q.roles.length - 1)) * pressure(q.civ); });
                     const top = Object.values(queue).sort((a, b) => b.score - a.score).slice(0, 6);
+                    const topNames = top.map(q => q.civ);
+                    const heads = Object.values(headsUp).filter(h => !topNames.includes(h.civ)).slice(0, 4);
                     if (top.length === 0) return null;
                     return (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', backgroundColor: C.card, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '6px 10px' }}>
-                            <span style={{ fontSize: '10px', color: C.gold, fontWeight: 'bold' }}>NEXT PICK QUEUE</span>
+                            <span style={{ fontSize: '10px', color: C.gold, fontWeight: 'bold' }} title="Ranked by our priority (role position, essentials, LFT, roles covered); rival preference only reorders it">NEXT PICK QUEUE</span>
                             {top.map((q, i) => {
                                 const r = civLabel(q.civ);
                                 return (
@@ -623,6 +634,18 @@ function ClanWarsVII() {
                                     </div>
                                 );
                             })}
+                            {heads.length > 0 && (
+                                <>
+                                    <span style={{ color: '#444', fontSize: '12px', margin: '0 2px' }}>|</span>
+                                    <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold' }} title="Rival favourites that are only a secondary option for us: if you want them, take them before the rival does">HEADS-UP:</span>
+                                    {heads.map(h => (
+                                        <div key={h.civ} title={`${h.roles.join(' | ')}\n${civTip(h.civ)}`} style={{ display: 'flex', alignItems: 'center', gap: '3px', opacity: 0.75 }}>
+                                            <img src={`/civs/${getCivImage(h.civ)}`} alt={h.civ} style={{ width: '14px', height: '14px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                            <span style={{ fontSize: '10px', color: '#ccc', fontWeight: 'bold' }}>{h.civ}</span>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     );
                 })()}
