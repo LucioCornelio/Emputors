@@ -121,7 +121,7 @@ export const buildRivalModel = (storedDrafts, allCivs) => {
   and our following pick? That is the window in which a civ we postpone can be taken.
 */
 export const rivalPicksInWindow = (turns, nextIndex, ourSide) => {
-  if (!turns || turns.length === 0) return 1;
+  if (!turns || turns.length === 0) return 2; // unknown format: assume a snake draft (2 rival picks)
   const rivalSide = ourSide === 'HOST' ? 'GUEST' : 'HOST';
   const isPick = (t) => String(t?.action || "").toUpperCase() === 'PICK';
   const who = (t) => String(t?.player || "").toUpperCase();
@@ -147,8 +147,15 @@ export const pickRisk = (civ, model, availableCivs, n) => {
   return 1 - Math.pow(1 - share, n);
 };
 
-export const riskLabel = (risk) => {
-  if (risk >= 0.25) return { label: 'NOW', color: '#ff4444' };
-  if (risk >= 0.12) return { label: 'SOON', color: '#ff9800' };
+// Preference against an average civ (x1.0), the same number shown in the rival profile
+export const preferenceRatio = (civ, model) => (model && model.base > 0) ? (model.pref[civ] || 0) / model.base : 0;
+
+/*
+  Label = how much the rival favours the civ (x3 or more: NOW, x1.5 or more: SOON).
+  If the rival has no exclusive pick before our following pick, nothing can be taken: CAN WAIT.
+*/
+export const riskLabel = (ratio, n) => {
+  if (n > 0 && ratio >= 3) return { label: 'NOW', color: '#ff4444' };
+  if (n > 0 && ratio >= 1.5) return { label: 'SOON', color: '#ff9800' };
   return { label: 'CAN WAIT', color: '#888' };
 };

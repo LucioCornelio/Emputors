@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import { supabase } from '../supabaseClient';
 import DraftPlanCreator from './admin/DraftPlanCreator';
 import RivalScouting from './cw7/RivalScouting';
-import { buildRivalModel, rivalPicksInWindow, pickRisk, riskLabel } from './cw7/forecast';
+import { buildRivalModel, rivalPicksInWindow, pickRisk, riskLabel, preferenceRatio } from './cw7/forecast';
 
 const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
 const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
@@ -378,10 +378,13 @@ function ClanWarsVII() {
   const openCivs = CIVS.filter(c => !takenCivs.includes(c));
   const pickWindow = rivalPicksInWindow(draftTurns, eventCount, isHost ? 'HOST' : 'GUEST');
   const civRisk = (civ) => forecastOn ? pickRisk(civ, rivalModel, openCivs, pickWindow) : 0;
+  const civRatio = (civ) => forecastOn ? preferenceRatio(civ, rivalModel) : 0;
+  const civLabel = (civ) => riskLabel(civRatio(civ), pickWindow);
+  const civTip = (civ) => `Rival preference x${civRatio(civ).toFixed(1)} vs an average civ. About ${Math.round(civRisk(civ) * 100)}% chance they take it in the ${pickWindow} rival pick${pickWindow === 1 ? '' : 's'} before our following pick.`;
   const RiskTag = ({ civ }) => {
       if (!forecastOn) return null;
-      const r = riskLabel(civRisk(civ));
-      return <span title={`${Math.round(civRisk(civ) * 100)}% chance the rival takes it before our following pick`} style={{ fontSize: '8px', fontWeight: 'bold', color: r.color, border: `1px solid ${r.color}`, borderRadius: '2px', padding: '0 3px', whiteSpace: 'nowrap', flexShrink: 0 }}>{r.label}</span>;
+      const r = civLabel(civ);
+      return <span title={civTip(civ)} style={{ fontSize: '8px', fontWeight: 'bold', color: r.color, border: `1px solid ${r.color}`, borderRadius: '2px', padding: '0 3px', whiteSpace: 'nowrap', flexShrink: 0 }}>{r.label}</span>;
   };
 
   const myColor = isHost ? C.blue : C.gold;
@@ -595,7 +598,7 @@ function ClanWarsVII() {
                                 if (cand.type !== 'TARGET') return;
                                 const idx = roleData.priority.indexOf(cand.civ);
                                 const importance = (essentials.includes(cand.civ) ? 2 : 1) * Math.max(0.3, 1 - 0.15 * Math.max(0, idx)) * (ev.urgencyCount <= 2 ? 1.4 : 1);
-                                const score = civRisk(cand.civ) * importance;
+                                const score = (pickWindow > 0 ? civRatio(cand.civ) : 0) * importance;
                                 const entry = queue[cand.civ] || { civ: cand.civ, score: 0, roles: [], essential: false };
                                 entry.score = Math.max(entry.score, score);
                                 entry.roles.push(`${mapName}: ${roleData.role}`);
@@ -610,9 +613,9 @@ function ClanWarsVII() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', backgroundColor: C.card, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '6px 10px' }}>
                             <span style={{ fontSize: '10px', color: C.gold, fontWeight: 'bold' }}>NEXT PICK QUEUE</span>
                             {top.map((q, i) => {
-                                const r = riskLabel(civRisk(q.civ));
+                                const r = civLabel(q.civ);
                                 return (
-                                    <div key={q.civ} title={`${q.roles.join(' | ')}\n${Math.round(civRisk(q.civ) * 100)}% chance the rival takes it before our following pick`} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '3px', border: `1px solid ${r.color}88`, backgroundColor: '#161920' }}>
+                                    <div key={q.civ} title={`${q.roles.join(' | ')}\n${civTip(q.civ)}`} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '3px', border: `1px solid ${r.color}88`, backgroundColor: '#161920' }}>
                                         <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold' }}>{i + 1}.</span>
                                         <img src={`/civs/${getCivImage(q.civ)}`} alt={q.civ} style={{ width: '16px', height: '16px', borderRadius: '2px', outline: q.essential ? '2px solid #ff4444' : 'none' }} onError={(e) => e.target.style.display='none'} />
                                         <span style={{ fontSize: '11px', color: '#fff', fontWeight: 'bold' }}>{q.civ}</span>
@@ -636,7 +639,7 @@ function ClanWarsVII() {
                             getEssentials(mapName, roleData).forEach(c => ourCore.add(c));
                         });
                     });
-                    const ratio = (c) => rivalModel.base > 0 ? rivalModel.pref[c] / rivalModel.base : 0;
+                    const ratio = civRatio;
                     const bans = openCivs.filter(c => !ourCore.has(c) && ratio(c) >= 1.5).sort((a, b) => ratio(b) - ratio(a)).slice(0, 5);
                     if (bans.length === 0) return null;
                     const ourSide = isHost ? 'HOST' : 'GUEST';
@@ -799,7 +802,7 @@ function ClanWarsVII() {
                                                             >
                                                                 <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px', outline: essFrame(cand.civ) }} onError={(e) => e.target.style.display='none'} />
                                                                 <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
-                                                                {forecastOn && cand.type === 'TARGET' && <span title={`${riskLabel(civRisk(cand.civ)).label}: ${Math.round(civRisk(cand.civ) * 100)}% chance the rival takes it before our following pick`} style={{ width: '6px', height: '6px', borderRadius: '3px', backgroundColor: riskLabel(civRisk(cand.civ)).color }}></span>}
+                                                                {forecastOn && cand.type === 'TARGET' && <span title={`${civLabel(cand.civ).label}. ${civTip(cand.civ)}`} style={{ width: '6px', height: '6px', borderRadius: '3px', backgroundColor: civLabel(cand.civ).color }}></span>}
                                                             </div>
                                                         ))}
                                                         
