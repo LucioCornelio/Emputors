@@ -278,6 +278,18 @@ function ClanWarsVII() {
       setDraft(temp);
   };
 
+  // Reload plans after they are saved in Plan Creator (no F5 needed)
+  const refreshPlans = async () => {
+      const { data } = await supabase.from('cw7_draft_plans').select('*');
+      if (!data) return;
+      const formatted = {};
+      data.forEach(row => {
+          if (!formatted[row.map_name]) formatted[row.map_name] = {};
+          formatted[row.map_name][row.plan_name] = row.roles;
+      });
+      setDraftPlans(formatted);
+  };
+
   const refreshRivalDrafts = async () => {
       const { data } = await supabase.from('cw7_rival_drafts').select('*').order('created_at', { ascending: false });
       if (data) setRivalDrafts(data);
@@ -578,10 +590,11 @@ function ClanWarsVII() {
                             const ev = evaluateRole(mapName, roleData);
                             if (ev.status === 'LOCKED') return;
                             const essentials = getEssentials(mapName, roleData);
-                            [...(ev.candidates || []), ...(ev.backups || [])].forEach(cand => {
+                            // Only our main priorities (top 5 of each role) compete for a pick; backups never do
+                            (ev.candidates || []).forEach(cand => {
                                 if (cand.type !== 'TARGET') return;
                                 const idx = roleData.priority.indexOf(cand.civ);
-                                const importance = (essentials.includes(cand.civ) ? 2 : 1) * Math.max(0.3, 1 - 0.12 * Math.max(0, idx)) * (ev.urgencyCount <= 2 ? 1.4 : 1);
+                                const importance = (essentials.includes(cand.civ) ? 2 : 1) * Math.max(0.3, 1 - 0.15 * Math.max(0, idx)) * (ev.urgencyCount <= 2 ? 1.4 : 1);
                                 const score = civRisk(cand.civ) * importance;
                                 const entry = queue[cand.civ] || { civ: cand.civ, score: 0, roles: [], essential: false };
                                 entry.score = Math.max(entry.score, score);
@@ -607,6 +620,40 @@ function ClanWarsVII() {
                                     </div>
                                 );
                             })}
+                        </div>
+                    );
+                })()}
+
+                {/* BAN CANDIDATES: rival favourites that are worth little to us */}
+                {forecastOn && (() => {
+                    const ourCore = new Set();
+                    selectedExecMaps.forEach(mapName => {
+                        const plans = draftPlans[mapName];
+                        if (!plans) return;
+                        const planName = selectedPlans[mapName] || Object.keys(plans)[0];
+                        (plans[planName] || []).forEach(roleData => {
+                            roleData.priority.slice(0, 5).forEach(c => ourCore.add(c));
+                            getEssentials(mapName, roleData).forEach(c => ourCore.add(c));
+                        });
+                    });
+                    const ratio = (c) => rivalModel.base > 0 ? rivalModel.pref[c] / rivalModel.base : 0;
+                    const bans = openCivs.filter(c => !ourCore.has(c) && ratio(c) >= 1.5).sort((a, b) => ratio(b) - ratio(a)).slice(0, 5);
+                    if (bans.length === 0) return null;
+                    const ourSide = isHost ? 'HOST' : 'GUEST';
+                    const turnsKnown = draftTurns.length > 0;
+                    const bansLeft = draftTurns.slice(eventCount).filter(t => String(t?.action || '').toUpperCase() === 'BAN' && String(t?.player || '').toUpperCase() === ourSide).length;
+                    const noBans = turnsKnown && bansLeft === 0;
+                    return (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', backgroundColor: C.card, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '6px 10px', opacity: noBans ? 0.5 : 1 }}>
+                            <span style={{ fontSize: '10px', color: C.red, fontWeight: 'bold' }} title="Civs the rival picks a lot that are not among our main priorities on these maps">BAN CANDIDATES</span>
+                            {bans.map(c => (
+                                <div key={c} title={`Rival preference x${ratio(c).toFixed(1)} vs an average civ. Not a main priority for us on these maps.`} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '3px', border: `1px solid ${C.red}66`, backgroundColor: '#161920' }}>
+                                    <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '16px', height: '16px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
+                                    <span style={{ fontSize: '11px', color: '#fff', fontWeight: 'bold' }}>{c}</span>
+                                    <span style={{ fontSize: '9px', fontWeight: 'bold', color: C.red }}>x{ratio(c).toFixed(1)}</span>
+                                </div>
+                            ))}
+                            <span style={{ marginLeft: 'auto', fontSize: '10px', color: '#888' }}>{turnsKnown ? (noBans ? 'No bans left for us' : `${bansLeft} ban${bansLeft === 1 ? '' : 's'} left for us`) : 'Connect a draft to see bans left'}</span>
                         </div>
                     );
                 })()}
@@ -1029,7 +1076,7 @@ function ClanWarsVII() {
 
         {/* --- VIEW: PLAN CREATOR --- */}
         <div style={{ display: activeTab === 'planCreator' ? 'block' : 'none', margin: '-20px' }}>
-            <DraftPlanCreator />
+            <DraftPlanCreator onPlansChanged={refreshPlans} />
         </div>
 
         {/* --- VIEW: RIVAL SCOUTING --- */}

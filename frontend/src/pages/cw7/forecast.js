@@ -69,7 +69,7 @@ export const sideSummary = (events, side) => {
   preference = (weighted picks + ALPHA * base) / (weighted exposure + ALPHA)
   ALPHA pulls civs with little evidence towards the average, so one draft does not dominate.
 */
-const ALPHA = 1.5;
+const ALPHA = 4;
 const pickWeight = (n) => 1 / (1 + 0.3 * (n - 1));
 
 export const buildRivalModel = (storedDrafts, allCivs) => {

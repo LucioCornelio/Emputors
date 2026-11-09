@@ -14,7 +14,7 @@ const getCivImage = (civName) => {
   return specials[civName] ? specials[civName] : `${civName.toLowerCase()}.png`;
 };
 
-function DraftPlanCreator() {
+function DraftPlanCreator({ onPlansChanged }) {
   const [planName, setPlanName] = useState("");
   const [selectedMap, setSelectedMap] = useState(MAP_POOL[0]);
   const [roles, setRoles] = useState([
@@ -142,6 +142,7 @@ function DraftPlanCreator() {
     } else {
       setMessage({ text: selectedPlanId ? "✅ Plan updated" : "✅ Plan created", type: "success" });
       fetchPlans();
+      if (onPlansChanged) onPlansChanged();
       if (!selectedPlanId) {
         setPlanName("");
         setRoles([{ role: "Flank 1", priority: [] }, { role: "Flank 2", priority: [] }, { role: "Pocket", priority: [] }]);
@@ -167,6 +168,7 @@ function DraftPlanCreator() {
     } else {
       setMessage({ text: "✅ Plan deleted", type: "success" });
       fetchPlans();
+      if (onPlansChanged) onPlansChanged();
       handleSelectPlan(""); 
       setTimeout(() => setMessage({ text: "", type: "" }), 4000);
     }
