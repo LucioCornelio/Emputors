@@ -72,7 +72,11 @@ export const sideSummary = (events, side) => {
 const ALPHA = 4;
 const pickWeight = (n) => 1 / (1 + 0.3 * (n - 1));
 
-export const buildRivalModel = (storedDrafts, allCivs) => {
+/*
+  mapStats (optional, from the team statistics page): { map: { civ: timesPlayed } }.
+  Civs the rival has played on the maps of today's match get a boost: +25% per game, up to x2.
+*/
+export const buildRivalModel = (storedDrafts, allCivs, currentMaps = [], mapStats = null) => {
   const stats = {};
   allCivs.forEach(c => { stats[c] = { exposure: 0, picks: 0, rawPicks: 0, seen: 0, snipes: 0 }; });
   let totalPicks = 0, totalExposure = 0;
@@ -107,13 +111,23 @@ export const buildRivalModel = (storedDrafts, allCivs) => {
     });
   });
 
-  const base = totalExposure > 0 ? totalPicks / totalExposure : 0;
+  const draftCount = (storedDrafts || []).length;
+  // Without drafts every civ starts as average (x1.0) and only the map statistics move it
+  const base = totalExposure > 0 ? totalPicks / totalExposure : 1;
   const pref = {};
   allCivs.forEach(c => {
     const s = stats[c];
-    pref[c] = (s.picks + ALPHA * base) / (s.exposure + ALPHA);
+    pref[c] = draftCount > 0 ? (s.picks + ALPHA * base) / (s.exposure + ALPHA) : base;
+    s.playedOn = {};
+    s.playedHere = 0;
+    if (mapStats) {
+      Object.entries(mapStats).forEach(([map, civs]) => {
+        if (civs[c]) { s.playedOn[map] = civs[c]; if (currentMaps.includes(map)) s.playedHere += civs[c]; }
+      });
+    }
+    pref[c] *= 1 + 0.25 * Math.min(s.playedHere, 4);
   });
-  return { stats, pref, base, draftCount: (storedDrafts || []).length };
+  return { stats, pref, base, draftCount, hasMapStats: !!mapStats };
 };
 
 /*
@@ -140,7 +154,7 @@ export const rivalPicksInWindow = (turns, nextIndex, ourSide) => {
 
 // Probability that the rival takes this civ before our following pick
 export const pickRisk = (civ, model, availableCivs, n) => {
-  if (!model || model.draftCount === 0 || n <= 0) return 0;
+  if (!model || (model.draftCount === 0 && !model.hasMapStats) || n <= 0) return 0;
   const total = availableCivs.reduce((acc, c) => acc + (model.pref[c] || 0), 0);
   if (total <= 0) return 0;
   const share = (model.pref[civ] || 0) / total;

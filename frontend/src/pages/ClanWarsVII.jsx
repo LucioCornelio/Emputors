@@ -56,6 +56,7 @@ function ClanWarsVII() {
 
   // --- STATE: RIVAL FORECAST ---
   const [rivalDrafts, setRivalDrafts] = useState([]);
+  const [rivalProfiles, setRivalProfiles] = useState([]);
   const [selectedRival, setSelectedRival] = useState("");
   const [draftTurns, setDraftTurns] = useState([]);
   const [eventCount, setEventCount] = useState(0);
@@ -107,6 +108,8 @@ function ClanWarsVII() {
 
       const { data: rivalData } = await supabase.from('cw7_rival_drafts').select('*').order('created_at', { ascending: false });
       if (rivalData) setRivalDrafts(rivalData);
+      const { data: profileData } = await supabase.from('cw7_rival_profiles').select('*');
+      if (profileData) setRivalProfiles(profileData);
 
       setLoading(false);
     };
@@ -295,6 +298,11 @@ function ClanWarsVII() {
       if (data) setRivalDrafts(data);
   };
 
+  const refreshRivalProfiles = async () => {
+      const { data } = await supabase.from('cw7_rival_profiles').select('*');
+      if (data) setRivalProfiles(data);
+  };
+
   const applyDraftState = (data) => {
       if (!data || !data.events) return;
       processEvents(data.events);
@@ -368,11 +376,12 @@ function ClanWarsVII() {
   };
 
   // --- LOGIC: RIVAL FORECAST (picks only) ---
-  const rivalNames = Array.from(new Set(rivalDrafts.map(d => d.rival_name))).sort((a, b) => a.localeCompare(b));
+  const rivalNames = Array.from(new Set([...rivalDrafts.map(d => d.rival_name), ...rivalProfiles.map(p => p.rival_name)])).sort((a, b) => a.localeCompare(b));
   const rivalModel = useMemo(() => {
       const ds = rivalDrafts.filter(d => d.rival_name === selectedRival);
-      return ds.length ? buildRivalModel(ds, CIVS) : null;
-  }, [rivalDrafts, selectedRival]);
+      const stats = rivalProfiles.find(p => p.rival_name === selectedRival);
+      return (ds.length || stats) ? buildRivalModel(ds, CIVS, selectedExecMaps, stats?.map_stats || null) : null;
+  }, [rivalDrafts, rivalProfiles, selectedRival, selectedExecMaps]);
   const forecastOn = !!rivalModel;
   const takenCivs = [...draft.picks, ...draft.oppPicks, ...draft.bans, ...draft.snipes];
   const openCivs = CIVS.filter(c => !takenCivs.includes(c));
@@ -380,7 +389,11 @@ function ClanWarsVII() {
   const civRisk = (civ) => forecastOn ? pickRisk(civ, rivalModel, openCivs, pickWindow) : 0;
   const civRatio = (civ) => forecastOn ? preferenceRatio(civ, rivalModel) : 0;
   const civLabel = (civ) => riskLabel(civRatio(civ), pickWindow);
-  const civTip = (civ) => `Rival preference x${civRatio(civ).toFixed(1)} vs an average civ. About ${Math.round(civRisk(civ) * 100)}% chance they take it in the ${pickWindow} rival pick${pickWindow === 1 ? '' : 's'} before our following pick.`;
+  const civTip = (civ) => {
+      const played = forecastOn ? Object.entries(rivalModel.stats[civ]?.playedOn || {}).filter(([m]) => selectedExecMaps.includes(m)) : [];
+      const playedTxt = played.length ? ` They played it on ${played.map(([m, n]) => `${m}${n > 1 ? ` x${n}` : ''}`).join(', ')}.` : '';
+      return `Rival preference x${civRatio(civ).toFixed(1)} vs an average civ.${playedTxt} About ${Math.round(civRisk(civ) * 100)}% chance they take it in the ${pickWindow} rival pick${pickWindow === 1 ? '' : 's'} before our following pick.`;
+  };
   const RiskTag = ({ civ }) => {
       if (!forecastOn) return null;
       const r = civLabel(civ);
@@ -472,7 +485,7 @@ function ClanWarsVII() {
                         <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
                         <select value={selectedRival} onChange={(e) => setSelectedRival(e.target.value)} title="Rival for the pick forecast (stored drafts in Rival Scouting)" style={{ marginLeft: 'auto', backgroundColor: '#1e212b', color: selectedRival ? C.gold : '#888', border: '1px solid #444', padding: '3px 6px', borderRadius: '4px', fontSize: '11px', outline: 'none', cursor: 'pointer' }}>
                             <option value="">Forecast: no rival</option>
-                            {rivalNames.map(r => <option key={r} value={r}>Forecast: {r} ({rivalDrafts.filter(d => d.rival_name === r).length} drafts)</option>)}
+                            {rivalNames.map(r => <option key={r} value={r}>Forecast: {r} ({rivalDrafts.filter(d => d.rival_name === r).length} drafts{rivalProfiles.some(p => p.rival_name === r) ? ' + stats' : ''})</option>)}
                         </select>
                     </div>
                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -1107,7 +1120,7 @@ function ClanWarsVII() {
 
         {/* --- VIEW: RIVAL SCOUTING --- */}
         <div style={{ display: activeTab === 'rivalScouting' ? 'block' : 'none' }}>
-            <RivalScouting C={C} CIVS={CIVS} getCivImage={getCivImage} rivalDrafts={rivalDrafts} refreshRivalDrafts={refreshRivalDrafts} />
+            <RivalScouting C={C} CIVS={CIVS} getCivImage={getCivImage} rivalDrafts={rivalDrafts} refreshRivalDrafts={refreshRivalDrafts} rivalProfiles={rivalProfiles} refreshRivalProfiles={refreshRivalProfiles} />
         </div>
       </div>
     </div>
