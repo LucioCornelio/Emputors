@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { supabase } from '../supabaseClient';
-import DraftPlanCreator from './admin/DraftPlanCreator'; 
+import DraftPlanCreator from './admin/DraftPlanCreator';
+import RivalScouting from './cw7/RivalScouting';
+import { buildRivalModel, rivalPicksInWindow, pickRisk, riskLabel } from './cw7/forecast';
 
 const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
 const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
@@ -51,6 +53,12 @@ function ClanWarsVII() {
   const [syncMessage, setSyncMessage] = useState("");
   const [isReplay, setIsReplay] = useState(false);
   const pollRef = useRef(null);
+
+  // --- STATE: RIVAL FORECAST ---
+  const [rivalDrafts, setRivalDrafts] = useState([]);
+  const [selectedRival, setSelectedRival] = useState("");
+  const [draftTurns, setDraftTurns] = useState([]);
+  const [eventCount, setEventCount] = useState(0);
   const isHostRef = useRef(isHost);
   const draftBoardRef = useRef(null);
 
@@ -96,6 +104,9 @@ function ClanWarsVII() {
       } else if (planError) {
         console.error("Error loading plans:", planError);
       }
+
+      const { data: rivalData } = await supabase.from('cw7_rival_drafts').select('*').order('created_at', { ascending: false });
+      if (rivalData) setRivalDrafts(rivalData);
 
       setLoading(false);
     };
@@ -204,7 +215,7 @@ function ClanWarsVII() {
           const fetchState = () => {
               socket.emit('set_role', { name: "LEAT11_Exec", role: "SPECTATOR" }, (res) => {
                   const data = Array.isArray(res) ? res[0] : res;
-                  if (data && data.events) processEvents(data.events);
+                  applyDraftState(data);
               });
           };
           fetchState();
@@ -215,7 +226,7 @@ function ClanWarsVII() {
       socket.on('replay', (data) => {
           replayLoaded = true;
           if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
-          if (data && data.events) processEvents(data.events);
+          applyDraftState(data);
           setSyncing(false);
           setIsConnected(true);
           setIsReplay(true);
@@ -230,7 +241,7 @@ function ClanWarsVII() {
           setTimeout(() => {
               socket.emit('set_role', { name: "LEAT11_Exec", role: "SPECTATOR" }, (res) => {
                   const data = Array.isArray(res) ? res[0] : res;
-                  if (data && data.events) processEvents(data.events);
+                  applyDraftState(data);
               });
           }, 500);
       });
@@ -265,6 +276,18 @@ function ClanWarsVII() {
           }
       });
       setDraft(temp);
+  };
+
+  const refreshRivalDrafts = async () => {
+      const { data } = await supabase.from('cw7_rival_drafts').select('*').order('created_at', { ascending: false });
+      if (data) setRivalDrafts(data);
+  };
+
+  const applyDraftState = (data) => {
+      if (!data || !data.events) return;
+      processEvents(data.events);
+      if (data.preset && Array.isArray(data.preset.turns)) setDraftTurns(data.preset.turns);
+      setEventCount(data.events.length);
   };
 
   const getConfirmedCivs = () => Object.values(assigned).filter(civ => !draft.snipes.includes(civ));
@@ -321,6 +344,8 @@ function ClanWarsVII() {
     setDraft({ picks: [], bans: [], oppPicks: [], snipes: [] }); 
     setAssigned({}); 
     setEssentialOverrides({});
+    setDraftTurns([]);
+    setEventCount(0);
     setIsReplay(false);
     setSyncMessage("");
     if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
@@ -328,6 +353,23 @@ function ClanWarsVII() {
     setCmId(""); 
     setIsConnected(false);
     if(liveSocket) liveSocket.disconnect();
+  };
+
+  // --- LOGIC: RIVAL FORECAST (picks only) ---
+  const rivalNames = Array.from(new Set(rivalDrafts.map(d => d.rival_name))).sort((a, b) => a.localeCompare(b));
+  const rivalModel = useMemo(() => {
+      const ds = rivalDrafts.filter(d => d.rival_name === selectedRival);
+      return ds.length ? buildRivalModel(ds, CIVS) : null;
+  }, [rivalDrafts, selectedRival]);
+  const forecastOn = !!rivalModel;
+  const takenCivs = [...draft.picks, ...draft.oppPicks, ...draft.bans, ...draft.snipes];
+  const openCivs = CIVS.filter(c => !takenCivs.includes(c));
+  const pickWindow = rivalPicksInWindow(draftTurns, eventCount, isHost ? 'HOST' : 'GUEST');
+  const civRisk = (civ) => forecastOn ? pickRisk(civ, rivalModel, openCivs, pickWindow) : 0;
+  const RiskTag = ({ civ }) => {
+      if (!forecastOn) return null;
+      const r = riskLabel(civRisk(civ));
+      return <span title={`${Math.round(civRisk(civ) * 100)}% chance the rival takes it before our following pick`} style={{ fontSize: '8px', fontWeight: 'bold', color: r.color, border: `1px solid ${r.color}`, borderRadius: '2px', padding: '0 3px', whiteSpace: 'nowrap', flexShrink: 0 }}>{r.label}</span>;
   };
 
   const myColor = isHost ? C.blue : C.gold;
@@ -376,6 +418,7 @@ function ClanWarsVII() {
         <div onClick={() => setActiveTab('executionDraft')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'executionDraft' ? C.gold : '#888', borderBottom: activeTab === 'executionDraft' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Execution Draft</div>
         <div onClick={() => setActiveTab('metaExplorer')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'metaExplorer' ? C.gold : '#888', borderBottom: activeTab === 'metaExplorer' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Meta Explorer</div>
         <div onClick={() => setActiveTab('planCreator')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'planCreator' ? C.gold : '#888', borderBottom: activeTab === 'planCreator' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Plan Creator</div>
+        <div onClick={() => setActiveTab('rivalScouting')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'rivalScouting' ? C.gold : '#888', borderBottom: activeTab === 'rivalScouting' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Rival Scouting</div>
       </div>
 
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: activeTab === 'executionDraft' ? '50vh' : '20px' }}>
@@ -410,7 +453,13 @@ function ClanWarsVII() {
 
                 {/* 2. CAPTAINS MODE CONNECTION */}
                 <div style={{ backgroundColor: '#1a1c23', padding: '15px', borderRadius: '6px', border: `1px solid ${C.borderMed}`, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', flex: '1 1 50%', width: '50%', minWidth: 0, animation: (isMapSelectionComplete && !roleAssigned) ? 'pulseCyan 2s infinite' : 'none' }}>
-                    <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
+                        <select value={selectedRival} onChange={(e) => setSelectedRival(e.target.value)} title="Rival for the pick forecast (stored drafts in Rival Scouting)" style={{ marginLeft: 'auto', backgroundColor: '#1e212b', color: selectedRival ? C.gold : '#888', border: '1px solid #444', padding: '3px 6px', borderRadius: '4px', fontSize: '11px', outline: 'none', cursor: 'pointer' }}>
+                            <option value="">Forecast: no rival</option>
+                            {rivalNames.map(r => <option key={r} value={r}>Forecast: {r} ({rivalDrafts.filter(d => d.rival_name === r).length} drafts)</option>)}
+                        </select>
+                    </div>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <input type="text" placeholder="Draft URL or ID..." value={cmId} onChange={(e) => setCmId(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', padding: '6px 10px', borderRadius: '4px', fontSize: '12px', flex: 1, outline: 'none' }} />
                         
@@ -446,8 +495,15 @@ function ClanWarsVII() {
                 </div>
             </div>
 
-            {/* LIVE DRAFT BOARD (scroll anchor) */}
-            <div ref={draftBoardRef} style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px', scrollMarginTop: '20px' }}>
+            {/* CONNECTION STATUS (scroll anchor, so it stays visible after the auto-scroll) */}
+            <div ref={draftBoardRef} style={{ scrollMarginTop: '20px', display: (isConnected || syncMessage) ? 'flex' : 'none', alignItems: 'center', gap: '10px', padding: '6px 10px', borderRadius: '4px', backgroundColor: isConnected ? 'rgba(76, 175, 80, 0.08)' : 'rgba(255, 68, 68, 0.08)', border: `1px solid ${isConnected ? C.green : C.red}55` }}>
+                <span style={{ fontSize: '11px', fontWeight: 'bold', color: isConnected ? C.green : C.red }}>{isConnected ? (isReplay ? '✓ FINISHED DRAFT LOADED' : '● LIVE') : '✗ NOT CONNECTED'}</span>
+                {syncMessage && !isReplay && <span style={{ fontSize: '11px', color: '#aaa' }}>{syncMessage}</span>}
+                {forecastOn && <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#aaa' }}>Forecast vs <strong style={{ color: C.gold }}>{selectedRival}</strong>: {pickWindow} rival pick{pickWindow === 1 ? '' : 's'} before our following pick</span>}
+            </div>
+
+            {/* LIVE DRAFT BOARD */}
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
                 <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -509,6 +565,51 @@ function ClanWarsVII() {
                     <span style={{ width: '12px', height: '12px', border: '2px solid #ff4444', borderRadius: '2px', backgroundColor: 'rgba(255, 68, 68, 0.15)' }}></span>
                     <span><strong style={{ color: '#ff6666' }}>Ctrl+click</strong> any civ in a role (or use "+ Essential") to mark or unmark it as <strong style={{ color: '#ff6666' }}>ESSENTIAL</strong> for this match. Plan essentials load automatically.</span>
                 </div>
+
+                {/* NEXT PICK QUEUE: civs we still need, ranked by forecast risk x importance */}
+                {forecastOn && (() => {
+                    const queue = {};
+                    selectedExecMaps.forEach(mapName => {
+                        const plans = draftPlans[mapName];
+                        if (!plans) return;
+                        const planName = selectedPlans[mapName] || Object.keys(plans)[0];
+                        const roles = plans[planName] || [];
+                        roles.forEach(roleData => {
+                            const ev = evaluateRole(mapName, roleData);
+                            if (ev.status === 'LOCKED') return;
+                            const essentials = getEssentials(mapName, roleData);
+                            [...(ev.candidates || []), ...(ev.backups || [])].forEach(cand => {
+                                if (cand.type !== 'TARGET') return;
+                                const idx = roleData.priority.indexOf(cand.civ);
+                                const importance = (essentials.includes(cand.civ) ? 2 : 1) * Math.max(0.3, 1 - 0.12 * Math.max(0, idx)) * (ev.urgencyCount <= 2 ? 1.4 : 1);
+                                const score = civRisk(cand.civ) * importance;
+                                const entry = queue[cand.civ] || { civ: cand.civ, score: 0, roles: [], essential: false };
+                                entry.score = Math.max(entry.score, score);
+                                entry.roles.push(`${mapName}: ${roleData.role}`);
+                                entry.essential = entry.essential || essentials.includes(cand.civ);
+                                queue[cand.civ] = entry;
+                            });
+                        });
+                    });
+                    const top = Object.values(queue).sort((a, b) => b.score - a.score).slice(0, 6);
+                    if (top.length === 0) return null;
+                    return (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', backgroundColor: C.card, border: `1px solid ${C.border}`, borderRadius: '4px', padding: '6px 10px' }}>
+                            <span style={{ fontSize: '10px', color: C.gold, fontWeight: 'bold' }}>NEXT PICK QUEUE</span>
+                            {top.map((q, i) => {
+                                const r = riskLabel(civRisk(q.civ));
+                                return (
+                                    <div key={q.civ} title={`${q.roles.join(' | ')}\n${Math.round(civRisk(q.civ) * 100)}% chance the rival takes it before our following pick`} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '3px', border: `1px solid ${r.color}88`, backgroundColor: '#161920' }}>
+                                        <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold' }}>{i + 1}.</span>
+                                        <img src={`/civs/${getCivImage(q.civ)}`} alt={q.civ} style={{ width: '16px', height: '16px', borderRadius: '2px', outline: q.essential ? '2px solid #ff4444' : 'none' }} onError={(e) => e.target.style.display='none'} />
+                                        <span style={{ fontSize: '11px', color: '#fff', fontWeight: 'bold' }}>{q.civ}</span>
+                                        <span style={{ fontSize: '8px', fontWeight: 'bold', color: r.color }}>{r.label}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    );
+                })()}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                     {execMapSlots.map((_, i) => {
                         const mapName = selectedExecMaps[i];
@@ -627,6 +728,7 @@ function ClanWarsVII() {
                                                             <>
                                                                 <img src={`/civs/${getCivImage(civ)}`} alt={civ} style={{ width: '22px', height: '22px', borderRadius: '3px', border: essentials.includes(civ) ? '2px solid #ff4444' : `1px solid ${bd}`, objectFit: 'cover', flexShrink: 0, opacity: status === 'SNIPED' ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />
                                                                 <span style={{ fontSize: '12px', color: status === 'SNIPED' ? C.red : '#fff', fontWeight: 'bold', textDecoration: status === 'SNIPED' ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{civ}</span>
+                                                                {status === 'TARGET' && <RiskTag civ={civ} />}
                                                             </>
                                                         ) : (
                                                             <span style={{ fontSize: '11px', color: '#555', fontStyle: 'italic' }}>-</span>
@@ -650,6 +752,7 @@ function ClanWarsVII() {
                                                             >
                                                                 <img src={`/civs/${getCivImage(cand.civ)}`} alt={cand.civ} style={{ width: '13px', height: '13px', borderRadius: '2px', outline: essFrame(cand.civ) }} onError={(e) => e.target.style.display='none'} />
                                                                 <span style={{ fontSize: '9px', color: cand.type === 'SUGGESTED' ? C.blue : '#888', fontWeight: cand.type === 'SUGGESTED' ? 'bold' : 'normal' }}>{cand.civ.substring(0,3).toUpperCase()}</span>
+                                                                {forecastOn && cand.type === 'TARGET' && <span title={`${riskLabel(civRisk(cand.civ)).label}: ${Math.round(civRisk(cand.civ) * 100)}% chance the rival takes it before our following pick`} style={{ width: '6px', height: '6px', borderRadius: '3px', backgroundColor: riskLabel(civRisk(cand.civ)).color }}></span>}
                                                             </div>
                                                         ))}
                                                         
@@ -927,6 +1030,11 @@ function ClanWarsVII() {
         {/* --- VIEW: PLAN CREATOR --- */}
         <div style={{ display: activeTab === 'planCreator' ? 'block' : 'none', margin: '-20px' }}>
             <DraftPlanCreator />
+        </div>
+
+        {/* --- VIEW: RIVAL SCOUTING --- */}
+        <div style={{ display: activeTab === 'rivalScouting' ? 'block' : 'none' }}>
+            <RivalScouting C={C} CIVS={CIVS} getCivImage={getCivImage} rivalDrafts={rivalDrafts} refreshRivalDrafts={refreshRivalDrafts} />
         </div>
       </div>
     </div>

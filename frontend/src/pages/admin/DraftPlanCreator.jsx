@@ -118,15 +118,24 @@ function DraftPlanCreator() {
     const payload = { map_name: selectedMap, plan_name: planName.trim(), roles: roles };
     let error;
 
+    let savedRows = 0;
     if (selectedPlanId) {
-      const res = await supabase.from('cw7_draft_plans').update(payload).eq('id', selectedPlanId);
+      const res = await supabase.from('cw7_draft_plans').update(payload).eq('id', selectedPlanId).select();
       error = res.error;
+      savedRows = res.data ? res.data.length : 0;
     } else {
-      const res = await supabase.from('cw7_draft_plans').insert(payload);
+      const res = await supabase.from('cw7_draft_plans').insert(payload).select();
       error = res.error;
+      savedRows = res.data ? res.data.length : 0;
     }
 
     setSaving(false);
+
+    // Supabase silently ignores writes without permission (e.g. not logged in), so check that a row came back
+    if (!error && savedRows === 0) {
+      setMessage({ text: "❌ Not saved: no permission. Log in and try again.", type: "error" });
+      return;
+    }
 
     if (error) {
       setMessage({ text: `❌ Error saving: ${error.message}`, type: "error" });
@@ -145,8 +154,13 @@ function DraftPlanCreator() {
     if (!selectedPlanId || !window.confirm(`Permanently delete the plan "${planName}"?`)) return;
     
     setIsDeleting(true);
-    const { error } = await supabase.from('cw7_draft_plans').delete().eq('id', selectedPlanId);
+    const { data: deleted, error } = await supabase.from('cw7_draft_plans').delete().eq('id', selectedPlanId).select();
     setIsDeleting(false);
+
+    if (!error && (!deleted || deleted.length === 0)) {
+      setMessage({ text: "❌ Not deleted: no permission. Log in and try again.", type: "error" });
+      return;
+    }
 
     if (error) {
       setMessage({ text: `❌ Error deleting: ${error.message}`, type: "error" });
