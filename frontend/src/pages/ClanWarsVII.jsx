@@ -47,7 +47,7 @@ function ClanWarsVII() {
   const [isConnected, setIsConnected] = useState(false);
   const [liveSocket, setLiveSocket] = useState(null);
   
-  const [draft, setDraft] = useState({ picks: [], bans: [], oppPicks: [], snipes: [] });
+  const [draft, setDraft] = useState({ picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [] });
   const [assigned, setAssigned] = useState({});
   const [essentialOverrides, setEssentialOverrides] = useState({});
   const [syncMessage, setSyncMessage] = useState("");
@@ -259,27 +259,57 @@ function ClanWarsVII() {
     } catch { setSyncing(false); setIsConnected(false); }
   };
 
-  const processEvents = (events) => {
-      let temp = { picks: [], bans: [], oppPicks: [], snipes: [] };
-      events.forEach(ev => {
+  /*
+    Draft state, kept PER SIDE:
+    - picks / oppPicks: rosters ("Hidden" holds the slot of a hidden pick until it is revealed)
+    - oppShared: rival picks made in NON-EXCLUSIVE turns (they do not take the civ away from us)
+    - bans: global or rival bans (unavailable for us); ourBans: our own non-global bans (unavailable only for the rival)
+    - snipedMine: our civs sniped by the rival; snipedTheirs: rival civs sniped by us
+    A ban on a civ that is already in the other side's roster is a snipe.
+  */
+  const processEvents = (events, turns = []) => {
+      const temp = { picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [] };
+      const add = (arr, c) => { if (!arr.includes(c)) arr.push(c); };
+      const sideOf = (player) => player === "HOST" ? (isHostRef.current ? 'me' : 'opp') : player === "GUEST" ? (isHostRef.current ? 'opp' : 'me') : null;
+
+      events.forEach((ev, i) => {
           const type = String(ev.actionType || ev.type || "").toLowerCase();
           const player = String(ev.player || ev.executingPlayer || "").toUpperCase();
-          const civRaw = formatCiv(ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId || "");
-          
-          if (!civRaw || civRaw === "Hidden" || type === "none") return;
-          const isMyAction = (player === "HOST" && isHostRef.current) || (player === "GUEST" && !isHostRef.current);
+          const civ = formatCiv(ev.chosenOptionId || ev.drafted || ev.civ || ev.optionId || ev.revealedOptionId || "");
+          if (!civ || type === "none") return;
+          const who = sideOf(player);
+          const turn = turns[i] || {};
+          const exclusivity = String(turn.exclusivity || "").toUpperCase();
+          const turnAction = String(turn.action || "").toUpperCase();
 
-          if (type === "ban") {
-              if (!temp.bans.includes(civRaw)) temp.bans.push(civRaw);
-          } else if (type === "pick" || type.includes("reveal")) {
-              if (isMyAction) { if (!temp.picks.includes(civRaw)) temp.picks.push(civRaw); }
-              else { if (!temp.oppPicks.includes(civRaw)) temp.oppPicks.push(civRaw); }
-          } else if (type === "snipe") {
-              if (!temp.snipes.includes(civRaw)) temp.snipes.push(civRaw);
+          if (type === "pick" || type.includes("reveal")) {
+              const roster = who === 'me' ? temp.picks : who === 'opp' ? temp.oppPicks : null;
+              if (civ === "Hidden") { if (roster) roster.push("Hidden"); return; }
+              if (roster) {
+                  const h = roster.indexOf("Hidden");
+                  if (h !== -1) roster[h] = civ; else add(roster, civ);
+              } else {
+                  // Reveal without a player: fill the first hidden slot
+                  const h1 = temp.picks.indexOf("Hidden"), h2 = temp.oppPicks.indexOf("Hidden");
+                  if (h1 !== -1) temp.picks[h1] = civ; else if (h2 !== -1) temp.oppPicks[h2] = civ;
+              }
+              if (who === 'opp' && exclusivity === 'NONEXCLUSIVE') add(temp.oppShared, civ);
+          } else if (type === "snipe" || turnAction === "SNIPE") {
+              if (civ === "Hidden") return;
+              if (who === 'me') add(temp.snipedTheirs, civ); else if (who === 'opp') add(temp.snipedMine, civ);
+          } else if (type === "ban") {
+              if (civ === "Hidden") return;
+              if (who === 'me' && temp.oppPicks.includes(civ)) add(temp.snipedTheirs, civ);
+              else if (who === 'opp' && temp.picks.includes(civ)) add(temp.snipedMine, civ);
+              else if (who === 'me' && exclusivity && exclusivity !== 'GLOBAL') add(temp.ourBans, civ);
+              else add(temp.bans, civ);
           }
       });
       setDraft(temp);
   };
+
+  const realPicks = draft.picks.filter(c => !isHidden(c));
+  const oppExclusive = draft.oppPicks.filter(c => !isHidden(c) && !draft.oppShared.includes(c));
 
   // Reload plans after they are saved in Plan Creator (no F5 needed)
   const refreshPlans = async () => {
@@ -305,21 +335,22 @@ function ClanWarsVII() {
 
   const applyDraftState = (data) => {
       if (!data || !data.events) return;
-      processEvents(data.events);
+      const turns = (data.preset && Array.isArray(data.preset.turns)) ? data.preset.turns : draftTurns;
+      processEvents(data.events, turns);
       if (data.preset && Array.isArray(data.preset.turns)) setDraftTurns(data.preset.turns);
       setEventCount(data.events.length);
   };
 
-  const getConfirmedCivs = () => Object.values(assigned).filter(civ => !draft.snipes.includes(civ));
+  const getConfirmedCivs = () => Object.values(assigned).filter(civ => !draft.snipedMine.includes(civ));
 
   const evaluateRole = (mapName, roleData) => {
       const roleKey = `${mapName}_${roleData.role}`;
       const confirmedCiv = assigned[roleKey];
-      const isSniped = draft.snipes.includes(confirmedCiv);
+      const isSniped = draft.snipedMine.includes(confirmedCiv);
 
       const confirmedList = getConfirmedCivs();
-      const availablePicks = draft.picks.filter(c => !confirmedList.includes(c) && !draft.snipes.includes(c));
-      const completelyUnavailable = [...draft.bans, ...draft.oppPicks, ...draft.snipes, ...confirmedList];
+      const availablePicks = realPicks.filter(c => !confirmedList.includes(c) && !draft.snipedMine.includes(c));
+      const completelyUnavailable = [...draft.bans, ...oppExclusive, ...draft.snipedMine, ...confirmedList];
 
       const corePriority = roleData.priority.slice(0, 5);
       const backupPriority = roleData.priority.slice(5);
@@ -361,7 +392,7 @@ function ClanWarsVII() {
   const confirmAssignment = (mapName, roleName, civ) => setAssigned(prev => ({ ...prev, [`${mapName}_${roleName}`]: civ }));
   const clearAssignment = (mapName, roleName) => setAssigned(prev => { const next = { ...prev }; delete next[`${mapName}_${roleName}`]; return next; });
   const resetDraft = () => { 
-    setDraft({ picks: [], bans: [], oppPicks: [], snipes: [] }); 
+    setDraft({ picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [] }); 
     setAssigned({}); 
     setEssentialOverrides({});
     setDraftTurns([]);
@@ -383,7 +414,7 @@ function ClanWarsVII() {
       return (ds.length || stats) ? buildRivalModel(ds, CIVS, selectedExecMaps, stats?.map_stats || null) : null;
   }, [rivalDrafts, rivalProfiles, selectedRival, selectedExecMaps]);
   const forecastOn = !!rivalModel;
-  const takenCivs = [...draft.picks, ...draft.oppPicks, ...draft.bans, ...draft.snipes];
+  const takenCivs = [...realPicks, ...draft.oppPicks, ...draft.bans, ...draft.ourBans].filter(c => !isHidden(c));
   const openCivs = CIVS.filter(c => !takenCivs.includes(c));
   const pickWindow = rivalPicksInWindow(draftTurns, eventCount, isHost ? 'HOST' : 'GUEST');
   const civRisk = (civ) => forecastOn ? pickRisk(civ, rivalModel, openCivs, pickWindow) : 0;
@@ -533,15 +564,12 @@ function ClanWarsVII() {
             {/* LIVE DRAFT BOARD */}
             <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
                 <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'})</h3>
+                    <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'}) <span style={{ color: '#888' }}>{draft.picks.length}/{draftMode === 'PA3' ? 9 : 15}</span></h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
-                            const c = draft.picks[i];
-                            if (!c) {
-                                return <div key={`empty-my-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
-                            }
+                        {draft.picks.length === 0 && <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic', lineHeight: '32px' }}>No picks yet</span>}
+                        {draft.picks.map((c, i) => {
                             const isAssigned = Object.values(assigned).includes(c);
-                            const isSniped = draft.snipes.includes(c);
+                            const isSniped = draft.snipedMine.includes(c);
 
                             return (
                                 <div key={`my-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
@@ -558,6 +586,12 @@ function ClanWarsVII() {
                 <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '220px' }}>
                     <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {draft.ourBans.map((c, i) => (
+                            <div key={`ourban-${i}`} title={`${c}: banned by us (only for the rival)`} style={{ position: 'relative', width: '32px', height: '32px', border: `1px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
+                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
+                                <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: myColor, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
+                            </div>
+                        ))}
                         {draft.bans.map((c, i) => (
                             <div key={`ban-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
                                 <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
@@ -568,18 +602,15 @@ function ClanWarsVII() {
                 </div>
 
                 <div style={{ order: isHost ? 3 : 1, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'})</h3>
+                    <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'}) <span style={{ color: '#888' }}>{draft.oppPicks.length}/{draftMode === 'PA3' ? 9 : 15}</span></h3>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {Array.from({ length: draftMode === 'PA3' ? 9 : 15 }).map((_, i) => {
-                            const c = draft.oppPicks[i];
-                            if (!c) {
-                                return <div key={`empty-opp-${i}`} style={{ width: '32px', height: '32px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b' }} />;
-                            }
+                        {draft.oppPicks.length === 0 && <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic', lineHeight: '32px' }}>No picks yet</span>}
+                        {draft.oppPicks.map((c, i) => {
                             return (
                                 <div key={`opp-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipes.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipedTheirs.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
                                     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                                    {draft.snipes.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                                    {draft.snipedTheirs.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
                                 </div>
                             );
                         })}
@@ -753,10 +784,10 @@ function ClanWarsVII() {
                                 <div style={{ padding: '6px', display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
                                     {roles.map((roleData, idx) => {
                                         const { status, civ, candidates, backups, urgencyCount } = evaluateRole(mapName, roleData);
-                                        const freePicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
+                                        const freePicks = realPicks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipedMine.includes(c));
                                         const canPickAny = status !== 'LOCKED' && freePicks.length > 0;
                                         const essentials = getEssentials(mapName, roleData);
-                                        const lostCivs = [...draft.bans, ...draft.oppPicks, ...draft.snipes];
+                                        const lostCivs = [...draft.bans, ...oppExclusive, ...draft.snipedMine];
                                         const essentialCandidates = roleData.priority.filter(c => !essentials.includes(c));
                                         const essFrame = (c) => essentials.includes(c) ? '2px solid #ff4444' : 'none';
                                         
@@ -890,7 +921,7 @@ function ClanWarsVII() {
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 6px', backgroundColor: 'rgba(255, 68, 68, 0.06)', borderTop: '1px solid #ff444444', flexWrap: 'wrap' }}>
                                                         <span style={{ fontSize: '8px', color: '#ff6666', fontWeight: 'bold' }}>ESSENTIAL:</span>
                                                         {essentials.map(c => {
-                                                            const picked = draft.picks.includes(c) && !draft.snipes.includes(c);
+                                                            const picked = realPicks.includes(c) && !draft.snipedMine.includes(c);
                                                             const lost = lostCivs.includes(c);
                                                             return (
                                                                 <div key={`ess-${c}`} onClick={(e) => { if (isCtrl(e)) toggleEssentialInDraft(mapName, roleData, c); }} title={picked ? `${c}: secured (Ctrl+click to unmark)` : lost ? `${c}: lost (Ctrl+click to unmark)` : `${c}: still open, secure it early (Ctrl+click to unmark)`} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '1px 3px', borderRadius: '2px', border: `1px solid ${picked ? C.blue : lost ? '#555' : '#ff4444'}`, opacity: lost ? 0.45 : 1, animation: (!picked && !lost) ? 'pulseAlertRed 1.5s infinite' : 'none' }}>
@@ -905,26 +936,36 @@ function ClanWarsVII() {
                                         );
                                     })}
 
-                                    {/* Picked but unassigned civs that fit this map */}
+                                    {/* BENCH: all our picked civs not assigned to any role yet */}
                                     {(() => {
-                                        const unassignedPicks = draft.picks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipes.includes(c));
-                                        const backupCivs = unassignedPicks.filter(c => {
-                                            return roles.some(r => r.priority.includes(c));
-                                        });
-
-                                        if (backupCivs.length === 0) return null;
-                                        
+                                        const unassigned = realPicks.filter(c => !getConfirmedCivs().includes(c) && !draft.snipedMine.includes(c));
+                                        const fits = unassigned.filter(c => roles.some(r => r.priority.includes(c)));
+                                        const offPlan = unassigned.filter(c => !fits.includes(c));
+                                        const chip = (c, fit) => (
+                                            <div key={c} title={fit ? `${c}: in this plan` : `${c}: not in this plan (use "+ Other" in a role to assign it)`} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 7px', backgroundColor: fit ? 'rgba(102, 178, 255, 0.12)' : '#1e212b', border: `1px solid ${fit ? C.blue : '#444'}`, borderRadius: '4px' }}>
+                                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '20px', height: '20px', borderRadius: '3px', opacity: fit ? 1 : 0.6 }} onError={(e) => e.target.style.display='none'} />
+                                                <span style={{ fontSize: '11px', color: fit ? '#fff' : '#888', fontWeight: 'bold' }}>{c}</span>
+                                            </div>
+                                        );
                                         return (
-                                            <div style={{ marginTop: 'auto', paddingTop: '10px', borderTop: '1px dashed #333' }}>
-                                                <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>AVAILABLE BENCH (FITS MAP)</span>
-                                                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                                                    {backupCivs.map(c => (
-                                                        <div key={c} style={{ display: 'flex', alignItems: 'center', gap: '3px', padding: '2px 4px', backgroundColor: 'rgba(102, 178, 255, 0.1)', border: `1px solid ${C.blue}55`, borderRadius: '3px' }}>
-                                                            <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '12px', height: '12px', borderRadius: '2px' }} onError={(e) => e.target.style.display='none'} />
-                                                            <span style={{ fontSize: '9px', color: C.blue, fontWeight: 'bold' }}>{c.substring(0,4)}</span>
-                                                        </div>
-                                                    ))}
+                                            <div style={{ marginTop: 'auto', padding: '8px', borderTop: `2px solid ${C.blue}55`, backgroundColor: 'rgba(102, 178, 255, 0.04)', borderRadius: '0 0 4px 4px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                                                    <span style={{ fontSize: '11px', color: C.blue, fontWeight: 'bold', letterSpacing: '1px' }}>BENCH</span>
+                                                    <span style={{ fontSize: '10px', color: '#888' }}>{unassigned.length} unassigned pick{unassigned.length === 1 ? '' : 's'}</span>
                                                 </div>
+                                                {unassigned.length === 0 ? (
+                                                    <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>Empty</span>
+                                                ) : (
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                        {fits.length > 0 && <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>{fits.map(c => chip(c, true))}</div>}
+                                                        {offPlan.length > 0 && (
+                                                            <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', alignItems: 'center' }}>
+                                                                <span style={{ fontSize: '9px', color: '#666', fontWeight: 'bold' }}>OFF-PLAN:</span>
+                                                                {offPlan.map(c => chip(c, false))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         );
                                     })()}
