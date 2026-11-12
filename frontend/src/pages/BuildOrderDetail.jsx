@@ -45,7 +45,9 @@ const renderPremiumStratIcons = (data) => {
 
 const FOOD_KEYS = ['sheep','boar','underTC','hunt','chicken','berries','farm','fish'];
 const FIXED_KEYS = ['wood','gold','stone','builder'];
-const SHIP_KEYS = ['ship', 'ship_gold']; 
+const SHIP_KEYS = ['ship', 'ship_gold'];
+const START_VILS = 3; // villagers every game starts with
+const GAME_CYAN = '#6ff2f2'; // colour of the in-game villager counter 
 
 const RES_ICON = {
   sheep: '🐑', boar: '🐗', underTC: '🛖', hunt: '🦌', chicken: '🐔', berries: '🫐',
@@ -349,7 +351,7 @@ const NoteInfo = ({ note, color }) => {
   );
 };
 
-const StepRow = ({ step, prevRes, hideNotes }) => {
+const StepRow = ({ step, prevRes, hideNotes, startVil }) => {
   const meta = TASK_META[step.task] || { icon: '❓', cat: 'action' };
   const accent = TYPE_ACCENT[meta.cat];
   const cc = accent ? { bg: 'rgba(0,0,0,0.25)', bd: accent } : (CAT_BG[meta.cat] || CAT_BG.action);
@@ -379,17 +381,22 @@ const StepRow = ({ step, prevRes, hideNotes }) => {
         <div style={{ height: '1px', margin: '3px 0', background: `linear-gradient(90deg,transparent,${C.borderMed},transparent)` }} />
       )}
       <div style={{
-        display: 'grid', gridTemplateColumns: '30px max-content 1fr auto',
+        display: 'grid', gridTemplateColumns: '48px max-content 1fr auto auto',
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
         borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`,
       }}>
         <div style={{ textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{
-            fontSize: '12px', fontWeight: '700', color: C.gold,
-            fontVariantNumeric: 'tabular-nums', lineHeight: '1'
-          }}>
-            {step.vil !== null ? step.vil : '—'}
-          </span>
+          {step.vil !== null && startVil != null ? (
+            <span title={`In game you see ${startVil} villagers: this is the step to do (until the next number)`} style={{
+              display: 'inline-flex', alignItems: 'center', gap: '2px', padding: '1px 4px 1px 2px', borderRadius: '4px',
+              background: '#000', border: '1px solid #3a3a3a', lineHeight: 1,
+            }}>
+              <img src="/aoe/resource/vil_counter.png" alt="" style={{ width: '15px', height: '12px', objectFit: 'contain', display: 'block' }} />
+              <span style={{ fontSize: '12px', fontWeight: '800', color: GAME_CYAN, fontVariantNumeric: 'tabular-nums', minWidth: '2ch', textAlign: 'right' }}>{startVil}</span>
+            </span>
+          ) : (
+            <span style={{ fontSize: '12px', color: C.textMute, lineHeight: '1' }}>—</span>
+          )}
           
           {(() => {
             const shipCount = SHIP_KEYS.reduce((sum, k) => sum + (step.res?.[k] || 0), 0);
@@ -423,6 +430,9 @@ const StepRow = ({ step, prevRes, hideNotes }) => {
           {step.note && !hideNotes && <NoteInfo note={step.note} color={noteColor} />}
         </div>
 
+        <span title="Villagers once this step is done" style={{ fontSize: '10px', color: C.textMute, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', minWidth: '30px', textAlign: 'right', paddingRight: '6px' }}>
+          {step.vil !== null ? `${step.vil === startVil ? '=' : '→'} ${step.vil}` : ''}
+        </span>
         <ResBadges step={step} prevRes={prevRes} />
       </div>
     </>
@@ -470,6 +480,7 @@ const AgeHeader = ({ age }) => {
 
 const AgeSections = ({ build, hideNotes = false }) => {
   let lastRes = {};
+  let lastVil = START_VILS;
   return (
     <>
       {build.ages.map((age, ai) => (
@@ -480,7 +491,13 @@ const AgeSections = ({ build, hideNotes = false }) => {
             if (step.res && Object.keys(step.res).length > 0) {
               lastRes = { ...step.res };
             }
-            return <StepRow key={si} step={step} prevRes={prevRes} hideNotes={hideNotes} />;
+            // Number shown in game when this step starts: the total before it (or the same total for moves)
+            let startVil = null;
+            if (step.vil !== null && step.vil !== undefined) {
+              startVil = step.vil > lastVil ? lastVil : step.vil;
+              lastVil = Math.max(lastVil, step.vil);
+            }
+            return <StepRow key={si} step={step} prevRes={prevRes} hideNotes={hideNotes} startVil={startVil} />;
           })}
         </div>
       ))}
