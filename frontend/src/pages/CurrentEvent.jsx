@@ -1,13 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../supabaseClient';
 
-// Players per team (Discord nicks in lowercase)
-const TEAM_MEMBERS = {
-  "RaiSquad": ["squadrano", "ryzenvelos"],
-  "CostalCanela": ["costalceleste", "ruizcanela"],
-  "SarCornelio": ["luciocornelio", "panete"],
-  "Sabaronte": ["ersabo", "caronte5865"]
-};
+// Teams and players live in Supabase (leat11_team_members): team, discord_username (lowercase), display_name, slot (1 = Puppeteer, 2 = Puppet)
 
 const GROUP_SCHEDULE = [
   { t1: "CostalCanela", t2: "RaiSquad" },
@@ -15,7 +9,7 @@ const GROUP_SCHEDULE = [
   { t1: "CostalCanela", t2: "Sabaronte" },
   { t1: "RaiSquad", t2: "SarCornelio" },
   { t1: "CostalCanela", t2: "SarCornelio" },
-  { t1: "RaiSquad", t2: "Sabaaronte" }
+  { t1: "RaiSquad", t2: "Sabaronte" }
 ];
 
 const mapPool = ["Arabia", "Arena"];
@@ -34,7 +28,7 @@ const CurrentEvent = () => {
 
   // SUPABASE: database state for standings and matches
   const [matchResults, setMatchResults] = useState([]);
-  const [calculatedStandings, setCalculatedStandings] = useState([]);
+  const [teamRows, setTeamRows] = useState([]);
 
   // SUPABASE: login form state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,25 +56,44 @@ const CurrentEvent = () => {
       .catch(() => console.error('Could not load techtree.json'));
   }, []);
 
-  // Load matches from Supabase and compute standings
+  // Load teams from Supabase
+  useEffect(() => {
+    supabase.from('leat11_team_members').select('team, discord_username, display_name, slot')
+      .then(({ data, error }) => {
+        if (error) console.error("Error fetching teams:", error);
+        else setTeamRows(data || []);
+      });
+  }, []);
+
+  // Team name -> list of Discord nicks (lowercase)
+  const teamMembers = useMemo(() => {
+    const out = {};
+    teamRows.forEach(r => {
+      if (!out[r.team]) out[r.team] = [];
+      out[r.team].push((r.discord_username || '').toLowerCase());
+    });
+    return out;
+  }, [teamRows]);
+  const teamNames = useMemo(() => Object.keys(teamMembers).sort((a, b) => a.localeCompare(b)), [teamMembers]);
+
+  // Load matches from Supabase
   const fetchMatches = async () => {
     const { data, error } = await supabase.from('match_results').select('*');
     if (error) {
       console.error("Error fetching matches:", error);
       return;
     }
-    
     setMatchResults(data);
+  };
 
-    // Compute base standings (group stage only)
-    let initialStandings = {
-      "RaiSquad": { id: "raisquad", name: "RaiSquad", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
-      "CostalCanela": { id: "costalcanela", name: "CostalCanela", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
-      "SarCornelio": { id: "sarcornelio", name: "SarCornelio", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 },
-      "Sabaronte": { id: "sabaronte", name: "Sabaronte", seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 }
-    };
+  // Compute standings (group stage only)
+  const calculatedStandings = useMemo(() => {
+    let initialStandings = {};
+    teamNames.forEach(name => {
+      initialStandings[name] = { id: name.toLowerCase(), name, seriesW: 0, seriesL: 0, mapsW: 0, mapsL: 0, pts: 0 };
+    });
 
-    data.filter(m => m.stage === 'group' || !m.stage).forEach(match => {
+    matchResults.filter(m => m.stage === 'group' || !m.stage).forEach(match => {
       const { team_a, team_b, score_a, score_b } = match;
       
       if (initialStandings[team_a] && initialStandings[team_b]) {
@@ -103,16 +116,14 @@ const CurrentEvent = () => {
       }
     });
 
-    const sortedStandings = Object.values(initialStandings).sort((a, b) => {
+    return Object.values(initialStandings).sort((a, b) => {
       if (b.pts !== a.pts) return b.pts - a.pts;
       const diffA = a.mapsW - a.mapsL;
       const diffB = b.mapsW - b.mapsL;
       if (diffB !== diffA) return diffB - diffA;
       return a.name.localeCompare(b.name);
     }).map((team, index) => ({ ...team, pos: index + 1 }));
-
-    setCalculatedStandings(sortedStandings);
-  };
+  }, [matchResults, teamNames]);
 
   // Initial load of matches and user check
   useEffect(() => {
@@ -136,7 +147,7 @@ const CurrentEvent = () => {
   const rawNickForAuth = user?.user_metadata?.preferred_username || user?.user_metadata?.name || '';
   const discordNick = rawNickForAuth.split('#')[0].toLowerCase();
   const isAdmin = userRole === 'admin';
-  const isAuthorizedToLog = isAdmin || TEAM_MEMBERS[teamA]?.includes(discordNick) || TEAM_MEMBERS[teamB]?.includes(discordNick);
+  const isAuthorizedToLog = isAdmin || teamMembers[teamA]?.includes(discordNick) || teamMembers[teamB]?.includes(discordNick);
   
   const groupMatchesPlayedCount = matchResults.filter(m => m.stage === 'group' || !m.stage).length;
   const isGroupStageComplete = groupMatchesPlayedCount >= 6;
@@ -291,12 +302,11 @@ const CurrentEvent = () => {
   const thStyle = { padding: '6px 8px', textAlign: 'center', whiteSpace: 'nowrap', color: '#a0aab5', fontWeight: 'bold', fontSize: '11px', textTransform: 'uppercase' };
   const tdStyle = { padding: '6px 8px', textAlign: 'center', color: '#e0e0e0', fontSize: '12px' };
 
-  const teamsRoster = [
-    { id: "costalcanela", name: "CostalCanela", player1: "Ruizcanela", player2: "Costalceleste" },
-    { id: "raisquad", name: "RaiSquad", player1: "Ryzenvelos", player2: "Squadrano" },
-    { id: "sabaronte", name: "Sabaronte", player1: "Caronte", player2: "Ersabo" },
-    { id: "sarcornelio", name: "SarCornelio", player1: "LucioCornelio", player2: "Panete" }
-  ].sort((a, b) => a.name.localeCompare(b.name));
+  const teamsRoster = teamNames.map(name => {
+    const players = teamRows.filter(r => r.team === name);
+    const bySlot = (s) => players.find(p => p.slot === s)?.display_name || '';
+    return { id: name.toLowerCase(), name, player1: bySlot(1), player2: bySlot(2) };
+  });
 
   // Build the visual match list by crossing the fixed schedule with the real results
   const generateGroupMatchesUI = () => {
@@ -516,14 +526,14 @@ const CurrentEvent = () => {
                       <label style={{ display: 'block', color: '#66b2ff', fontSize: '12px', fontWeight: 'bold', marginBottom: '5px' }}>Team A</label>
                       <select value={teamA} onChange={e => setTeamA(e.target.value)} style={{ width: '100%', padding: '8px', backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', borderRadius: '4px' }}>
                         <option value="">- Select Team A -</option>
-                        {Object.keys(TEAM_MEMBERS).map(team => <option key={team} value={team} disabled={team === teamB}>{team}</option>)}
+                        {teamNames.map(team => <option key={team} value={team} disabled={team === teamB}>{team}</option>)}
                       </select>
                     </div>
                     <div style={{ flex: 1 }}>
                       <label style={{ display: 'block', color: '#ff6666', fontSize: '12px', fontWeight: 'bold', marginBottom: '5px' }}>Team B</label>
                       <select value={teamB} onChange={e => setTeamB(e.target.value)} style={{ width: '100%', padding: '8px', backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', borderRadius: '4px' }}>
                         <option value="">- Select Team B -</option>
-                        {Object.keys(TEAM_MEMBERS).map(team => <option key={team} value={team} disabled={team === teamA}>{team}</option>)}
+                        {teamNames.map(team => <option key={team} value={team} disabled={team === teamA}>{team}</option>)}
                       </select>
                     </div>
                   </>

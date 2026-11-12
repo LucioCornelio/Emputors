@@ -27,6 +27,18 @@ const getCivImage = (civName) => {
 function ClanWarsVII() {
   const [activeTab, setActiveTab] = useState('executionDraft');
 
+  // Access: plans and scouting are readable by clan members only (RLS). 'anon' | 'member' | 'other'
+  const [access, setAccess] = useState(null);
+  useEffect(() => {
+    const checkAccess = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) { setAccess('anon'); return; }
+      const { data: role } = await supabase.rpc('current_clan_role');
+      setAccess(role === 'admin' || role === 'member' ? 'member' : 'other');
+    };
+    checkAccess();
+  }, []);
+
   // --- STATE: META EXPLORER ---
   const [db, setDb] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -484,6 +496,14 @@ function ClanWarsVII() {
       </div>
 
       <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: activeTab === 'executionDraft' ? '50vh' : '20px' }}>
+
+        {(access === 'anon' || access === 'other') && activeTab !== 'metaExplorer' && (
+            <div style={{ backgroundColor: C.card, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.gold}`, borderRadius: '6px', padding: '12px 15px', color: C.textMain, fontSize: '13px' }}>
+                {access === 'anon'
+                    ? <><strong style={{ color: C.gold }}>Log in to see the plans.</strong> Draft plans and rival scouting are visible to clan members only. Use the Discord login in the menu.</>
+                    : <><strong style={{ color: C.gold }}>Clan members only.</strong> Draft plans and rival scouting are visible to clan members only.</>}
+            </div>
+        )}
 
         {/* --- VIEW: EXECUTION DRAFT --- */}
         <div style={{ display: activeTab === 'executionDraft' ? 'flex' : 'none', flexDirection: 'column', gap: '15px' }}>
