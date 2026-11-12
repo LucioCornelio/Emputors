@@ -72,7 +72,7 @@ const RES_ART = {
   gold:      { src: '/aoe/resource/gold.png', fallback: '🪙', label: 'Gold' },
   stone:     { src: '/aoe/resource/stone.png', fallback: '🪨', label: 'Stone' },
   builder:   { src: '/aoe/unit/Villager.png', fallback: '🔨', label: 'Builders' },
-  ship:      { src: '/aoe/unit/Fishing_Ship.png', fallback: '🚢', label: 'Fishing ships' },
+  ship:      { src: '/aoe/resource/fishing_ship_water.png', fallback: '🚢', label: 'Fishing ships' },
   ship_gold: { src: '/aoe/unit/Trade_Cog.png', fallback: '⛵', label: 'Trade cogs' },
 };
 // Emojis used in older build orders map to the same art
@@ -291,12 +291,14 @@ const ResBadges = ({ step, prevRes }) => {
   const visualRes = mergeUnderTC(res);
   const visualPrev = mergeUnderTC(safePrev);
 
+  // Checkpoint rows close a reorganisation: every resource with villagers is highlighted
+  const hl = (k) => step.checkpoint ? (visualRes[k] || 0) > 0 : (visualRes[k] || 0) > (visualPrev[k] || 0);
   const foodBadges = FOOD_KEYS
     .filter((k) => (visualRes[k] || 0) > 0)
-    .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />);
+    .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={hl(k)} />);
     
   const fixedBadges = FIXED_KEYS.map((k) => (
-    <Badge key={k} resKey={k} value={visualRes[k] || 0} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />
+    <Badge key={k} resKey={k} value={visualRes[k] || 0} isGrowing={hl(k)} />
   ));
   
   const shipBadges = SHIP_KEYS
@@ -308,6 +310,7 @@ const ResBadges = ({ step, prevRes }) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexShrink: 0, gap: '4px' }}>
+      {step.checkpoint && <span title="Economy after the reorganisation" style={{ fontSize: '8px', fontWeight: '800', letterSpacing: '0.05em', color: C.gold, border: `1px solid ${C.gold}66`, borderRadius: '3px', padding: '1px 4px', whiteSpace: 'nowrap' }}>NEW ECO</span>}
       {foodBadges}
       {fixedBadges}
       {shipBadges.length > 0 && (
@@ -416,8 +419,8 @@ const StepRow = ({ step, prevRes }) => {
             const shipCount = SHIP_KEYS.reduce((sum, k) => sum + (step.res?.[k] || 0), 0);
             if (shipCount > 0) {
               return (
-                <span style={{ fontSize: '9px', color: '#3b82f6', fontWeight: 'bold', marginTop: '1px' }}>
-                  +{shipCount}🚢
+                <span title={`+${shipCount} Fishing Ships`} style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', fontSize: '9px', color: '#3b82f6', fontWeight: 'bold', marginTop: '1px' }}>
+                  +{shipCount}<img src="/aoe/resource/fishing_ship_cutout.png" alt="" style={{ width: '12px', height: '12px', objectFit: 'contain' }} />
                 </span>
               );
             }
@@ -505,7 +508,7 @@ const AgeSections = ({ build }) => {
           <AgeHeader age={age} />
           {age.steps.map((step, si) => {
             const prevRes = { ...lastRes };
-            if (step.res) {
+            if (step.res && Object.keys(step.res).length > 0) {
               lastRes = { ...step.res };
             }
             return <StepRow key={si} step={step} prevRes={prevRes} />;
