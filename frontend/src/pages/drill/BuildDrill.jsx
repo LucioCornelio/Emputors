@@ -23,7 +23,7 @@ const BUILDINGS = {
   lumber:     { name: 'Lumber Camp',    key: 'Lumber_camp_aoe2de',    menu: ['DoubleBitAxe_aoe2DE', 'BowSawDE', 'Two-Man Saw'] },
   mining:     { name: 'Mining Camp',    key: 'Mining_camp_aoe2de',    menu: ['Gold_mining_aoe2de', 'Stone Mining', 'Gold Shaft Mining'] },
   mulecart:   { name: 'Mule Cart',      key: 'MuleCartDE',            menu: ['DoubleBitAxe_aoe2DE', 'BowSawDE', 'Gold_mining_aoe2de', 'Stone Mining'], optional: true },
-  dock:       { name: 'Dock',           key: 'Dock_aoe2DE',           menu: ['FishingShipDE', 'Hulk_AoE2', 'Gillnets', 'Galley'], water: true },
+  dock:       { name: 'Dock',           key: 'Dock_aoe2DE',           menu: ['FishingShipDE', 'Fire Galley', 'Galley', 'Hulk_AoE2', 'Gillnets'], water: true },
   barracks:   { name: 'Barracks',       key: 'Barracks_aoe2DE',       menu: ['MilitiaDE', 'Manatarms', 'Longswordsman_aoe2DE', 'Spearman', 'ManAtArmsUpgDE', 'LongSwordsmanUpgDE', 'SquiresDE'] },
   range:      { name: 'Archery Range',  key: 'Archery_range_aoe2DE',  menu: ['Archer_aoe2DE', 'Skirmisher', 'Crossbowman_aoe2DE', 'Thumb Ring'] },
   stable:     { name: 'Stable',         key: 'Stable_aoe2de',         menu: ['Scoutcavalry_aoe2DE', 'LightCavalryDE', 'Bloodlines', 'Husbandry'] },
