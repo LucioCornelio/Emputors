@@ -373,7 +373,35 @@ const TaskIcon = ({ step, meta, cc, crossCount = 0 }) => {
   return <IconBox cc={cc}><span>{meta.icon}</span></IconBox>;
 };
 
-const StepRow = ({ step, prevRes }) => {
+// Advice hidden behind an (i): opens on hover or tap, never shown in Game Mode
+const NoteInfo = ({ note, color }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <span
+      onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}
+      onClick={(e) => { e.stopPropagation(); setOpen(o => !o); }}
+      style={{ position: 'relative', display: 'inline-block', marginLeft: '6px', verticalAlign: 'middle', cursor: 'help' }}
+    >
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: '13px', height: '13px', borderRadius: '50%', fontSize: '9px', fontWeight: '800',
+        fontStyle: 'italic', fontFamily: 'Georgia, serif', lineHeight: 1,
+        color, border: `1px solid ${color}`, opacity: open ? 1 : 0.6,
+      }}>i</span>
+      {open && (
+        <span style={{
+          position: 'absolute', left: '50%', bottom: 'calc(100% + 6px)', transform: 'translateX(-50%)',
+          zIndex: 20, width: 'max-content', maxWidth: '260px', whiteSpace: 'normal',
+          padding: '5px 8px', borderRadius: '4px', fontSize: '11px', lineHeight: 1.35, fontStyle: 'normal',
+          color: C.text, background: '#14161c', border: `1px solid ${color}88`,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.5)', pointerEvents: 'none',
+        }}>{note}</span>
+      )}
+    </span>
+  );
+};
+
+const StepRow = ({ step, prevRes, hideNotes }) => {
   const meta = TASK_META[step.task] || { icon: '❓', cat: 'action' };
   const accent = TYPE_ACCENT[meta.cat];
   const cc = accent ? { bg: 'rgba(0,0,0,0.25)', bd: accent } : (CAT_BG[meta.cat] || CAT_BG.action);
@@ -444,14 +472,7 @@ const StepRow = ({ step, prevRes }) => {
           textAlign: 'left',
         }}>
           {formatDesc(step.desc)}
-          {step.note && (
-            <span style={{
-              color: noteColor, fontStyle: 'italic', fontSize: '11px',
-              marginLeft: '8px',
-            }}>
-              — {step.note}
-            </span>
-          )}
+          {step.note && !hideNotes && <NoteInfo note={step.note} color={noteColor} />}
         </div>
 
         <ResBadges step={step} prevRes={prevRes} />
@@ -499,7 +520,7 @@ const AgeHeader = ({ age }) => {
   );
 };
 
-const AgeSections = ({ build }) => {
+const AgeSections = ({ build, hideNotes = false }) => {
   let lastRes = {};
   return (
     <>
@@ -511,7 +532,7 @@ const AgeSections = ({ build }) => {
             if (step.res && Object.keys(step.res).length > 0) {
               lastRes = { ...step.res };
             }
-            return <StepRow key={si} step={step} prevRes={prevRes} />;
+            return <StepRow key={si} step={step} prevRes={prevRes} hideNotes={hideNotes} />;
           })}
         </div>
       ))}
@@ -625,7 +646,7 @@ const BuildOrderDetail = () => {
             </div>
           </div>
         </div>
-        <AgeSections build={build} />
+        <AgeSections build={build} hideNotes />
       </div>
     );
   }
