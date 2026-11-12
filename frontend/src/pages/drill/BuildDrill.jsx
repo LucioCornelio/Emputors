@@ -723,7 +723,7 @@ const HELP = [
   ['Research, units, age up', 'Click the building that does it (the Town Center on the map, or any building in the palette) and pick the icon.'],
   ['Combined steps', 'Some steps do several things at once. "1 vil builds House, then Mill, then berries" means: Build House + Build Mill + send 1 villager to Berries. Do every part in any order, then press Check. "This step" shows what you have built or chosen so far.'],
   ['Fishing ships', 'Switch to "Fishing ships" and send them to deep water.'],
-  ['Checking', 'Check (Enter) validates the step. After two misses you get a hint; Reveal solves the step and counts as a miss. Undo (Ctrl+Z) and Reset step fix mistakes. Steps without villager work (pushing deer, luring the boar) pop up as "Don't forget" reminders: read them and press Continue.'],
+  ['Checking', 'Check (Enter) validates the step. After two misses you get a hint; Reveal solves the step and counts as a miss. Undo (Ctrl+Z) and Reset step fix mistakes. Steps without villager work (pushing deer, luring the boar) pop up as "Don’t forget" reminders: read them and press Continue.'],
 ];
 
 const HowToPlay = ({ onClose }) => (
