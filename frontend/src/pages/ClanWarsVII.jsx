@@ -567,9 +567,9 @@ function ClanWarsVII() {
             {/* LIVE DRAFT BOARD: like aoe2cm, HOST on the left and GUEST on the right, both filling from the centre outwards */}
             {(() => {
                 const mySide = isHost ? 'HOST' : 'GUEST';
-                // Slots come from the draft format itself; before connecting, PA3 = 9 picks and BO5 = 12 picks per side
+                // Pick slots per side, reserved from the start: PA3 = 12, BO5 = 19
                 const countTurns = (side, action) => draftTurns.filter(t => String(t?.player || '').toUpperCase() === side && String(t?.action || '').toUpperCase() === action).length;
-                const pickSlots = (side) => draftTurns.length ? countTurns(side, 'PICK') : (draftMode === 'PA3' ? 9 : 12);
+                const pickSlots = () => draftMode === 'PA3' ? 12 : 19;
                 const draftOver = draftTurns.length > 0 && eventCount >= draftTurns.length;
                 const banSlots = (side) => (draftTurns.length && !draftOver) ? countTurns(side, 'BAN') : 0;
 
@@ -588,7 +588,7 @@ function ClanWarsVII() {
                     const isLeft = side === 'HOST';
                     const color = mine ? myColor : oppColor;
                     const list = mine ? draft.picks : draft.oppPicks;
-                    const slots = Math.max(pickSlots(side), list.length);
+                    const slots = Math.max(pickSlots(), list.length);
                     const tiles = list.map((c, i) => {
                         if (mine) {
                             const sniped = draft.snipedMine.includes(c);
