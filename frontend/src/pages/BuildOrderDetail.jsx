@@ -383,7 +383,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
       <div style={{
         display: 'grid', gridTemplateColumns: '48px 40px max-content 1fr auto',
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
-        borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`,
+        borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`, borderBottom: '1px solid rgba(255,255,255,0.045)',
       }}>
         <div style={{ textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           {startVil != null ? (
