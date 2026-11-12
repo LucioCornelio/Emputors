@@ -159,7 +159,7 @@ const ICON_MAP = {
   'FletchingDE': '/techs/FletchingDE.png',
   'BodkinArrowDE': '/techs/BodkinArrowDE.png',
   'WheelbarrowDE': '/techs/WheelbarrowDE.png',
-  'Gold_mining_aoe2de': '/techs/Gold_mining_aoe2de.png', // Gold mining icon
+  'Gold_mining_aoe2de': '/aoe/tech/Gold_Mining.png',
   
   'ManAtArmsUpgDE': '/techs/ManAtArmsUpgDE.png',
   'LongSwordsmanUpgDE': '/techs/LongSwordmanUpgDE.png', 
@@ -185,7 +185,7 @@ const ICON_MAP = {
   'Siege_workshop_aoe2DE': '/buildings/Siege_workshop_aoe2DE.png',
   'Stable_aoe2de': '/buildings/Stable_aoe2DE.png',
   'Dock_aoe2DE': '/buildings/Dock_aoe2DE.png',
-  'Mining_camp_aoe2de': '/buildings/Mining_camp_aoe2de.png',
+  'Mining_camp_aoe2de': '/aoe/building/Mining_Camp.png',
   'Town_center_aoe2de': '/buildings/Town_center_aoe2de.png',
   'University_aoe2de': '/buildings/University_AoE2_DE.png',
   'CastleDE': '/buildings/Castle_aoe2DE.png',
@@ -217,14 +217,11 @@ const CAT_BG = {
   reallocate:{ bg: 'rgba(255,255,255,0.05)', bd: 'rgba(255,255,255,0.20)' },
 };
 
-const ROW_BG = {
-  research:  { bg: 'rgba(255,215,0,0.06)',  bd: '1px solid rgba(255,215,0,0.15)' },
-  train:     { bg: 'rgba(239,68,68,0.06)',  bd: '1px solid rgba(239,68,68,0.15)' },
-  build:     { bg: 'rgba(148,163,184,0.08)', bd: '1px solid rgba(148,163,184,0.20)' },
-  build_res: { bg: 'transparent', bd: 'none' },
-  age_up:    { bg: 'rgba(255,215,0,0.06)',  bd: '1px solid rgba(255,215,0,0.15)' },
-  action:    { bg: 'rgba(255,215,0,0.03)',  bd: '1px solid rgba(255,215,0,0.10)' },
-  reallocate:{ bg: 'rgba(255,255,255,0.03)', bd: '1px dashed rgba(255,255,255,0.10)' },
+// Step type marker: coloured icon frame (A) + thin bar on the left of the row (B). Rows themselves stay neutral.
+const TYPE_ACCENT = {
+  build: '#94a3b8', build_res: '#94a3b8',
+  train: '#ef4444',
+  research: '#ffd700', age_up: '#ffd700',
 };
 
 const AGE_STYLE = {
@@ -374,9 +371,9 @@ const TaskIcon = ({ step, meta, cc, crossCount = 0 }) => {
 
 const StepRow = ({ step, prevRes }) => {
   const meta = TASK_META[step.task] || { icon: '❓', cat: 'action' };
-  const cc = CAT_BG[meta.cat] || CAT_BG.action;
+  const accent = TYPE_ACCENT[meta.cat];
+  const cc = accent ? { bg: 'rgba(0,0,0,0.25)', bd: accent } : (CAT_BG[meta.cat] || CAT_BG.action);
   const valid = validateStep(step);
-  const rowStyle = ROW_BG[meta.cat] || { bg: 'transparent', bd: 'none' };
   const isAgeUp = meta.cat === 'age_up';
 
   // "Move X from A to B" without icons: draw [A crossed] -> [B] from the change in villagers
@@ -404,7 +401,7 @@ const StepRow = ({ step, prevRes }) => {
       <div style={{
         display: 'grid', gridTemplateColumns: '30px max-content 1fr auto',
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
-        borderRadius: '4px', background: rowStyle.bg, border: rowStyle.bd,
+        borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`,
       }}>
         <div style={{ textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <span style={{
