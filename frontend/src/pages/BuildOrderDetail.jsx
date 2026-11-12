@@ -381,7 +381,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
         <div style={{ height: '1px', margin: '3px 0', background: `linear-gradient(90deg,transparent,${C.borderMed},transparent)` }} />
       )}
       <div style={{
-        display: 'grid', gridTemplateColumns: '48px 50px max-content 1fr auto',
+        display: 'grid', gridTemplateColumns: '48px 40px max-content 1fr auto',
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
         borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`,
       }}>
@@ -418,11 +418,11 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           {totalVil != null && (
             <span title={adds ? 'Villagers once this step is done' : 'Villagers at this point'} style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '2px', minWidth: '42px', height: '18px', padding: '0 5px',
-              borderRadius: '9px', boxSizing: 'border-box', fontSize: '12px', fontWeight: '800', fontVariantNumeric: 'tabular-nums',
-              color: adds ? '#1a1300' : C.gold, background: adds ? C.gold : 'rgba(255,215,0,0.12)', border: `1px solid ${C.gold}`,
+              display: 'inline-flex', alignItems: 'baseline', gap: '3px', paddingLeft: '4px',
+              fontVariantNumeric: 'tabular-nums', lineHeight: 1,
             }}>
-              <span style={{ fontSize: '10px', opacity: 0.8 }}>{adds ? '→' : '='}</span>{totalVil}
+              <span style={{ fontSize: '10px', color: C.textMute }}>{adds ? '→' : '='}</span>
+              <span style={{ fontSize: '13px', fontWeight: adds ? '700' : '400', color: adds ? C.gold : C.textMute }}>{totalVil}</span>
             </span>
           )}
         </div>
