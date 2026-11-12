@@ -252,23 +252,24 @@ const validateStep = (step) => {
   return vilSum === 0 || vilSum === step.vil;
 };
 
+// Fixed size: same width for 1 or 2 digits (number centred in a 2-digit slot), low height so rows stay compact
 const Badge = ({ resKey, value, isGrowing }) => {
   const zero = value === 0;
   const color = RES_COLOR[resKey];
-  
+
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: '2px',
-      padding: '2px 4px', borderRadius: '4px', minWidth: '30px', justifyContent: 'center',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2px',
+      width: '36px', height: '18px', padding: '0 2px', borderRadius: '4px', lineHeight: 1,
       fontSize: '10px', fontWeight: isGrowing ? '800' : '600', fontVariantNumeric: 'tabular-nums',
       backgroundColor: isGrowing ? `${color}33` : (zero ? 'transparent' : `${color}15`),
       border: `1px solid ${isGrowing ? color : 'transparent'}`,
-      // Always uses 'color' instead of '#fff' when not zero.
       color: zero ? C.resZero : color,
       transition: 'all 0.2s ease',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box', flexShrink: 0,
     }}>
-      <span style={{ display: 'inline-flex', opacity: zero ? 0.35 : 1 }}><ResArt art={RES_ART[resKey]} size={13} /></span>{value}
+      <span style={{ display: 'inline-flex', opacity: zero ? 0.35 : 1 }}><ResArt art={RES_ART[resKey]} size={12} /></span>
+      <span style={{ display: 'inline-block', width: '2ch', textAlign: 'center' }}>{value}</span>
     </div>
   );
 };
