@@ -377,9 +377,6 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
 
   return (
     <>
-      {isAgeUp && (
-        <div style={{ height: '1px', margin: '3px 0', background: `linear-gradient(90deg,transparent,${C.borderMed},transparent)` }} />
-      )}
       <div style={{
         display: 'grid', gridTemplateColumns: '48px 40px max-content 1fr auto',
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
@@ -422,7 +419,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
               fontVariantNumeric: 'tabular-nums', lineHeight: 1,
             }}>
               <span style={{ fontSize: '10px', color: C.textMute }}>{adds ? '→' : '='}</span>
-              <span style={{ fontSize: isAgeUp ? '14px' : '13px', fontWeight: (adds || isAgeUp) ? '700' : '400', color: (adds || isAgeUp) ? C.gold : C.textMute }}>{totalVil}</span>
+              <span style={{ fontSize: '13px', fontWeight: (adds || isAgeUp) ? '700' : '400', color: (adds || isAgeUp) ? C.gold : C.textMute }}>{totalVil}</span>
             </span>
           )}
         </div>
@@ -432,11 +429,11 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
         </div>
 
         <div style={{
-          fontSize: '12px', color: C.text,
+          fontSize: '12px', color: isAgeUp ? C.gold : C.text, fontWeight: isAgeUp ? '800' : undefined,
           paddingLeft: '10px', lineHeight: '1.4',
           textAlign: 'left',
         }}>
-          {formatDesc(step.desc)}
+          {isAgeUp ? step.desc.replace(/\*\*/g, '') : formatDesc(step.desc)}
           {step.note && !hideNotes && <NoteInfo note={step.note} color={noteColor} />}
         </div>
 
