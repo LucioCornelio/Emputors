@@ -228,7 +228,7 @@ function ClanWarsVII() {
               draftBoardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
           const fetchState = () => {
-              socket.emit('set_role', { name: "LEAT11_Exec", role: "SPECTATOR" }, (res) => {
+              socket.emit('set_role', { name: "Emputors_CW7", role: "SPECTATOR" }, (res) => {
                   const data = Array.isArray(res) ? res[0] : res;
                   applyDraftState(data);
               });
@@ -254,7 +254,7 @@ function ClanWarsVII() {
 
       socket.on('playerEvent', () => {
           setTimeout(() => {
-              socket.emit('set_role', { name: "LEAT11_Exec", role: "SPECTATOR" }, (res) => {
+              socket.emit('set_role', { name: "Emputors_CW7", role: "SPECTATOR" }, (res) => {
                   const data = Array.isArray(res) ? res[0] : res;
                   applyDraftState(data);
               });

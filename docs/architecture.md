@@ -7,10 +7,10 @@ Website of the Emputors clan (Age of Empires II). Owner and only maintainer: Jav
 | Piece | What | Notes |
 |---|---|---|
 | Frontend | React 19 + Vite + react-router-dom, in `frontend/` | Inline styles only (no CSS framework, no CSS modules). Dark theme: background `#161920`, gold `#ffd700`. |
-| Hosting | Vercel, project root `frontend/` | `main` = production. Every other branch gets a preview URL. `frontend/vercel.json` rewrites everything to `index.html` except `/api/*`. |
+| Hosting | Vercel, project root `frontend/` | `main` = production (https://emputors.vercel.app, also the Website field of the GitHub repo). Every other branch gets a preview URL. `frontend/vercel.json` rewrites everything to `index.html` except `/api/*`. |
 | Serverless | `frontend/api/draft.js` | Proxy to `https://aoe2cm.net/api/draft/{id}` (the browser cannot call aoe2cm directly). |
 | Database and login | Supabase, project `aqxleorkndmencmjczfx` | Client in `frontend/src/supabaseClient.js` (public anon key). Login with Discord OAuth. |
-| Live drafts | socket.io to `https://aoe2cm.net` | Spectator connection; finished drafts arrive once as a `replay` event. |
+| Live drafts | socket.io to `https://aoe2cm.net` | Spectator connection; finished drafts arrive once as a `replay` event. Spectator names: `Emputors_CW7` (Clan Wars VII tool), `LEAT11_Live` (legacy LEAT11 Draft tool). |
 
 ## Pages (menu order)
 
