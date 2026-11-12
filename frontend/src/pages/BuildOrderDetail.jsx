@@ -230,6 +230,7 @@ const ROW_BG = {
 const AGE_STYLE = {
   'Dark Age':                { accent: C.blue, bg: 'rgba(102,178,255,0.20)' },
   'Advancing to Feudal':     { accent: C.blue, bg: 'rgba(102,178,255,0.06)' },
+  'Advancing to Feudal Age': { accent: C.blue, bg: 'rgba(102,178,255,0.06)' },
   'Feudal Age':              { accent: C.blue, bg: 'rgba(102,178,255,0.20)' },
   'Advancing to Castle Age': { accent: C.blue, bg: 'rgba(102,178,255,0.06)' },
   'Castle Age':              { accent: C.blue, bg: 'rgba(102,178,255,0.20)' },
