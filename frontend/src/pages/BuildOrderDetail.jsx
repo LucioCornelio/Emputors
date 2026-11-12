@@ -101,6 +101,7 @@ const mergeUnderTC = (res) => {
 };
 
 const KEYWORDS = [
+  "(?:food )?under TC",
   "\\d+",
   "sheep", "boar", "wood", "gold", "stone", "berries", "hunt", "fish", "shore fish", "straggler(?:s)?", "farm(?:s)?", "food", "deer",
   "TC", "Town Center", "House(?:s)?", "Mill", "Lumber Camp", "Mining Camp", "Barracks", "Archery Range", "Range", "Market", "Blacksmith", "Stable", "Siege Workshop", "Monastery", "Dock(?:s)?", "Tower", "Castle",
