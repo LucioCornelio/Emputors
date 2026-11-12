@@ -445,7 +445,7 @@ export default function BuildDrill() {
                 <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: C.blue, letterSpacing: '.04em' }}>{step.age}</span>
                 <span style={{ fontSize: 13, fontWeight: 800, color: C.gold }}>{step.vil != null ? `Pop ${step.vil}` : 'Next'}</span>
                 <span style={{ fontSize: 13, color: C.text }}>
-                  {step.kind === 'card' ? <span style={{ color: '#86efac' }}>{plain(step.desc)}</span> : fails >= 2 ? <span style={{ color: '#fde68a' }}>Hint: {plain(step.desc)}</span> : "What's next?"}
+                  {step.kind === 'card' ? <span style={{ color: '#86efac' }}>Don't forget</span> : fails >= 2 ? <span style={{ color: '#fde68a' }}>Hint: {plain(step.desc)}</span> : "What's next?"}
                 </span>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
                   {step.kind === 'play' && <Btn onClick={undo} disabled={!history.length} title="Ctrl+Z">↶ Undo</Btn>}
@@ -583,6 +583,20 @@ export default function BuildDrill() {
               </div>
             )}
 
+            {/* reminder popup for steps without villager work (push deer, lure boar...) */}
+            {!done && step?.kind === 'card' && !feedback && (
+              <div style={{ position: 'absolute', inset: 0, zIndex: 25, background: 'rgba(10,12,16,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ background: '#14161c', border: `2px solid ${C.gold}`, borderRadius: 12, padding: '16px 22px', maxWidth: '60%', textAlign: 'center', boxShadow: '0 12px 30px rgba(0,0,0,0.6)', animation: 'drillPop .25s ease-out' }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: C.gold, marginBottom: 10 }}>Don't forget</div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 14 }}>
+                    {(() => { const ic = iconList(step.icon).map(iconPath).find(Boolean); return ic ? <Img src={ic} size={44} round={8} style={{ border: `1px solid ${C.gold}88` }} /> : null; })()}
+                    <span style={{ fontSize: 16, fontWeight: 700, color: C.text, textAlign: 'left' }}>{plain(step.desc)}</span>
+                  </div>
+                  <Btn kind="primary" onClick={check}>Continue (Enter)</Btn>
+                </div>
+              </div>
+            )}
+
             {done && (
               <div style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(10,12,16,0.82)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ textAlign: 'center' }}>
@@ -709,7 +723,7 @@ const HELP = [
   ['Research, units, age up', 'Click the building that does it (the Town Center on the map, or any building in the palette) and pick the icon.'],
   ['Combined steps', 'Some steps do several things at once. "1 vil builds House, then Mill, then berries" means: Build House + Build Mill + send 1 villager to Berries. Do every part in any order, then press Check. "This step" shows what you have built or chosen so far.'],
   ['Fishing ships', 'Switch to "Fishing ships" and send them to deep water.'],
-  ['Checking', 'Check (Enter) validates the step. After two misses you get a hint; Reveal solves the step and counts as a miss. Undo (Ctrl+Z) and Reset step fix mistakes. Tip steps (scouting, luring) appear as cards: read them and press Continue.'],
+  ['Checking', 'Check (Enter) validates the step. After two misses you get a hint; Reveal solves the step and counts as a miss. Undo (Ctrl+Z) and Reset step fix mistakes. Steps without villager work (pushing deer, luring the boar) pop up as "Don't forget" reminders: read them and press Continue.'],
 ];
 
 const HowToPlay = ({ onClose }) => (
