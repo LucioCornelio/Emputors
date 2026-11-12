@@ -343,6 +343,10 @@ const IconBox = ({ cc, children, crossed }) => (
   </div>
 );
 
+// Transparent resource art always sits on its own resource colour, whatever the step type
+const RES_FRAME = { wood: CAT_BG.wood, gold: CAT_BG.gold, stone: CAT_BG.stone };
+const frameFor = (ic, cc) => (typeof ic === 'string' && ic.startsWith('res:') && RES_FRAME[ic.slice(4)]) || cc;
+
 const TaskIcon = ({ step, meta, cc, crossCount = 0 }) => {
   if (Array.isArray(step.icon)) {
     // Only show "OR" if the description explicitly says " or "
@@ -358,7 +362,7 @@ const TaskIcon = ({ step, meta, cc, crossCount = 0 }) => {
           const sep = last ? null : isChoice ? 'OR' : (crossN && idx === crossN - 1) ? '➔' : (crossN || meta.cat === 'build') ? '+' : '➔';
           return (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <IconBox cc={cc} crossed={isCrossed}><IconContent ic={ic} /></IconBox>
+              <IconBox cc={frameFor(ic, cc)} crossed={isCrossed}><IconContent ic={ic} /></IconBox>
               {sep && <span style={{ fontSize: '9px', color: C.textMute, fontWeight: 'bold' }}>{sep}</span>}
             </div>
           );
@@ -368,7 +372,7 @@ const TaskIcon = ({ step, meta, cc, crossCount = 0 }) => {
     );
   }
 
-  if (step.icon) return <IconBox cc={cc}><IconContent ic={step.icon} /></IconBox>;
+  if (step.icon) return <IconBox cc={frameFor(step.icon, cc)}><IconContent ic={step.icon} /></IconBox>;
   if (TASK_RES[step.task]) return <IconBox cc={cc}><ResArt art={RES_ART[TASK_RES[step.task]]} size={18} /></IconBox>;
   return <IconBox cc={cc}><span>{meta.icon}</span></IconBox>;
 };
