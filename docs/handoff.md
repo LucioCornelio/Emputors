@@ -25,7 +25,7 @@ Last update: 12 Nov 2026 (move of the website work into the "Emputors web" proje
 
 ## Pending, in suggested order
 
-1. **Security (priority):** RLS by role. Today any Discord login can write everywhere, including `clan_roles`. Proposal: a SQL function that reads the role of the current user from `clan_roles`, admin-only writes on `clan_roles`, `build_orders`, `cw7_draft_plans`; members for `match_results` and rival scouting. Needs Javier's approval of the exact policies.
+1. **Security:** RLS by role applied in Supabase on 12 Nov 2026 (see architecture.md). Web changes (teams from `leat11_team_members`, CW7 login notice, Sabaronte schedule fix) on branch `claude/project-thread-facz6b`, pending Javier's review and "a producción". Next step suggested: store the numeric Discord ID in `clan_roles` so roles survive nickname changes.
 2. **Build order consistency audit** (build-orders skill, validator over all builds). Rule agreed: when something is built, it appears in the text and in the icon. Known cases in "17 Vils | Any | Arabia | Forward Archery Range":
    - "2 vils to wood" shows the Lumber Camp icon but the text does not say it is built;
    - "Move 2 from stragglers to gold and build a Mining Camp" says it in the text but has no icon;

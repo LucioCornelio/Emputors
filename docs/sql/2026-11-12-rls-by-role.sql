@@ -1,4 +1,4 @@
--- Emputors: RLS by role (proposal, 12 Nov 2026). NOT APPLIED until Javier approves.
+-- Emputors: RLS by role. Approved by Javier and applied on 12 Nov 2026; the 3 tests below passed.
 -- One DO block: guards first (RAISE EXCEPTION aborts everything), then backups, then changes.
 --
 -- Role check: public.current_discord_username() reads the Discord username from auth.identities

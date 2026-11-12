@@ -47,12 +47,23 @@ Shared: `components/Navbar.jsx` (menu, Discord login), `data/iconPaths.js` (`ICO
 
 ### Permissions (RLS) and roles
 
-- Read: public on every table.
-- Write: any authenticated user (any Discord login) on every table. Role checks (admin, member, guest, team members) exist only in the interface:
-  - admin: editors, modify or reset logged results, admin links.
-  - member: log results.
-  - team members listed in `CurrentEvent.jsx`: log their own matches.
-- **Known risk:** any Discord user who logs in can write to `clan_roles` (and make themselves admin) or edit and delete build orders, plans and results. Fix: role check in the database (RLS using `clan_roles`), admin-only writes on `clan_roles`.
+Applied 12 Nov 2026 (`docs/sql/2026-11-12-rls-by-role.sql`, backups in `backup.*_20261112_rls`).
+
+- Role check in the database: `current_discord_username()` reads the Discord username from `auth.identities` (written by Discord at login; `user_metadata` is NOT used because users can edit it), `current_clan_role()` matches it with `clan_roles` (case-insensitive). Helpers `is_admin()`, `is_member()` (member or admin), `is_team_player(team_a, team_b)`. All security definer, executable by `authenticated` only. Guest counts as a visitor.
+
+| Table | Read | Write |
+|---|---|---|
+| `clan_roles` | logged-in users | admin |
+| `build_orders` | public | insert/update admin (soft delete, no DELETE) |
+| `cw7_draft_plans` | members | admin |
+| `cw7_rival_drafts` | members | insert/delete members |
+| `cw7_rival_profiles` | members | insert/update members |
+| `match_results` | public | insert: admin or a player of either team (`leat11_team_members`); update/delete: admin |
+| `leat11_team_members` | public | admin |
+
+- TRUNCATE, REFERENCES and TRIGGER revoked from `anon` and `authenticated` on these tables (TRUNCATE ignores RLS).
+- The interface still reads the role with `user_metadata` for display only; real protection is the RLS above. The CW7 page calls `rpc('current_clan_role')` to show "Log in to see the plans" to visitors.
+- `leat11_team_members`: `discord_username` (lowercase, key), `team`, `display_name`, `slot` (1 = Puppeteer, 2 = Puppet). `CurrentEvent.jsx` reads teams from here.
 - Preview deployments: Supabase Auth has the redirect URL `https://*-luciocornelios-projects.vercel.app/**`, but each preview domain needs its own login.
 
 ## Static data and generators
