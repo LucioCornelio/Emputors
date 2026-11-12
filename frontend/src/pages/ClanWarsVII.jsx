@@ -47,7 +47,7 @@ function ClanWarsVII() {
   const [isConnected, setIsConnected] = useState(false);
   const [liveSocket, setLiveSocket] = useState(null);
   
-  const [draft, setDraft] = useState({ picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [] });
+  const [draft, setDraft] = useState({ picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [], bansByMe: [], bansByOpp: [], bansByAdmin: [] });
   const [assigned, setAssigned] = useState({});
   const [essentialOverrides, setEssentialOverrides] = useState({});
   const [syncMessage, setSyncMessage] = useState("");
@@ -268,7 +268,7 @@ function ClanWarsVII() {
     A ban on a civ that is already in the other side's roster is a snipe.
   */
   const processEvents = (events, turns = []) => {
-      const temp = { picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [] };
+      const temp = { picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [], bansByMe: [], bansByOpp: [], bansByAdmin: [] };
       const add = (arr, c) => { if (!arr.includes(c)) arr.push(c); };
       const sideOf = (player) => player === "HOST" ? (isHostRef.current ? 'me' : 'opp') : player === "GUEST" ? (isHostRef.current ? 'opp' : 'me') : null;
 
@@ -301,8 +301,11 @@ function ClanWarsVII() {
               if (civ === "Hidden") return;
               if (who === 'me' && temp.oppPicks.includes(civ)) add(temp.snipedTheirs, civ);
               else if (who === 'opp' && temp.picks.includes(civ)) add(temp.snipedMine, civ);
-              else if (who === 'me' && exclusivity && exclusivity !== 'GLOBAL') add(temp.ourBans, civ);
-              else add(temp.bans, civ);
+              else if (who === 'me' && exclusivity && exclusivity !== 'GLOBAL') { add(temp.ourBans, civ); add(temp.bansByMe, civ); }
+              else {
+                  add(temp.bans, civ);
+                  add(who === 'me' ? temp.bansByMe : who === 'opp' ? temp.bansByOpp : temp.bansByAdmin, civ);
+              }
           }
       });
       setDraft(temp);
@@ -392,7 +395,7 @@ function ClanWarsVII() {
   const confirmAssignment = (mapName, roleName, civ) => setAssigned(prev => ({ ...prev, [`${mapName}_${roleName}`]: civ }));
   const clearAssignment = (mapName, roleName) => setAssigned(prev => { const next = { ...prev }; delete next[`${mapName}_${roleName}`]; return next; });
   const resetDraft = () => { 
-    setDraft({ picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [] }); 
+    setDraft({ picks: [], oppPicks: [], oppShared: [], bans: [], ourBans: [], snipedMine: [], snipedTheirs: [], bansByMe: [], bansByOpp: [], bansByAdmin: [] }); 
     setAssigned({}); 
     setEssentialOverrides({});
     setDraftTurns([]);
@@ -561,62 +564,90 @@ function ClanWarsVII() {
                 {forecastOn && <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#aaa' }}>Forecast vs <strong style={{ color: C.gold }}>{selectedRival}</strong>: {pickWindow} rival pick{pickWindow === 1 ? '' : 's'} before our following pick</span>}
             </div>
 
-            {/* LIVE DRAFT BOARD */}
-            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
-                <div style={{ order: isHost ? 1 : 3, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${myColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h3 style={{ color: myColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>MY PICKS ({isHost ? 'HOST' : 'GUEST'}) <span style={{ color: '#888' }}>{draft.picks.length}/{draftMode === 'PA3' ? 9 : 15}</span></h3>
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {draft.picks.length === 0 && <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic', lineHeight: '32px' }}>No picks yet</span>}
-                        {draft.picks.map((c, i) => {
-                            const isAssigned = Object.values(assigned).includes(c);
-                            const isSniped = draft.snipedMine.includes(c);
+            {/* LIVE DRAFT BOARD: like aoe2cm, HOST on the left and GUEST on the right, both filling from the centre outwards */}
+            {(() => {
+                const mySide = isHost ? 'HOST' : 'GUEST';
+                // Slots come from the draft format itself; before connecting, PA3 = 9 picks and BO5 = 12 picks per side
+                const countTurns = (side, action) => draftTurns.filter(t => String(t?.player || '').toUpperCase() === side && String(t?.action || '').toUpperCase() === action).length;
+                const pickSlots = (side) => draftTurns.length ? countTurns(side, 'PICK') : (draftMode === 'PA3' ? 9 : 12);
+                const draftOver = draftTurns.length > 0 && eventCount >= draftTurns.length;
+                const banSlots = (side) => (draftTurns.length && !draftOver) ? countTurns(side, 'BAN') : 0;
 
-                            return (
-                                <div key={`my-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: (isSniped || isAssigned) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                                    {isSniped && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
-                                    {isAssigned && !isSniped && <div style={{position: 'absolute', top:'-2px', right:'0px'}}><span style={{color:C.green, fontSize:'14px', fontWeight: '900', textShadow: '1px 1px 1px #000'}}>✓</span></div>}
-                                </div>
-                            );
-                        })}
+                const tile = (c, key, border, opts = {}) => (
+                    <div key={key} title={opts.title || c} style={{ position: 'relative', width: '34px', height: '34px', border: `1.5px solid ${border}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b', flexShrink: 0 }}>
+                        {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: C.gold, fontWeight: 'bold' }}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: opts.dim ? 0.35 : 1 }} onError={(e) => e.target.style.display='none'} />}
+                        {!opts.noLabel && <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>}
+                        {opts.cross && <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: opts.crossColor || C.red, fontSize: '24px', fontWeight: '300' }}>✗</span></div>}
+                        {opts.tick && <div style={{ position: 'absolute', top: '-2px', right: '0px' }}><span style={{ color: C.green, fontSize: '14px', fontWeight: '900', textShadow: '1px 1px 1px #000' }}>✓</span></div>}
                     </div>
-                </div>
+                );
+                const emptySlot = (key) => <div key={key} style={{ width: '34px', height: '34px', border: '1px dashed #444', borderRadius: '4px', backgroundColor: '#1e212b', flexShrink: 0 }} />;
 
-                <div style={{ order: 2, backgroundColor: '#161920', padding: '6px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '220px' }}>
-                    <h3 style={{ color: '#888', margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>GLOBAL BANS</h3>
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {draft.ourBans.map((c, i) => (
-                            <div key={`ourban-${i}`} title={`${c}: banned by us (only for the rival)`} style={{ position: 'relative', width: '32px', height: '32px', border: `1px solid ${myColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
-                                <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: myColor, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
+                const rosterPanel = (side) => {
+                    const mine = side === mySide;
+                    const isLeft = side === 'HOST';
+                    const color = mine ? myColor : oppColor;
+                    const list = mine ? draft.picks : draft.oppPicks;
+                    const slots = Math.max(pickSlots(side), list.length);
+                    const tiles = list.map((c, i) => {
+                        if (mine) {
+                            const sniped = draft.snipedMine.includes(c);
+                            const assignedCiv = Object.values(assigned).includes(c);
+                            return tile(c, `${side}-${i}`, color, { dim: sniped || assignedCiv, cross: sniped, tick: assignedCiv && !sniped, title: sniped ? `${c}: sniped by the rival` : c });
+                        }
+                        const sniped = draft.snipedTheirs.includes(c);
+                        return tile(c, `${side}-${i}`, color, { dim: sniped, cross: sniped, title: sniped ? `${c}: sniped by us` : c });
+                    });
+                    for (let i = list.length; i < slots; i++) tiles.push(emptySlot(`${side}-empty-${i}`));
+                    return (
+                        <div style={{ flex: 1, minWidth: 0, backgroundColor: '#1a1c23', padding: '8px', borderRadius: '6px', borderTop: `3px solid ${color}`, display: 'flex', flexDirection: 'column', alignItems: isLeft ? 'flex-end' : 'flex-start' }}>
+                            <h3 style={{ color, margin: '0 0 6px 0', fontSize: '11px', letterSpacing: '1px' }}>{mine ? 'MY PICKS' : 'OPPONENT PICKS'} ({side}) <span style={{ color: '#888' }}>{list.length}/{slots}</span></h3>
+                            <div style={{ display: 'flex', flexDirection: isLeft ? 'row-reverse' : 'row', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '4px', width: '100%' }}>
+                                {tiles}
                             </div>
-                        ))}
-                        {draft.bans.map((c, i) => (
-                            <div key={`ban-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: '1px solid #555', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => e.target.style.display='none'} />
-                                <div style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><span style={{color: C.red, fontSize: '24px', fontWeight: '300'}}>✗</span></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                        </div>
+                    );
+                };
 
-                <div style={{ order: isHost ? 3 : 1, flex: 1, backgroundColor: '#1a1c23', padding: '6px', borderRadius: '6px', borderTop: `3px solid ${oppColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h3 style={{ color: oppColor, margin: '0 0 4px 0', fontSize: '11px', letterSpacing: '1px' }}>OPPONENT PICKS ({isHost ? 'GUEST' : 'HOST'}) <span style={{ color: '#888' }}>{draft.oppPicks.length}/{draftMode === 'PA3' ? 9 : 15}</span></h3>
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {draft.oppPicks.length === 0 && <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic', lineHeight: '32px' }}>No picks yet</span>}
-                        {draft.oppPicks.map((c, i) => {
-                            return (
-                                <div key={`opp-${i}`} style={{ position: 'relative', width: '32px', height: '32px', border: `1.5px solid ${oppColor}`, borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-                                    {isHidden(c) ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{color: C.gold, fontWeight: 'bold'}}>?</span></div> : <img src={`/civs/${getCivImage(c)}`} alt={c} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: draft.snipedTheirs.includes(c) ? 0.3 : 1 }} onError={(e) => e.target.style.display='none'} />}
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '12px', backgroundColor: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>{isHidden(c) ? '?' : c.substring(0,4)}</div>
-                                    {draft.snipedTheirs.includes(c) && <div style={{position: 'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center'}}><span style={{color:C.red, fontSize:'24px', fontWeight: '300'}}>✗</span></div>}
+                const banColumn = (side) => {
+                    const mine = side === mySide;
+                    const isLeft = side === 'HOST';
+                    const list = mine ? draft.bansByMe : draft.bansByOpp;
+                    const tiles = list.map((c, i) => tile(c, `ban-${side}-${i}`, '#555', { dim: true, cross: true, crossColor: mine ? myColor : C.red, title: `${c}: banned by ${mine ? 'us' : 'the rival'}${mine && draft.ourBans.includes(c) ? ' (only for the rival)' : ''}` }));
+                    for (let i = list.length; i < banSlots(side); i++) tiles.push(emptySlot(`ban-${side}-empty-${i}`));
+                    return (
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: isLeft ? 'flex-end' : 'flex-start', gap: '4px' }}>
+                            <span style={{ fontSize: '9px', color: mine ? myColor : oppColor, fontWeight: 'bold', letterSpacing: '1px' }}>{mine ? 'OUR BANS' : 'THEIR BANS'}</span>
+                            <div style={{ display: 'flex', flexDirection: isLeft ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: '4px' }}>
+                                {tiles.length ? tiles : <span style={{ fontSize: '10px', color: '#555', fontStyle: 'italic' }}>-</span>}
+                            </div>
+                        </div>
+                    );
+                };
+
+                return (
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+                        {rosterPanel('HOST')}
+                        <div style={{ flex: '0 0 auto', width: '250px', backgroundColor: '#161920', padding: '8px', borderRadius: '6px', border: '1px dashed #555', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                            <h3 style={{ color: '#888', margin: 0, fontSize: '11px', letterSpacing: '1px', textAlign: 'center' }}>BANS</h3>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                {banColumn('HOST')}
+                                <div style={{ width: '1px', alignSelf: 'stretch', backgroundColor: '#444' }} />
+                                {banColumn('GUEST')}
+                            </div>
+                            {draft.bansByAdmin.length > 0 && (
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', borderTop: '1px solid #333', paddingTop: '6px' }}>
+                                    <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold', letterSpacing: '1px' }}>GLOBAL</span>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'center' }}>
+                                        {draft.bansByAdmin.map((c, i) => tile(c, `ban-admin-${i}`, '#555', { dim: true, cross: true, title: `${c}: global ban` }))}
+                                    </div>
                                 </div>
-                            );
-                        })}
+                            )}
+                        </div>
+                        {rosterPanel('GUEST')}
                     </div>
-                </div>
-            </div>
+                );
+            })()}
 
             {/* EXECUTION BOARD (STRICT 3-COLUMN GRID) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
