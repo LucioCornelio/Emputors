@@ -60,8 +60,7 @@ const RES_COLOR = {
 };
 
 // Real AoE2 images for resources and food sources. "fallback" is shown until the image file exists.
-const FOOD_IMG = '/aoe/resource/food.png';
-const UNDER_TC = { src: '/aoe/building/Town_Center.png', overlay: FOOD_IMG, fallback: '🛖', label: 'Food under TC (sheep, boar, deer)' };
+const UNDER_TC = { src: '/aoe/resource/food_under_tc.png', fallback: '🛖', label: 'Food under TC (sheep, boar, deer)' };
 const RES_ART = {
   underTC: UNDER_TC, sheep: UNDER_TC, boar: UNDER_TC,
   hunt:      { src: '/aoe/resource/deer.png', fallback: '🦌', label: 'Hunt' },
