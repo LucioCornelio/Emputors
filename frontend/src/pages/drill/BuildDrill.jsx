@@ -126,10 +126,6 @@ const buildSteps = (ages) => {
   return steps;
 };
 
-const fmtTime = (ms) => {
-  const s = Math.floor(ms / 1000);
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
-};
 
 // ---------- Small UI pieces ----------
 const Img = ({ src, size, round = 4, style }) => (
@@ -185,8 +181,8 @@ const Terrain = ({ water, chicken, farmCount }) => {
         <Sprite key={i} x={s.x} y={s.y} w={s.w} ratio={0.8} z={2}>{s.t === 'pine' ? <Pine shade={s.shade} /> : <Oak shade={s.shade} />}</Sprite>
       ))}
       {/* food under TC */}
-      {[[40, 62.5], [44.5, 66.5], [49, 62.5], [52.5, 67]].map(([x, y], i) => <Sprite key={`sh${i}`} x={x} y={y} w={4.2} ratio={32 / 24} z={3}><Sheep /></Sprite>)}
-      <Sprite x={56} y={63} w={5} ratio={36 / 24} z={3}><Boar /></Sprite>
+      {[[39.5, 62.5], [43.5, 66.5], [47.5, 62]].map(([x, y], i) => <Sprite key={`sh${i}`} x={x} y={y} w={4.2} ratio={32 / 24} z={3}><Sheep /></Sprite>)}
+      <Sprite x={51} y={64} w={6.4} ratio={36 / 24} z={3}><Boar /></Sprite>
       {/* berries */}
       {[[67, 21], [71, 20], [75, 22], [68.5, 26.5], [72.5, 27], [76, 28]].map(([x, y], i) => <Sprite key={`b${i}`} x={x} y={y} w={4.3} ratio={30 / 26} z={3}><BerryBush /></Sprite>)}
       {/* hunt */}
@@ -197,15 +193,17 @@ const Terrain = ({ water, chicken, farmCount }) => {
       <Sprite x={70.5} y={82} w={6.6} ratio={40 / 28} z={3}><StoneMine /></Sprite>
       <Sprite x={76} y={86} w={6.6} ratio={40 / 28} z={3}><StoneMine /></Sprite>
       {chicken && [[64, 42], [67, 44.5], [69.5, 41.5]].map(([x, y], i) => <Sprite key={`c${i}`} x={x} y={y} w={3.2} ratio={24 / 22} z={3}><Chicken /></Sprite>)}
-      {/* farms grow with the farmers */}
-      {Array.from({ length: Math.max(2, Math.min(14, farmCount)) }).map((_, i) => {
-        const col = i % 7, row = Math.floor(i / 7);
+      {/* farms grow with the farmers (one farm per farmer) */}
+      {Array.from({ length: Math.max(6, Math.min(12, farmCount)) }).map((_, i) => {
+        const col = i % 6, row = Math.floor(i / 6);
+        const on = i < farmCount;
         return (
-          <div key={`f${i}`} style={{ position: 'absolute', left: `${37 + col * 3.9}%`, top: `${80 + row * 8}%`, width: '3.6%', aspectRatio: 30 / 22, zIndex: 1, opacity: i < farmCount ? 1 : 0.22, pointerEvents: 'none' }}>
-            <FarmPlot />
+          <div key={`f${i}`} style={{ position: 'absolute', left: `${36.5 + col * 4.55}%`, top: `${79 + row * 7.6}%`, width: '4.3%', aspectRatio: 1, zIndex: 1, opacity: on ? 1 : 0.35, pointerEvents: 'none', transition: 'opacity .3s' }}>
+            <FarmPlot active={on} />
           </div>
         );
       })}
+      {farmCount > 12 && <div style={{ position: 'absolute', left: '64%', top: '84%', zIndex: 3, fontSize: 12, fontWeight: 800, color: '#f5dc7a', textShadow: '0 1px 2px #000' }}>+{farmCount - 12}</div>}
       {water && [[89.5, 18], [93.5, 24], [90.5, 32], [94, 40]].map(([x, y], i) => <Sprite key={`fs${i}`} x={x} y={y} w={3.4} ratio={2} z={3}><Fish /></Sprite>)}
       {water && [[92, 62], [95.5, 70], [91, 80], [95, 87]].map(([x, y], i) => <Sprite key={`fd${i}`} x={x} y={y} w={3.4} ratio={2} z={3}><Fish /></Sprite>)}
       {/* builders' yard */}
@@ -236,9 +234,9 @@ export default function BuildDrill() {
   const [fails, setFails] = useState(0);
   const [results, setResults] = useState([]);         // { i, errors, revealed }
   const [log, setLog] = useState([]);
-  const [startAt, setStartAt] = useState(null);
-  const [now, setNow] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [showHelp, setShowHelp] = useState(() => { try { return !localStorage.getItem('drillHelpSeen'); } catch { return true; } });
+  const closeHelp = () => { setShowHelp(false); try { localStorage.setItem('drillHelpSeen', '1'); } catch { /* storage unavailable */ } };
   const wrapRef = useRef(null);
   const logRef = useRef(null);
 
@@ -251,7 +249,6 @@ export default function BuildDrill() {
   }, [buildId]);
 
   useEffect(() => { document.title = build ? `Drill | ${build.civ} | ${build.map}` : 'Drill | Emputors'; }, [build]);
-  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 500); return () => clearInterval(t); }, []);
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [log]);
 
   const steps = useMemo(() => buildSteps(build?.ages), [build]);
@@ -269,7 +266,7 @@ export default function BuildDrill() {
   const playSteps = steps.filter(s => s.kind === 'play').length;
 
   const snapshot = () => setHistory(h => [...h, { counts, stepBuilt, stepCmd }]);
-  const touch = () => { if (!startAt) setStartAt(now); setFeedback(null); setWrongRes([]); };
+  const touch = () => { setFeedback(null); setWrongRes([]); };
 
   const moveTo = (targetId, from = source) => {
     if (busy || done || !step) return;
@@ -379,7 +376,7 @@ export default function BuildDrill() {
 
   const restart = () => {
     setIdx(0); setCounts({}); setBuilt([]); setStepBuilt([]); setStepCmd(null); setHistory([]); setSource('tc');
-    setFeedback(null); setWrongRes([]); setFails(0); setResults([]); setLog([]); setStartAt(null);
+    setFeedback(null); setWrongRes([]); setFails(0); setResults([]); setLog([]);
   };
 
   const openMenu = (e, bid, canBuild) => {
@@ -393,7 +390,6 @@ export default function BuildDrill() {
   if (!build) return <div style={{ color: C.textDim, textAlign: 'center', padding: '4rem' }}>Build order not found.</div>;
 
   const firstTry = results.filter(r => r.kind === 'play' && r.errors === 0 && !r.revealed).length;
-  const elapsed = startAt ? Math.max(0, now - startAt) : 0;
   const allBuilt = [...built, ...stepBuilt.map(b => ({ pending: b }))];
   const farmCount = sumByRes(counts).farm || 0;
 
@@ -427,9 +423,9 @@ export default function BuildDrill() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 14, fontSize: 12, color: C.textDim }}>
-          <span>⏱ {fmtTime(elapsed)}</span>
           <span>✓ {firstTry}/{results.filter(r => r.kind === 'play').length} first try</span>
           <span>Step {Math.min(idx + 1, steps.length)}/{steps.length}</span>
+          <button onClick={() => (showHelp ? closeHelp() : setShowHelp(true))} style={{ background: 'transparent', border: `1px solid ${C.borderLt}`, color: C.textDim, borderRadius: 6, padding: '2px 8px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>❔ How to play</button>
         </div>
       </div>
 
@@ -437,6 +433,8 @@ export default function BuildDrill() {
       <div style={{ height: 4, background: C.border, borderRadius: 2, marginBottom: 10, overflow: 'hidden' }}>
         <div style={{ height: '100%', width: `${(idx / steps.length) * 100}%`, background: C.gold, transition: 'width .4s' }} />
       </div>
+
+      {showHelp && <HowToPlay onClose={closeHelp} />}
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
         <div ref={wrapRef} style={{ flex: '1 1 720px', minWidth: 0, position: 'relative' }} onClick={() => setMenu(null)}>
@@ -590,7 +588,7 @@ export default function BuildDrill() {
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 26, fontWeight: 800, color: C.gold }}>Build complete</div>
                   <div style={{ fontSize: 14, color: C.text, margin: '8px 0 16px' }}>
-                    {firstTry}/{playSteps} steps right first time ({playSteps ? Math.round((firstTry / playSteps) * 100) : 0}%) · {fmtTime(elapsed)}
+                    {firstTry}/{playSteps} steps right first time ({playSteps ? Math.round((firstTry / playSteps) * 100) : 0}%)
                   </div>
                   <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
                     <Btn kind="primary" onClick={restart}>Play again</Btn>
@@ -605,7 +603,7 @@ export default function BuildDrill() {
           {!done && (
             <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'stretch' }}>
               <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 8, padding: '6px 8px', minWidth: 150 }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: C.textMute, textTransform: 'uppercase', marginBottom: 4 }}>This step</div>
+                <div style={{ fontSize: 10, fontWeight: 800, color: C.textMute, textTransform: 'uppercase', marginBottom: 4 }}>This step (do every part, then Check)</div>
                 <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', alignItems: 'center', minHeight: 34 }}>
                   {stepBuilt.map((b, i) => (
                     <div key={i} title={`${BUILDINGS[b].name} (click to remove)`} onClick={() => { snapshot(); setStepBuilt(s => s.filter((_, j) => j !== i)); }}
@@ -702,3 +700,30 @@ const spinBtn = {
   width: 28, height: 28, borderRadius: 6, border: `1px solid ${C.borderLt}`, background: C.card, color: C.text,
   fontSize: 16, fontWeight: 800, cursor: 'pointer', lineHeight: 1,
 };
+
+const HELP = [
+  ['Goal', 'Rebuild the build order from memory, one step at a time. Each step only shows the population: work out what comes next.'],
+  ['Villagers', 'Set how many with − and +, then click an area on the map (or drag the "New villagers" card onto it). To move villagers who are already working, click their badge (it turns gold) and then the destination, or drag the badge. Drop a badge on "New villagers" to take them off the map.'],
+  ['Builders', 'If villagers stay on a construction (for example "2 vils build Barracks"), send them to Builders.'],
+  ['Buildings', 'Click a building in the palette below the map and choose Build. It appears on the map next to its resource.'],
+  ['Research, units, age up', 'Click the building that does it (the Town Center on the map, or any building in the palette) and pick the icon.'],
+  ['Combined steps', 'Some steps do several things at once. "1 vil builds House, then Mill, then berries" means: Build House + Build Mill + send 1 villager to Berries. Do every part in any order, then press Check. "This step" shows what you have built or chosen so far.'],
+  ['Fishing ships', 'Switch to "Fishing ships" and send them to deep water.'],
+  ['Checking', 'Check (Enter) validates the step. After two misses you get a hint; Reveal solves the step and counts as a miss. Undo (Ctrl+Z) and Reset step fix mistakes. Tip steps (scouting, luring) appear as cards: read them and press Continue.'],
+];
+
+const HowToPlay = ({ onClose }) => (
+  <div style={{ background: C.card, border: `1px solid ${C.gold}55`, borderRadius: 8, padding: '10px 14px', marginBottom: 10 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+      <span style={{ fontSize: 13, fontWeight: 800, color: C.gold }}>How to play</span>
+      <Btn onClick={onClose}>Got it</Btn>
+    </div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '6px 18px' }}>
+      {HELP.map(([t, d]) => (
+        <div key={t} style={{ fontSize: 12, lineHeight: 1.45, color: C.textDim, textAlign: 'left' }}>
+          <b style={{ color: C.text }}>{t}.</b> {d}
+        </div>
+      ))}
+    </div>
+  </div>
+);

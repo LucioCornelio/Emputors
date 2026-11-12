@@ -115,11 +115,19 @@ export const Chicken = () => (
   </svg>
 );
 
-export const FarmPlot = () => (
-  <svg viewBox="0 0 30 22" width="100%" height="100%" style={{ display: 'block' }}>
-    <rect x="1" y="1" width="28" height="20" rx="2" fill="#8a6a3a" stroke="#6b5129" strokeWidth="1" />
-    <g stroke="#6e5229" strokeWidth="1.2"><line x1="3" y1="6" x2="27" y2="6" /><line x1="3" y1="11" x2="27" y2="11" /><line x1="3" y1="16" x2="27" y2="16" /></g>
-    <g fill="#9ccc65"><circle cx="7" cy="8.5" r="1.1" /><circle cx="15" cy="8.5" r="1.1" /><circle cx="23" cy="8.5" r="1.1" /><circle cx="11" cy="13.5" r="1.1" /><circle cx="19" cy="13.5" r="1.1" /></g>
+export const FarmPlot = ({ active }) => (
+  <svg viewBox="0 0 40 40" width="100%" height="100%" style={{ display: 'block', overflow: 'visible' }}>
+    <rect x="1" y="2" width="38" height="37" rx="3" fill="rgba(0,0,0,0.25)" />
+    <rect x="0.5" y="0.5" width="38" height="37" rx="3" fill={active ? '#7a5a30' : '#6d5a3a'} stroke={active ? '#4e3818' : '#8a7a5a'} strokeWidth="1" strokeDasharray={active ? 'none' : '3 2'} />
+    {[5, 12, 19, 26, 33].map(y => (
+      active ? (
+        <g key={y}>
+          <rect x="3" y={y - 2.6} width="33" height="5.2" rx="2.4" fill="#d8b23f" />
+          <rect x="3" y={y + 0.6} width="33" height="2" rx="1" fill="#b48a22" />
+          {[6, 11, 16, 21, 26, 31].map(x => <circle key={x} cx={x} cy={y - 1} r="1" fill="#f5dc7a" />)}
+        </g>
+      ) : <line key={y} x1="4" y1={y} x2="35" y2={y} stroke="#5a4628" strokeWidth="1.4" />
+    ))}
   </svg>
 );
 
