@@ -15,7 +15,7 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
 
 ## Execution draft
 
-- Connects to a live aoe2cm draft as spectator (socket.io, `set_role` SPECTATOR with the name `Emputors_CW7`) or loads a finished one (single `replay` event). Connection status is visible.
+- Connects to a live aoe2cm draft as spectator (socket.io, `set_role` SPECTATOR with the name `Emputors`) or loads a finished one (single `replay` event). Connection status is visible.
 - aoe2cm-like board: picks fill from the centre outwards, bans per team with a separator, per-side bans and snipes, hidden picks handled. Both sides cannot hold the same civ.
 - Bench redesign: available, taken and banned civs per role at a glance.
 
