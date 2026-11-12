@@ -417,12 +417,12 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
 
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           {totalVil != null && (
-            <span title={adds ? 'Villagers once this step is done' : 'Villagers at this point'} style={{
+            <span title={adds ? 'Villagers once this step is done' : isAgeUp ? 'Villagers when you click the next age' : 'Villagers at this point'} style={{
               display: 'inline-flex', alignItems: 'baseline', gap: '3px', paddingLeft: '4px',
               fontVariantNumeric: 'tabular-nums', lineHeight: 1,
             }}>
               <span style={{ fontSize: '10px', color: C.textMute }}>{adds ? '→' : '='}</span>
-              <span style={{ fontSize: '13px', fontWeight: adds ? '700' : '400', color: adds ? C.gold : C.textMute }}>{totalVil}</span>
+              <span style={{ fontSize: isAgeUp ? '14px' : '13px', fontWeight: (adds || isAgeUp) ? '700' : '400', color: (adds || isAgeUp) ? C.gold : C.textMute }}>{totalVil}</span>
             </span>
           )}
         </div>
