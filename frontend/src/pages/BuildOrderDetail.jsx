@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import AOE_ICONS from '../data/aoeIcons.json';
 
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
@@ -56,6 +57,48 @@ const RES_COLOR = {
   chicken: '#ef4444', berries: '#ef4444', farm: '#ef4444', fish: '#ef4444', // Farm in red
   wood: '#cd7f32', gold: '#fbbf24', stone: '#94a3b8', builder: '#94a3b8',
   ship: '#3b82f6', ship_gold: '#fbbf24', 
+};
+
+// Real AoE2 images for resources and food sources. "fallback" is shown until the image file exists.
+const FOOD_IMG = '/aoe/resource/food.png';
+const UNDER_TC = { src: '/aoe/building/Town_Center.png', overlay: FOOD_IMG, fallback: '🛖', label: 'Food under TC (sheep, boar, deer)' };
+const RES_ART = {
+  underTC: UNDER_TC, sheep: UNDER_TC, boar: UNDER_TC,
+  hunt:      { src: '/aoe/resource/deer.png', fallback: '🦌', label: 'Hunt' },
+  berries:   { src: '/aoe/resource/berries.png', fallback: '🫐', label: 'Berries' },
+  farm:      { src: '/aoe/building/Farm.png', fallback: '🌾', label: 'Farms' },
+  fish:      { src: '/aoe/resource/fish.png', fallback: '🐟', label: 'Fish' },
+  chicken:   { src: '/aoe/resource/chicken.png', fallback: '🐔', label: 'Chicken' },
+  wood:      { src: '/aoe/resource/wood.png', fallback: '🪵', label: 'Wood' },
+  gold:      { src: '/aoe/resource/gold.png', fallback: '🪙', label: 'Gold' },
+  stone:     { src: '/aoe/resource/stone.png', fallback: '🪨', label: 'Stone' },
+  builder:   { src: '/aoe/unit/Villager.png', fallback: '🔨', label: 'Builders' },
+  ship:      { src: '/aoe/unit/Fishing_Ship.png', fallback: '🚢', label: 'Fishing ships' },
+  ship_gold: { src: '/aoe/unit/Trade_Cog.png', fallback: '⛵', label: 'Trade cogs' },
+};
+// Emojis used in older build orders map to the same art
+const EMOJI_RES = { '🛖': 'underTC', '🐑': 'underTC', '🐗': 'underTC', '🦌': 'hunt', '🫐': 'berries', '🌾': 'farm', '🐟': 'fish', '🐔': 'chicken', '🪵': 'wood', '🪙': 'gold', '🪨': 'stone', '🔨': 'builder', '🚢': 'ship', '⛵': 'ship_gold' };
+// Default icon for resource tasks when the step has no icon
+const TASK_RES = { food_sheep: 'underTC', food_tc: 'underTC', food_boar: 'underTC', food_berries: 'berries', food_fish: 'fish', food_farm: 'farm', food_chicken: 'chicken', food_hunt: 'hunt', wood: 'wood', gold: 'gold', stone: 'stone' };
+
+const ResArt = ({ art, size = 18 }) => {
+  const [failed, setFailed] = useState(false);
+  if (!art) return null;
+  if (failed || !art.src) return <span title={art.label} style={{ fontSize: `${Math.round(size * 0.7)}px`, lineHeight: 1 }}>{art.fallback}</span>;
+  return (
+    <span title={art.label} style={{ position: 'relative', display: 'inline-block', width: `${size}px`, height: `${size}px`, flexShrink: 0 }}>
+      <img src={art.src} alt="" onError={() => setFailed(true)} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '2px', display: 'block' }} />
+      {art.overlay && <img src={art.overlay} alt="" style={{ position: 'absolute', right: '-2px', bottom: '-2px', width: `${Math.round(size * 0.55)}px`, height: `${Math.round(size * 0.55)}px`, objectFit: 'contain', filter: 'drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #000)' }} />}
+    </span>
+  );
+};
+
+// Sheep and boar are shown together as Food under TC
+const mergeUnderTC = (res) => {
+  const v = { ...(res || {}) };
+  v.underTC = (v.underTC || 0) + (v.sheep || 0) + (v.boar || 0);
+  delete v.sheep; delete v.boar;
+  return v;
 };
 
 const KEYWORDS = [
@@ -150,9 +193,10 @@ const ICON_MAP = {
   'FarmDE': '/buildings/Farm_Icon_AoE.png',
 };
 
+// Accepts our own keys (ICON_MAP) or any unit, tech or building name as it appears in the game (e.g. "Bodkin Arrow")
 const iconPath = (name) => {
-  if (!name) return null;
-  return ICON_MAP[name] || null; 
+  if (!name || typeof name !== 'string') return null;
+  return ICON_MAP[name] || AOE_ICONS[name] || null;
 };
 
 const CAT_BG = {
@@ -226,7 +270,7 @@ const Badge = ({ resKey, value, isGrowing }) => {
       transition: 'all 0.2s ease',
       boxSizing: 'border-box'
     }}>
-      <span style={{ fontSize: '9px' }}>{RES_ICON[resKey]}</span>{value}
+      <span style={{ display: 'inline-flex', opacity: zero ? 0.35 : 1 }}><ResArt art={RES_ART[resKey]} size={13} /></span>{value}
     </div>
   );
 };
@@ -245,15 +289,8 @@ const ResBadges = ({ step, prevRes }) => {
   const safePrev = prevRes || {};
 
   // VISUAL TRICK: group sheep and boar into "underTC" only for the right-hand UI
-  const visualRes = { ...res };
-  visualRes.underTC = (visualRes.underTC || 0) + (visualRes.sheep || 0) + (visualRes.boar || 0);
-  delete visualRes.sheep;
-  delete visualRes.boar;
-
-  const visualPrev = { ...safePrev };
-  visualPrev.underTC = (visualPrev.underTC || 0) + (visualPrev.sheep || 0) + (visualPrev.boar || 0);
-  delete visualPrev.sheep;
-  delete visualPrev.boar;
+  const visualRes = mergeUnderTC(res);
+  const visualPrev = mergeUnderTC(safePrev);
 
   const foodBadges = FOOD_KEYS
     .filter((k) => (visualRes[k] || 0) > 0)
@@ -283,42 +320,44 @@ const ResBadges = ({ step, prevRes }) => {
   );
 };
 
-const TaskIcon = ({ step, meta, cc }) => {
+// One icon: a resource token ("res:wood"), an emoji, an ICON_MAP key or a game name
+const IconContent = ({ ic, size = 18 }) => {
+  if (typeof ic === 'string' && ic.startsWith('res:')) return <ResArt art={RES_ART[ic.slice(4)]} size={size} />;
+  if (EMOJI_RES[ic]) return <ResArt art={RES_ART[EMOJI_RES[ic]]} size={size} />;
+  const imgPath = iconPath(ic);
+  if (imgPath) return <img src={imgPath} alt="" style={{ width: `${size}px`, height: `${size}px`, objectFit: 'cover', borderRadius: '2px', display: 'block' }} />;
+  return <span>{ic}</span>;
+};
+
+const IconBox = ({ cc, children, crossed }) => (
+  <div style={{
+    width: '22px', height: '22px', borderRadius: '5px',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: '12px', overflow: 'hidden', position: 'relative',
+    backgroundColor: cc.bg, border: `1px solid ${cc.bd}`,
+  }}>
+    {children}
+    {crossed && <div style={{ position: 'absolute', width: '30px', height: '2px', backgroundColor: C.red, transform: 'rotate(-45deg)' }} />}
+  </div>
+);
+
+const TaskIcon = ({ step, meta, cc, crossCount = 0 }) => {
   if (Array.isArray(step.icon)) {
     // Only show "OR" if the description explicitly says " or "
     const isChoice = step.desc && step.desc.toLowerCase().includes(' or ');
     const isReallocate = meta.cat === 'reallocate';
+    const crossN = crossCount || (isReallocate ? 1 : 0);
 
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
         {step.icon.map((ic, idx) => {
-          const imgPath = iconPath(ic);
-          const isImage = !!imgPath;
-          const isCrossed = isReallocate && idx === 0;
-          const showSeparator = idx < step.icon.length - 1 && (!isReallocate || idx === 0);
-
+          const isCrossed = idx < crossN;
+          const last = idx === step.icon.length - 1;
+          const sep = last ? null : isChoice ? 'OR' : (crossN && idx === crossN - 1) ? '➔' : (crossN || meta.cat === 'build') ? '+' : '➔';
           return (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <div style={{
-                width: '22px', height: '22px', borderRadius: '5px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '12px', overflow: 'hidden', position: 'relative',
-                backgroundColor: cc.bg, border: `1px solid ${cc.bd}`,
-              }}>
-                {isImage ? (
-                  <img src={imgPath} alt="" style={{ width: '18px', height: '18px', objectFit: 'cover', borderRadius: '2px' }} />
-                ) : (
-                  <span>{ic}</span>
-                )}
-                {isCrossed && (
-                  <div style={{ position: 'absolute', width: '30px', height: '2px', backgroundColor: C.red, transform: 'rotate(-45deg)' }} />
-                )}
-              </div>
-              {showSeparator && (
-                <span style={{ fontSize: '9px', color: C.textMute, fontWeight: 'bold' }}>
-                  {isChoice ? 'OR' : (meta.cat === 'build' ? '+' : '➔')}
-                </span>
-              )}
+              <IconBox cc={cc} crossed={isCrossed}><IconContent ic={ic} /></IconBox>
+              {sep && <span style={{ fontSize: '9px', color: C.textMute, fontWeight: 'bold' }}>{sep}</span>}
             </div>
           );
         })}
@@ -327,30 +366,9 @@ const TaskIcon = ({ step, meta, cc }) => {
     );
   }
 
-  const imgPath = iconPath(step.icon);
-  const hasImg = !!imgPath;
-  return (
-    <div style={{
-      width: '22px', height: '22px', borderRadius: '5px',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: '12px', overflow: 'hidden',
-      backgroundColor: cc.bg, border: `1px solid ${cc.bd}`,
-    }}>
-      {hasImg ? (
-        <img
-          src={imgPath}
-          alt=""
-          style={{ width: '18px', height: '18px', objectFit: 'cover', borderRadius: '2px', display: 'block' }}
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-            e.currentTarget.insertAdjacentText('afterend', meta.icon);
-          }}
-        />
-      ) : (
-        <span>{step.icon || meta.icon}</span>
-      )}
-    </div>
-  );
+  if (step.icon) return <IconBox cc={cc}><IconContent ic={step.icon} /></IconBox>;
+  if (TASK_RES[step.task]) return <IconBox cc={cc}><ResArt art={RES_ART[TASK_RES[step.task]]} size={18} /></IconBox>;
+  return <IconBox cc={cc}><span>{meta.icon}</span></IconBox>;
 };
 
 const StepRow = ({ step, prevRes }) => {
@@ -359,6 +377,20 @@ const StepRow = ({ step, prevRes }) => {
   const valid = validateStep(step);
   const rowStyle = ROW_BG[meta.cat] || { bg: 'transparent', bd: 'none' };
   const isAgeUp = meta.cat === 'age_up';
+
+  // "Move X from A to B" without icons: draw [A crossed] -> [B] from the change in villagers
+  let shownStep = step;
+  let crossCount = 0;
+  if (step.task === 'reallocate' && !step.icon && step.res) {
+    const now = mergeUnderTC(step.res), before = mergeUnderTC(prevRes);
+    const keys = Array.from(new Set([...Object.keys(now), ...Object.keys(before)]));
+    const from = keys.filter(k => (now[k] || 0) < (before[k] || 0));
+    const to = keys.filter(k => (now[k] || 0) > (before[k] || 0));
+    if (from.length && to.length) {
+      shownStep = { ...step, icon: [...from.map(k => `res:${k}`), ...to.map(k => `res:${k}`)] };
+      crossCount = from.length;
+    }
+  }
 
   const noteColor = (meta.cat === 'research' || meta.cat === 'train' || meta.cat === 'build' || meta.cat === 'age_up')
     ? C.noteGold : C.tipGreen;
@@ -401,7 +433,7 @@ const StepRow = ({ step, prevRes }) => {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <TaskIcon step={step} meta={meta} cc={cc} />
+          <TaskIcon step={shownStep} meta={meta} cc={cc} crossCount={crossCount} />
         </div>
 
         <div style={{
