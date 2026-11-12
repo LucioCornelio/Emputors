@@ -418,8 +418,8 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
               display: 'inline-flex', alignItems: 'baseline', gap: '3px', paddingLeft: '4px',
               fontVariantNumeric: 'tabular-nums', lineHeight: 1,
             }}>
-              <span style={{ fontSize: '10px', color: C.textMute }}>{adds ? '→' : '='}</span>
-              <span style={{ fontSize: '13px', fontWeight: (adds || isAgeUp) ? '700' : '400', color: (adds || isAgeUp) ? C.gold : C.textMute }}>{totalVil}</span>
+              {typeof totalVil !== 'string' && <span style={{ fontSize: '10px', color: C.textMute }}>{adds ? '→' : '='}</span>}
+              <span style={{ fontSize: typeof totalVil === 'string' ? '11px' : '13px', fontWeight: (adds || isAgeUp) ? '700' : '400', color: (adds || isAgeUp) ? C.gold : C.textMute, whiteSpace: 'nowrap' }}>{totalVil}</span>
             </span>
           )}
         </div>
@@ -504,7 +504,8 @@ const AgeSections = ({ build, hideNotes = false }) => {
               totalVil = step.vil;
               lastVil = Math.max(lastVil, step.vil);
             } else if (step.task === 'age_up') {
-              totalVil = lastVil;
+              // vil_label lets an age up show a target range ("75-80") instead of the last counted total
+              totalVil = step.vil_label || lastVil;
             }
             return <StepRow key={si} step={step} prevRes={prevRes} hideNotes={hideNotes} startVil={startVil} totalVil={totalVil} adds={adds} />;
           })}

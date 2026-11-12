@@ -21,17 +21,14 @@ Last update: 12 Nov 2026 (move of the website work into the "Emputors web" proje
 - Subtle horizontal guides between steps.
 - Build Drill (`/academy/build-orders/:id/drill`, "Practice" button): schematic map with trees, sheep and boar under the TC, berries, deer, mines, shore and deep water, golden farms that grow with farmers; villager spawner with + and -, drag or click; building palette with Build and research/train menus; validation per step (villagers, buildings, command); hints after 2 misses; Reveal; "Don't forget" popup for steps without villager work; How to play panel; log of the build.
 - New build `any-hybrid-21-4-fire-galleys-archers` (21+4 Vils, Any, Hybrid, Fire Galleys into Archers).
+- Build order audit (12 Nov 2026): 13 checks of the build-orders skill run on the 10 builds and every finding fixed with Javier's data (villager counts in every phase, buildings in text and icon, no default icons, res only on villager steps, NEW ECO only on global redistributions). Backups `backup.build_orders_20261112_scouts`, `_std9`, `_round3`, `_round4`. Age up steps accept `vil_label` (e.g. "75-80") to show a target instead of the last counted total (Burgundians Imperial Age).
 - Repo cleanup: Supabase client is now a dependency of `frontend/`, committed root `node_modules` removed, unused files removed, icon scripts in `scripts/`.
 
 ## Pending, in suggested order
 
 1. **Security:** RLS by role applied in Supabase on 12 Nov 2026 (see architecture.md). Web changes (teams from `leat11_team_members`, CW7 login notice, Sabaronte schedule fix) on branch `claude/project-thread-facz6b`, pending Javier's review and "a producción". Next step suggested: store the numeric Discord ID in `clan_roles` so roles survive nickname changes.
-2. **Build order consistency audit** (build-orders skill, validator over all builds). Rule agreed: when something is built, it appears in the text and in the icon. Known cases in "17 Vils | Any | Arabia | Forward Archery Range":
-   - "2 vils to wood" shows the Lumber Camp icon but the text does not say it is built;
-   - "Move 2 from stragglers to gold and build a Mining Camp" says it in the text but has no icon;
-   - "Move 5 from stragglers to the Lumber Camp" shows crossed swords (default fallback icon), wrong.
-   Many `reallocate` rows that build something have `icon: null`; check all builds.
-3. **Hybrid build, to confirm with Javier:** civ ("Any" was assumed), map image (`public/maps/Hybrid.png` missing), assumptions made from his Excel: first wood vil builds the Lumber Camp; the 4 vils moved from wood to food go to berries and build a Mill; the 2 Archery Range builders come from wood; his note "1 from berries + barrack builder" did not match the numbers and was left out.
+2. **Build order audit:** done (see above).
+3. **Hybrid build:** assumptions from his Excel confirmed by Javier on 12 Nov 2026.
 4. **More visual adjustments to build order rows:** Javier announced more; wait for his list.
 5. **Build Drill next steps** (proposed, not started): Drill hub with filters and mastery per build; Study mode (blocks grouped by rules, cover and reveal); Quiz mode ("What's next?", 5 options with tricky distractors: wrong villager count, later step, other resource, same step from another build); progress saving (open question: private per user or visible to the clan); optional strict order inside combined steps; building counts ("Build 2 Houses" currently accepts one).
 6. Start villager count is fixed at 3; civs that start with more villagers would need a field in the build.
