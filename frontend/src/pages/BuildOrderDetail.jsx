@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { iconPath } from '../data/iconPaths';
+import { startVils } from '../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
@@ -826,6 +827,11 @@ const BuildOrderDetail = () => {
             <div style={{ color: C.gold, fontSize: '15px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
               <strong style={{ fontWeight: '900', color: '#fff' }}>{build.map}</strong> <span style={{ color: C.textMute }}>|</span> {build.civ} <span style={{ color: C.textMute }}>|</span> {build.popCount} Vils <span style={{ color: C.textMute }}>|</span> {build.strategy}
             </div>
+            {startVils(build) !== 3 && (
+              <span title={`The game starts with ${startVils(build)} villagers`} style={{ padding: '3px 9px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(0,200,200,0.12)', border: '1px solid rgba(0,200,200,0.4)', color: '#00c8c8', whiteSpace: 'nowrap' }}>
+                {startVils(build)} Vils Start
+              </span>
+            )}
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

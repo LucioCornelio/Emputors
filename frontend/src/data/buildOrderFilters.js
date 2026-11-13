@@ -12,3 +12,10 @@ export const STRATEGY_GROUPS = [
 ];
 
 export const asList = (v) => (Array.isArray(v) ? v : []);
+
+// Villagers the game starts with: the total of the steps flagged "start" (default 3)
+export const startVils = (b) => {
+  let n = 3;
+  (b?.ages || []).forEach(a => (a.steps || []).forEach(s => { if (s.start && typeof s.vil === 'number') n = Math.max(n, s.vil); }));
+  return n;
+};

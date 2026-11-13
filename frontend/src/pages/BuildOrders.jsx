@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { STRATEGY_GROUPS, asList } from '../data/buildOrderFilters';
+import { STRATEGY_GROUPS, asList, startVils } from '../data/buildOrderFilters';
 
 const C = {
   card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8',
@@ -61,6 +61,7 @@ const BuildOrders = () => {
           strategyIcons: b.strategy_icons ?? b.strategyIcons ?? [],
           whatsNext: b.whats_next ?? b.whatsNext ?? [],
           strategyGroups: asList(b.strategy_groups),
+          startVils: startVils(b),
           hasVod: typeof b.video === 'string' && b.video.trim() !== '',
         }));
         setBuilds(formattedBuilds);
@@ -242,7 +243,12 @@ const BuildOrders = () => {
                     <img src={b.civ === 'Any' ? '/civs/random.png' : `/civs/${b.civ.toLowerCase()}.png`} alt="" style={{ width: '24px', height: '24px', display: 'block' }} onError={(e) => e.target.style.display='none'} />
                   </div>
                   {renderPremiumStratIcons(b)}
-                  <div style={{ marginLeft: 'auto', backgroundColor: '#2a2d36', padding: '4px 10px', borderRadius: '4px', border: `1px solid ${C.borderLt}`, color: C.textMain, fontSize: '11px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+                  {b.startVils !== 3 && (
+                    <div title={`The game starts with ${b.startVils} villagers`} style={{ marginLeft: 'auto', backgroundColor: `${C.cyan}1a`, padding: '4px 10px', borderRadius: '4px', border: `1px solid ${C.cyan}66`, color: C.cyan, fontSize: '11px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+                      {b.startVils} Vils Start
+                    </div>
+                  )}
+                  <div style={{ marginLeft: b.startVils !== 3 ? 0 : 'auto', backgroundColor: '#2a2d36', padding: '4px 10px', borderRadius: '4px', border: `1px solid ${C.borderLt}`, color: C.textMain, fontSize: '11px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
                     {b.popCount} Vils
                   </div>
                 </div>
