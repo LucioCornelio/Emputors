@@ -650,7 +650,11 @@ const AgeSections = ({ build, hideNotes = false }) => {
             // Number shown in game when this step starts: the total before it (or the same total for moves)
             // only shown when the step creates villagers; moves keep the same count
             let startVil = null, totalVil = null, adds = false;
-            if (step.vil !== null && step.vil !== undefined) {
+            if (step.start) {
+              // villagers the game starts with (maps that start with more than 3): no in-game counter, sets the starting total
+              totalVil = step.vil;
+              lastVil = step.vil;
+            } else if (step.vil !== null && step.vil !== undefined) {
               adds = step.vil > lastVil;
               startVil = adds ? lastVil : null;
               totalVil = step.vil;
