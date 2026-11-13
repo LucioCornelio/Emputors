@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
+import { STRATEGY_GROUPS, TRAITS, asList } from '../../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', 
@@ -75,6 +76,24 @@ const parseInitialAges = (build) => {
   }));
 };
 
+const ChipPicker = ({ label, options, value, onChange }) => (
+  <div style={{ gridColumn: 'span 3' }}>
+    <label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>{label}</label>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
+      {options.map((o) => {
+        const on = value.includes(o);
+        return (
+          <button key={o} type="button" onClick={() => onChange(on ? value.filter((x) => x !== o) : [...value, o])} style={{
+            padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: '600', cursor: 'pointer',
+            backgroundColor: on ? `${C.gold}1f` : 'transparent', border: `1px solid ${on ? `${C.gold}88` : '#3a3e4a'}`,
+            color: on ? C.gold : C.textDim,
+          }}>{o}</button>
+        );
+      })}
+    </div>
+  </div>
+);
+
 const BuildOrderCreator = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -92,6 +111,8 @@ const BuildOrderCreator = () => {
   const [description, setDescription] = useState(editBuild?.description || '');
   
   const [tags, setTags] = useState(editBuild?.tags || []);
+  const [strategyGroups, setStrategyGroups] = useState(asList(editBuild?.strategy_groups ?? editBuild?.strategyGroups));
+  const [traits, setTraits] = useState(asList(editBuild?.traits));
   const [strategyIcons, setStrategyIcons] = useState(editBuild?.strategyIcons || []);
   const [whatsNext, setWhatsNext] = useState(editBuild?.whatsNext || []);
   
@@ -115,6 +136,8 @@ const BuildOrderCreator = () => {
       if (data.description) setDescription(data.description);
       if (data.author) setAuthor(data.author);
       if (data.tags) setTags(data.tags);
+      if (data.strategy_groups || data.strategyGroups) setStrategyGroups(asList(data.strategy_groups ?? data.strategyGroups));
+      if (data.traits) setTraits(asList(data.traits));
       if (data.strategyIcons) setStrategyIcons(data.strategyIcons);
       if (data.whatsNext) setWhatsNext(data.whatsNext);
       if (data.ages) setAges(data.ages); 
@@ -234,12 +257,15 @@ const BuildOrderCreator = () => {
 
   const handleSubmit = async () => {
     if (!id || !title) return alert("ID and Title are required.");
+    if (strategyGroups.length === 0) return alert("Pick at least one Strategy Group.");
     setIsSubmitting(true);
     
     const payload = {
       id, title, civ, map, strategy, difficulty,
       pop_count: parseInt(popCount), video, description, author,
       tags: tags, 
+      strategy_groups: STRATEGY_GROUPS.filter((g) => strategyGroups.includes(g)),
+      traits: TRAITS.filter((t) => traits.includes(t)),
       strategy_icons: strategyIcons, 
       whats_next: whatsNext,
       ages: calculateSmartSteps()
@@ -316,6 +342,8 @@ const BuildOrderCreator = () => {
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Author</label><input type="text" value={author} onChange={e => setAuthor(e.target.value)} style={inputStyle} /></div>
           <div style={{ gridColumn: 'span 3' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Description</label><textarea value={description} onChange={e => setDescription(e.target.value)} style={{ ...inputStyle, minHeight: '60px' }} /></div>
           <div style={{ gridColumn: 'span 3' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>YouTube VOD Link (Optional)</label><input type="text" value={video} onChange={e => setVideo(e.target.value)} style={inputStyle} /></div>
+          <ChipPicker label="Strategy Groups (filter, one or more)" options={STRATEGY_GROUPS} value={strategyGroups} onChange={setStrategyGroups} />
+          <ChipPicker label="Traits (filter, optional)" options={TRAITS} value={traits} onChange={setTraits} />
         </div>
       </div>
 

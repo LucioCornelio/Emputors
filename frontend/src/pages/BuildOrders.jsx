@@ -1,6 +1,7 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { STRATEGY_GROUPS, TRAITS, asList } from '../data/buildOrderFilters';
 
 const C = {
   card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8',
@@ -58,7 +59,10 @@ const BuildOrders = () => {
           // Support camelCase and a default value (99) so the sort does not break
           popCount: b.pop_count ?? b.popCount ?? 99,
           strategyIcons: b.strategy_icons ?? b.strategyIcons ?? [],
-          whatsNext: b.whats_next ?? b.whatsNext ?? []
+          whatsNext: b.whats_next ?? b.whatsNext ?? [],
+          strategyGroups: asList(b.strategy_groups),
+          traits: asList(b.traits),
+          hasVod: typeof b.video === 'string' && b.video.trim() !== '',
         }));
         setBuilds(formattedBuilds);
       } else if (error) {
@@ -83,13 +87,19 @@ const BuildOrders = () => {
   
   const civFilter = searchParams.get('civ') || 'All';
   const mapFilter = searchParams.get('map') || 'All';
-  const stratFilter = searchParams.get('strat') || 'All';
+  const groupFilter = searchParams.get('group') || 'All';
+  const traitsParam = searchParams.get('traits') || '';
+  const traitFilter = traitsParam.split(',').filter(Boolean);
+  const vodOnly = searchParams.get('vod') === '1';
   const diffFilter = searchParams.get('diff') || 'All';
   const search = searchParams.get('search') || '';
 
   const civs = getUnique(builds, 'civ');
   const maps = getUnique(builds, 'map');
-  const strats = getUnique(builds, 'strategy');
+  const usedGroups = new Set(builds.flatMap((b) => b.strategyGroups));
+  const groups = STRATEGY_GROUPS.filter((g) => usedGroups.has(g));
+  const usedTraits = new Set(builds.flatMap((b) => b.traits));
+  const traitOptions = TRAITS.filter((t) => usedTraits.has(t));
   const diffs = getUnique(builds, 'difficulty');
 
   const setFilter = (key, value) => {
@@ -99,21 +109,29 @@ const BuildOrders = () => {
     setSearchParams(newParams);
   };
 
+  const toggleTrait = (t) => {
+    const next = traitFilter.includes(t) ? traitFilter.filter((x) => x !== t) : [...traitFilter, t];
+    setFilter('traits', next.join(','));
+  };
+
   const clearAllFilters = () => {
     setSearchParams(new URLSearchParams());
   };
 
-  const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || stratFilter !== 'All' || diffFilter !== 'All' || search !== '';
+  const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || groupFilter !== 'All' || traitFilter.length > 0 || vodOnly || diffFilter !== 'All' || search !== '';
 
-  const filtered = useMemo(() => {
+  // Few builds: filter on every render, no memo needed.
+  const filtered = (() => {
     const results = builds.filter((b) => {
       if (civFilter !== 'All' && b.civ !== civFilter) return false;
       if (mapFilter !== 'All' && b.map !== mapFilter) return false;
-      if (stratFilter !== 'All' && b.strategy !== stratFilter) return false;
+      if (groupFilter !== 'All' && !b.strategyGroups.includes(groupFilter)) return false;
+      if (traitFilter.some((t) => !b.traits.includes(t))) return false;
+      if (vodOnly && !b.hasVod) return false;
       if (diffFilter !== 'All' && b.difficulty !== diffFilter) return false;
       if (search) {
         const q = search.toLowerCase();
-        const haystack = `${b.title} ${b.civ} ${b.map} ${b.strategy}`.toLowerCase();
+        const haystack = `${b.title} ${b.civ} ${b.map} ${b.strategy} ${b.strategyGroups.join(' ')} ${b.traits.join(' ')}`.toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
@@ -130,7 +148,7 @@ const BuildOrders = () => {
 
       return a.popCount - b.popCount;
     });
-  }, [builds, civFilter, mapFilter, stratFilter, diffFilter, search]);
+  })();
 
   const sel = {
     backgroundColor: '#1e212b', color: C.textMain, border: `1px solid ${C.border}`,
@@ -173,9 +191,9 @@ const BuildOrders = () => {
           <option value="All">All Maps</option>
           {maps.map((m) => <option key={m} value={m}>{m}</option>)}
         </select>
-        <select value={stratFilter} onChange={(e) => setFilter('strat', e.target.value)} style={sel}>
+        <select value={groupFilter} onChange={(e) => setFilter('group', e.target.value)} style={sel}>
           <option value="All">All Strategies</option>
-          {strats.map((s) => <option key={s} value={s}>{s}</option>)}
+          {groups.map((g) => <option key={g} value={g}>{g}</option>)}
         </select>
         <select value={diffFilter} onChange={(e) => setFilter('diff', e.target.value)} style={sel}>
           <option value="All">All Levels</option>
@@ -192,6 +210,24 @@ const BuildOrders = () => {
             CLEAR
           </button>
         )}
+
+        <div style={{ flexBasis: '100%', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', borderTop: `1px solid ${C.border}`, paddingTop: '10px', marginTop: '2px' }}>
+          <span style={{ color: C.textMute, fontSize: '10px', fontWeight: 'bold', letterSpacing: '1px', textTransform: 'uppercase', marginRight: '4px' }}>Traits</span>
+          {traitOptions.map((t) => {
+            const on = traitFilter.includes(t);
+            return (
+              <button key={t} type="button" onClick={() => toggleTrait(t)} aria-pressed={on} style={{
+                padding: '3px 10px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', cursor: 'pointer',
+                backgroundColor: on ? `${C.gold}1f` : 'transparent', border: `1px solid ${on ? `${C.gold}88` : '#3a3e4a'}`,
+                color: on ? C.gold : C.textDim, transition: 'all 0.15s',
+              }}>{t}</button>
+            );
+          })}
+          <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px', color: vodOnly ? C.textMain : C.textDim, fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }}>
+            <input type="checkbox" checked={vodOnly} onChange={(e) => setFilter('vod', e.target.checked ? '1' : '')} style={{ accentColor: C.gold, cursor: 'pointer', margin: 0 }} />
+            With VOD
+          </label>
+        </div>
       </div>
 
       {filtered.length === 0 ? (
@@ -241,7 +277,7 @@ const BuildOrders = () => {
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
                   <span onClick={(e) => handleTagClick(e, 'civ', b.civ)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.cyan}1a`, border: `1px solid ${C.cyan}33`, color: C.cyan, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.civ}</span>
                   <span onClick={(e) => handleTagClick(e, 'map', b.map)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: '#2a2d36', border: '1px solid #444', color: C.textMain, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.map}</span>
-                  <span onClick={(e) => handleTagClick(e, 'strat', b.strategy)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.gold}1a`, border: `1px solid ${C.gold}33`, color: C.gold, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.strategy}</span>
+                  <span onClick={(e) => b.strategyGroups[0] && handleTagClick(e, 'group', b.strategyGroups[0])} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.gold}1a`, border: `1px solid ${C.gold}33`, color: C.gold, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.strategy}</span>
                   <span onClick={(e) => handleTagClick(e, 'diff', b.difficulty)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${diffColor(b.difficulty)}1a`, border: `1px solid ${diffColor(b.difficulty)}33`, color: diffColor(b.difficulty), cursor: 'pointer', transition: 'filter 0.2s' }}>{b.difficulty}</span>
                 </div>
                 
