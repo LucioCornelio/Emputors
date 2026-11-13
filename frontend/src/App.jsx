@@ -4,7 +4,6 @@ import Leat11Draft from './pages/Leat11Draft';
 import AdvancedSearch from './pages/AdvancedSearch';
 import BuildOrders from './pages/BuildOrders';
 import BuildOrderDetail from './pages/BuildOrderDetail';
-import BuildDrill from './pages/drill/BuildDrill';
 import Home from './pages/Home';
 import BuildOrderCreator from './pages/admin/BuildOrderCreator';
 import DraftPlanCreator from './pages/admin/DraftPlanCreator';
@@ -34,7 +33,6 @@ function App() {
           {/* Academy routes */}
           <Route path="/academy/build-orders" element={<BuildOrders />} />
           <Route path="/academy/build-orders/:buildId" element={<BuildOrderDetail />} />
-          <Route path="/academy/build-orders/:buildId/drill" element={<BuildDrill />} />
           
           {/* Tournament routes */}
           <Route path="/tournaments/current" element={<CurrentEvent />} />

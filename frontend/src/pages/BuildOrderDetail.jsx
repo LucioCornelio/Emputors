@@ -840,10 +840,6 @@ const BuildOrderDetail = () => {
               </button>
             )}
             <YouTubeBtn url={build.video} />
-            <Link to={`/academy/build-orders/${build.id}/drill`} title="Memorise this build on a schematic map" style={{
-              padding: '5px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '800', textDecoration: 'none',
-              color: '#1a1300', background: C.gold, border: `1px solid ${C.gold}`, whiteSpace: 'nowrap',
-            }}>🎯 Practice</Link>
             <SizeControl factor={factor} change={change} />
             <ToggleSwitch on={gameMode} onToggle={() => setGameMode(true)} label="Game Mode" />
           </div>
