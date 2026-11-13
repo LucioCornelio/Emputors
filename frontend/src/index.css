@@ -109,3 +109,8 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* Pages that set their own width (build order detail): the site frame and navbar follow it */
+html[data-page-w] #root {
+  width: var(--page-w);
+}

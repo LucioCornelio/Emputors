@@ -445,7 +445,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
 
 const ToggleSwitch = ({ on, onToggle, label }) => (
   <div onClick={onToggle} style={{ display: 'flex', alignItems: 'center', gap: '7px', cursor: 'pointer', userSelect: 'none' }}>
-    <span style={{ fontSize: '11px', fontWeight: '600', color: on ? C.gold : C.textMute }}>{label}</span>
+    <span style={{ fontSize: '11px', fontWeight: '600', color: on ? C.gold : C.textMute, whiteSpace: 'nowrap' }}>{label}</span>
     <div style={{
       width: '32px', height: '18px', borderRadius: '9px', position: 'relative',
       backgroundColor: on ? `${C.gold}44` : '#2a2d36',
@@ -459,6 +459,80 @@ const ToggleSwitch = ({ on, onToggle, label }) => (
     </div>
   </div>
 );
+
+// ---- Page size: wider page and proportional scale on big screens, plus a remembered A-/A+ factor ----
+const SIZE_KEY = 'bo-size';
+const SIZE_STEPS = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5];
+const MAX_PAGE = 1200;     // page width on big screens (navbar and content)
+const DESIGN_W = 860;      // width the rows are designed for, used to widen the page when zoomed in
+const GUTTER = 24;         // free space on each side of the page
+const WIDE_FROM = 900;     // below this the page keeps the normal mobile layout
+
+const readSize = () => {
+  try {
+    const v = parseFloat(localStorage.getItem(SIZE_KEY));
+    return SIZE_STEPS.includes(v) ? v : 1;
+  } catch { return 1; }
+};
+
+// Automatic scale from the window width: 1 up to 1024px, 1.1 on a 1366px laptop, 1.4 from 1920px
+const autoScale = (vw) => {
+  if (vw <= 1024) return 1;
+  if (vw <= 1366) return 1 + 0.1 * (vw - 1024) / 342;
+  return Math.min(1.4, 1.1 + 0.3 * (vw - 1366) / 554);
+};
+
+const usePageSize = () => {
+  const [vw, setVw] = useState(() => window.innerWidth);
+  const [factor, setFactor] = useState(readSize);
+
+  useEffect(() => {
+    const onResize = () => setVw(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const wide = vw >= WIDE_FROM;
+  const scale = autoScale(vw) * factor;
+  const width = wide ? Math.round(Math.max(Math.min(MAX_PAGE, vw - 2 * GUTTER), Math.min(DESIGN_W * scale, vw - 2 * GUTTER))) : null;
+
+  // The site frame (#root, which holds the navbar) takes the same width as the content on this page
+  useEffect(() => {
+    const root = document.documentElement;
+    if (width) {
+      root.style.setProperty('--page-w', `${width}px`);
+      root.setAttribute('data-page-w', '');
+    } else {
+      root.removeAttribute('data-page-w');
+    }
+    return () => root.removeAttribute('data-page-w');
+  }, [width]);
+
+  const change = (dir) => {
+    const i = SIZE_STEPS.indexOf(factor);
+    const next = SIZE_STEPS[Math.min(SIZE_STEPS.length - 1, Math.max(0, i + dir))];
+    setFactor(next);
+    try { localStorage.setItem(SIZE_KEY, String(next)); } catch { /* storage unavailable */ }
+  };
+
+  return { wide, scale, factor, change };
+};
+
+const SizeControl = ({ factor, change }) => {
+  const btn = (disabled) => ({
+    width: '24px', height: '22px', padding: 0, lineHeight: 1, cursor: disabled ? 'default' : 'pointer',
+    background: 'transparent', border: 'none', color: disabled ? '#555' : C.textDim, fontWeight: 800,
+    fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center',
+  });
+  const min = factor <= SIZE_STEPS[0], max = factor >= SIZE_STEPS[SIZE_STEPS.length - 1];
+  return (
+    <div title={`Text size ${Math.round(factor * 100)}%`} style={{ display: 'flex', alignItems: 'center', border: `1px solid ${C.borderLt}`, borderRadius: '4px', background: 'rgba(30,33,43,0.8)', overflow: 'hidden', flexShrink: 0 }}>
+      <button type="button" title="Smaller text" disabled={min} onClick={() => change(-1)} style={btn(min)}><span style={{ fontSize: '11px' }}>A−</span></button>
+      <div style={{ width: '1px', alignSelf: 'stretch', background: C.borderLt }} />
+      <button type="button" title="Larger text" disabled={max} onClick={() => change(1)} style={btn(max)}><span style={{ fontSize: '13px' }}>A+</span></button>
+    </div>
+  );
+};
 
 const AgeHeader = ({ age }) => {
   const as = AGE_STYLE[age.name] || AGE_STYLE['Dark Age'];
@@ -541,6 +615,7 @@ const BuildOrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [gameMode, setGameMode] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const { wide, scale, factor, change } = usePageSize();
   
   useEffect(() => {
     const fetchBuild = async () => {
@@ -600,7 +675,7 @@ const BuildOrderDetail = () => {
 
   if (gameMode) {
     return (
-      <div style={{ maxWidth: '820px', margin: '0 auto', padding: '8px 10px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
+      <div style={{ zoom: scale, padding: wide ? '8px 0 40px' : '8px 10px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
         <div style={{
           position: 'relative', overflow: 'hidden',
           borderRadius: '5px', border: `1px solid ${C.border}`,
@@ -617,6 +692,7 @@ const BuildOrderDetail = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <YouTubeBtn url={build.video} />
+              <SizeControl factor={factor} change={change} />
               <ToggleSwitch on={gameMode} onToggle={() => setGameMode(false)} label="Game Mode" />
             </div>
           </div>
@@ -627,7 +703,7 @@ const BuildOrderDetail = () => {
   }
 
   return (
-    <div style={{ maxWidth: '820px', margin: '0 auto', padding: '12px 12px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
+    <div style={{ zoom: scale, padding: wide ? '12px 0 40px' : '12px 12px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
       
       {/* MAP BANNER HEADER */}
       <div style={{
@@ -672,6 +748,7 @@ const BuildOrderDetail = () => {
               padding: '5px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: '800', textDecoration: 'none',
               color: '#1a1300', background: C.gold, border: `1px solid ${C.gold}`, whiteSpace: 'nowrap',
             }}>🎯 Practice</Link>
+            <SizeControl factor={factor} change={change} />
             <ToggleSwitch on={gameMode} onToggle={() => setGameMode(true)} label="Game Mode" />
           </div>
         </div>
