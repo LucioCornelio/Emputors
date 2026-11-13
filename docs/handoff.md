@@ -38,3 +38,17 @@ Last update: 13 Nov 2026 (build order list filters).
 6. Start villager count is fixed at 3; civs that start with more villagers would need a field in the build.
 7. Placeholders without content: Past Events, Hall of Fame, Roster, About.
 8. `TODO.md`: tag cloud in Advanced Search, clean old icons, bold numbers and keywords (done for build orders).
+
+## Ideas para más adelante
+
+Ideas noted by Javier on 13 Nov 2026. Not started: do not implement until he asks.
+
+1. **Build order variants by differences (main goal).** Not a full simulator: start from a build that already works and calculate only the effect of a change, because the existing build already includes the real walking times and building placement. It must answer questions such as:
+   - "Can I do this build with one villager less?": resources missing or left over at the age up click, seconds the click moves earlier, and which reorganization compensates.
+   - "I want constant ship production from the dock and a single archery range instead of 3 galleys and 2 archery ranges": difference in consumption per resource, villagers needed on each resource and in which steps to move them.
+
+   Key rule: every change is calculated with all its effects, not only the obvious one. Example: one villager less means about 60 food less gathered, but also 50 food not spent on creating it (net about 10 less), and it also frees TC time that moves the click earlier and reduces what the other villagers gather until then. Results are estimates and are shown with their assumptions.
+
+   The maths is done by a deterministic module (costs, production times, gather rates, economy upgrades). The build-orders skill uses it and returns the modified build in the standard format. First test case: Hybrid with constant ship production and 1 archery range.
+
+2. **Eco Calculator.** Its own section of the website, equivalent to https://aoe2-de-tools.herokuapp.com/villagers-required/ (villagers required for constant production, with economy and civilization bonuses), with a better design and using the same calculation module. Data: costs and times from the aoe2techtree data we already use; gather rates measured by Survivalist (credit him on the page). To do first: find out exactly where that page gets its data.
