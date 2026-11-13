@@ -461,7 +461,7 @@ const ToggleSwitch = ({ on, onToggle, label }) => (
 );
 
 // ---- Page size: wider page and proportional scale on big screens, plus a remembered A-/A+ factor ----
-const SIZE_KEY = 'bo-size';
+const SIZE_KEY = 'bo-size-v2';
 const SIZE_STEPS = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5];
 const MAX_PAGE = 1200;     // page width on big screens (navbar and content)
 const DESIGN_W = 860;      // width the rows are designed for, used to widen the page when zoomed in
@@ -475,11 +475,13 @@ const readSize = () => {
   } catch { return 1; }
 };
 
-// Automatic scale from the window width: 1 up to 1024px, 1.1 on a 1366px laptop, 1.4 from 1920px
+// Automatic scale from the window width: 1 up to 1366px, 1.26 from 1920px (never smaller than the original size)
 const autoScale = (vw) => {
-  if (vw <= 1024) return 1;
-  if (vw <= 1366) return 1 + 0.1 * (vw - 1024) / 342;
-  return Math.min(1.4, 1.1 + 0.3 * (vw - 1366) / 554);
+  let s;
+  if (vw <= 1024) s = 1;
+  else if (vw <= 1366) s = 1 + 0.1 * (vw - 1024) / 342;
+  else s = Math.min(1.4, 1.1 + 0.3 * (vw - 1366) / 554);
+  return Math.max(1, s * 0.9);
 };
 
 const usePageSize = () => {
