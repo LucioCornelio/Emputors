@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { iconPath } from '../data/iconPaths';
@@ -377,7 +377,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
 
   return (
     <>
-      <div style={{
+      <div data-bo-line="" style={{
         display: 'grid', gridTemplateColumns: '48px 40px max-content 1fr auto',
         alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
         borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`, borderBottom: '1px solid rgba(255,255,255,0.045)',
@@ -536,12 +536,79 @@ const SizeControl = ({ factor, change }) => {
   );
 };
 
+// ---- Game Mode paging: blinking arrows on both sides of the build that scroll one screen down ----
+const LINES_KEPT = 4; // the 4th visible line from the bottom becomes the top line after a page down
+
+const scrollToY = (y) => window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: 'smooth' });
+
+const pageDown = () => {
+  const lines = Array.from(document.querySelectorAll('[data-bo-line]'));
+  const vh = window.innerHeight;
+  const visible = lines.filter((el) => { const r = el.getBoundingClientRect(); return r.top >= -1 && r.bottom <= vh + 1; });
+  if (visible.length === 0) return scrollToY(window.scrollY + vh * 0.75);
+  const target = visible[Math.max(0, visible.length - LINES_KEPT)];
+  const top = target.getBoundingClientRect().top;
+  // Always move forward, even on very short screens
+  scrollToY(window.scrollY + (top > 4 ? top : vh * 0.75));
+};
+
+const PAGE_ARROW_CSS = `
+@keyframes boArrowPulse { 0%, 100% { opacity: 0.35; transform: translateY(-3px); } 50% { opacity: 1; transform: translateY(3px); } }
+.bo-page-arrow { transition: background 0.2s, border-color 0.2s; }
+.bo-page-arrow:hover { background: rgba(255,215,0,0.16) !important; border-color: rgba(255,215,0,0.75) !important; }
+.bo-page-arrow svg { animation: boArrowPulse 1.6s ease-in-out infinite; }
+`;
+
+const PageArrows = ({ contentRef }) => {
+  const [pos, setPos] = useState(null);
+
+  useEffect(() => {
+    const update = () => {
+      const el = contentRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const atEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+      setPos({ left: r.left, right: r.right, atEnd });
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
+  }, [contentRef]);
+
+  if (!pos || pos.atEnd) return null;
+  const SIZE = 44;
+  const room = pos.left >= SIZE + 16; // enough free space beside the build to place the arrows outside it
+  const leftX = room ? pos.left - SIZE - 12 : pos.left + 8;
+  const rightX = room ? pos.right + 12 : pos.right - SIZE - 8;
+  const arrow = (x, side) => (
+    <button key={side} type="button" className="bo-page-arrow" title="Scroll down" aria-label="Scroll down" onClick={pageDown} style={{
+      position: 'fixed', left: `${x}px`, bottom: '40px', zIndex: 50,
+      width: `${SIZE}px`, height: `${SIZE}px`, borderRadius: '50%', padding: 0, cursor: 'pointer',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(22,25,32,0.85)', border: '1px solid rgba(255,215,0,0.40)',
+      boxShadow: '0 4px 14px rgba(0,0,0,0.55)',
+    }}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </button>
+  );
+  return (
+    <>
+      <style>{PAGE_ARROW_CSS}</style>
+      {arrow(leftX, 'l')}
+      {arrow(rightX, 'r')}
+    </>
+  );
+};
+
 const AgeHeader = ({ age }) => {
   const as = AGE_STYLE[age.name] || AGE_STYLE['Dark Age'];
   const hasImg = !!age.icon;
 
   return (
-    <div style={{
+    <div data-bo-line="" data-bo-age="" style={{
       display: 'flex', alignItems: 'center', gap: '7px',
       padding: '5px 12px', borderRadius: '5px', marginBottom: '3px',
       fontWeight: '800', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em',
@@ -618,6 +685,17 @@ const BuildOrderDetail = () => {
   const [gameMode, setGameMode] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const { wide, scale, factor, change } = usePageSize();
+  const gameRef = useRef(null);
+
+  // Entering Game Mode: put the first age header (Dark Age) at the top of the screen
+  useEffect(() => {
+    if (!gameMode) return;
+    const id = requestAnimationFrame(() => {
+      const first = document.querySelector('[data-bo-age]');
+      if (first) window.scrollTo({ top: Math.max(0, Math.round(window.scrollY + first.getBoundingClientRect().top)), behavior: 'auto' });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [gameMode]);
   
   useEffect(() => {
     const fetchBuild = async () => {
@@ -677,7 +755,8 @@ const BuildOrderDetail = () => {
 
   if (gameMode) {
     return (
-      <div style={{ zoom: scale, padding: wide ? '8px 0 40px' : '8px 10px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
+      <>
+      <div ref={gameRef} style={{ zoom: scale, padding: wide ? '8px 0 40px' : '8px 10px 40px', fontFamily: 'Segoe UI, sans-serif' }}>
         <div style={{
           position: 'relative', overflow: 'hidden',
           borderRadius: '5px', border: `1px solid ${C.border}`,
@@ -701,6 +780,8 @@ const BuildOrderDetail = () => {
         </div>
         <AgeSections build={build} hideNotes />
       </div>
+      <PageArrows contentRef={gameRef} />
+      </>
     );
   }
 
