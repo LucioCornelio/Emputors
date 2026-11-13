@@ -21,7 +21,7 @@ Website of the Emputors clan (Age of Empires II). Owner and only maintainer: Jav
 | Tournaments > Past Events | `/tournaments/past-events` | inline in `App.jsx` | Placeholder | |
 | Tournaments > Hall of Fame | `/tournaments/hall-of-fame` | inline in `App.jsx` | Placeholder | |
 | Academy > Build Orders | `/academy/build-orders` | `pages/BuildOrders.jsx` | List with filters (civ, map, strategy, difficulty, search) | `build_orders` |
-| | `/academy/build-orders/:buildId` | `pages/BuildOrderDetail.jsx` | Build order detail: age sections, step rows, in-game villager counter, resource badges, notes behind (i), Game Mode | `build_orders`, `clan_roles` |
+| | `/academy/build-orders/:buildId` | `pages/BuildOrderDetail.jsx` | Build order detail: age sections, step rows, in-game villager counter, resource badges, notes behind (i), Game Mode (starts at Dark Age, page down bars), wide layout with zoom and A- / A+ size control | `build_orders`, `clan_roles` |
 | | `/academy/build-orders/:buildId/drill` | `pages/drill/BuildDrill.jsx` (+ `art.jsx`, `util.js`) | Build Drill: schematic map simulator to memorise the build | `build_orders` |
 | Tools > Clan Wars VII (3v3) | `/tools/clan-wars-vii` | `pages/ClanWarsVII.jsx` + `pages/cw7/*` | Tournament draft tool (see `cw7-draft-tool.md`) | `cw7_draft_plans`, `cw7_rival_drafts`, `cw7_rival_profiles`, `public/db_3v3.json` |
 | Tools > Advanced Search | `/tools/advanced-search` | `pages/AdvancedSearch.jsx` | Civ finder by tech tree: combinable filters (include, exclude, modes), civ tags (full cavalry, foot archer, cavalry archer), mark civs as used | `public/techtree.json`, `public/civtags.json` |
