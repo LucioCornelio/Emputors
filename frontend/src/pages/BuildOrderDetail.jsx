@@ -553,12 +553,16 @@ const pageDown = () => {
 };
 
 const PAGE_ARROW_CSS = `
-@keyframes boArrowPulse { 0%, 100% { opacity: 0.35; transform: translateY(-3px); } 50% { opacity: 1; transform: translateY(3px); } }
-.bo-page-arrow { transition: background 0.2s, border-color 0.2s; }
-.bo-page-arrow:hover { background: rgba(255,215,0,0.16) !important; border-color: rgba(255,215,0,0.75) !important; }
-.bo-page-arrow svg { animation: boArrowPulse 1.6s ease-in-out infinite; }
+@keyframes boArrowPulse { 0%, 100% { opacity: 0.2; } 40% { opacity: 1; } }
+.bo-page-arrow { transition: background 0.15s, border-color 0.15s; }
+.bo-page-arrow:hover { background: rgba(255,215,0,0.14) !important; border-color: rgba(255,215,0,0.8) !important; }
+.bo-page-arrow:active { background: rgba(255,215,0,0.24) !important; }
+.bo-page-arrow svg { animation: boArrowPulse 1.5s ease-in-out infinite; }
+.bo-page-arrow svg:nth-child(2) { animation-delay: 0.2s; }
+.bo-page-arrow svg:nth-child(3) { animation-delay: 0.4s; }
 `;
 
+// Tall bars at mid height on both sides of the build: a big target to page down in a split second
 const PageArrows = ({ contentRef }) => {
   const [pos, setPos] = useState(null);
 
@@ -577,28 +581,33 @@ const PageArrows = ({ contentRef }) => {
   }, [contentRef]);
 
   if (!pos || pos.atEnd) return null;
-  const SIZE = 44;
-  const room = pos.left >= SIZE + 16; // enough free space beside the build to place the arrows outside it
-  const leftX = room ? pos.left - SIZE - 12 : pos.left + 8;
-  const rightX = room ? pos.right + 12 : pos.right - SIZE - 8;
-  const arrow = (x, side) => (
+  const gap = 10;
+  const free = pos.left - 2 * gap;                 // free space beside the build
+  const room = free >= 40;
+  const W = room ? Math.min(72, free) : 40;          // outside the build when there is room, else on its edges
+  const leftX = room ? pos.left - gap - W : pos.left + 4;
+  const rightX = room ? pos.right + gap : pos.right - W - 4;
+  const chevron = (i) => (
+    <svg key={i} width="22" height="14" viewBox="0 0 24 14" fill="none" stroke={C.gold} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+      <polyline points="4 3 12 11 20 3" />
+    </svg>
+  );
+  const bar = (x, side) => (
     <button key={side} type="button" className="bo-page-arrow" title="Scroll down" aria-label="Scroll down" onClick={pageDown} style={{
-      position: 'fixed', left: `${x}px`, bottom: '40px', zIndex: 50,
-      width: `${SIZE}px`, height: `${SIZE}px`, borderRadius: '50%', padding: 0, cursor: 'pointer',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      position: 'fixed', left: `${x}px`, top: '50%', transform: 'translateY(-50%)', zIndex: 50,
+      width: `${W}px`, height: 'max(180px, 42vh)', borderRadius: `${W / 2}px`, padding: 0, cursor: 'pointer',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px',
       background: 'rgba(22,25,32,0.85)', border: '1px solid rgba(255,215,0,0.40)',
       boxShadow: '0 4px 14px rgba(0,0,0,0.55)',
     }}>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="6 9 12 15 18 9" />
-      </svg>
+      {[0, 1, 2].map(chevron)}
     </button>
   );
   return (
     <>
       <style>{PAGE_ARROW_CSS}</style>
-      {arrow(leftX, 'l')}
-      {arrow(rightX, 'r')}
+      {bar(leftX, 'l')}
+      {bar(rightX, 'r')}
     </>
   );
 };
