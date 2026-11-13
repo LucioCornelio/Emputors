@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient';
 import DraftPlanCreator from './admin/DraftPlanCreator';
 import RivalScouting from './cw7/RivalScouting';
 import { buildRivalModel, rivalPicksInWindow, pickRisk, riskLabel, preferenceRatio } from './cw7/forecast';
+import { isMapDraft } from './cw7/mapDrafts';
 
 const MAP_POOL = ["Colosseum", "Crescent", "Fortress", "Grand Bara", "Nomad", "Socotra", "Tres Leches"].sort();
 const CIVS = ["Armenians", "Aztecs", "Bengalis", "Berbers", "Bohemians", "Britons", "Bulgarians", "Burgundians", "Burmese", "Byzantines", "Celts", "Chinese", "Cumans", "Danes", "Dravidians", "Ethiopians", "Franks", "Georgians", "Goths", "Gurjaras", "Hindustanis", "Huns", "Incas", "Italians", "Japanese", "Jurchens", "Khitans", "Khmer", "Koreans", "Lithuanians", "Magyars", "Malay", "Malians", "Mapuche", "Mayans", "Mongols", "Muisca", "Persians", "Poles", "Portuguese", "Romans", "Saracens", "Saxons", "Shu", "Sicilians", "Slavs", "Spanish", "Tatars", "Teutons", "Tupi", "Turks", "Varangians", "Vietnamese", "Vikings", "Wei", "Wu"].sort();
@@ -424,7 +425,7 @@ function ClanWarsVII() {
   // --- LOGIC: RIVAL FORECAST (picks only) ---
   const rivalNames = Array.from(new Set([...rivalDrafts.map(d => d.rival_name), ...rivalProfiles.map(p => p.rival_name)])).sort((a, b) => a.localeCompare(b));
   const rivalModel = useMemo(() => {
-      const ds = rivalDrafts.filter(d => d.rival_name === selectedRival);
+      const ds = rivalDrafts.filter(d => d.rival_name === selectedRival && !isMapDraft(d, CIVS));
       const stats = rivalProfiles.find(p => p.rival_name === selectedRival);
       return (ds.length || stats) ? buildRivalModel(ds, CIVS, selectedExecMaps, stats?.map_stats || null) : null;
   }, [rivalDrafts, rivalProfiles, selectedRival, selectedExecMaps]);
@@ -539,7 +540,7 @@ function ClanWarsVII() {
                         <span style={{ color: C.gold, fontSize: '11px', fontWeight: 'bold' }}>2. CAPTAINS MODE SYNC:</span>
                         <select value={selectedRival} onChange={(e) => setSelectedRival(e.target.value)} title="Rival for the pick forecast (stored drafts in Rival Scouting)" style={{ marginLeft: 'auto', backgroundColor: '#1e212b', color: selectedRival ? C.gold : '#888', border: '1px solid #444', padding: '3px 6px', borderRadius: '4px', fontSize: '11px', outline: 'none', cursor: 'pointer' }}>
                             <option value="">Forecast: no rival</option>
-                            {rivalNames.map(r => <option key={r} value={r}>Forecast: {r} ({rivalDrafts.filter(d => d.rival_name === r).length} drafts{rivalProfiles.some(p => p.rival_name === r) ? ' + stats' : ''})</option>)}
+                            {rivalNames.map(r => <option key={r} value={r}>Forecast: {r} ({rivalDrafts.filter(d => d.rival_name === r && !isMapDraft(d, CIVS)).length} civ drafts{rivalProfiles.some(p => p.rival_name === r) ? ' + stats' : ''})</option>)}
                         </select>
                     </div>
                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -1212,7 +1213,7 @@ function ClanWarsVII() {
 
         {/* --- VIEW: RIVAL SCOUTING --- */}
         <div style={{ display: activeTab === 'rivalScouting' ? 'block' : 'none' }}>
-            <RivalScouting C={C} CIVS={CIVS} getCivImage={getCivImage} rivalDrafts={rivalDrafts} refreshRivalDrafts={refreshRivalDrafts} rivalProfiles={rivalProfiles} refreshRivalProfiles={refreshRivalProfiles} />
+            <RivalScouting C={C} CIVS={CIVS} MAP_POOL={MAP_POOL} getCivImage={getCivImage} rivalDrafts={rivalDrafts} refreshRivalDrafts={refreshRivalDrafts} rivalProfiles={rivalProfiles} refreshRivalProfiles={refreshRivalProfiles} />
         </div>
       </div>
     </div>

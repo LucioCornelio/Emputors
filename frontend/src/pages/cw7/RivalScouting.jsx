@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react';
 import { supabase } from '../../supabaseClient';
 import { loadFinishedDraft, sideSummary, buildRivalModel } from './forecast';
+import { isMapDraft, mapSideSummary } from './mapDrafts';
+import MapDraftsView, { MapThumb } from './MapDraftsView';
 import { htmlToText, detectPasteType, parseMatchPage, parseTeamStats, civsPlayedBy } from './matchPage';
 
 const NEW_RIVAL = '__new__';
@@ -28,7 +30,7 @@ function RivalPicker({ rivals, value, onChange, newName, onNewName, input }) {
   );
 }
 
-function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, rivalProfiles, refreshRivalProfiles }) {
+function RivalScouting({ C, CIVS, MAP_POOL, getCivImage, rivalDrafts, refreshRivalDrafts, rivalProfiles, refreshRivalProfiles }) {
   const [draftInput, setDraftInput] = useState("");
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [loaded, setLoaded] = useState(null);
@@ -38,6 +40,8 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [profileRival, setProfileRival] = useState("");
+  const [view, setView] = useState("register");
+  const [pendingMapDraft, setPendingMapDraft] = useState(null);
 
   const [matchParsed, setMatchParsed] = useState(null);
   const [rivalTeam, setRivalTeam] = useState("");
@@ -50,12 +54,25 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
 
   const flash = (text, type) => { setMessage({ text, type }); if (type === 'success') setTimeout(() => setMessage({ text: "", type: "" }), 4000); };
 
-  const handleLoad = async (source) => {
+  // Captain nick each rival drafted under (from its stored drafts), to pre-select rival and side
+  const captainOf = (extra) => {
+    const out = {};
+    [...rivalDrafts, ...(extra ? [extra] : [])].forEach(d => {
+      const nick = String((d.rival_side === 'HOST' ? d.host_name : d.guest_name) || "").trim().toLowerCase();
+      if (nick) (out[nick] = out[nick] || new Set()).add(d.rival_name);
+    });
+    return out;
+  };
+
+  const handleLoad = async (source, savedRow) => {
     const target = source || draftInput;
     setLoadingDraft(true); setLoaded(null); setSide(""); setMessage({ text: "", type: "" });
     try {
       const res = await loadFinishedDraft(target);
       if (rivalDrafts.some(d => d.draft_id === res.draftId)) flash("This draft is already stored (you can store it again for the other side).", "info");
+      const caps = captainOf(savedRow);
+      const hits = ['HOST', 'GUEST'].map(s => ({ s, rivals: caps[String((s === 'HOST' ? res.data.nameHost : res.data.nameGuest) || "").trim().toLowerCase()] })).filter(h => h.rivals && h.rivals.size === 1);
+      if (hits.length === 1) { const r = [...hits[0].rivals][0]; setSide(hits[0].s); setRivalChoice(r); setNewRivalName(""); }
       setLoaded(res);
     } catch (err) {
       flash(`❌ ${err.message}`, "error");
@@ -72,7 +89,9 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
     if (type === 'match') {
       const p = parseMatchPage(text);
       setMatchParsed(p); setRivalTeam(""); setStatsParsed(null);
-      if (p.draftUrl) { setDraftInput(p.draftUrl); handleLoad(p.draftUrl); }
+      const mapUrl = p.mapDraftUrl && !rivalDrafts.some(d => p.mapDraftUrl.endsWith(`/${d.draft_id}`)) ? p.mapDraftUrl : null;
+      if (p.draftUrl) { setDraftInput(p.draftUrl); handleLoad(p.draftUrl); setPendingMapDraft(mapUrl); }
+      else if (mapUrl) { setDraftInput(mapUrl); handleLoad(mapUrl); setPendingMapDraft(null); }
       else flash("Match page read, but no Draft Civis link was found. Paste the draft link in the box below.", "info");
     } else if (type === 'teamStats') {
       const st = parseTeamStats(text);
@@ -90,7 +109,7 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
     setRivalTeam(team);
     const existing = findRival(team);
     if (existing) { setRivalChoice(existing); setNewRivalName(""); } else { setRivalChoice(NEW_RIVAL); setNewRivalName(team); }
-    if (loaded && matchParsed) {
+    if (loaded && matchParsed && !loadedIsMap) {
       const played = civsPlayedBy(matchParsed, team);
       const overlap = (s) => sideSummary(loaded.data.events, s).picks.filter(c => played.includes(c)).length;
       const h = overlap('HOST'), g = overlap('GUEST');
@@ -119,6 +138,13 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
     setLoaded(null); setDraftInput(""); setSide(""); setNewRivalName(""); setRivalChoice(rivalName); setMatchParsed(null); setRivalTeam("");
     setProfileRival(rivalName);
     refreshRivalDrafts();
+    // The match page also had a map draft: load it next, rival and side pre-selected from the captain
+    if (pendingMapDraft) {
+      const next = pendingMapDraft;
+      setPendingMapDraft(null); setDraftInput(next);
+      await handleLoad(next, data[0]);
+      flash(`✅ Draft stored for ${rivalName}. Map draft of the same match loaded: check it and save.`, "info");
+    }
   };
 
   const handleSaveStats = async () => {
@@ -143,7 +169,10 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
     refreshRivalDrafts();
   };
 
-  const profileDrafts = rivalDrafts.filter(d => d.rival_name === profileRival);
+  const loadedIsMap = !!loaded && isMapDraft(loaded.data, CIVS);
+  const rivalAll = rivalDrafts.filter(d => d.rival_name === profileRival);
+  const profileDrafts = rivalAll.filter(d => !isMapDraft(d, CIVS));
+  const profileMapDrafts = rivalAll.filter(d => isMapDraft(d, CIVS));
   const profileStats = rivalProfiles.find(p => p.rival_name === profileRival);
   const model = useMemo(() => (profileDrafts.length || profileStats) ? buildRivalModel(profileDrafts, CIVS, [], profileStats?.map_stats || null) : null, [profileDrafts, profileStats, CIVS]);
   const topCivs = model ? CIVS.filter(c => model.stats[c].rawPicks > 0 || model.stats[c].snipes > 0 || Object.keys(model.stats[c].playedOn).length > 0).sort((a, b) => (model.pref[b] - model.pref[a]) || (Object.keys(model.stats[b].playedOn).length - Object.keys(model.stats[a].playedOn).length)) : [];
@@ -157,15 +186,21 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', color: C.textMain }}>
       <div style={{ textAlign: 'center' }}>
         <h1 style={{ color: C.gold, fontSize: '22px', margin: '0 0 5px 0', textTransform: 'uppercase', letterSpacing: '2px' }}>Rival Scouting</h1>
-        <p style={{ color: '#888', fontSize: '12px', margin: 0 }}>Drafts show what each rival picks; team statistics show what they play on each map. Both feed the forecast in Execution Draft.</p>
+        <p style={{ color: '#888', fontSize: '12px', margin: 0 }}>Register: load civ and map drafts and team statistics. Profile: what each rival picks, bans and snipes.</p>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+        {[['register', 'Register'], ['profile', 'Profile']].map(([k, t]) => (
+          <button key={k} onClick={() => setView(k)} style={{ backgroundColor: view === k ? 'rgba(255, 215, 0, 0.1)' : '#1e212b', color: view === k ? C.gold : '#aaa', border: `1px solid ${view === k ? C.gold : '#444'}`, padding: '6px 22px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px' }}>{t}</button>
+        ))}
       </div>
 
       {message.text && (
         <div style={{ padding: '8px', borderRadius: '4px', textAlign: 'center', fontWeight: 'bold', fontSize: '12px', color: message.type === 'error' ? C.red : message.type === 'info' ? C.gold : C.green, border: `1px solid ${message.type === 'error' ? C.red : message.type === 'info' ? C.gold : C.green}` }}>{message.text}</div>
       )}
 
-      <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 480px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      {view === 'register' && (
+        <div style={{ width: '100%', maxWidth: '760px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '15px' }}>
 
           {/* PASTE BOX */}
           <div style={{ ...box, display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -204,7 +239,7 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
 
           {/* ADD A FINISHED DRAFT */}
           <div style={{ ...box, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <span style={{ ...label, color: C.cyan }}>Add a finished draft</span>
+            <span style={{ ...label, color: C.cyan }}>Add a finished draft (civs or maps)</span>
             <div style={{ display: 'flex', gap: '8px' }}>
               <input type="text" placeholder="aoe2cm draft URL or ID" value={draftInput} onChange={(e) => setDraftInput(e.target.value)} style={{ ...input, flex: 1 }} />
               <button onClick={() => handleLoad()} disabled={loadingDraft || !draftInput.trim()} style={{ backgroundColor: loadingDraft ? '#555' : C.cyan, color: '#161920', border: 'none', padding: '6px 14px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', cursor: loadingDraft ? 'not-allowed' : 'pointer' }}>{loadingDraft ? 'LOADING...' : 'LOAD'}</button>
@@ -223,10 +258,11 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
 
             {loaded && (
               <>
-                <span style={{ ...label, color: C.cyan }}>Rival side in the draft</span>
+                <span style={{ ...label, color: C.cyan }}>Rival side in the {loadedIsMap ? 'map' : 'civ'} draft</span>
                 <span style={{ fontSize: '11px', color: '#888' }}>{matchParsed ? 'Pre-selected from the civs the team played. Check it.' : 'Names are shown only as a reference: teams often draft under a captain\'s nick.'}</span>
                 {['HOST', 'GUEST'].map(s => {
-                  const sum = sideSummary(loaded.data.events, s);
+                  const sum = loadedIsMap ? mapSideSummary(loaded.data.events, s) : sideSummary(loaded.data.events, s);
+                  const icon = (c, key, size, faded) => loadedIsMap ? <MapThumb key={key} map={c} struck={faded} size={size + 8} /> : <CivIcon key={key} civ={c} getCivImage={getCivImage} size={size} faded={faded} />;
                   const name = s === 'HOST' ? loaded.data.nameHost : loaded.data.nameGuest;
                   const sel = side === s;
                   return (
@@ -238,14 +274,14 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold', width: '42px' }}>PICKS</span>
-                        {sum.picks.map(c => <CivIcon key={`p-${c}`} civ={c} getCivImage={getCivImage} />)}
+                        {sum.picks.map(c => icon(c, `p-${c}`, 22, false))}
                       </div>
                       {(sum.bans.length > 0 || sum.snipes.length > 0) && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
                           <span style={{ fontSize: '9px', color: '#888', fontWeight: 'bold', width: '42px' }}>BANS</span>
-                          {sum.bans.map(c => <CivIcon key={`b-${c}`} civ={c} getCivImage={getCivImage} size={18} faded />)}
+                          {sum.bans.map(c => icon(c, `b-${c}`, 18, !loadedIsMap))}
                           {sum.snipes.length > 0 && <span style={{ fontSize: '9px', color: C.red, fontWeight: 'bold', marginLeft: '6px' }}>SNIPES</span>}
-                          {sum.snipes.map(c => <CivIcon key={`s-${c}`} civ={c} getCivImage={getCivImage} size={18} faded />)}
+                          {sum.snipes.map(c => icon(c, `s-${c}`, 18, !loadedIsMap))}
                         </div>
                       )}
                     </label>
@@ -261,18 +297,33 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
             )}
           </div>
         </div>
+      )}
 
-        {/* RIVAL PROFILE */}
-        <div style={{ ...box, flex: '1 1 420px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ ...label, color: C.gold }}>Rival profile</span>
-            <select value={profileRival} onChange={(e) => setProfileRival(e.target.value)} style={{ ...input, flex: 1, cursor: 'pointer' }}>
-              <option value="">- Select rival -</option>
-              {rivals.map(r => <option key={r} value={r}>{r} ({rivalDrafts.filter(d => d.rival_name === r).length} drafts{rivalProfiles.some(p => p.rival_name === r) ? ', stats' : ''})</option>)}
-            </select>
+      {/* RIVAL PROFILE */}
+      {view === 'profile' && (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', textAlign: 'left' }}>
+        <div style={{ ...box, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ ...label, color: C.gold }}>Rival</span>
+          <select value={profileRival} onChange={(e) => setProfileRival(e.target.value)} style={{ ...input, flex: 1, maxWidth: '420px', cursor: 'pointer' }}>
+            <option value="">- Select rival -</option>
+            {rivals.map(r => {
+              const ds = rivalDrafts.filter(d => d.rival_name === r);
+              const maps = ds.filter(d => isMapDraft(d, CIVS)).length;
+              return <option key={r} value={r}>{r} ({ds.length - maps} civ drafts, {maps} map drafts{rivalProfiles.some(p => p.rival_name === r) ? ', stats' : ''})</option>;
+            })}
+          </select>
+        </div>
+
+        {profileRival && (
+          <div style={{ ...box, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <span style={{ ...label, color: C.gold }}>Map drafts</span>
+            <MapDraftsView C={C} drafts={profileMapDrafts} mapPool={MAP_POOL || []} onDelete={(r) => { const row = profileMapDrafts.find(d => d.id === r.id); if (row) handleDelete(row); }} />
           </div>
+        )}
 
-          {profileRival && (
+        {profileRival && (
+        <div style={{ ...box, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <span style={{ ...label, color: C.gold }}>Civ drafts</span>
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 {profileDrafts.map(d => (
@@ -322,9 +373,10 @@ function RivalScouting({ C, CIVS, getCivImage, rivalDrafts, refreshRivalDrafts, 
               </table>
               <span style={{ fontSize: '10px', color: '#666' }}>Preference is shown against an average civ (x1.0). Civs that were not available when they picked do not count for or against. In Execution Draft, civs they played on the maps of the match get an extra boost.</span>
             </>
-          )}
         </div>
+        )}
       </div>
+      )}
     </div>
   );
 }

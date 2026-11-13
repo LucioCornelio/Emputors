@@ -26,6 +26,11 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
   - match page: civs played per map, draft link;
   - team statistics page ("Estadísticas de Mapas", all sections expanded): civs played per map, stored as `map_stats` in the rival profile.
 - Civ and map names are translated from the Spanish site names (`CIV_ES`, `MAP_LOOKUP`).
+- Two views: Register (paste box, add draft, team statistics) and Profile (full width: Map drafts and Civ drafts of the chosen rival).
+- Map drafts (`mapDrafts.js`, `MapDraftsView.jsx`): stored in `cw7_rival_drafts` like civ drafts, no extra column. A draft is a map draft when none of its chosen options is a civ (`isMapDraft`); map drafts are left out of the civ model and the forecast. aoe2cm map ids are slugs (`grand-bara`) turned into names (`Grand Bara`).
+  - Profile shows plain-language patterns (most banned and most picked map, which rival pick they snipe, maps lost to snipes), one card per map (picked, banned, sniped by them, lost to snipe, starting map, final maps) and a draft by draft table (sniped maps crossed out).
+  - Starting map = the pick made by NONE: the map left over after picks, bans and snipes; the match starts on it (PA3: all three maps are played). Nothing depends on the number of turns, so BO5 presets work the same way; how BO5 final maps are read may need a review when the format is used.
+  - When loading any draft, the rival and side are pre-selected if a captain nick matches exactly one rival's stored drafts. A match page with a "Draft Mapas" link (or any second aoe2cm link) loads the map draft right after the civ draft is saved.
 
 ## Rival model (`forecast.js`)
 

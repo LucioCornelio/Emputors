@@ -56,6 +56,10 @@ export const parseMatchPage = (text) => {
 
   const draftMatch = raw.match(/Draft\s*Civis[^\n]*?(https?:\/\/(?:www\.)?aoe2cm\.net\/draft\/[A-Za-z0-9_-]+)/i);
   const draftUrl = draftMatch ? draftMatch[1] : null;
+  // The map draft link: labelled "Draft Mapas", or any other aoe2cm draft link on the page
+  const mapMatch = raw.match(/Draft\s*Mapas?[^\n]*?(https?:\/\/(?:www\.)?aoe2cm\.net\/draft\/[A-Za-z0-9_-]+)/i);
+  const otherLinks = (raw.match(/https?:\/\/(?:www\.)?aoe2cm\.net\/draft\/[A-Za-z0-9_-]+/gi) || []).filter(u => u !== draftUrl);
+  const mapDraftUrl = mapMatch ? mapMatch[1] : (otherLinks[0] || null);
 
   let teams = [];
   for (const l of lines) {
@@ -86,7 +90,7 @@ export const parseMatchPage = (text) => {
     }
   }
 
-  return { teams, draftUrl, games: games.filter(g => g.map && Object.keys(g.picks).length > 0) };
+  return { teams, draftUrl, mapDraftUrl, games: games.filter(g => g.map && Object.keys(g.picks).length > 0) };
 };
 
 // Civs one team played across the match
