@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { STRATEGY_GROUPS, TRAITS, asList } from '../data/buildOrderFilters';
+import { STRATEGY_GROUPS, asList } from '../data/buildOrderFilters';
 
 const C = {
   card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8',
@@ -61,7 +61,6 @@ const BuildOrders = () => {
           strategyIcons: b.strategy_icons ?? b.strategyIcons ?? [],
           whatsNext: b.whats_next ?? b.whatsNext ?? [],
           strategyGroups: asList(b.strategy_groups),
-          traits: asList(b.traits),
           hasVod: typeof b.video === 'string' && b.video.trim() !== '',
         }));
         setBuilds(formattedBuilds);
@@ -88,8 +87,6 @@ const BuildOrders = () => {
   const civFilter = searchParams.get('civ') || 'All';
   const mapFilter = searchParams.get('map') || 'All';
   const groupFilter = searchParams.get('group') || 'All';
-  const traitsParam = searchParams.get('traits') || '';
-  const traitFilter = traitsParam.split(',').filter(Boolean);
   const vodOnly = searchParams.get('vod') === '1';
   const diffFilter = searchParams.get('diff') || 'All';
   const search = searchParams.get('search') || '';
@@ -98,8 +95,6 @@ const BuildOrders = () => {
   const maps = getUnique(builds, 'map');
   const usedGroups = new Set(builds.flatMap((b) => b.strategyGroups));
   const groups = STRATEGY_GROUPS.filter((g) => usedGroups.has(g));
-  const usedTraits = new Set(builds.flatMap((b) => b.traits));
-  const traitOptions = TRAITS.filter((t) => usedTraits.has(t));
   const diffs = getUnique(builds, 'difficulty');
 
   const setFilter = (key, value) => {
@@ -109,16 +104,11 @@ const BuildOrders = () => {
     setSearchParams(newParams);
   };
 
-  const toggleTrait = (t) => {
-    const next = traitFilter.includes(t) ? traitFilter.filter((x) => x !== t) : [...traitFilter, t];
-    setFilter('traits', next.join(','));
-  };
-
   const clearAllFilters = () => {
     setSearchParams(new URLSearchParams());
   };
 
-  const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || groupFilter !== 'All' || traitFilter.length > 0 || vodOnly || diffFilter !== 'All' || search !== '';
+  const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || groupFilter !== 'All' || vodOnly || diffFilter !== 'All' || search !== '';
 
   // Few builds: filter on every render, no memo needed.
   const filtered = (() => {
@@ -126,12 +116,11 @@ const BuildOrders = () => {
       if (civFilter !== 'All' && b.civ !== civFilter) return false;
       if (mapFilter !== 'All' && b.map !== mapFilter) return false;
       if (groupFilter !== 'All' && !b.strategyGroups.includes(groupFilter)) return false;
-      if (traitFilter.some((t) => !b.traits.includes(t))) return false;
       if (vodOnly && !b.hasVod) return false;
       if (diffFilter !== 'All' && b.difficulty !== diffFilter) return false;
       if (search) {
         const q = search.toLowerCase();
-        const haystack = `${b.title} ${b.civ} ${b.map} ${b.strategy} ${b.strategyGroups.join(' ')} ${b.traits.join(' ')}`.toLowerCase();
+        const haystack = `${b.title} ${b.civ} ${b.map} ${b.strategy} ${b.strategyGroups.join(' ')}`.toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
@@ -202,6 +191,11 @@ const BuildOrders = () => {
         <input type="text" placeholder="Search builds..." value={search} onChange={(e) => setFilter('search', e.target.value)}
           style={{ ...sel, minWidth: '180px', flex: '1 1 180px', backgroundColor: 'transparent' }} />
         
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', color: vodOnly ? C.textMain : C.textDim, fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none', padding: '0 4px' }}>
+          <input type="checkbox" checked={vodOnly} onChange={(e) => setFilter('vod', e.target.checked ? '1' : '')} style={{ accentColor: C.gold, cursor: 'pointer', margin: 0 }} />
+          With VOD
+        </label>
+
         {hasFilters && (
           <button onClick={clearAllFilters} style={{ backgroundColor: 'transparent', color: '#ff4444', border: '1px solid #ff444444', padding: '6px 12px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.2s', marginLeft: 'auto' }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#ff444422'}
@@ -211,23 +205,6 @@ const BuildOrders = () => {
           </button>
         )}
 
-        <div style={{ flexBasis: '100%', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', borderTop: `1px solid ${C.border}`, paddingTop: '10px', marginTop: '2px' }}>
-          <span style={{ color: C.textMute, fontSize: '10px', fontWeight: 'bold', letterSpacing: '1px', textTransform: 'uppercase', marginRight: '4px' }}>Traits</span>
-          {traitOptions.map((t) => {
-            const on = traitFilter.includes(t);
-            return (
-              <button key={t} type="button" onClick={() => toggleTrait(t)} aria-pressed={on} style={{
-                padding: '3px 10px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', cursor: 'pointer',
-                backgroundColor: on ? `${C.gold}1f` : 'transparent', border: `1px solid ${on ? `${C.gold}88` : '#3a3e4a'}`,
-                color: on ? C.gold : C.textDim, transition: 'all 0.15s',
-              }}>{t}</button>
-            );
-          })}
-          <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px', color: vodOnly ? C.textMain : C.textDim, fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }}>
-            <input type="checkbox" checked={vodOnly} onChange={(e) => setFilter('vod', e.target.checked ? '1' : '')} style={{ accentColor: C.gold, cursor: 'pointer', margin: 0 }} />
-            With VOD
-          </label>
-        </div>
       </div>
 
       {filtered.length === 0 ? (

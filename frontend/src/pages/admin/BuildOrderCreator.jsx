@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
-import { STRATEGY_GROUPS, TRAITS, asList } from '../../data/buildOrderFilters';
+import { STRATEGY_GROUPS, asList } from '../../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', 
@@ -112,7 +112,6 @@ const BuildOrderCreator = () => {
   
   const [tags, setTags] = useState(editBuild?.tags || []);
   const [strategyGroups, setStrategyGroups] = useState(asList(editBuild?.strategy_groups ?? editBuild?.strategyGroups));
-  const [traits, setTraits] = useState(asList(editBuild?.traits));
   const [strategyIcons, setStrategyIcons] = useState(editBuild?.strategyIcons || []);
   const [whatsNext, setWhatsNext] = useState(editBuild?.whatsNext || []);
   
@@ -137,7 +136,6 @@ const BuildOrderCreator = () => {
       if (data.author) setAuthor(data.author);
       if (data.tags) setTags(data.tags);
       if (data.strategy_groups || data.strategyGroups) setStrategyGroups(asList(data.strategy_groups ?? data.strategyGroups));
-      if (data.traits) setTraits(asList(data.traits));
       if (data.strategyIcons) setStrategyIcons(data.strategyIcons);
       if (data.whatsNext) setWhatsNext(data.whatsNext);
       if (data.ages) setAges(data.ages); 
@@ -265,7 +263,6 @@ const BuildOrderCreator = () => {
       pop_count: parseInt(popCount), video, description, author,
       tags: tags, 
       strategy_groups: STRATEGY_GROUPS.filter((g) => strategyGroups.includes(g)),
-      traits: TRAITS.filter((t) => traits.includes(t)),
       strategy_icons: strategyIcons, 
       whats_next: whatsNext,
       ages: calculateSmartSteps()
@@ -343,7 +340,6 @@ const BuildOrderCreator = () => {
           <div style={{ gridColumn: 'span 3' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Description</label><textarea value={description} onChange={e => setDescription(e.target.value)} style={{ ...inputStyle, minHeight: '60px' }} /></div>
           <div style={{ gridColumn: 'span 3' }}><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>YouTube VOD Link (Optional)</label><input type="text" value={video} onChange={e => setVideo(e.target.value)} style={inputStyle} /></div>
           <ChipPicker label="Strategy Groups (filter, one or more)" options={STRATEGY_GROUPS} value={strategyGroups} onChange={setStrategyGroups} />
-          <ChipPicker label="Traits (filter, optional)" options={TRAITS} value={traits} onChange={setTraits} />
         </div>
       </div>
 
