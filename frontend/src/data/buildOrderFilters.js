@@ -19,3 +19,7 @@ export const startVils = (b) => {
   (b?.ages || []).forEach(a => (a.steps || []).forEach(s => { if (s.start && typeof s.vil === 'number') n = Math.max(n, s.vil); }));
   return n;
 };
+
+// Builds still being worked out (tag "Under Construction"): shown with a badge
+export const UNDER_CONSTRUCTION = 'Under Construction';
+export const underConstruction = (b) => asList(b?.tags).includes(UNDER_CONSTRUCTION);
