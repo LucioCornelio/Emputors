@@ -1,0 +1,3060 @@
+{
+ "source": {
+  "survivalist": {
+   "repo": "https://github.com/PeterWhiteJavascript/aoe2-de-tools",
+   "commit": "dc3b00b574b22ef822e4c873b08f2865974e8870",
+   "site": "https://aoe2-de-tools.herokuapp.com/villagers-required/"
+  },
+  "aoe2techtree": {
+   "repo": "https://github.com/SiegeEngineers/aoe2techtree",
+   "commit": "e56728e76b7d08301fba7b18d5f16bc8554c109a",
+   "used_for": "age ups and buildings"
+  },
+  "generated": "2026-11-15"
+ },
+ "gather": {
+  "farm heavy plow": {
+   "res": "food",
+   "rate": 0.3533
+  },
+  "farmer": {
+   "res": "food",
+   "rate": 0.3383
+  },
+  "feitoria food": {
+   "res": "food",
+   "rate": 1.6
+  },
+  "feitoria gold": {
+   "res": "gold",
+   "rate": 1.0
+  },
+  "feitoria stone": {
+   "res": "stone",
+   "rate": 0.3
+  },
+  "feitoria wood": {
+   "res": "wood",
+   "rate": 0.7
+  },
+  "fish trap": {
+   "res": "food",
+   "rate": 0.35
+  },
+  "fisherman": {
+   "res": "food",
+   "rate": 0.43
+  },
+  "fishing ship deep": {
+   "res": "food",
+   "rate": 0.4217
+  },
+  "fishing ship deep fishing lines": {
+   "res": "food",
+   "rate": 0.4633
+  },
+  "fishing ship deep gillnets": {
+   "res": "food",
+   "rate": 0.5083
+  },
+  "fishing ship oysters": {
+   "res": "gold",
+   "rate": 0.4
+  },
+  "fishing ship oysters fishing lines": {
+   "res": "gold",
+   "rate": 0.44
+  },
+  "fishing ship oysters gillnets": {
+   "res": "gold",
+   "rate": 0.4833
+  },
+  "fishing ship shore": {
+   "res": "food",
+   "rate": 0.24
+  },
+  "fishing ship shore fishing lines": {
+   "res": "food",
+   "rate": 0.2633
+  },
+  "fishing ship shore gillnets": {
+   "res": "food",
+   "rate": 0.29
+  },
+  "forager": {
+   "res": "food",
+   "rate": 0.31
+  },
+  "gold miner": {
+   "res": "gold",
+   "rate": 0.38
+  },
+  "hand cart": {
+   "res": "food",
+   "rate": 0.4
+  },
+  "herder": {
+   "res": "food",
+   "rate": 0.3815
+  },
+  "hunter": {
+   "res": "food",
+   "rate": 0.41
+  },
+  "lumberjack": {
+   "res": "wood",
+   "rate": 0.39
+  },
+  "oyster gatherer": {
+   "res": "gold",
+   "rate": 0.38
+  },
+  "pasture hand cart": {
+   "res": "food",
+   "rate": 0.421
+  },
+  "pasture wheelbarrow": {
+   "res": "food",
+   "rate": 0.3993
+  },
+  "relic": {
+   "res": "gold",
+   "rate": 0.5
+  },
+  "relic food": {
+   "res": "food",
+   "rate": 0.3333
+  },
+  "shepherd": {
+   "res": "food",
+   "rate": 0.33
+  },
+  "stone miner": {
+   "res": "stone",
+   "rate": 0.36
+  },
+  "trade cart": {
+   "res": "gold",
+   "rate": 0.4
+  },
+  "wheelbarrow": {
+   "res": "food",
+   "rate": 0.3838
+  },
+  "wheelbarrow heavy plow": {
+   "res": "food",
+   "rate": 0.386
+  }
+ },
+ "techs": {
+  "andean sling": {
+   "cost": {
+    "food": 200,
+    "gold": 300
+   },
+   "time": 40
+  },
+  "arbalester": {
+   "cost": {
+    "food": 450,
+    "gold": 350
+   },
+   "time": 50
+  },
+  "architecture": {
+   "cost": {
+    "food": 300,
+    "wood": 200
+   },
+   "time": 70
+  },
+  "arquebus": {
+   "cost": {
+    "food": 700,
+    "gold": 400
+   },
+   "time": 40
+  },
+  "arrowslits": {
+   "cost": {
+    "food": 250,
+    "wood": 250
+   },
+   "time": 25
+  },
+  "arson": {
+   "cost": {
+    "food": 75,
+    "gold": 25
+   },
+   "time": 25
+  },
+  "artillery": {
+   "cost": {
+    "food": 600,
+    "gold": 650
+   },
+   "time": 40
+  },
+  "atlatl": {
+   "cost": {
+    "food": 400,
+    "gold": 350
+   },
+   "time": 40
+  },
+  "atonement": {
+   "cost": {
+    "gold": 325
+   },
+   "time": 40
+  },
+  "bagains": {
+   "cost": {
+    "food": 900,
+    "gold": 450
+   },
+   "time": 40
+  },
+  "ballistas": {
+   "cost": {
+    "food": 400,
+    "gold": 300
+   },
+   "time": 45
+  },
+  "ballistics": {
+   "cost": {
+    "wood": 300,
+    "gold": 175
+   },
+   "time": 60
+  },
+  "bimaristan": {
+   "cost": {
+    "wood": 300,
+    "gold": 200
+   },
+   "time": 50
+  },
+  "blast furnace": {
+   "cost": {
+    "food": 275,
+    "gold": 225
+   },
+   "time": 100
+  },
+  "block printing": {
+   "cost": {
+    "gold": 200
+   },
+   "time": 55
+  },
+  "bloodlines": {
+   "cost": {
+    "food": 150,
+    "gold": 100
+   },
+   "time": 50
+  },
+  "bodkin arrow": {
+   "cost": {
+    "food": 200,
+    "gold": 100
+   },
+   "time": 35
+  },
+  "bow saw": {
+   "cost": {
+    "food": 150,
+    "wood": 100
+   },
+   "time": 50,
+   "gather": {
+    "target": "lumberjack",
+    "mult": 1.2
+   }
+  },
+  "bracer": {
+   "cost": {
+    "food": 300,
+    "gold": 200
+   },
+   "time": 40
+  },
+  "camel rider": {
+   "cost": {
+    "food": 0,
+    "gold": 0
+   },
+   "time": 0
+  },
+  "capped ram": {
+   "cost": {
+    "food": 300
+   },
+   "time": 50
+  },
+  "caravan": {
+   "cost": {
+    "food": 200,
+    "gold": 200
+   },
+   "time": 40
+  },
+  "careening": {
+   "cost": {
+    "food": 250,
+    "gold": 150
+   },
+   "time": 50
+  },
+  "carrack": {
+   "cost": {
+    "wood": 200,
+    "gold": 300
+   },
+   "time": 40
+  },
+  "castle age": {
+   "cost": {
+    "food": 800,
+    "gold": 200
+   },
+   "time": 160,
+   "source": "aoe2techtree"
+  },
+  "cavalier": {
+   "cost": {
+    "food": 300,
+    "gold": 300
+   },
+   "time": 80
+  },
+  "chain barding armor": {
+   "cost": {
+    "food": 250,
+    "gold": 150
+   },
+   "time": 60
+  },
+  "chain mail armor": {
+   "cost": {
+    "food": 200,
+    "gold": 100
+   },
+   "time": 55
+  },
+  "champion": {
+   "cost": {
+    "food": 650,
+    "gold": 350
+   },
+   "time": 70
+  },
+  "chatras": {
+   "cost": {
+    "food": 250,
+    "gold": 250
+   },
+   "time": 40
+  },
+  "chemistry": {
+   "cost": {
+    "food": 300,
+    "gold": 200
+   },
+   "time": 100
+  },
+  "chieftains": {
+   "cost": {
+    "food": 600,
+    "gold": 450
+   },
+   "time": 40
+  },
+  "chivalry": {
+   "cost": {
+    "food": 600,
+    "gold": 500
+   },
+   "time": 40
+  },
+  "comitatenses": {
+   "cost": {
+    "food": 700,
+    "gold": 800
+   },
+   "time": 60
+  },
+  "conscription": {
+   "cost": {
+    "food": 150,
+    "gold": 150
+   },
+   "time": 60
+  },
+  "corvinian army": {
+   "cost": {
+    "food": 200,
+    "gold": 300
+   },
+   "time": 40
+  },
+  "counter weights": {
+   "cost": {
+    "food": 650,
+    "gold": 500
+   },
+   "time": 60
+  },
+  "crenellations": {
+   "cost": {
+    "food": 600,
+    "stone": 400
+   },
+   "time": 60
+  },
+  "crossbowman": {
+   "cost": {
+    "food": 175,
+    "gold": 100
+   },
+   "time": 35
+  },
+  "demolition ship": {
+   "cost": {
+    "food": 230,
+    "gold": 100
+   },
+   "time": 50
+  },
+  "detinets": {
+   "cost": {
+    "food": 400,
+    "gold": 200
+   },
+   "time": 40
+  },
+  "devotion": {
+   "cost": {
+    "food": 100,
+    "gold": 200
+   },
+   "time": 40
+  },
+  "double crossbow": {
+   "cost": {
+    "food": 700,
+    "gold": 400
+   },
+   "time": 40
+  },
+  "double-bit axe": {
+   "cost": {
+    "food": 100,
+    "wood": 50
+   },
+   "time": 25,
+   "gather": {
+    "target": "lumberjack",
+    "mult": 1.2
+   }
+  },
+  "druzhina": {
+   "cost": {
+    "food": 900,
+    "gold": 500
+   },
+   "time": 40
+  },
+  "dry dock": {
+   "cost": {
+    "food": 600,
+    "gold": 400
+   },
+   "time": 60
+  },
+  "eagle warrior": {
+   "cost": {
+    "food": 200,
+    "gold": 200
+   },
+   "time": 50
+  },
+  "el dorado": {
+   "cost": {
+    "food": 750,
+    "gold": 450
+   },
+   "time": 70
+  },
+  "elite arambai": {
+   "cost": {
+    "food": 1000,
+    "gold": 750
+   },
+   "time": 65
+  },
+  "elite ballista elephant": {
+   "cost": {
+    "food": 1000,
+    "gold": 500
+   },
+   "time": 70
+  },
+  "elite battle elephant": {
+   "cost": {
+    "food": 1100,
+    "gold": 700
+   },
+   "time": 100
+  },
+  "elite berserk": {
+   "cost": {
+    "food": 1300,
+    "gold": 550
+   },
+   "time": 45
+  },
+  "elite boyar": {
+   "cost": {
+    "food": 1000,
+    "gold": 750
+   },
+   "time": 60
+  },
+  "elite camel archer": {
+   "cost": {
+    "wood": 1000,
+    "gold": 500
+   },
+   "time": 50
+  },
+  "elite cannon galleon": {
+   "cost": {
+    "wood": 525,
+    "gold": 500
+   },
+   "time": 30
+  },
+  "elite caravel": {
+   "cost": {
+    "food": 700,
+    "gold": 525
+   },
+   "time": 60
+  },
+  "elite cataphract": {
+   "cost": {
+    "food": 1200,
+    "gold": 800
+   },
+   "time": 50
+  },
+  "elite centurion": {
+   "cost": {
+    "food": 1100,
+    "gold": 900
+   },
+   "time": 60
+  },
+  "elite chakram thrower": {
+   "cost": {
+    "food": 1000,
+    "gold": 650
+   },
+   "time": 45
+  },
+  "elite chu ko nu": {
+   "cost": {
+    "food": 1105,
+    "wood": 1105
+   },
+   "time": 50
+  },
+  "elite composite bowman": {
+   "cost": {
+    "wood": 600,
+    "gold": 500
+   },
+   "time": 45
+  },
+  "elite conquistador": {
+   "cost": {
+    "food": 1200,
+    "gold": 600
+   },
+   "time": 60
+  },
+  "elite coustillier": {
+   "cost": {
+    "food": 1000,
+    "gold": 800
+   },
+   "time": 45
+  },
+  "elite eagle warrior": {
+   "cost": {
+    "food": 800,
+    "gold": 500
+   },
+   "time": 50
+  },
+  "elite elephant archer": {
+   "cost": {
+    "food": 900,
+    "gold": 500
+   },
+   "time": 80
+  },
+  "elite fire lancer": {
+   "cost": {
+    "food": 650,
+    "gold": 400
+   },
+   "time": 50
+  },
+  "elite gbeto": {
+   "cost": {
+    "food": 900,
+    "gold": 600
+   },
+   "time": 45
+  },
+  "elite genitour": {
+   "cost": {
+    "food": 500,
+    "wood": 450
+   },
+   "time": 60
+  },
+  "elite genoese crossbowman": {
+   "cost": {
+    "food": 900,
+    "gold": 750
+   },
+   "time": 60
+  },
+  "elite ghulam": {
+   "cost": {
+    "food": 950,
+    "gold": 575
+   },
+   "time": 45
+  },
+  "elite hearth troop": {
+   "cost": {
+    "wood": 750,
+    "gold": 700
+   },
+   "time": 45
+  },
+  "elite huskarl": {
+   "cost": {
+    "food": 1200,
+    "gold": 550
+   },
+   "time": 40
+  },
+  "elite hussite wagon": {
+   "cost": {
+    "wood": 800,
+    "gold": 600
+   },
+   "time": 45
+  },
+  "elite iron pagoda": {
+   "cost": {
+    "food": 950,
+    "gold": 750
+   },
+   "time": 45
+  },
+  "elite jaguar warrior": {
+   "cost": {
+    "food": 1000,
+    "gold": 500
+   },
+   "time": 45
+  },
+  "elite janissary": {
+   "cost": {
+    "food": 850,
+    "gold": 750
+   },
+   "time": 55
+  },
+  "elite jarl": {
+   "cost": {
+    "food": 825,
+    "gold": 725
+   },
+   "time": 45
+  },
+  "elite jomsviking": {
+   "cost": {
+    "food": 825,
+    "gold": 825
+   },
+   "time": 45
+  },
+  "elite kamayuk": {
+   "cost": {
+    "food": 900,
+    "gold": 500
+   },
+   "time": 45
+  },
+  "elite karambit warrior": {
+   "cost": {
+    "food": 900,
+    "gold": 600
+   },
+   "time": 40
+  },
+  "elite keshik": {
+   "cost": {
+    "food": 700,
+    "gold": 900
+   },
+   "time": 40
+  },
+  "elite kipchak": {
+   "cost": {
+    "food": 1100,
+    "wood": 1000
+   },
+   "time": 65
+  },
+  "elite konnik": {
+   "cost": {
+    "food": 1000,
+    "gold": 750
+   },
+   "time": 50
+  },
+  "elite leitis": {
+   "cost": {
+    "food": 750,
+    "gold": 750
+   },
+   "time": 45
+  },
+  "elite liao dao": {
+   "cost": {
+    "food": 800,
+    "gold": 650
+   },
+   "time": 45
+  },
+  "elite longbowman": {
+   "cost": {
+    "food": 850,
+    "gold": 850
+   },
+   "time": 60
+  },
+  "elite longship": {
+   "cost": {
+    "wood": 750,
+    "gold": 475
+   },
+   "time": 60
+  },
+  "elite magyar huszar": {
+   "cost": {
+    "food": 800,
+    "gold": 600
+   },
+   "time": 60
+  },
+  "elite mameluke": {
+   "cost": {
+    "food": 600,
+    "gold": 500
+   },
+   "time": 50
+  },
+  "elite mangudai": {
+   "cost": {
+    "food": 1100,
+    "gold": 675
+   },
+   "time": 50
+  },
+  "elite monaspa": {
+   "cost": {
+    "food": 1000,
+    "gold": 700
+   },
+   "time": 45
+  },
+  "elite obuch": {
+   "cost": {
+    "food": 800,
+    "gold": 600
+   },
+   "time": 45
+  },
+  "elite organ gun": {
+   "cost": {
+    "food": 1200,
+    "gold": 500
+   },
+   "time": 45
+  },
+  "elite plumed archer": {
+   "cost": {
+    "wood": 1000,
+    "food": 700
+   },
+   "time": 45
+  },
+  "elite ratha": {
+   "cost": {
+    "food": 800,
+    "wood": 800
+   },
+   "time": 45
+  },
+  "elite rattan archer": {
+   "cost": {
+    "food": 1000,
+    "gold": 750
+   },
+   "time": 45
+  },
+  "elite samurai": {
+   "cost": {
+    "food": 750,
+    "gold": 650
+   },
+   "time": 60
+  },
+  "elite serjeant": {
+   "cost": {
+    "food": 800,
+    "gold": 675
+   },
+   "time": 50
+  },
+  "elite shotel warrior": {
+   "cost": {
+    "food": 1200,
+    "gold": 550
+   },
+   "time": 45
+  },
+  "elite shrivamsha rider": {
+   "cost": {
+    "food": 850,
+    "gold": 500
+   },
+   "time": 45
+  },
+  "elite skirmisher": {
+   "cost": {
+    "wood": 230,
+    "gold": 130
+   },
+   "time": 50
+  },
+  "elite steppe lancer": {
+   "cost": {
+    "food": 600,
+    "gold": 550
+   },
+   "time": 55
+  },
+  "elite tarkan": {
+   "cost": {
+    "food": 1000,
+    "gold": 500
+   },
+   "time": 45
+  },
+  "elite teutonic knight": {
+   "cost": {
+    "food": 1200,
+    "gold": 600
+   },
+   "time": 50
+  },
+  "elite throwing axeman": {
+   "cost": {
+    "food": 1000,
+    "gold": 750
+   },
+   "time": 45
+  },
+  "elite turtle ship": {
+   "cost": {
+    "food": 650,
+    "gold": 500
+   },
+   "time": 65
+  },
+  "elite urumi swordsman": {
+   "cost": {
+    "food": 900,
+    "gold": 450
+   },
+   "time": 45
+  },
+  "elite varangian guard": {
+   "cost": {
+    "food": 750,
+    "gold": 475
+   },
+   "time": 50
+  },
+  "elite war elephant": {
+   "cost": {
+    "food": 1350,
+    "gold": 800
+   },
+   "time": 75
+  },
+  "elite war wagon": {
+   "cost": {
+    "food": 1200,
+    "gold": 600
+   },
+   "time": 75
+  },
+  "elite woad raider": {
+   "cost": {
+    "food": 1000,
+    "gold": 800
+   },
+   "time": 45
+  },
+  "eupseong": {
+   "cost": {},
+   "time": null
+  },
+  "fabric shields": {
+   "cost": {
+    "food": 400,
+    "gold": 200
+   },
+   "time": 40
+  },
+  "faith": {
+   "cost": {
+    "food": 550,
+    "gold": 750
+   },
+   "time": 60
+  },
+  "farimba": {
+   "cost": {
+    "food": 650,
+    "gold": 400
+   },
+   "time": 40
+  },
+  "fast fire ship": {
+   "cost": {
+    "food": 280,
+    "gold": 250
+   },
+   "time": 50
+  },
+  "fervor": {
+   "cost": {
+    "gold": 140
+   },
+   "time": 50
+  },
+  "feudal age": {
+   "cost": {
+    "food": 500
+   },
+   "time": 130,
+   "source": "aoe2techtree"
+  },
+  "fire ship": {
+   "cost": {
+    "food": 230,
+    "gold": 100
+   },
+   "time": 50
+  },
+  "fletching": {
+   "cost": {
+    "food": 100,
+    "gold": 50
+   },
+   "time": 30
+  },
+  "forced levy": {
+   "cost": {
+    "food": 850,
+    "gold": 500
+   },
+   "time": 40
+  },
+  "forging": {
+   "cost": {
+    "food": 150
+   },
+   "time": 50
+  },
+  "fortified gate": {
+   "cost": {
+    "food": 200,
+    "wood": 100
+   },
+   "time": 50
+  },
+  "fortified wall": {
+   "cost": {
+    "food": 200,
+    "wood": 100
+   },
+   "time": 50
+  },
+  "furor celtica": {
+   "cost": {
+    "food": 750,
+    "gold": 450
+   },
+   "time": 50
+  },
+  "galleon": {
+   "cost": {
+    "food": 400,
+    "wood": 315
+   },
+   "time": 65
+  },
+  "gambesons": {
+   "cost": {
+    "food": 50,
+    "gold": 100
+   },
+   "time": 25
+  },
+  "garland wars": {
+   "cost": {
+    "food": 450,
+    "gold": 750
+   },
+   "time": 60
+  },
+  "gold mining": {
+   "cost": {
+    "food": 100,
+    "wood": 75
+   },
+   "time": 30,
+   "gather": {
+    "target": "gold miner",
+    "mult": 1.15
+   }
+  },
+  "gold shaft mining": {
+   "cost": {
+    "food": 175,
+    "wood": 75
+   },
+   "time": 75,
+   "gather": {
+    "target": "gold miner",
+    "mult": 1.15
+   }
+  },
+  "grand trunk road": {
+   "cost": {
+    "food": 250,
+    "gold": 0,
+    "wood": 200
+   },
+   "time": 40,
+   "gather": {
+    "target": "gold miner",
+    "mult": 1.1
+   }
+  },
+  "great wall": {
+   "cost": {
+    "wood": 400,
+    "stone": 200
+   },
+   "time": 40
+  },
+  "guard tower": {
+   "cost": {
+    "food": 100,
+    "wood": 250
+   },
+   "time": 30
+  },
+  "halberdier": {
+   "cost": {
+    "food": 300,
+    "gold": 600
+   },
+   "time": 50
+  },
+  "hand cart": {
+   "cost": {
+    "food": 300,
+    "wood": 200
+   },
+   "time": 55
+  },
+  "hauberk": {
+   "cost": {
+    "food": 700,
+    "gold": 600
+   },
+   "time": ""
+  },
+  "heated shot": {
+   "cost": {
+    "food": 350,
+    "gold": 100
+   },
+   "time": 30
+  },
+  "heavy camel rider": {
+   "cost": {
+    "food": 325,
+    "gold": 365
+   },
+   "time": 105
+  },
+  "heavy cavalry archer": {
+   "cost": {
+    "food": 900,
+    "gold": 500
+   },
+   "time": 50
+  },
+  "heavy demolition ship": {
+   "cost": {
+    "wood": 200,
+    "gold": 300
+   },
+   "time": 50
+  },
+  "heavy mounted crossbowman": {
+   "cost": {
+    "food": 1000,
+    "gold": 650
+   },
+   "time": 50
+  },
+  "heavy plow": {
+   "cost": {
+    "food": 125,
+    "wood": 125
+   },
+   "time": 40
+  },
+  "heavy rocket cart": {
+   "cost": {
+    "wood": 800,
+    "gold": 750
+   },
+   "time": 75
+  },
+  "heavy scorpion": {
+   "cost": {
+    "food": 800,
+    "wood": 750
+   },
+   "time": 50
+  },
+  "herbal medicine": {
+   "cost": {
+    "gold": 350
+   },
+   "time": 60
+  },
+  "heresy": {
+   "cost": {
+    "gold": 1000
+   },
+   "time": 60
+  },
+  "hoardings": {
+   "cost": {
+    "food": 400,
+    "wood": 400
+   },
+   "time": 75
+  },
+  "houfnice": {
+   "cost": {
+    "food": 1100,
+    "gold": 800
+   },
+   "time": 140
+  },
+  "howdah": {
+   "cost": {
+    "food": 400,
+    "wood": 300
+   },
+   "time": 40
+  },
+  "husbandry": {
+   "cost": {
+    "food": 150
+   },
+   "time": 40
+  },
+  "hussar": {
+   "cost": {
+    "food": 500,
+    "gold": 600
+   },
+   "time": 50
+  },
+  "illumination": {
+   "cost": {
+    "gold": 120
+   },
+   "time": 65
+  },
+  "imperial age": {
+   "cost": {
+    "food": 1000,
+    "gold": 800
+   },
+   "time": 190,
+   "source": "aoe2techtree"
+  },
+  "imperial camel rider": {
+   "cost": {
+    "food": 1000,
+    "gold": 500
+   },
+   "time": 125
+  },
+  "imperial skirmisher": {
+   "cost": {
+    "wood": 300,
+    "gold": 300
+   },
+   "time": 50
+  },
+  "iron casting": {
+   "cost": {
+    "food": 220,
+    "gold": 120
+   },
+   "time": 75
+  },
+  "ironclad": {
+   "cost": {
+    "wood": 400,
+    "gold": 350
+   },
+   "time": 60
+  },
+  "kamandaran": {
+   "cost": {
+    "food": 400,
+    "gold": 300
+   },
+   "time": 40
+  },
+  "keep": {
+   "cost": {
+    "food": 500,
+    "wood": 350
+   },
+   "time": 75
+  },
+  "leather archer armor": {
+   "cost": {
+    "food": 150,
+    "gold": 150
+   },
+   "time": 55
+  },
+  "light cavalry": {
+   "cost": {
+    "food": 150,
+    "gold": 50
+   },
+   "time": 45
+  },
+  "logistica": {
+   "cost": {
+    "food": 800,
+    "gold": 600
+   },
+   "time": 50
+  },
+  "long swordsman": {
+   "cost": {
+    "food": 150,
+    "gold": 65
+   },
+   "time": 40
+  },
+  "loom": {
+   "cost": {
+    "gold": 50
+   },
+   "time": 25
+  },
+  "man-at-arms": {
+   "cost": {
+    "food": 100,
+    "gold": 40
+   },
+   "time": 40
+  },
+  "manipur cavalry": {
+   "cost": {
+    "food": 300,
+    "gold": 300
+   },
+   "time": 40
+  },
+  "masonry": {
+   "cost": {
+    "food": 150,
+    "wood": 175
+   },
+   "time": 50
+  },
+  "medical corps": {
+   "cost": {
+    "food": 300,
+    "gold": 200
+   },
+   "time": 45
+  },
+  "murder holes": {
+   "cost": {
+    "food": 200,
+    "stone": 100
+   },
+   "time": 35
+  },
+  "obsidian arrows": {
+   "cost": {
+    "food": 300,
+    "gold": 300
+   },
+   "time": 60
+  },
+  "onager": {
+   "cost": {
+    "food": 800,
+    "gold": 500
+   },
+   "time": 75
+  },
+  "padded archer armor": {
+   "cost": {
+    "food": 100
+   },
+   "time": 40
+  },
+  "paladin": {
+   "cost": {
+    "food": 1300,
+    "gold": 750
+   },
+   "time": 170
+  },
+  "paper money": {
+   "cost": {
+    "food": 550,
+    "wood": 200
+   },
+   "time": 60
+  },
+  "parthian tactics": {
+   "cost": {
+    "food": 200,
+    "gold": 250
+   },
+   "time": 65
+  },
+  "pavise": {
+   "cost": {
+    "wood": 200,
+    "gold": 150
+   },
+   "time": 40
+  },
+  "perfusion": {
+   "cost": {
+    "wood": 400,
+    "gold": 600
+   },
+   "time": 40
+  },
+  "pikeman": {
+   "cost": {
+    "food": 160,
+    "gold": 90
+   },
+   "time": 45
+  },
+  "plate barding armor": {
+   "cost": {
+    "food": 350,
+    "gold": 200
+   },
+   "time": 75
+  },
+  "plate mail armor": {
+   "cost": {
+    "food": 300,
+    "gold": 150
+   },
+   "time": 70
+  },
+  "recurve bow": {
+   "cost": {
+    "wood": 600,
+    "gold": 400
+   },
+   "time": 40
+  },
+  "redemption": {
+   "cost": {
+    "gold": 475
+   },
+   "time": 50
+  },
+  "ring archer armor": {
+   "cost": {
+    "food": 250,
+    "gold": 250
+   },
+   "time": 70
+  },
+  "rocketry": {
+   "cost": {
+    "wood": 600,
+    "gold": 600
+   },
+   "time": 60
+  },
+  "sanctity": {
+   "cost": {
+    "gold": 175
+   },
+   "time": 60
+  },
+  "sappers": {
+   "cost": {
+    "food": 400,
+    "wood": 200
+   },
+   "time": 10
+  },
+  "scale barding armor": {
+   "cost": {
+    "food": 150
+   },
+   "time": 45
+  },
+  "scale mail armor": {
+   "cost": {
+    "food": 100
+   },
+   "time": 40
+  },
+  "shinkichon": {
+   "cost": {},
+   "time": null
+  },
+  "shipwright": {
+   "cost": {
+    "food": 1000,
+    "gold": 300
+   },
+   "time": 60
+  },
+  "siege elephant": {
+   "cost": {
+    "food": 850
+   },
+   "time": 50
+  },
+  "siege engineers": {
+   "cost": {
+    "food": 500,
+    "wood": 600
+   },
+   "time": 45
+  },
+  "siege onager": {
+   "cost": {
+    "food": 1450,
+    "gold": 1000
+   },
+   "time": 150
+  },
+  "siege ram": {
+   "cost": {
+    "food": 1000
+   },
+   "time": 75
+  },
+  "silk armor": {
+   "cost": {
+    "wood": 400,
+    "gold": 300
+   },
+   "time": 40
+  },
+  "silk road": {
+   "cost": {
+    "food": 500,
+    "gold": 250
+   },
+   "time": 60
+  },
+  "sipahi": {
+   "cost": {
+    "food": 350,
+    "gold": 150
+   },
+   "time": 60
+  },
+  "squires": {
+   "cost": {
+    "food": 100
+   },
+   "time": 25
+  },
+  "steppe husbandry": {
+   "cost": {
+    "food": 200,
+    "wood": 300
+   },
+   "time": 40
+  },
+  "stirrups": {
+   "cost": {
+    "food": 400,
+    "gold": 200
+   },
+   "time": 35
+  },
+  "stone mining": {
+   "cost": {
+    "food": 100,
+    "wood": 75
+   },
+   "time": 30,
+   "gather": {
+    "target": "stone miner",
+    "mult": 1.15
+   }
+  },
+  "stone shaft mining": {
+   "cost": {
+    "food": 175,
+    "wood": 75
+   },
+   "time": 75,
+   "gather": {
+    "target": "stone miner",
+    "mult": 1.15
+   }
+  },
+  "stronghold": {
+   "cost": {
+    "food": 250,
+    "gold": 200
+   },
+   "time": 30
+  },
+  "supplies": {
+   "cost": {
+    "food": 75,
+    "gold": 75
+   },
+   "time": 20
+  },
+  "supremacy": {
+   "cost": {
+    "food": 400,
+    "gold": 250
+   },
+   "time": 60
+  },
+  "theocracy": {
+   "cost": {
+    "gold": 200
+   },
+   "time": 75
+  },
+  "thumb ring": {
+   "cost": {
+    "food": 300,
+    "wood": 250
+   },
+   "time": 45
+  },
+  "tower shields": {
+   "cost": {
+    "food": 500,
+    "gold": 200
+   },
+   "time": 40
+  },
+  "town patrol": {
+   "cost": {
+    "food": 300,
+    "gold": 100
+   },
+   "time": 40
+  },
+  "town watch": {
+   "cost": {
+    "food": 75
+   },
+   "time": 25
+  },
+  "treadmill crane": {
+   "cost": {
+    "food": 300,
+    "wood": 200
+   },
+   "time": 50
+  },
+  "tusk swords": {
+   "cost": {
+    "wood": 300,
+    "gold": 450
+   },
+   "time": 40
+  },
+  "two-handed swordsman": {
+   "cost": {
+    "food": 200,
+    "gold": 100
+   },
+   "time": 45
+  },
+  "two-man saw": {
+   "cost": {
+    "food": 300,
+    "wood": 200
+   },
+   "time": 100,
+   "gather": {
+    "target": "lumberjack",
+    "mult": 1.1
+   }
+  },
+  "war galley": {
+   "cost": {
+    "food": 230,
+    "gold": 100
+   },
+   "time": 50
+  },
+  "war hulk": {
+   "cost": {
+    "wood": 150,
+    "gold": 100
+   },
+   "time": 50
+  },
+  "wheelbarrow": {
+   "cost": {
+    "food": 175,
+    "wood": 50
+   },
+   "time": 75
+  },
+  "winged hussar": {
+   "cost": {
+    "food": 600,
+    "gold": 800
+   },
+   "time": 50
+  },
+  "wootz steel": {
+   "cost": {
+    "food": 650,
+    "gold": 550
+   },
+   "time": 60
+  },
+  "yeomen": {
+   "cost": {
+    "wood": 750,
+    "gold": 450
+   },
+   "time": 60
+  },
+  "zealotry": {
+   "cost": {
+    "food": 400,
+    "gold": 400
+   },
+   "time": 50
+  }
+ },
+ "units": {
+  "arambai": {
+   "cost": {
+    "wood": 75,
+    "gold": 60
+   },
+   "time": 18
+  },
+  "archer": {
+   "cost": {
+    "wood": 25,
+    "gold": 45
+   },
+   "time": 35
+  },
+  "archery range": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 50
+  },
+  "armored elephant": {
+   "cost": {
+    "food": 120,
+    "gold": 95
+   },
+   "time": 36
+  },
+  "ballista elephant": {
+   "cost": {
+    "food": 100,
+    "gold": 80
+   },
+   "time": 25
+  },
+  "barracks": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 50
+  },
+  "battering ram": {
+   "cost": {
+    "wood": 160,
+    "gold": 75
+   },
+   "time": 36
+  },
+  "battle elephant": {
+   "cost": {
+    "food": 100,
+    "gold": 70
+   },
+   "time": 24
+  },
+  "berserk": {
+   "cost": {
+    "food": 65,
+    "gold": 20
+   },
+   "time": 14
+  },
+  "blacksmith": {
+   "cost": {
+    "wood": 150
+   },
+   "time": 40
+  },
+  "blackwood archer": {
+   "cost": {
+    "wood": 40,
+    "gold": 45
+   },
+   "time": 18
+  },
+  "bolas rider": {
+   "cost": {
+    "wood": 50,
+    "gold": 55
+   },
+   "time": 34
+  },
+  "bombard cannon": {
+   "cost": {
+    "wood": 225,
+    "gold": 225
+   },
+   "time": 56
+  },
+  "bombard tower": {
+   "cost": {
+    "gold": 100,
+    "stone": 125
+   },
+   "time": 80
+  },
+  "boyar": {
+   "cost": {
+    "food": 60,
+    "gold": 70
+   },
+   "time": 15
+  },
+  "camel archer": {
+   "cost": {
+    "wood": 50,
+    "gold": 60
+   },
+   "time": 25
+  },
+  "camel scout": {
+   "cost": {
+    "food": 55,
+    "gold": 60
+   },
+   "time": 22
+  },
+  "cannon galleon": {
+   "cost": {
+    "wood": 200,
+    "gold": 150
+   },
+   "time": 46
+  },
+  "caravanserai": {
+   "cost": {
+    "wood": 175,
+    "stone": 50
+   },
+   "time": 60
+  },
+  "caravel": {
+   "cost": {
+    "wood": 90,
+    "gold": 43
+   },
+   "time": 25
+  },
+  "castle": {
+   "cost": {
+    "stone": 650,
+    "wood": 0
+   },
+   "time": 200
+  },
+  "cataphract": {
+   "cost": {
+    "food": 70,
+    "gold": 75
+   },
+   "time": 20
+  },
+  "catapult galleon": {
+   "cost": {
+    "wood": 225,
+    "gold": 100
+   },
+   "time": 55
+  },
+  "cavalry archer": {
+   "cost": {
+    "wood": 40,
+    "gold": 60
+   },
+   "time": 37
+  },
+  "centurion": {
+   "cost": {
+    "food": 75,
+    "gold": 85
+   },
+   "time": 24
+  },
+  "chakram thrower": {
+   "cost": {
+    "food": 65,
+    "gold": 30
+   },
+   "time": 15
+  },
+  "champi scout": {
+   "cost": {
+    "food": 50,
+    "gold": 25
+   },
+   "time": 42
+  },
+  "chu ko nu": {
+   "cost": {
+    "wood": 40,
+    "gold": 35
+   },
+   "time": 16
+  },
+  "composite bowman": {
+   "cost": {
+    "wood": 35,
+    "gold": 45
+   },
+   "time": 12
+  },
+  "condottiero": {
+   "cost": {
+    "food": 50,
+    "gold": 35
+   },
+   "time": 18
+  },
+  "conquistador": {
+   "cost": {
+    "food": 75,
+    "gold": 60
+   },
+   "time": 26
+  },
+  "coustillier": {
+   "cost": {
+    "food": 55,
+    "gold": 55
+   },
+   "time": 15
+  },
+  "demolition raft": {
+   "cost": {
+    "wood": 45,
+    "gold": 80
+   },
+   "time": 45
+  },
+  "dock": {
+   "cost": {
+    "wood": 150
+   },
+   "time": 35
+  },
+  "donjon": {
+   "cost": {
+    "wood": 50,
+    "stone": 175
+   },
+   "time": 125
+  },
+  "dromon": {
+   "cost": {
+    "wood": 175,
+    "gold": 150
+   },
+   "time": 65
+  },
+  "eagle scout": {
+   "cost": {
+    "food": 20,
+    "gold": 50
+   },
+   "time": 46
+  },
+  "elephant archer": {
+   "cost": {
+    "food": 60,
+    "gold": 80
+   },
+   "time": 32
+  },
+  "farm": {
+   "cost": {
+    "wood": 60
+   },
+   "time": 15
+  },
+  "feitoria": {
+   "cost": {
+    "gold": 350,
+    "stone": 300
+   },
+   "time": 120
+  },
+  "fire archer": {
+   "cost": {
+    "wood": 45,
+    "gold": 45
+   },
+   "time": 17
+  },
+  "fire galley": {
+   "cost": {
+    "wood": 75,
+    "gold": 45
+   },
+   "time": 49
+  },
+  "fire lancer": {
+   "cost": {
+    "wood": 45,
+    "gold": 45
+   },
+   "time": 35
+  },
+  "fishing ship": {
+   "cost": {
+    "wood": 75
+   },
+   "time": 40
+  },
+  "flaming camel": {
+   "cost": {
+    "food": 75,
+    "gold": 30
+   },
+   "time": 30
+  },
+  "flemish militia": {
+   "cost": {
+    "food": 35,
+    "gold": 25
+   },
+   "time": 16
+  },
+  "folwark": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 40
+  },
+  "fortified church": {
+   "cost": {
+    "wood": 200
+   },
+   "time": 50
+  },
+  "galley": {
+   "cost": {
+    "wood": 90,
+    "gold": 30
+   },
+   "time": 45
+  },
+  "gate": {
+   "cost": {
+    "stone": 30
+   },
+   "time": 70
+  },
+  "gbeto": {
+   "cost": {
+    "food": 50,
+    "gold": 40
+   },
+   "time": 17
+  },
+  "genitour": {
+   "cost": {
+    "food": 40,
+    "wood": 35
+   },
+   "time": 25
+  },
+  "genoese crossbowman": {
+   "cost": {
+    "wood": 45,
+    "gold": 40
+   },
+   "time": 14
+  },
+  "ghulam": {
+   "cost": {
+    "food": 30,
+    "gold": 45
+   },
+   "time": 12
+  },
+  "grenadier": {
+   "cost": {
+    "food": 55,
+    "gold": 50
+   },
+   "time": 21
+  },
+  "guecha warrior": {
+   "cost": {
+    "wood": 50,
+    "gold": 60
+   },
+   "time": 17
+  },
+  "hand cannoneer": {
+   "cost": {
+    "food": 45,
+    "gold": 50
+   },
+   "time": 34
+  },
+  "hearth troop": {
+   "cost": {
+    "wood": 80,
+    "gold": 35
+   },
+   "time": 16
+  },
+  "hei guang cavalry": {
+   "cost": {
+    "food": 65,
+    "gold": 65
+   },
+   "time": 28
+  },
+  "house": {
+   "cost": {
+    "wood": 25
+   },
+   "time": 25
+  },
+  "hulk": {
+   "cost": {
+    "wood": 75,
+    "gold": 35
+   },
+   "time": 42
+  },
+  "huskarl": {
+   "cost": {
+    "food": 75,
+    "gold": 35
+   },
+   "time": 13
+  },
+  "hussite wagon": {
+   "cost": {
+    "wood": 110,
+    "gold": 80
+   },
+   "time": 30
+  },
+  "ibirapema warrior": {
+   "cost": {
+    "food": 30,
+    "gold": 60
+   },
+   "time": 24
+  },
+  "iron pagoda": {
+   "cost": {
+    "food": 80,
+    "gold": 55
+   },
+   "time": 14
+  },
+  "jaguar warrior": {
+   "cost": {
+    "food": 60,
+    "gold": 30
+   },
+   "time": 12
+  },
+  "janissary": {
+   "cost": {
+    "food": 60,
+    "gold": 55
+   },
+   "time": 21
+  },
+  "jarl": {
+   "cost": {
+    "food": 75,
+    "gold": 55
+   },
+   "time": 23
+  },
+  "jian swordsman": {
+   "cost": {
+    "food": 45,
+    "gold": 50
+   },
+   "time": 35
+  },
+  "jomsviking": {
+   "cost": {
+    "food": 65,
+    "gold": 15
+   },
+   "time": 10
+  },
+  "kamayuk": {
+   "cost": {
+    "food": 70,
+    "gold": 30
+   },
+   "time": 10
+  },
+  "karambit warrior": {
+   "cost": {
+    "food": 25,
+    "gold": 15
+   },
+   "time": 6
+  },
+  "keshik": {
+   "cost": {
+    "food": 60,
+    "gold": 40
+   },
+   "time": 17
+  },
+  "kipchak": {
+   "cost": {
+    "wood": 60,
+    "gold": 35
+   },
+   "time": 20
+  },
+  "knight": {
+   "cost": {
+    "food": 60,
+    "gold": 75
+   },
+   "time": 30
+  },
+  "kona": {
+   "cost": {
+    "food": 65,
+    "gold": 40
+   },
+   "time": 14
+  },
+  "konnik": {
+   "cost": {
+    "food": 60,
+    "gold": 70
+   },
+   "time": 16
+  },
+  "krepost": {
+   "cost": {
+    "stone": 350
+   },
+   "time": 150
+  },
+  "leitis": {
+   "cost": {
+    "food": 70,
+    "gold": 50
+   },
+   "time": 20
+  },
+  "liao dao": {
+   "cost": {
+    "food": 40,
+    "gold": 40
+   },
+   "time": 12
+  },
+  "longbowman": {
+   "cost": {
+    "wood": 35,
+    "gold": 40
+   },
+   "time": 18
+  },
+  "longship": {
+   "cost": {
+    "wood": 100,
+    "gold": 50
+   },
+   "time": 25
+  },
+  "lou chuan": {
+   "cost": {
+    "wood": 250,
+    "gold": 225
+   },
+   "time": 60
+  },
+  "lumber camp": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 35
+  },
+  "magyar huszar": {
+   "cost": {
+    "food": 35,
+    "gold": 45
+   },
+   "time": 18
+  },
+  "mameluke": {
+   "cost": {
+    "food": 55,
+    "gold": 85
+   },
+   "time": 23
+  },
+  "mangonel": {
+   "cost": {
+    "wood": 160,
+    "gold": 135
+   },
+   "time": 46
+  },
+  "mangudai": {
+   "cost": {
+    "wood": 55,
+    "gold": 65
+   },
+   "time": 26
+  },
+  "market": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 60
+  },
+  "militia": {
+   "cost": {
+    "food": 50,
+    "gold": 20
+   },
+   "time": 21
+  },
+  "mill": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 35
+  },
+  "mining camp": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 35
+  },
+  "missionary": {
+   "cost": {
+    "gold": 100,
+    "food": 30
+   },
+   "time": 51
+  },
+  "monaspa": {
+   "cost": {
+    "food": 60,
+    "gold": 45
+   },
+   "time": 14
+  },
+  "monastery": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 40
+  },
+  "monk": {
+   "cost": {
+    "gold": 100,
+    "food": 0
+   },
+   "time": 51
+  },
+  "mounted crossbowman": {
+   "cost": {
+    "wood": 40,
+    "gold": 65
+   },
+   "time": 40
+  },
+  "mounted trebuchet": {
+   "cost": {
+    "food": 175,
+    "gold": 175
+   },
+   "time": 46
+  },
+  "mule cart": {
+   "cost": {
+    "food": 20,
+    "wood": 80
+   },
+   "time": 25
+  },
+  "obuch": {
+   "cost": {
+    "food": 55,
+    "gold": 20
+   },
+   "time": 12
+  },
+  "organ gun": {
+   "cost": {
+    "wood": 80,
+    "gold": 70
+   },
+   "time": 28
+  },
+  "outpost": {
+   "cost": {
+    "wood": 25,
+    "stone": 5
+   },
+   "time": 15
+  },
+  "palisade gate": {
+   "cost": {
+    "wood": 30
+   },
+   "time": 30
+  },
+  "palisade wall": {
+   "cost": {
+    "wood": 3
+   },
+   "time": 7
+  },
+  "pasture": {
+   "cost": {
+    "wood": 110
+   },
+   "time": 22
+  },
+  "petard": {
+   "cost": {
+    "food": 65,
+    "gold": 20
+   },
+   "time": 25
+  },
+  "plumed archer": {
+   "cost": {
+    "wood": 55,
+    "gold": 55
+   },
+   "time": 16
+  },
+  "ratha": {
+   "cost": {
+    "wood": 60,
+    "gold": 60
+   },
+   "time": 24
+  },
+  "rattan archer": {
+   "cost": {
+    "wood": 50,
+    "gold": 45
+   },
+   "time": 16
+  },
+  "rocket cart": {
+   "cost": {
+    "wood": 135,
+    "gold": 155
+   },
+   "time": 40
+  },
+  "samurai": {
+   "cost": {
+    "food": 45,
+    "gold": 30
+   },
+   "time": 9
+  },
+  "scorpion": {
+   "cost": {
+    "wood": 75,
+    "gold": 75
+   },
+   "time": 30
+  },
+  "scout cavalry": {
+   "cost": {
+    "food": 80
+   },
+   "time": 30
+  },
+  "serjeant": {
+   "cost": {
+    "food": 55,
+    "gold": 25
+   },
+   "time": 16
+  },
+  "shotel warrior": {
+   "cost": {
+    "food": 50,
+    "gold": 30
+   },
+   "time": 8
+  },
+  "shrivamsha rider": {
+   "cost": {
+    "food": 70,
+    "gold": 30
+   },
+   "time": 20
+  },
+  "siege tower": {
+   "cost": {
+    "wood": 100,
+    "gold": 120
+   },
+   "time": 36
+  },
+  "siege workshop": {
+   "cost": {
+    "wood": 200
+   },
+   "time": 40
+  },
+  "skirmisher": {
+   "cost": {
+    "food": 25,
+    "wood": 35
+   },
+   "time": 26
+  },
+  "slinger": {
+   "cost": {
+    "food": 50,
+    "wood": 25
+   },
+   "time": 25
+  },
+  "spearman": {
+   "cost": {
+    "food": 35,
+    "wood": 25
+   },
+   "time": 22
+  },
+  "stable": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 50
+  },
+  "steppe lancer": {
+   "cost": {
+    "food": 70,
+    "gold": 40
+   },
+   "time": 24
+  },
+  "stone wall": {
+   "cost": {
+    "stone": 5
+   },
+   "time": 10
+  },
+  "tarkan": {
+   "cost": {
+    "food": 60,
+    "gold": 60
+   },
+   "time": 14
+  },
+  "temple guard": {
+   "cost": {
+    "food": 70,
+    "gold": 45
+   },
+   "time": 28
+  },
+  "teutonic knight": {
+   "cost": {
+    "food": 85,
+    "gold": 30
+   },
+   "time": 12
+  },
+  "thirisadai": {
+   "cost": {
+    "wood": 180,
+    "gold": 60
+   },
+   "time": 40
+  },
+  "throwing axeman": {
+   "cost": {
+    "food": 55,
+    "gold": 25
+   },
+   "time": 13
+  },
+  "tiger cavalry": {
+   "cost": {
+    "food": 60,
+    "gold": 80
+   },
+   "time": 18
+  },
+  "town center": {
+   "cost": {
+    "wood": 275,
+    "stone": 100
+   },
+   "time": 150
+  },
+  "traction trebuchet": {
+   "cost": {
+    "wood": 175,
+    "gold": 210
+   },
+   "time": 70
+  },
+  "trade cart": {
+   "cost": {
+    "wood": 100,
+    "gold": 50
+   },
+   "time": 51
+  },
+  "trade cog": {
+   "cost": {
+    "wood": 100,
+    "gold": 50
+   },
+   "time": 36
+  },
+  "transport ship": {
+   "cost": {
+    "wood": 125
+   },
+   "time": 46
+  },
+  "trebuchet": {
+   "cost": {
+    "wood": 200,
+    "gold": 200
+   },
+   "time": 50
+  },
+  "trebuchet unpacked": {
+   "cost": {
+    "wood": 200,
+    "gold": 200
+   },
+   "time": 50
+  },
+  "turtle ship": {
+   "cost": {
+    "wood": 190,
+    "gold": 130
+   },
+   "time": 50
+  },
+  "university": {
+   "cost": {
+    "wood": 200
+   },
+   "time": 60
+  },
+  "urumi swordsman": {
+   "cost": {
+    "food": 65,
+    "gold": 20
+   },
+   "time": 9
+  },
+  "varangian guard": {
+   "cost": {
+    "food": 65,
+    "gold": 45
+   },
+   "time": 30
+  },
+  "villager": {
+   "cost": {
+    "food": 50
+   },
+   "time": 25
+  },
+  "war chariot": {
+   "cost": {
+    "food": 75,
+    "gold": 90
+   },
+   "time": 32
+  },
+  "war elephant": {
+   "cost": {
+    "food": 170,
+    "gold": 85
+   },
+   "time": 25
+  },
+  "war wagon": {
+   "cost": {
+    "wood": 200,
+    "gold": 60
+   },
+   "time": 21
+  },
+  "warrior priest": {
+   "cost": {
+    "gold": 50,
+    "food": 40
+   },
+   "time": 30
+  },
+  "watch tower": {
+   "cost": {
+    "wood": 35,
+    "stone": 125
+   },
+   "time": 80
+  },
+  "white feather guard": {
+   "cost": {
+    "food": 60,
+    "gold": 15
+   },
+   "time": 11
+  },
+  "woad raider": {
+   "cost": {
+    "food": 70,
+    "gold": 25
+   },
+   "time": 10
+  },
+  "wonder": {
+   "cost": {
+    "wood": 1000,
+    "gold": 1000,
+    "stone": 1000
+   },
+   "time": 3500
+  },
+  "xianbei raider": {
+   "cost": {
+    "wood": 65,
+    "gold": 35
+   },
+   "time": 29
+  },
+  "xolotl warrior": {
+   "cost": {
+    "food": 60,
+    "gold": 75
+   },
+   "time": 30
+  }
+ },
+ "buildings": {
+  "house": {
+   "cost": {
+    "wood": 25
+   },
+   "time": 25
+  },
+  "dock": {
+   "cost": {
+    "wood": 150
+   },
+   "time": 35
+  },
+  "mill": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 35
+  },
+  "lumber camp": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 35
+  },
+  "mining camp": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 35
+  },
+  "farm": {
+   "cost": {
+    "wood": 60
+   },
+   "time": 15
+  },
+  "barracks": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 50
+  },
+  "archery range": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 50
+  },
+  "stable": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 50
+  },
+  "blacksmith": {
+   "cost": {
+    "wood": 150
+   },
+   "time": 40
+  },
+  "market": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 60
+  },
+  "town center": {
+   "cost": {
+    "stone": 100,
+    "wood": 275
+   },
+   "time": 100
+  },
+  "outpost": {
+   "cost": {
+    "stone": 5,
+    "wood": 25
+   },
+   "time": 15
+  },
+  "palisade wall": {
+   "cost": {
+    "wood": 3
+   },
+   "time": 7
+  },
+  "watch tower": {
+   "cost": {
+    "stone": 125,
+    "wood": 35
+   },
+   "time": 80
+  },
+  "monastery": {
+   "cost": {
+    "wood": 175
+   },
+   "time": 40
+  },
+  "university": {
+   "cost": {
+    "wood": 200
+   },
+   "time": 60
+  },
+  "siege workshop": {
+   "cost": {
+    "wood": 200
+   },
+   "time": 40
+  },
+  "castle": {
+   "cost": {
+    "stone": 650,
+    "wood": 0
+   },
+   "time": 200
+  },
+  "fish trap": {
+   "cost": {
+    "wood": 100
+   },
+   "time": 40
+  }
+ },
+ "civBonuses": {
+  "Generic": {},
+  "Armenians (Stronger Eco Techs)": {
+   "double-bit axe": 0.04,
+   "bow saw": 0.04,
+   "two-man saw": 0.04,
+   "gold mining": 0.04,
+   "gold shaft mining": 0.04,
+   "stone mining": 0.04,
+   "stone shaft mining": 0.04
+  },
+  "Japanese - Dark Age": {
+   "fishing ship shore": 0.05,
+   "fishing ship deep": 0.05,
+   "fishing ship oysters": 0.05,
+   "fish trap": 0.05
+  },
+  "Japanese - Feudal Age": {
+   "fishing ship shore": 0.1,
+   "fishing ship deep": 0.1,
+   "fishing ship shore fishing lines": 0.1,
+   "fishing ship deep fishing lines": 0.1,
+   "fishing ship oysters": 0.1,
+   "fishing ship oysters fishing lines": 0.1,
+   "fish trap": 0.1
+  },
+  "Japanese - Castle Age": {
+   "fishing ship shore": 0.15,
+   "fishing ship deep": 0.15,
+   "fishing ship shore gillnets": 0.15,
+   "fishing ship deep gillnets": 0.15,
+   "fishing ship shore fishing lines": 0.15,
+   "fishing ship deep fishing lines": 0.15,
+   "fishing ship oysters": 0.15,
+   "fishing ship oysters fishing lines": 0.15,
+   "fishing ship oysters gillnets": 0.15,
+   "fish trap": 0.15,
+   "fish trap gillnets": 0.15
+  },
+  "Japanese - Imperial Age": {
+   "fishing ship shore": 0.2,
+   "fishing ship deep": 0.2,
+   "fishing ship shore gillnets": 0.2,
+   "fishing ship deep gillnets": 0.2,
+   "fishing ship shore fishing lines": 0.2,
+   "fishing ship deep fishing lines": 0.2,
+   "fishing ship oysters": 0.2,
+   "fishing ship oysters fishing lines": 0.2,
+   "fishing ship oysters gillnets": 0.2,
+   "fish trap": 0.2,
+   "fish trap gillnets": 0.2
+  },
+  "Aztecs (Farms)": {
+   "farmer": "22.46",
+   "farm heavy plow": "22.98",
+   "wheelbarrow": "23.9",
+   "wheelbarrow heavy plow": "24.00",
+   "hand cart": "24.00"
+  },
+  "Slavs (Farms)": {
+   "farmer": "23.34",
+   "farm heavy plow": "24.38",
+   "wheelbarrow": "26.45",
+   "wheelbarrow heavy plow": "26.68",
+   "hand cart": "27.6"
+  },
+  "Berbers (Farms)": {
+   "farmer": "20.88",
+   "farm heavy plow": "21.61",
+   "wheelbarrow": "23.13",
+   "wheelbarrow heavy plow": "23.64",
+   "hand cart": "24.00"
+  },
+  "Mayans (Farms)": {
+   "farmer": "19.50",
+   "farm heavy plow": "20.04",
+   "wheelbarrow": "21.59",
+   "wheelbarrow heavy plow": "22.06",
+   "hand cart": "24.12"
+  },
+  "Khmer (Farms)": {
+   "farmer": "21.48",
+   "farm heavy plow": "22.11",
+   "wheelbarrow": "23.56",
+   "wheelbarrow heavy plow": "23.77",
+   "hand cart": "24.00"
+  },
+  "Mongols (Hunters)": {
+   "hunter": 0.4
+  },
+  "Britons (Shepherds)": {
+   "shepherd": 0.25
+  },
+  "Celts (Lumberjacks)": {
+   "lumberjack": 0.15,
+   "double-bit axe": 0.15,
+   "bow saw": 0.15,
+   "two-man saw": 0.15
+  },
+  "Franks (Foragers)": {
+   "forager": 0.15
+  },
+  "Koreans (Stone Miners)": {
+   "stone miner": 0.2,
+   "stone mining": 0.2,
+   "stone shaft mining": 0.2
+  },
+  "Turks (Gold Miners)": {
+   "gold miner": 0.25,
+   "gold mining": 0.25,
+   "gold shaft mining": 0.25
+  },
+  "Malians (Gold Miners)": {
+   "gold miner": 0.1,
+   "gold mining": 0.1,
+   "gold shaft mining": 0.1,
+   "oyster gatherer": 0.1
+  },
+  "Mapuche (Foragers)": {
+   "forager": 0.25
+  },
+  "Romans (5% Everything)": {
+   "farmer": 0.05,
+   "farm heavy plow": 0.05,
+   "wheelbarrow": 0.05,
+   "wheelbarrow heavy plow": 0.05,
+   "hand cart": 0.05,
+   "hunter": 0.05,
+   "shepherd": 0.05,
+   "forager": 0.05,
+   "fisherman": 0.05,
+   "lumberjack": 0.05,
+   "double-bit axe": 0.05,
+   "bow saw": 0.05,
+   "two-man saw": 0.05,
+   "gold miner": 0.05,
+   "gold mining": 0.05,
+   "gold shaft mining": 0.05,
+   "oyster gatherer": 0.05,
+   "stone miner": 0.05,
+   "stone mining": 0.05,
+   "stone shaft mining": 0.05
+  },
+  "Georgians (10% Everything Near Church)": {
+   "farmer": 0.1,
+   "farm heavy plow": 0.1,
+   "wheelbarrow": 0.1,
+   "wheelbarrow heavy plow": 0.1,
+   "hand cart": 0.1,
+   "hunter": 0.1,
+   "shepherd": 0.1,
+   "forager": 0.1,
+   "fisherman": 0.1,
+   "lumberjack": 0.1,
+   "double-bit axe": 0.1,
+   "bow saw": 0.1,
+   "two-man saw": 0.1,
+   "gold miner": 0.1,
+   "gold mining": 0.1,
+   "gold shaft mining": 0.1,
+   "oyster gatherer": 0.1,
+   "stone miner": 0.1,
+   "stone mining": 0.1,
+   "stone shaft mining": 0.1
+  },
+  "Danes (Food drop-off +5%)": {
+   "farmer": 0.05,
+   "farm heavy plow": 0.05,
+   "wheelbarrow": 0.05,
+   "wheelbarrow heavy plow": 0.05,
+   "hand cart": 0.05,
+   "herder": 0.05,
+   "pasture wheelbarrow": 0.05,
+   "pasture hand cart": 0.05,
+   "hunter": 0.05,
+   "shepherd": 0.05,
+   "forager": 0.05,
+   "fisherman": 0.05,
+   "fishing ship shore": 0.05,
+   "fishing ship deep": 0.05,
+   "fishing ship shore fishing lines": 0.05,
+   "fishing ship deep fishing lines": 0.05,
+   "fishing ship shore gillnets": 0.05,
+   "fishing ship deep gillnets": 0.05
+  }
+ }
+}

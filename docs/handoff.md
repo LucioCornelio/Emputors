@@ -1,6 +1,6 @@
 # Handoff: status and pending work
 
-Last update: 13 Nov 2026 (Build Drill removed).
+Last update: 15 Nov 2026 (eco module, phase 2).
 
 ## How Javier works
 
@@ -42,6 +42,8 @@ Last update: 13 Nov 2026 (Build Drill removed).
 ## Ideas para más adelante
 
 Ideas noted by Javier on 13 Nov 2026. Not started: do not implement until he asks.
+
+**Status 15 Nov 2026:** the calculation module is built (`frontend/src/eco/`, see architecture.md) with tests and the Hybrid into Men-at-Arms test case. Next: Javier reviews the variant, then the build-order-variants skill is written, then the Eco Calculator page. Design document: https://claude.ai/artifact/PmENS4GMLdv5MxHERYgTQA. Data source decided by Javier: Survivalist only (its public repo), aoe2techtree only for age ups and buildings.
 
 1. **Build order variants by differences (main goal).** Not a full simulator: start from a build that already works and calculate only the effect of a change, because the existing build already includes the real walking times and building placement. It must answer questions such as:
    - "Can I do this build with one villager less?": resources missing or left over at the age up click, seconds the click moves earlier, and which reorganization compensates.
