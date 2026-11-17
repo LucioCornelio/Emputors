@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 import { supabase } from '../supabaseClient';
 import DraftPlanCreator from './admin/DraftPlanCreator';
 import RivalScouting from './cw7/RivalScouting';
+import CivPlanner from './cw7/CivPlanner';
 import { buildRivalModel, rivalPicksInWindow, pickRisk, riskLabel, preferenceRatio } from './cw7/forecast';
 import { isMapDraft } from './cw7/mapDrafts';
 
@@ -491,6 +492,7 @@ function ClanWarsVII() {
       {/* TABS */}
       <div style={{ display: 'flex', borderBottom: '2px solid #2a2d36', backgroundColor: '#1e212b', padding: '0 1rem' }}>
         <div onClick={() => setActiveTab('executionDraft')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'executionDraft' ? C.gold : '#888', borderBottom: activeTab === 'executionDraft' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Execution Draft</div>
+        <div onClick={() => setActiveTab('civPlanner')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'civPlanner' ? C.gold : '#888', borderBottom: activeTab === 'civPlanner' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Civ Planner</div>
         <div onClick={() => setActiveTab('metaExplorer')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'metaExplorer' ? C.gold : '#888', borderBottom: activeTab === 'metaExplorer' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Meta Explorer</div>
         <div onClick={() => setActiveTab('planCreator')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'planCreator' ? C.gold : '#888', borderBottom: activeTab === 'planCreator' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Plan Creator</div>
         <div onClick={() => setActiveTab('rivalScouting')} style={{ padding: '10px 15px', cursor: 'pointer', fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: activeTab === 'rivalScouting' ? C.gold : '#888', borderBottom: activeTab === 'rivalScouting' ? `3px solid ${C.gold}` : '3px solid transparent', transition: 'all 0.2s' }}>Rival Scouting</div>
@@ -1205,6 +1207,11 @@ function ClanWarsVII() {
                 </div>
             )}
         </div>
+
+        {/* --- VIEW: CIV PLANNER --- */}
+        {activeTab === 'civPlanner' && (
+            <CivPlanner C={C} MAP_POOL={MAP_POOL} draftPlans={draftPlans} getCivImage={getCivImage} getMapImageName={getMapImageName} />
+        )}
 
         {/* --- VIEW: PLAN CREATOR --- */}
         <div style={{ display: activeTab === 'planCreator' ? 'block' : 'none', margin: '-20px' }}>

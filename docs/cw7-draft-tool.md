@@ -19,6 +19,12 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
 - aoe2cm-like board: picks fill from the centre outwards, bans per team with a separator, per-side bans and snipes, hidden picks handled. Both sides cannot hold the same civ.
 - Bench redesign: available, taken and banned civs per role at a glance.
 
+## Civ Planner (`pages/cw7/CivPlanner.jsx`)
+
+- Offline sandbox to build a "plan A": choose PA3 or BO5 and the maps, pick a plan per map, then click suggested civs (role priority lists) to fill each role.
+- A civ can be used only once across all maps and roles: elsewhere it shows crossed out with the map name, and clicking it moves it. Civs suggested on more than one selected map have a gold frame; essentials a red outline. "Plan A" strip summarises the assignment.
+- No aoe2cm connection, no picks or bans. Saved only in the browser (localStorage `cw7-civ-planner-v1`), no tables.
+
 ## Rival scouting (`cw7_rival_drafts`, `cw7_rival_profiles`)
 
 - Load past drafts of a rival from aoe2cm (id or URL) and choose which side the rival played in each one.
