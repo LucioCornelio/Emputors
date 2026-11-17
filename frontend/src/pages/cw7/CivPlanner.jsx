@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 // Civ Planner: offline sandbox to share out the suggested civs of each map's plan
 // across the 3 (PA3) or 5 (BO5) maps, with no civ used twice. Saved in this browser only.
 const STORAGE_KEY = 'cw7-civ-planner-v1';
-const EMPTY = { mode: 'PA3', maps: [], plans: {}, assigned: {} };
+const EMPTY = { mode: 'PA3', maps: [], plans: {}, assigned: {}, players: {} };
+const ALT_COUNT = 3;
 
 const load = () => {
   try { return { ...EMPTY, ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) }; } catch { return EMPTY; }
@@ -72,6 +73,31 @@ export default function CivPlanner({ C, MAP_POOL, draftPlans, getCivImage, getMa
 
   const totalRoles = maps.reduce((n, m) => n + rolesOf(m).length, 0);
   const filled = maps.reduce((n, m) => n + rolesOf(m).filter(r => slot(m)[r.role]).length, 0);
+  const [copied, setCopied] = useState('');
+  const playerOf = (map, role) => (state.players || {})[`${map}|${role}`] || '';
+  const setPlayer = (map, role, v) => setState(s => ({ ...s, players: { ...(s.players || {}), [`${map}|${role}`]: v } }));
+
+  // Favourite = assigned civ; second options = next civs of the role list not used anywhere
+  const summaryOf = (map) => rolesOf(map).map(r => {
+    const fav = slot(map)[r.role] || null;
+    const alts = (r.priority || []).filter(c => c !== fav && !usedBy[c]).slice(0, ALT_COUNT);
+    return { role: r.role, player: playerOf(map, r.role).trim(), fav, alts };
+  });
+  const mapText = (map) => {
+    const lines = [`*${map.toUpperCase()}* (${planOf(map) || 'no plan'})`];
+    summaryOf(map).forEach(x => {
+      lines.push(`- ${x.role}${x.player ? ` (${x.player})` : ''}: *${x.fav || 'TBD'}*${x.alts.length ? `. Alt: ${x.alts.join(', ')}` : ''}`);
+    });
+    return lines.join('\n');
+  };
+  const copy = async (key, text) => {
+    try { await navigator.clipboard.writeText(text); setCopied(key); setTimeout(() => setCopied(''), 1500); } catch { /* clipboard blocked */ }
+  };
+  const allText = () => [`*CW7 PLAN A* (${mode})`, ...maps.filter(m => rolesOf(m).length).map(mapText)].join('\n\n');
+  const copyBtn = (key, text, txt) => (
+    <button onClick={() => copy(key, text)} style={{ backgroundColor: copied === key ? C.green : 'transparent', color: copied === key ? '#161920' : C.cyan, border: `1px solid ${copied === key ? C.green : C.cyan}`, padding: '3px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold', whiteSpace: 'nowrap' }}>{copied === key ? 'COPIED' : txt}</button>
+  );
+
   const label = { color: C.cyan, fontSize: '11px', margin: 0, textTransform: 'uppercase', fontWeight: 'bold' };
 
   return (
@@ -184,6 +210,39 @@ export default function CivPlanner({ C, MAP_POOL, draftPlans, getCivImage, getMa
           );
         })}
       </div>
+      {maps.some(m => rolesOf(m).length) && (
+        <div style={{ backgroundColor: C.card, padding: '12px 15px', borderRadius: '6px', border: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ ...label, color: C.gold }}>Summary</span>
+            <span style={{ color: '#888', fontSize: '11px' }}>Favourite = assigned civ. Alternatives = next civs on the role list not used anywhere else. Type the player of each slot.</span>
+            <span style={{ marginLeft: 'auto' }}>{copyBtn('all', allText(), 'COPY ALL MAPS')}</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '10px' }}>
+            {maps.filter(m => rolesOf(m).length).map(map => (
+              <div key={map} style={{ backgroundColor: '#161920', border: `1px solid ${C.border}`, borderRadius: '4px', padding: '8px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ color: '#fff', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>{map}</span>
+                  <span style={{ color: '#666', fontSize: '10px' }}>{planOf(map)}</span>
+                  <span style={{ marginLeft: 'auto' }}>{copyBtn(map, mapText(map), 'COPY')}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'max-content 90px 1fr', alignItems: 'center', gap: '5px 8px', textAlign: 'left' }}>
+                {summaryOf(map).map(x => (
+                  <div key={x.role} style={{ display: 'contents' }}>
+                    <span style={{ color: C.gold, fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{x.role}</span>
+                    <input value={playerOf(map, x.role)} onChange={(e) => setPlayer(map, x.role, e.target.value)} placeholder="Player" style={{ minWidth: 0, backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', borderRadius: '3px', padding: '2px 5px', fontSize: '11px', outline: 'none' }} />
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap', minWidth: 0 }}>
+                      {x.fav ? (<>{civIcon(x.fav, 18)}<strong style={{ color: C.blue, fontSize: '11px' }}>{x.fav}</strong></>) : <span style={{ color: '#555', fontSize: '11px' }}>TBD</span>}
+                      {x.alts.length > 0 && <span style={{ color: '#666', fontSize: '10px', marginLeft: '4px' }}>Alt:</span>}
+                      {x.alts.map(c => <span key={c} title={c} style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#aaa', fontSize: '10px' }}>{civIcon(c, 14)}{c}</span>)}
+                    </span>
+                  </div>
+                ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <span style={{ color: '#666', fontSize: '10px' }}>Gold frame: civ suggested on more than one of these maps. Red outline: essential. Crossed out: already used on another map.</span>
     </div>
   );

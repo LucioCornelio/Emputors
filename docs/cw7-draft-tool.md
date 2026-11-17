@@ -23,6 +23,7 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
 
 - Offline sandbox to build a "plan A": choose PA3 or BO5 and the maps, pick a plan per map, then click suggested civs (role priority lists) to fill each role.
 - A civ can be used only once across all maps and roles: elsewhere it shows crossed out with the map name, and clicking it moves it. Civs suggested on more than one selected map have a gold frame; essentials a red outline. "Plan A" strip summarises the assignment.
+- Summary below the maps: per role the favourite (assigned civ) and up to 3 alternatives (next civs of the role list not used anywhere), plus a player name per slot. Copy buttons (all maps, or one map) put a WhatsApp-ready text (bold with `*`) on the clipboard.
 - No aoe2cm connection, no picks or bans. Saved only in the browser (localStorage `cw7-civ-planner-v1`), no tables.
 
 ## Rival scouting (`cw7_rival_drafts`, `cw7_rival_profiles`)
