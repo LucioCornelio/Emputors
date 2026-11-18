@@ -38,6 +38,7 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
 - Our side: win chance per map (clan base, changed per rival), saved in this browser only (localStorage `cw7-map-draft-v1`). Match win = chance to win at least 2 of the 3 maps.
 - Rival model: every pick, ban and snipe in their map drafts is a choice among the maps available at that moment (a snipe only compares the two maps of the pair). Fitted as a choice model with a prior (`fitRivalModel`); shown as a preference order with Favourite / Neutral / Low tags.
 - Engine (`analyzeScenarios`): enumerates the whole draft tree; our moves maximise the match win chance, rival moves follow the model with probabilities (not a perfect opponent). Outputs the likely final map sets, the win chance of each possible first pick of ours (can be fixed in "Our first pick") and our line grouped by the rival's picks.
+- Our line: a turn table (one column per turn, one row per rival double pick). Every move of ours can be changed by clicking its map (options show the match win chance from that point); choices are kept per rival in `cw7-map-draft-v1` and the engine follows them (`overrides`, keyed by draft state).
 - "Send to Civ Planner" opens the Civ Planner with those maps: if a match is selected, it opens the scenario with the same maps or (admin) adds a new scenario; otherwise it fills the sandbox.
 - Tests: `node --test src/pages/cw7/mapDraftEngine.test.js` (fixture with three real map drafts).
 

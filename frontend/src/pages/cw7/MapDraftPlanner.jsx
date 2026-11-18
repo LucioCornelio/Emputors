@@ -34,15 +34,16 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
   const own = (state.ratings || {})[rival] || {};
   const rating = (m) => own[m] ?? base[m] ?? 50;
   const ours = Object.fromEntries(MAP_POOL.map(m => [m, rating(m) / 100]));
+  const choices = useMemo(() => (state.choices || {})[rival] || {}, [state.choices, rival]);
   // Default first pick: our best rated map (the model's ranking is shown next to each option)
   const firstPick = (state.firstPick || {})[rival] || [...MAP_POOL].sort((a, b) => rating(b) - rating(a))[0];
 
   const model = useMemo(() => fitRivalModel(drafts, MAP_POOL), [drafts, MAP_POOL]);
   const oursKey = MAP_POOL.map(m => ours[m]).join(',');
   const result = useMemo(
-    () => analyzeScenarios({ pool: MAP_POOL, ours, utility: model.utility, weFirst: state.weFirst, firstPick: firstPick || null }),
+    () => analyzeScenarios({ pool: MAP_POOL, ours, utility: model.utility, weFirst: state.weFirst, firstPick: firstPick || null, overrides: choices }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [MAP_POOL, model, oursKey, state.weFirst, firstPick]
+    [MAP_POOL, model, oursKey, state.weFirst, firstPick, choices]
   );
 
   const setRating = (m, v) => setState(s => {
@@ -54,6 +55,8 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
   const resetRival = () => setState(s => ({ ...s, ratings: { ...(s.ratings || {}), [rival]: {} } }));
   const saveAsBase = () => setState(s => ({ ...s, base: { ...base, ...own }, ratings: { ...(s.ratings || {}), [rival]: {} } }));
   const setFirstPick = (m) => setState(s => ({ ...s, firstPick: { ...(s.firstPick || {}), [rival]: m } }));
+  const setChoice = (k, m) => setState(s => ({ ...s, choices: { ...(s.choices || {}), [rival]: { ...((s.choices || {})[rival] || {}), [k]: m } } }));
+  const resetChoices = () => setState(s => ({ ...s, choices: { ...(s.choices || {}), [rival]: {} } }));
 
   const u = model.utility;
   const rank = [...MAP_POOL].sort((a, b) => u[b] - u[a]);
@@ -103,6 +106,7 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
     const us = (t.side === 'A') === weHost;
     return { kind: t.kind, us, who: us ? 'EMP' : tag3(rivalShort), color: (t.side === 'A') ? C.blue : C.gold };
   }), { kind: 'pick', admin: true, who: 'ADM', color: '#888' }];
+  const firstUsCol = columns.findIndex(c => c.us && c.kind === 'pick');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left', color: C.textMain }}>
@@ -211,7 +215,11 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
           </div>
 
           <div style={card}>
-            <span style={label}>Our line, by what the rival picks</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={label}>Our line, by what the rival picks</span>
+              <span style={{ fontSize: '10px', color: '#777' }}>Click any of our maps to choose another move and see what follows.</span>
+              {Object.keys(choices).length > 0 && <button style={{ ...smallBtn, marginLeft: 'auto' }} onClick={resetChoices}>Reset our choices</button>}
+            </div>
             <div style={{ overflowX: 'auto', marginTop: '8px' }}>
               <table style={{ borderCollapse: 'collapse', fontSize: '11px', minWidth: '100%' }}>
                 <thead>
@@ -244,7 +252,17 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
                                 {out && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(22,25,32,0.55)', borderRadius: '3px' }} />}
                                 {(s.kind === 'ban' || lost) && <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.red, fontWeight: 900, fontSize: '16px' }}>✕</span>}
                               </div>
-                              <div style={{ fontSize: '10px', lineHeight: 1.15, color: out ? '#777' : '#fff', textDecoration: lost ? 'line-through' : 'none', marginTop: '2px' }}>{s.map}</div>
+                              {s.us && s.alternatives?.length > 1 ? (
+                                <div style={{ position: 'relative', marginTop: '2px', display: 'flex', justifyContent: 'center' }} title="Choose our move here; each option shows the match win chance from this point">
+                                  <div style={{ fontSize: '10px', lineHeight: 1.15, color: s.forced ? '#ff9800' : out ? '#999' : '#fff', textDecoration: lost ? 'line-through' : 'none', borderBottom: `1px dashed ${s.forced ? '#ff9800' : '#555'}`, whiteSpace: 'nowrap' }}>{s.map} <span style={{ fontSize: '8px', color: '#888' }}>▾</span></div>
+                                  <select value={s.map} onChange={(e) => (i === firstUsCol ? setFirstPick(e.target.value) : setChoice(s.stateKey, e.target.value))}
+                                    style={{ position: 'absolute', inset: 0, width: '100%', opacity: 0, cursor: 'pointer' }}>
+                                    {s.alternatives.map(a => <option key={a.map} value={a.map}>{a.map} ({(a.win * 100).toFixed(1)}%)</option>)}
+                                  </select>
+                                </div>
+                              ) : (
+                                <div style={{ fontSize: '10px', lineHeight: 1.15, color: out ? '#777' : '#fff', textDecoration: lost ? 'line-through' : 'none', marginTop: '2px' }}>{s.map}</div>
+                              )}
                               {!s.us && !s.admin && s.chance < 0.995 && <div style={{ fontSize: '9px', color: '#888' }}>{pct(s.chance)}</div>}
                             </td>
                           );

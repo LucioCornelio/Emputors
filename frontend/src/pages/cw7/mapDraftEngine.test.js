@@ -49,3 +49,16 @@ test('with Nomad + Socotra from the rival, we never ban Socotra and we pick Tres
   const ourPicks = line.steps.filter(s => s.us && s.kind === 'pick').map(s => s.map);
   assert.ok(ourPicks.includes('Tres Leches'));
 });
+
+test('our own choice at a point of the draft is followed and changes the outcome', () => {
+  const { utility } = fitRivalModel(drafts, POOL);
+  const base = analyzeScenarios({ pool: POOL, ours: OURS, utility, weFirst: true, firstPick: 'Colosseum' });
+  const line = base.lines.find(l => l.theirPicks.join() === 'Nomad,Socotra');
+  const second = line.steps[3];
+  assert.ok(second.us && second.kind === 'pick' && second.alternatives.length > 1);
+  const other = second.alternatives.find(a => a.map !== second.map).map;
+  const r = analyzeScenarios({ pool: POOL, ours: OURS, utility, weFirst: true, firstPick: 'Colosseum', overrides: { [second.stateKey]: other } });
+  const changed = r.lines.find(l => l.theirPicks.join() === 'Nomad,Socotra');
+  assert.equal(changed.steps[3].map, other);
+  assert.equal(changed.steps[3].forced, true);
+});

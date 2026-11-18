@@ -91,9 +91,10 @@ const softmax = (opts, score) => {
   pool: map names. ours: { map: win chance 0..1 } against this rival. utility: rival model.
   weFirst: true when Emputors has the first pick (side A).
   firstPick: optional map we commit to as our first pick (otherwise the best one).
+  overrides: { stateKey: map } our own choice at a given point of the draft (stateKey comes with each step).
   Returns { winChance, firstPicks: [{ map, win }], finals: [{ maps, start, prob, win }], lines: [...] }.
 */
-export const analyzeScenarios = ({ pool, ours, utility, weFirst = true, firstPick = null, turns = PA3_TURNS }) => {
+export const analyzeScenarios = ({ pool, ours, utility, weFirst = true, firstPick = null, overrides = {}, turns = PA3_TURNS }) => {
   const usSide = weFirst ? 'A' : 'B';
   const finalOf = (s) => {
     const left = pool.filter(m => !s.pa.includes(m) && !s.pb.includes(m) && !s.bans.includes(m));
@@ -104,7 +105,9 @@ export const analyzeScenarios = ({ pool, ours, utility, weFirst = true, firstPic
     return { start: left, maps: [...left, ...usKept, ...themKept] };
   };
   const win = (maps) => matchWinChance(maps.map(m => ours[m] ?? 0.5));
-  const key = (s, t) => [t, s.pa.join(','), s.pb.join(','), s.bans.join(','), s.snA.join(','), s.snB.join(',')].join('|');
+  // Order inside each list does not change what can happen next, so it is left out of the key
+  const srt = (l) => [...l].sort().join(',');
+  const key = (s, t) => [t, srt(s.pa), srt(s.pb), srt(s.bans), srt(s.snA), srt(s.snB)].join('|');
   const options = (s, turn) => {
     const taken = new Set([...s.pa, ...s.pb, ...s.bans]);
     if (turn.kind === 'snipe') return (turn.side === 'A' ? s.pb.filter(m => !s.snB.includes(m)) : s.pa.filter(m => !s.snA.includes(m)));
@@ -128,7 +131,10 @@ export const analyzeScenarios = ({ pool, ours, utility, weFirst = true, firstPic
     const opts = options(s, turn);
     let v;
     if (opts.length === 0) v = value(s, t + 1);
-    else if (turn.side === usSide) v = Math.max(...opts.map(m => value(apply(s, turn, m), t + 1)));
+    else if (turn.side === usSide) {
+      const forced = overrides[k];
+      v = forced && opts.includes(forced) ? value(apply(s, turn, forced), t + 1) : Math.max(...opts.map(m => value(apply(s, turn, m), t + 1)));
+    }
     else {
       const sg = turn.kind === 'pick' ? 1 : -1;
       const ps = softmax(opts, m => sg * (utility[m] || 0));
@@ -141,6 +147,8 @@ export const analyzeScenarios = ({ pool, ours, utility, weFirst = true, firstPic
   const bestMove = (s, t) => {
     const opts = options(s, turns[t]);
     if (t === firstUs && firstPick && opts.includes(firstPick)) return firstPick;
+    const forced = overrides[key(s, t)];
+    if (forced && opts.includes(forced)) return forced;
     let best = null, bv = -1;
     opts.forEach(m => { const v = value(apply(s, turns[t], m), t + 1); if (v > bv + 1e-12) { bv = v; best = m; } });
     return best;
@@ -156,7 +164,9 @@ export const analyzeScenarios = ({ pool, ours, utility, weFirst = true, firstPic
     if (opts.length === 0) { walk(s, t + 1, prob, steps); return; }
     if (turn.side === usSide) {
       const m = bestMove(s, t);
-      walk(apply(s, turn, m), t + 1, prob, [...steps, { ...turn, us: true, map: m }]);
+      const stateKey = key(s, t);
+      const alternatives = opts.map(o => ({ map: o, win: value(apply(s, turn, o), t + 1) })).sort((a, b) => b.win - a.win);
+      walk(apply(s, turn, m), t + 1, prob, [...steps, { ...turn, us: true, map: m, stateKey, alternatives, forced: !!overrides[stateKey] && overrides[stateKey] === m }]);
       return;
     }
     const sg = turn.kind === 'pick' ? 1 : -1;
