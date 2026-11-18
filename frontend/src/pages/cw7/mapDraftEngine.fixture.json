@@ -1,0 +1,170 @@
+[
+ {
+  "rival_side": "HOST",
+  "draft_id": "ciTCn",
+  "events": [
+   {
+    "player": "HOST",
+    "actionType": "pick",
+    "chosenOptionId": "socotra"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "pick",
+    "chosenOptionId": "nomad"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "pick",
+    "chosenOptionId": "colosseum"
+   },
+   {
+    "player": "HOST",
+    "actionType": "pick",
+    "chosenOptionId": "fortress"
+   },
+   {
+    "player": "HOST",
+    "actionType": "ban",
+    "chosenOptionId": "tres-leches"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "ban",
+    "chosenOptionId": "crescent"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "snipe",
+    "chosenOptionId": "fortress"
+   },
+   {
+    "player": "HOST",
+    "actionType": "snipe",
+    "chosenOptionId": "colosseum"
+   },
+   {
+    "player": "NONE",
+    "actionType": null,
+    "chosenOptionId": null
+   },
+   {
+    "player": "NONE",
+    "actionType": "pick",
+    "chosenOptionId": "grand-bara"
+   }
+  ]
+ },
+ {
+  "rival_side": "GUEST",
+  "draft_id": "QRHrN",
+  "events": [
+   {
+    "player": "HOST",
+    "actionType": "pick",
+    "chosenOptionId": "grand-bara"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "pick",
+    "chosenOptionId": "nomad"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "pick",
+    "chosenOptionId": "socotra"
+   },
+   {
+    "player": "HOST",
+    "actionType": "pick",
+    "chosenOptionId": "crescent"
+   },
+   {
+    "player": "HOST",
+    "actionType": "ban",
+    "chosenOptionId": "colosseum"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "ban",
+    "chosenOptionId": "tres-leches"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "snipe",
+    "chosenOptionId": "crescent"
+   },
+   {
+    "player": "HOST",
+    "actionType": "snipe",
+    "chosenOptionId": "socotra"
+   },
+   {
+    "player": "NONE",
+    "actionType": null,
+    "chosenOptionId": null
+   },
+   {
+    "player": "NONE",
+    "actionType": "pick",
+    "chosenOptionId": "fortress"
+   }
+  ]
+ },
+ {
+  "rival_side": "GUEST",
+  "draft_id": "fuQMm",
+  "events": [
+   {
+    "player": "HOST",
+    "actionType": "pick",
+    "chosenOptionId": "socotra"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "pick",
+    "chosenOptionId": "fortress"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "pick",
+    "chosenOptionId": "nomad"
+   },
+   {
+    "player": "HOST",
+    "actionType": "pick",
+    "chosenOptionId": "colosseum"
+   },
+   {
+    "player": "HOST",
+    "actionType": "ban",
+    "chosenOptionId": "crescent"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "ban",
+    "chosenOptionId": "grand-bara"
+   },
+   {
+    "player": "GUEST",
+    "actionType": "snipe",
+    "chosenOptionId": "colosseum"
+   },
+   {
+    "player": "HOST",
+    "actionType": "snipe",
+    "chosenOptionId": "nomad"
+   },
+   {
+    "player": "NONE",
+    "actionType": null,
+    "chosenOptionId": null
+   },
+   {
+    "player": "NONE",
+    "actionType": "pick",
+    "chosenOptionId": "tres-leches"
+   }
+  ]
+ }
+]
