@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { isMapDraft } from './mapDrafts';
-import { fitRivalModel, analyzeScenarios } from './mapDraftEngine';
+import { fitRivalModel, analyzeScenarios, PA3_TURNS } from './mapDraftEngine';
 
 // Map Draft: likely final maps and our best line against one rival, before the match.
 // Our win chances per map are saved in this browser only (clan base + per rival changes).
@@ -96,21 +96,13 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
   // Same colours as the Execution Draft: host blue, guest gold; picks green, bans red
   const weHost = state.weFirst;
   const rivalShort = (rival.split(/\s+/)[0] || 'Rival');
-  const actor = (us) => ({ name: us ? 'Emputors' : rivalShort, color: (us === weHost) ? C.blue : C.gold });
   const ACTION = { pick: { text: 'Pick', color: C.green }, ban: { text: 'Ban', color: C.red }, snipe: { text: 'Snipe', color: '#ddd' } };
-  const stepBox = { display: 'inline-flex', alignItems: 'baseline', gap: '4px', border: '1px solid #3a3d48', backgroundColor: '#1e212b', borderRadius: '3px', padding: '2px 7px', fontSize: '11px', whiteSpace: 'nowrap' };
-  const step = (s, i) => {
-    const a = ACTION[s.kind];
-    const who = actor(s.us);
-    return (
-      <span key={i} style={stepBox}>
-        <b style={{ color: a.color }}>{a.text}</b>
-        <b style={{ color: who.color }}>({who.name}):</b>
-        <span style={{ color: '#fff' }}>{s.map}</span>
-        {!s.us && s.chance < 0.995 ? <span style={{ color: '#888' }}>{pct(s.chance)}</span> : null}
-      </span>
-    );
-  };
+  const tag3 = (name) => name.replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase();
+  // Turn columns: fixed order of the format, plus the Admin pick (map left over)
+  const columns = [...PA3_TURNS.map(t => {
+    const us = (t.side === 'A') === weHost;
+    return { kind: t.kind, us, who: us ? 'EMP' : tag3(rivalShort), color: (t.side === 'A') ? C.blue : C.gold };
+  }), { kind: 'pick', admin: true, who: 'ADM', color: '#888' }];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left', color: C.textMain }}>
@@ -199,7 +191,7 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
                     <div style={{ height: '6px', backgroundColor: C.border, borderRadius: '3px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: pct(Math.min(1, f.prob / Math.max(0.01, shownFinals[0].prob))), backgroundColor: tone === C.red ? C.red : C.gold }} />
                     </div>
-                    <div style={{ display: 'flex', gap: '6px' }}>
+                    <div style={{ display: 'flex', gap: '10px' }}>
                       {f.maps.map(m => (
                         <div key={m} style={{ flex: 1, minWidth: 0, textAlign: 'center', fontSize: '11px' }}>
                           {thumb(m, '100%', 42)}
@@ -220,31 +212,52 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
 
           <div style={card}>
             <span style={label}>Our line, by what the rival picks</span>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', marginTop: '6px' }}>
-              <thead>
-                <tr style={{ color: '#888', fontSize: '11px' }}><th style={{ textAlign: 'left', padding: '4px', width: '150px' }}>Rival picks</th><th style={{ textAlign: 'left', padding: '4px' }}>Draft</th><th style={{ textAlign: 'left', padding: '4px', width: '50px' }}>Win</th></tr>
-              </thead>
-              <tbody>
-                {result.lines.slice(0, 4).map(l => (
-                  <tr key={l.theirPicks.join('+')} style={{ borderTop: `1px solid ${C.border}` }}>
-                    <td style={{ padding: '6px 4px', verticalAlign: 'middle' }}><b style={{ color: '#fff' }}>{l.theirPicks.join(' + ')}</b><div style={{ color: '#888' }}>{pct(l.prob)} likely</div></td>
-                    <td style={{ padding: '6px 4px' }}>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'center' }}>
-                        {l.steps.map(step)}
-                        <span style={stepBox}>
-                          <b style={{ color: C.green }}>Pick</b>
-                          <b style={{ color: '#888' }}>(Admin):</b>
-                          <span style={{ color: '#fff' }}>{l.start}</span>
-                        </span>
-                      </div>
-                    </td>
-                    <td style={{ padding: '6px 4px', fontWeight: 'bold', color: toneOf(l.win) }}>{pct(l.win)}</td>
+            <div style={{ overflowX: 'auto', marginTop: '8px' }}>
+              <table style={{ borderCollapse: 'collapse', fontSize: '11px', minWidth: '100%' }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '4px 6px', textAlign: 'left', color: '#888', fontSize: '10px', fontWeight: 'normal', verticalAlign: 'bottom' }}>Chance</th>
+                    {columns.map((c, i) => (
+                      <th key={i} style={{ padding: '4px 3px', textAlign: 'center', borderLeft: c.kind !== (columns[i - 1] || {}).kind ? `1px solid ${C.border}` : 'none' }}>
+                        <div style={{ fontSize: '9px', color: '#666' }}>{i + 1}</div>
+                        <div style={{ color: ACTION[c.kind].color, fontWeight: 'bold', fontSize: '11px' }}>{ACTION[c.kind].text}</div>
+                        <div style={{ color: c.color, fontWeight: 'bold', fontSize: '11px' }}>{c.who}</div>
+                      </th>
+                    ))}
+                    <th style={{ padding: '4px 6px', textAlign: 'center', color: '#888', fontSize: '10px', fontWeight: 'normal', verticalAlign: 'bottom', borderLeft: `1px solid ${C.border}` }}>Win</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {result.lines.slice(0, 4).map(l => {
+                    const sniped = new Set(l.steps.filter(s => s.kind === 'snipe').map(s => s.map));
+                    const cells = [...l.steps, { kind: 'pick', admin: true, map: l.start }];
+                    return (
+                      <tr key={l.theirPicks.join('+')} style={{ borderTop: `1px solid ${C.border}` }}>
+                        <td style={{ padding: '6px', whiteSpace: 'nowrap' }}><b style={{ color: '#fff', fontSize: '13px' }}>{pct(l.prob)}</b></td>
+                        {cells.map((s, i) => {
+                          const lost = s.kind === 'pick' && !s.admin && sniped.has(s.map);
+                          const out = s.kind !== 'pick' || lost;
+                          return (
+                            <td key={i} style={{ padding: '6px 3px', textAlign: 'center', verticalAlign: 'top', width: '64px', borderLeft: (columns[i] || {}).kind !== (columns[i - 1] || {}).kind ? `1px solid ${C.border}` : 'none' }} title={lost ? `${s.map}: sniped` : s.map}>
+                              <div style={{ position: 'relative', display: 'inline-block' }}>
+                                {thumb(s.map, 46, 30)}
+                                {out && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(22,25,32,0.55)', borderRadius: '3px' }} />}
+                                {(s.kind === 'ban' || lost) && <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.red, fontWeight: 900, fontSize: '16px' }}>✕</span>}
+                              </div>
+                              <div style={{ fontSize: '10px', lineHeight: 1.15, color: out ? '#777' : '#fff', textDecoration: lost ? 'line-through' : 'none', marginTop: '2px' }}>{s.map}</div>
+                              {!s.us && !s.admin && s.chance < 0.995 && <div style={{ fontSize: '9px', color: '#888' }}>{pct(s.chance)}</div>}
+                            </td>
+                          );
+                        })}
+                        <td style={{ padding: '6px', textAlign: 'center', fontWeight: 'bold', fontSize: '13px', color: toneOf(l.win), borderLeft: `1px solid ${C.border}` }}>{pct(l.win)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
             <div style={{ fontSize: '10px', color: '#777', marginTop: '8px', lineHeight: 1.4 }}>
-              Blue = host, gold = guest. Rival moves show their chance. Each row shows the most likely way the draft goes once the rival has those picks. Admin pick = the map nobody chose; the match starts on it.
+              One row per rival double pick, with the most likely way the draft goes from there. Blue = host, gold = guest. Small % = chance of the rival's move. Dimmed = banned, sniped or used to snipe; the maps left bright are the ones played. ADM = the map nobody chose; the match starts on it.
             </div>
           </div>
         </div>
