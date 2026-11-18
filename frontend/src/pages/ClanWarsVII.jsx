@@ -29,6 +29,7 @@ const getCivImage = (civName) => {
 
 function ClanWarsVII() {
   const [activeTab, setActiveTab] = useState('executionDraft');
+  const [incomingMaps, setIncomingMaps] = useState(null); // maps sent from Map Draft to Civ Planner
 
   // Access: plans and scouting are readable by clan members only (RLS). 'anon' | 'member' | 'other'
   const [access, setAccess] = useState(null);
@@ -1214,12 +1215,12 @@ function ClanWarsVII() {
 
         {/* --- VIEW: CIV PLANNER --- */}
         {activeTab === 'civPlanner' && (
-            <CivPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} draftPlans={draftPlans} isAdmin={isAdmin} rivalNames={rivalNames} getCivImage={getCivImage} getMapImageName={getMapImageName} />
+            <CivPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} draftPlans={draftPlans} isAdmin={isAdmin} rivalNames={rivalNames} getCivImage={getCivImage} getMapImageName={getMapImageName} incoming={incomingMaps} onIncomingDone={() => setIncomingMaps(null)} />
         )}
 
         {/* --- VIEW: MAP DRAFT --- */}
         {activeTab === 'mapDraft' && (
-            <MapDraftPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} rivalDrafts={rivalDrafts} getMapImageName={getMapImageName} onOpenCivPlanner={() => setActiveTab('civPlanner')} />
+            <MapDraftPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} rivalDrafts={rivalDrafts} getMapImageName={getMapImageName} onSendToCivPlanner={(maps) => { setIncomingMaps({ maps, at: Date.now() }); setActiveTab('civPlanner'); }} />
         )}
 
         {/* --- VIEW: PLAN CREATOR --- */}

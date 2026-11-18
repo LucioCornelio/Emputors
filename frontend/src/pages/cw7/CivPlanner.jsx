@@ -55,7 +55,7 @@ const analyze = (sc, draftPlans, roleEdits) => {
   return { planOf, rolesOf, slot, usedBy, playerOf, summaryOf, mapText, mapsText };
 };
 
-export default function CivPlanner({ C, MAP_POOL, CIVS, draftPlans, getCivImage, getMapImageName, isAdmin, rivalNames }) {
+export default function CivPlanner({ C, MAP_POOL, CIVS, draftPlans, getCivImage, getMapImageName, isAdmin, rivalNames, incoming, onIncomingDone }) {
   const [sandbox, setSandbox] = useState(load);
   const [matches, setMatches] = useState([]);
   const [matchId, setMatchId] = useState(() => { try { return localStorage.getItem(MATCH_KEY) || ''; } catch { return ''; } });
@@ -64,6 +64,7 @@ export default function CivPlanner({ C, MAP_POOL, CIVS, draftPlans, getCivImage,
   const [saveStatus, setSaveStatus] = useState('');
   const [editing, setEditing] = useState(null); // editKey of the role whose list is being edited
   const [copied, setCopied] = useState('');
+  const [loaded, setLoaded] = useState(false);
   const dirty = useRef(new Set());
   const timer = useRef(null);
 
@@ -77,8 +78,9 @@ export default function CivPlanner({ C, MAP_POOL, CIVS, draftPlans, getCivImage,
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase.from(TABLE).select('*').order('match_date', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
-      if (error) { console.error('Error loading civ planner matches:', error); return; }
+      if (error) { console.error('Error loading civ planner matches:', error); setLoaded(true); return; }
       setMatches(data || []);
+      setLoaded(true);
       if (data && !data.some(m => m.id === matchId)) setMatchId('');
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,6 +143,25 @@ export default function CivPlanner({ C, MAP_POOL, CIVS, draftPlans, getCivImage,
     if (!match) setSandbox(s => ({ ...s, role_edits: fn(s.role_edits || {}) }));
     else patchMatch(m => ({ ...m, role_edits: fn(m.role_edits || {}) }));
   };
+
+  // Maps sent from the Map Draft tab: open that scenario in the selected match (a new one if
+  // needed and the user is admin), otherwise put them in the sandbox.
+  useEffect(() => {
+    if (!loaded || !incoming?.maps?.length) return;
+    const wanted = incoming.maps;
+    const same = (sc) => (sc?.maps || []).length === wanted.length && wanted.every(m => sc.maps.includes(m));
+    if (match && scenarios.some(same)) setScIdx(scenarios.findIndex(same));
+    else if (match && isAdmin) {
+      patchMatch(m => ({ ...m, scenarios: [...(m.scenarios || []), { ...EMPTY_SCENARIO, maps: wanted.slice(0, m.mode === 'PA3' ? 3 : 5) }] }));
+      setScIdx(scenarios.length);
+    } else {
+      if (match) setMatchId('');
+      setSandbox(s => ({ ...s, mode: wanted.length > 3 ? 'BO5' : 'PA3', maps: wanted }));
+    }
+    setView('plan');
+    if (onIncomingDone) onIncomingDone();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded, incoming]);
 
   // civ -> number of selected maps whose plan suggests it (overlaps)
   const demand = {};

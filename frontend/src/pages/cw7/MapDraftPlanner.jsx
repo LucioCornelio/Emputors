@@ -5,7 +5,6 @@ import { fitRivalModel, analyzeScenarios } from './mapDraftEngine';
 // Map Draft: likely final maps and our best line against one rival, before the match.
 // Our win chances per map are saved in this browser only (clan base + per rival changes).
 const STORAGE_KEY = 'cw7-map-draft-v1';
-const CIV_PLANNER_KEY = 'cw7-civ-planner-v1';
 const DEFAULT_BASE = { Colosseum: 60, Socotra: 58, 'Tres Leches': 56, 'Grand Bara': 52, Nomad: 50, Fortress: 45, Crescent: 42 };
 const EMPTY = { rival: '', weFirst: true, firstPick: {}, base: DEFAULT_BASE, ratings: {} };
 
@@ -16,7 +15,7 @@ const pct = (x) => `${Math.round(x * 100)}%`;
 
 const KIND = { pick: 'PICK', ban: 'BAN', snipe: 'SNIPE' };
 
-export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMapImageName, onOpenCivPlanner }) {
+export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMapImageName, onSendToCivPlanner }) {
   const [state, setState] = useState(load);
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* storage unavailable */ }
@@ -54,14 +53,6 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
   const resetRival = () => setState(s => ({ ...s, ratings: { ...(s.ratings || {}), [rival]: {} } }));
   const saveAsBase = () => setState(s => ({ ...s, base: { ...base, ...own }, ratings: { ...(s.ratings || {}), [rival]: {} } }));
   const setFirstPick = (m) => setState(s => ({ ...s, firstPick: { ...(s.firstPick || {}), [rival]: m } }));
-
-  const sendToCivPlanner = (maps) => {
-    try {
-      const prev = JSON.parse(localStorage.getItem(CIV_PLANNER_KEY)) || {};
-      localStorage.setItem(CIV_PLANNER_KEY, JSON.stringify({ ...prev, mode: 'PA3', maps }));
-    } catch { /* storage unavailable */ }
-    onOpenCivPlanner();
-  };
 
   const u = model.utility;
   const rank = [...MAP_POOL].sort((a, b) => u[b] - u[a]);
@@ -208,7 +199,7 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
                         </div>
                       ))}
                     </div>
-                    <button onClick={() => sendToCivPlanner(f.maps)} style={{ background: 'transparent', border: `1px solid ${C.gold}`, color: C.gold, borderRadius: '4px', padding: '4px 8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>Send to Civ Planner</button>
+                    <button onClick={() => onSendToCivPlanner(f.maps)} style={{ background: 'transparent', border: `1px solid ${C.gold}`, color: C.gold, borderRadius: '4px', padding: '4px 8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>Send to Civ Planner</button>
                   </div>
                 );
               })}
