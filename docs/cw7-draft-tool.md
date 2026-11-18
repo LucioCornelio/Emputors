@@ -24,7 +24,12 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
 - Offline sandbox to build a "plan A": choose PA3 or BO5 and the maps, pick a plan per map, then click suggested civs (role priority lists) to fill each role.
 - A civ can be used only once across all maps and roles: elsewhere it shows crossed out with the map name, and clicking it moves it. Civs suggested on more than one selected map have a gold frame; essentials a red outline. "Plan A" strip summarises the assignment.
 - Summary below the maps: per role the favourite (assigned civ) and up to 3 alternatives (next civs of the role list not used anywhere), plus a player name per slot. Copy buttons (all maps, or one map) put a WhatsApp-ready text (bold with `*`) on the clipboard.
-- No aoe2cm connection, no picks or bans. Saved only in the browser (localStorage `cw7-civ-planner-v1`), no tables.
+- No aoe2cm connection, no picks or bans.
+- Match selector: "Sandbox (this browser only)" (localStorage `cw7-civ-planner-v1`) or a saved match from `cw7_civ_scenarios` (one row per match: name, rival, PA3/BO5, date, `scenarios` jsonb, `role_edits` jsonb). Last selected match in localStorage `cw7-civ-planner-match`.
+- A match holds several scenarios (tabs A, B, C...), one per possible map draft outcome. Each scenario = maps, plan per map, assigned civs and players. "+ Scenario" adds an empty one, "Duplicate" copies the current one. "Save as match" turns the sandbox into a new match (scenario A).
+- "Edit list" on a role: reorder, remove or add civs for this match only (`role_edits`, key `map|plan|role`); the plan in Plan Creator is unchanged. Edited roles show "MATCH EDIT" and can be reset.
+- Compare: map and role rows against scenarios; gold = same civ as most scenarios, blue = different. Copy per scenario or all scenarios (WhatsApp text).
+- Admin edits and changes save automatically (debounced); members see saved matches read only (RLS: members read, admin insert/update/delete).
 
 ## Rival scouting (`cw7_rival_drafts`, `cw7_rival_profiles`)
 

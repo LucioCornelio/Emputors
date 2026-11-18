@@ -31,12 +31,14 @@ function ClanWarsVII() {
 
   // Access: plans and scouting are readable by clan members only (RLS). 'anon' | 'member' | 'other'
   const [access, setAccess] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     const checkAccess = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) { setAccess('anon'); return; }
       const { data: role } = await supabase.rpc('current_clan_role');
       setAccess(role === 'admin' || role === 'member' ? 'member' : 'other');
+      setIsAdmin(role === 'admin');
     };
     checkAccess();
   }, []);
@@ -1210,7 +1212,7 @@ function ClanWarsVII() {
 
         {/* --- VIEW: CIV PLANNER --- */}
         {activeTab === 'civPlanner' && (
-            <CivPlanner C={C} MAP_POOL={MAP_POOL} draftPlans={draftPlans} getCivImage={getCivImage} getMapImageName={getMapImageName} />
+            <CivPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} draftPlans={draftPlans} isAdmin={isAdmin} rivalNames={rivalNames} getCivImage={getCivImage} getMapImageName={getMapImageName} />
         )}
 
         {/* --- VIEW: PLAN CREATOR --- */}

@@ -22,7 +22,7 @@ Website of the Emputors clan (Age of Empires II). Owner and only maintainer: Jav
 | Tournaments > Hall of Fame | `/tournaments/hall-of-fame` | inline in `App.jsx` | Placeholder | |
 | Academy > Build Orders | `/academy/build-orders` | `pages/BuildOrders.jsx` | List with filters (civ, map, strategy group from `strategy_groups`, difficulty, search, With VOD) | `build_orders` |
 | | `/academy/build-orders/:buildId` | `pages/BuildOrderDetail.jsx` | Build order detail: age sections, step rows, in-game villager counter, resource badges, notes behind (i), Game Mode (starts at Dark Age, page down bars), wide layout with zoom and A- / A+ size control | `build_orders`, `clan_roles` |
-| Tools > Clan Wars VII (3v3) | `/tools/clan-wars-vii` | `pages/ClanWarsVII.jsx` + `pages/cw7/*` | Tournament draft tool (see `cw7-draft-tool.md`) | `cw7_draft_plans`, `cw7_rival_drafts`, `cw7_rival_profiles`, `public/db_3v3.json` |
+| Tools > Clan Wars VII (3v3) | `/tools/clan-wars-vii` | `pages/ClanWarsVII.jsx` + `pages/cw7/*` | Tournament draft tool (see `cw7-draft-tool.md`) | `cw7_draft_plans`, `cw7_civ_scenarios`, `cw7_rival_drafts`, `cw7_rival_profiles`, `public/db_3v3.json` |
 | Tools > Advanced Search | `/tools/advanced-search` | `pages/AdvancedSearch.jsx` | Civ finder by tech tree: combinable filters (include, exclude, modes), civ tags (full cavalry, foot archer, cavalry archer), mark civs as used | `public/techtree.json`, `public/civtags.json` |
 | Tools > LEAT11 Draft | `/tools/leat11` | `pages/Leat11Draft.jsx` + `engine.js` | LEAT 11 draft assistant: loads aoe2cm drafts (socket + `/api/draft`), suggests bans and picks (God tier, counters, roster killer, anti-flex, safe ban) | `public/db.json` (counters matrix, per-map stats from ladder and pro VODs) |
 | Clan > Roster | `/clan/roster` | inline in `App.jsx` | Placeholder | |
@@ -41,6 +41,7 @@ Shared: `components/Navbar.jsx` (menu, Discord login), `data/iconPaths.js` (`ICO
 | `match_results` | 0 | LEAT 11 results: teams, score, `map_1_data`..`map_3_data` (jsonb), `stage`, `youtube_link`, `submitted_by`. |
 | `cw7_draft_plans` | 8 | `map_name`, `plan_name`, `roles` (jsonb: role, priority list, essential list). |
 | `cw7_rival_drafts` | 3 | Rival drafts loaded from aoe2cm: `rival_name`, `draft_id`, `rival_side`, `events`, `turns`. |
+| `cw7_civ_scenarios` | 0 | Civ Planner matches: `match_name`, `rival_name`, `mode`, `match_date`, `scenarios` (jsonb), `role_edits` (jsonb). |
 | `cw7_rival_profiles` | 1 | `rival_name` (key), `team_name`, `map_stats` (civs played per map). |
 | `backup.*` | | Copies taken before data migrations (schema not exposed to the API). |
 
@@ -55,6 +56,7 @@ Applied 12 Nov 2026 (`docs/sql/2026-11-12-rls-by-role.sql`, backups in `backup.*
 | `clan_roles` | logged-in users | admin |
 | `build_orders` | public | insert/update admin (soft delete, no DELETE) |
 | `cw7_draft_plans` | members | admin |
+| `cw7_civ_scenarios` | members | admin |
 | `cw7_rival_drafts` | members | insert/delete members |
 | `cw7_rival_profiles` | members | insert/update members |
 | `match_results` | public | insert: admin or a player of either team (`leat11_team_members`); update/delete: admin |
