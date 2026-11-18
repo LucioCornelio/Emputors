@@ -34,7 +34,8 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
   const own = (state.ratings || {})[rival] || {};
   const rating = (m) => own[m] ?? base[m] ?? 50;
   const ours = Object.fromEntries(MAP_POOL.map(m => [m, rating(m) / 100]));
-  const firstPick = (state.firstPick || {})[rival] || '';
+  // Default first pick: our best rated map (the model's ranking is shown next to each option)
+  const firstPick = (state.firstPick || {})[rival] || [...MAP_POOL].sort((a, b) => rating(b) - rating(a))[0];
 
   const model = useMemo(() => fitRivalModel(drafts, MAP_POOL), [drafts, MAP_POOL]);
   const oursKey = MAP_POOL.map(m => ours[m]).join(',');
@@ -73,7 +74,7 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
 
   const card = { backgroundColor: C.card, border: `1px solid ${C.border}`, borderRadius: '6px', padding: '14px 15px' };
   const label = { fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: C.cyan, letterSpacing: '0.5px' };
-  const seg = (on) => ({ padding: '5px 12px', fontSize: '12px', cursor: 'pointer', color: on ? '#111' : '#888', backgroundColor: on ? C.cyan : 'transparent', fontWeight: on ? 'bold' : 'normal' });
+  const seg = (on, color = C.cyan) => ({ padding: '5px 12px', fontSize: '12px', cursor: 'pointer', color: on ? '#111' : '#888', backgroundColor: on ? color : 'transparent', fontWeight: on ? 'bold' : 'normal' });
   const thumb = (m, w = 46, h = 30) => (
     <img src={`/maps/${getMapImageName(m)}.png`} alt={m} style={{ width: w, height: h, objectFit: 'cover', borderRadius: '3px', border: '1px solid #444', flexShrink: 0 }} onError={(e) => { e.target.src = '/maps/Any.png'; }} />
   );
@@ -92,12 +93,21 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
   const otherFinals = 1 - shownFinals.reduce((a, f) => a + f.prob, 0);
   const toneOf = (w) => (w >= result.winChance + 0.015 ? C.green : w <= result.winChance - 0.015 ? C.red : '#ddd');
 
+  // Same colours as the Execution Draft: host blue, guest gold; picks green, bans red
+  const weHost = state.weFirst;
+  const rivalShort = (rival.split(/\s+/)[0] || 'Rival');
+  const actor = (us) => ({ name: us ? 'Emputors' : rivalShort, color: (us === weHost) ? C.blue : C.gold });
+  const ACTION = { pick: { text: 'Pick', color: C.green }, ban: { text: 'Ban', color: C.red }, snipe: { text: 'Snipe', color: '#ddd' } };
+  const stepBox = { display: 'inline-flex', alignItems: 'baseline', gap: '4px', border: '1px solid #3a3d48', backgroundColor: '#1e212b', borderRadius: '3px', padding: '2px 7px', fontSize: '11px', whiteSpace: 'nowrap' };
   const step = (s, i) => {
-    const color = s.us ? C.cyan : C.red;
+    const a = ACTION[s.kind];
+    const who = actor(s.us);
     return (
-      <span key={i} style={{ display: 'inline-flex', alignItems: 'center', border: `1px solid ${color}`, backgroundColor: `${color}22`, borderRadius: '3px', overflow: 'hidden', fontSize: '11px' }}>
-        <i style={{ fontStyle: 'normal', fontWeight: 'bold', backgroundColor: color, color: '#111', padding: '2px 5px' }}>{KIND[s.kind]}</i>
-        <b style={{ padding: '2px 6px', color: '#fff' }}>{s.map}{!s.us && s.chance < 0.995 ? <span style={{ color: '#aaa', fontWeight: 'normal' }}> {pct(s.chance)}</span> : null}</b>
+      <span key={i} style={stepBox}>
+        <b style={{ color: a.color }}>{a.text}</b>
+        <b style={{ color: who.color }}>({who.name}):</b>
+        <span style={{ color: '#fff' }}>{s.map}</span>
+        {!s.us && s.chance < 0.995 ? <span style={{ color: '#888' }}>{pct(s.chance)}</span> : null}
       </span>
     );
   };
@@ -115,18 +125,17 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
           <span style={label}>Format</span>
           <span style={{ fontSize: '12px', color: '#fff', fontWeight: 'bold' }}>PA3</span>
         </div>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <span style={label}>First pick</span>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }} title="The host has the first pick">
+          <span style={label}>Emputors are</span>
           <div style={{ display: 'inline-flex', border: '1px solid #444', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#1e212b' }}>
-            <span style={seg(state.weFirst)} onClick={() => setState(s => ({ ...s, weFirst: true }))}>Emputors</span>
-            <span style={seg(!state.weFirst)} onClick={() => setState(s => ({ ...s, weFirst: false }))}>Rival</span>
+            <span style={seg(state.weFirst, C.blue)} onClick={() => setState(s => ({ ...s, weFirst: true }))}>Host</span>
+            <span style={seg(!state.weFirst, C.gold)} onClick={() => setState(s => ({ ...s, weFirst: false }))}>Guest</span>
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <span style={label}>Our first pick</span>
           <select value={firstPick} onChange={(e) => setFirstPick(e.target.value)} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', borderRadius: '4px', padding: '5px 8px', fontSize: '12px' }}>
-            <option value="">Best ({result.firstPicks[0]?.map})</option>
-            {result.firstPicks.map(f => <option key={f.map} value={f.map}>{f.map} ({pct(f.win)})</option>)}
+            {result.firstPicks.map((f, i) => <option key={f.map} value={f.map}>{f.map} ({(f.win * 100).toFixed(1)}%{i === 0 ? ', model best' : ''})</option>)}
           </select>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
@@ -222,9 +231,10 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
                     <td style={{ padding: '6px 4px' }}>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'center' }}>
                         {l.steps.map(step)}
-                        <span style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid #888', borderRadius: '3px', overflow: 'hidden', fontSize: '11px' }}>
-                          <i style={{ fontStyle: 'normal', fontWeight: 'bold', backgroundColor: '#888', color: '#111', padding: '2px 5px' }}>LEFT</i>
-                          <b style={{ padding: '2px 6px', color: '#fff' }}>{l.start}</b>
+                        <span style={stepBox}>
+                          <b style={{ color: C.green }}>Pick</b>
+                          <b style={{ color: '#888' }}>(Admin):</b>
+                          <span style={{ color: '#fff' }}>{l.start}</span>
                         </span>
                       </div>
                     </td>
@@ -234,7 +244,7 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
               </tbody>
             </table>
             <div style={{ fontSize: '10px', color: '#777', marginTop: '8px', lineHeight: 1.4 }}>
-              Cyan = us, red = rival with the chance of their most likely move. Each row shows the most likely way the draft goes once the rival has those picks. Left = the map nobody chose; the match starts on it.
+              Blue = host, gold = guest. Rival moves show their chance. Each row shows the most likely way the draft goes once the rival has those picks. Admin pick = the map nobody chose; the match starts on it.
             </div>
           </div>
         </div>

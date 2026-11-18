@@ -46,7 +46,7 @@ export const rivalChoices = (draft, pool) => {
 };
 
 // Utility per map (0 = neutral). Picks reward a high value, bans and snipes a low one.
-export const fitRivalModel = (drafts, pool, { prior = 1, iterations = 1500, rate = 0.05 } = {}) => {
+export const fitRivalModel = (drafts, pool, { prior = 2, iterations = 1500, rate = 0.05 } = {}) => {
   const choices = (drafts || []).flatMap(d => rivalChoices(d, pool));
   const u = Object.fromEntries(pool.map(m => [m, 0]));
   for (let it = 0; it < iterations; it++) {

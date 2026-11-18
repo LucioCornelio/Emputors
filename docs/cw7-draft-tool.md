@@ -33,7 +33,8 @@ Route `/tools/clan-wars-vii`. Files: `pages/ClanWarsVII.jsx` (page, plan view, e
 
 ## Map Draft (`pages/cw7/MapDraftPlanner.jsx`, `pages/cw7/mapDraftEngine.js`)
 
-- Pre-match scenario generator for the map draft against one rival (PA3 only: pick A, pick B, pick B, pick A, ban A, ban B, snipe B, snipe A; the map left over is the starting map).
+- Pre-match scenario generator for the map draft against one rival (PA3 only: pick A, pick B, pick B, pick A, ban A, ban B, snipe B, snipe A, where A = host; the map left over is the Admin pick and starting map). Colours as in the Execution Draft: host blue, guest gold, picks green, bans red.
+- "Our first pick" defaults to our best rated map; each option shows the model's match win chance (the differences are usually under one point, so it is a guide, not a rule).
 - Our side: win chance per map (clan base, changed per rival), saved in this browser only (localStorage `cw7-map-draft-v1`). Match win = chance to win at least 2 of the 3 maps.
 - Rival model: every pick, ban and snipe in their map drafts is a choice among the maps available at that moment (a snipe only compares the two maps of the pair). Fitted as a choice model with a prior (`fitRivalModel`); shown as a preference order with Favourite / Neutral / Low tags.
 - Engine (`analyzeScenarios`): enumerates the whole draft tree; our moves maximise the match win chance, rival moves follow the model with probabilities (not a perfect opponent). Outputs the likely final map sets, the win chance of each possible first pick of ours (can be fixed in "Our first pick") and our line grouped by the rival's picks.
