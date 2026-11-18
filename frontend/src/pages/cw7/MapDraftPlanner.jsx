@@ -1,10 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { supabase } from '../../supabaseClient';
 import { isMapDraft } from './mapDrafts';
 import { fitRivalModel, analyzeScenarios, PA3_TURNS } from './mapDraftEngine';
 
 // Map Draft: likely final maps and our best line against one rival, before the match.
-// Our win chances per map are saved in this browser only (clan base + per rival changes).
+// Sandbox: saved in this browser only. Matches: the map draft setup is saved as JSON in the
+// map_draft column of the Civ Planner match (cw7_civ_scenarios); members read, admin writes.
+// The clan base of win chances stays in this browser.
 const STORAGE_KEY = 'cw7-map-draft-v1';
+const MATCH_KEY = 'cw7-map-draft-match';
+const CIV_PLANNER_MATCH_KEY = 'cw7-civ-planner-match';
+const TABLE = 'cw7_civ_scenarios';
 const DEFAULT_BASE = { Colosseum: 60, Socotra: 58, 'Tres Leches': 56, 'Grand Bara': 52, Nomad: 50, Fortress: 45, Crescent: 42 };
 const EMPTY = { rival: '', weFirst: true, firstPick: {}, base: DEFAULT_BASE, ratings: {} };
 
@@ -15,11 +21,55 @@ const pct = (x) => `${Math.round(x * 100)}%`;
 
 const KIND = { pick: 'PICK', ban: 'BAN', snipe: 'SNIPE' };
 
-export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMapImageName, onSendToCivPlanner }) {
-  const [state, setState] = useState(load);
+export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMapImageName, onSendToCivPlanner, isAdmin }) {
+  const [sandbox, setSandbox] = useState(load);
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* storage unavailable */ }
-  }, [state]);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sandbox)); } catch { /* storage unavailable */ }
+  }, [sandbox]);
+
+  // --- matches (shared with the Civ Planner) ---
+  const [matches, setMatches] = useState([]);
+  const [matchId, setMatchId] = useState(() => { try { return localStorage.getItem(MATCH_KEY) || ''; } catch { return ''; } });
+  const [saveStatus, setSaveStatus] = useState('');
+  const timer = useRef(null);
+  useEffect(() => {
+    try { localStorage.setItem(MATCH_KEY, matchId); } catch { /* storage unavailable */ }
+  }, [matchId]);
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.from(TABLE).select('*').order('match_date', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
+      if (error) { console.error('Error loading matches:', error); return; }
+      setMatches(data || []);
+    })();
+  }, []);
+  const match = matches.find(m => m.id === matchId) || null;
+
+  const saveMatch = (m) => {
+    clearTimeout(timer.current);
+    setSaveStatus('pending');
+    timer.current = setTimeout(async () => {
+      setSaveStatus('saving');
+      const { data, error } = await supabase.from(TABLE).update({ match_name: m.match_name, rival_name: m.rival_name || null, map_draft: m.map_draft, updated_at: new Date().toISOString() }).eq('id', m.id).select('id');
+      setSaveStatus(error || !data?.length ? 'error' : 'saved');
+      if (error) console.error('Save failed', error);
+    }, 700);
+  };
+  const patchMatch = (fn) => {
+    if (!match || !isAdmin) return;
+    const next = fn(match);
+    setMatches(ms => ms.map(m => (m.id === next.id ? next : m)));
+    saveMatch(next);
+  };
+
+  // Active setup: the sandbox, or the selected match (with the clan base from this browser)
+  const state = match ? { ...EMPTY, ...(match.map_draft || {}), rival: match.rival_name || (match.map_draft || {}).rival || '', base: sandbox.base } : sandbox;
+  const setState = (fn) => {
+    if (!match) { setSandbox(fn); return; }
+    patchMatch(m => {
+      const { base: _base, ...next } = fn(state);
+      return { ...m, rival_name: next.rival || m.rival_name, map_draft: next };
+    });
+  };
 
   const mapDraftsByRival = useMemo(() => {
     const out = {};
@@ -53,10 +103,35 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
     return { ...s, ratings: { ...(s.ratings || {}), [rival]: r } };
   });
   const resetRival = () => setState(s => ({ ...s, ratings: { ...(s.ratings || {}), [rival]: {} } }));
-  const saveAsBase = () => setState(s => ({ ...s, base: { ...base, ...own }, ratings: { ...(s.ratings || {}), [rival]: {} } }));
+  const saveAsBase = () => {
+    setSandbox(s => ({ ...s, base: { ...base, ...own } }));
+    setState(s => ({ ...s, ratings: { ...(s.ratings || {}), [rival]: {} } }));
+  };
   const setFirstPick = (m) => setState(s => ({ ...s, firstPick: { ...(s.firstPick || {}), [rival]: m } }));
   const setChoice = (k, m) => setState(s => ({ ...s, choices: { ...(s.choices || {}), [rival]: { ...((s.choices || {})[rival] || {}), [k]: m } } }));
   const resetChoices = () => setState(s => ({ ...s, choices: { ...(s.choices || {}), [rival]: {} } }));
+
+  const newMatch = async () => {
+    if (!isAdmin) return;
+    const { base: _base, ...setup } = state;
+    const { data, error } = await supabase.from(TABLE).insert({ match_name: 'New match', rival_name: rival || null, mode: 'PA3', map_draft: { ...setup, rival } }).select('*');
+    if (error || !data?.length) { console.error('Create match failed', error); setSaveStatus('error'); return; }
+    setMatches(ms => [data[0], ...ms]);
+    setMatchId(data[0].id);
+    setSaveStatus('saved');
+  };
+  const deleteMatch = async () => {
+    if (!match || !isAdmin || !window.confirm(`Permanently delete the match "${match.match_name}"? Its Civ Planner scenarios are deleted too.`)) return;
+    const { data, error } = await supabase.from(TABLE).delete().eq('id', match.id).select('id');
+    if (error || !data?.length) { console.error('Delete match failed', error); setSaveStatus('error'); return; }
+    setMatches(ms => ms.filter(m => m.id !== match.id));
+    setMatchId('');
+    setSaveStatus('');
+  };
+  const sendToCivPlanner = (maps) => {
+    try { if (match) localStorage.setItem(CIV_PLANNER_MATCH_KEY, match.id); } catch { /* storage unavailable */ }
+    onSendToCivPlanner(maps);
+  };
 
   const u = model.utility;
   const rank = [...MAP_POOL].sort((a, b) => u[b] - u[a]);
@@ -110,6 +185,23 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left', color: C.textMain }}>
+      <div style={{ ...card, display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', padding: '10px 15px' }}>
+        <span style={label}>Match</span>
+        <select value={matchId} onChange={(e) => { setMatchId(e.target.value); setSaveStatus(''); }} style={{ backgroundColor: '#1e212b', color: C.cyan, border: '1px solid #444', borderRadius: '4px', padding: '5px 8px', fontSize: '12px', minWidth: '240px' }}>
+          <option value="">Sandbox (this browser only)</option>
+          {matches.map(m => <option key={m.id} value={m.id}>{m.match_name}{m.rival_name ? ` vs ${m.rival_name}` : ''}{m.match_date ? ` (${m.match_date})` : ''}</option>)}
+        </select>
+        {isAdmin && <button onClick={newMatch} style={{ background: 'transparent', border: `1px solid ${C.cyan}`, color: C.cyan, borderRadius: '4px', padding: '4px 10px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>{match ? '+ New match' : '+ Save as match'}</button>}
+        {match && isAdmin && (
+          <input value={match.match_name} onChange={(e) => patchMatch(m => ({ ...m, match_name: e.target.value }))} style={{ backgroundColor: '#1e212b', color: '#fff', border: '1px solid #444', borderRadius: '4px', padding: '4px 8px', fontSize: '12px', width: '200px' }} />
+        )}
+        <span style={{ fontSize: '11px', color: '#888' }}>
+          {match ? (isAdmin ? 'Saved for the clan, shared with the Civ Planner match. Changes save automatically.' : 'Read only: only the admin can change matches.') : 'Sandbox: only in this browser.'}
+        </span>
+        {saveStatus && <span style={{ fontSize: '11px', fontWeight: 'bold', color: saveStatus === 'error' ? C.red : saveStatus === 'saved' ? C.green : '#888' }}>{{ pending: 'Unsaved', saving: 'Saving', saved: 'Saved', error: 'Save failed' }[saveStatus]}</span>}
+        {match && isAdmin && <button onClick={deleteMatch} style={{ marginLeft: 'auto', background: 'transparent', border: `1px solid ${C.red}`, color: C.red, borderRadius: '4px', padding: '4px 10px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>DELETE MATCH</button>}
+      </div>
+
       <div style={{ ...card, display: 'flex', gap: '18px', alignItems: 'center', flexWrap: 'wrap', padding: '10px 15px' }}>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <span style={label}>Rival</span>
@@ -204,7 +296,7 @@ export default function MapDraftPlanner({ C, MAP_POOL, CIVS, rivalDrafts, getMap
                         </div>
                       ))}
                     </div>
-                    <button onClick={() => onSendToCivPlanner(f.maps)} style={{ background: 'transparent', border: `1px solid ${C.gold}`, color: C.gold, borderRadius: '4px', padding: '4px 8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>Send to Civ Planner</button>
+                    <button onClick={() => sendToCivPlanner(f.maps)} style={{ background: 'transparent', border: `1px solid ${C.gold}`, color: C.gold, borderRadius: '4px', padding: '4px 8px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer' }}>Send to Civ Planner</button>
                   </div>
                 );
               })}

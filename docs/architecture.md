@@ -41,7 +41,7 @@ Shared: `components/Navbar.jsx` (menu, Discord login), `data/iconPaths.js` (`ICO
 | `match_results` | 0 | LEAT 11 results: teams, score, `map_1_data`..`map_3_data` (jsonb), `stage`, `youtube_link`, `submitted_by`. |
 | `cw7_draft_plans` | 8 | `map_name`, `plan_name`, `roles` (jsonb: role, priority list, essential list). |
 | `cw7_rival_drafts` | 3 | Rival drafts loaded from aoe2cm: `rival_name`, `draft_id`, `rival_side`, `events`, `turns`. |
-| `cw7_civ_scenarios` | 0 | Civ Planner matches: `match_name`, `rival_name`, `mode`, `match_date`, `scenarios` (jsonb), `role_edits` (jsonb). |
+| `cw7_civ_scenarios` | 0 | Civ Planner and Map Draft matches: `match_name`, `rival_name`, `mode`, `match_date`, `scenarios` (jsonb), `role_edits` (jsonb), `map_draft` (jsonb, Map Draft setup; added 18 Nov 2026, backup `backup.cw7_civ_scenarios_20261118`). |
 | `cw7_rival_profiles` | 1 | `rival_name` (key), `team_name`, `map_stats` (civs played per map). |
 | `backup.*` | | Copies taken before data migrations (schema not exposed to the API). |
 

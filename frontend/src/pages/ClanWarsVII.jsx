@@ -1220,7 +1220,7 @@ function ClanWarsVII() {
 
         {/* --- VIEW: MAP DRAFT --- */}
         {activeTab === 'mapDraft' && (
-            <MapDraftPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} rivalDrafts={rivalDrafts} getMapImageName={getMapImageName} onSendToCivPlanner={(maps) => { setIncomingMaps({ maps, at: Date.now() }); setActiveTab('civPlanner'); }} />
+            <MapDraftPlanner C={C} MAP_POOL={MAP_POOL} CIVS={CIVS} rivalDrafts={rivalDrafts} getMapImageName={getMapImageName} isAdmin={isAdmin} onSendToCivPlanner={(maps) => { setIncomingMaps({ maps, at: Date.now() }); setActiveTab('civPlanner'); }} />
         )}
 
         {/* --- VIEW: PLAN CREATOR --- */}
