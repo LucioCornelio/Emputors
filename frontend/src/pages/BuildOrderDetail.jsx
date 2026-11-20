@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { iconPath } from '../data/iconPaths';
-import { startVils, underConstruction } from '../data/buildOrderFilters';
+import { startVils, showStartBadge, underConstruction } from '../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
@@ -832,7 +832,7 @@ const BuildOrderDetail = () => {
                 Under Construction
               </span>
             )}
-            {startVils(build) !== 3 && (
+            {showStartBadge(startVils(build)) && (
               <span title={`The game starts with ${startVils(build)} villagers`} style={{ padding: '3px 9px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(0,200,200,0.12)', border: '1px solid rgba(0,200,200,0.4)', color: '#00c8c8', whiteSpace: 'nowrap' }}>
                 {startVils(build)} Vils Start
               </span>

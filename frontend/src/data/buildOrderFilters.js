@@ -20,6 +20,9 @@ export const startVils = (b) => {
   return n;
 };
 
+// The start badge is only for unusual starts: 3 is the normal start and 6 is the usual Chinese start
+export const showStartBadge = (n) => n !== 3 && n !== 6;
+
 // Builds still being worked out (tag "Under Construction"): shown with a badge
 export const UNDER_CONSTRUCTION = 'Under Construction';
 export const underConstruction = (b) => asList(b?.tags).includes(UNDER_CONSTRUCTION);
