@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import useNarrow from '../useNarrow';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { iconPath } from '../data/iconPaths';
@@ -221,14 +222,15 @@ const Badge = ({ resKey, value, isGrowing }) => {
   );
 };
 
-const ResBadges = ({ step, prevRes }) => {
+const ResBadges = ({ step, prevRes, narrow }) => {
+  const empty = narrow ? null : <div style={{ minWidth: '96px' }} />;
   // HIDE BADGES FOR ACTIONS, TRAINING AND TECHNOLOGIES
   if (['research', 'age_up', 'action', 'train'].includes(step.task)) {
-    return <div style={{ minWidth: '96px' }} />;
+    return empty;
   }
   // Also hide them for generic 'build' steps that do NOT send fixed vils to the builder resource
   if (step.task === 'build' && !(step.res && step.res.builder > 0)) {
-    return <div style={{ minWidth: '96px' }} />;
+    return empty;
   }
 
   const res = step.res || {};
@@ -253,7 +255,7 @@ const ResBadges = ({ step, prevRes }) => {
     .map((k) => <Badge key={k} resKey={k} value={visualRes[k]} isGrowing={(visualRes[k] || 0) > (visualPrev[k] || 0)} />);
 
   const hasAnything = foodBadges.length > 0 || FIXED_KEYS.some((k) => (visualRes[k] || 0) > 0) || shipBadges.length > 0;
-  if (!hasAnything) return <div style={{ minWidth: '96px' }} />;
+  if (!hasAnything) return empty;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexShrink: 0, gap: '4px' }}>
@@ -358,6 +360,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
   const cc = accent ? { bg: 'rgba(0,0,0,0.25)', bd: accent } : (CAT_BG[meta.cat] || CAT_BG.action);
   const valid = validateStep(step);
   const isAgeUp = meta.cat === 'age_up';
+  const narrow = useNarrow();
 
   // "Move X from A to B" without icons: draw [A crossed] -> [B] from the change in villagers
   let shownStep = step;
@@ -379,8 +382,8 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
   return (
     <>
       <div data-bo-line="" style={{
-        display: 'grid', gridTemplateColumns: '48px 40px max-content 1fr auto',
-        alignItems: 'center', padding: '1px 8px', marginBottom: '1px',
+        display: 'grid', gridTemplateColumns: narrow ? '44px 36px max-content 1fr' : '48px 40px max-content 1fr auto',
+        alignItems: 'center', padding: narrow ? '4px 6px' : '1px 8px', marginBottom: '1px',
         borderRadius: '2px', background: 'transparent', borderLeft: `3px solid ${accent || 'transparent'}`, borderBottom: '1px solid rgba(255,255,255,0.045)',
       }}>
         <div style={{ textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -430,7 +433,7 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
         </div>
 
         <div style={{
-          fontSize: '12px', color: isAgeUp ? C.gold : C.text, fontWeight: isAgeUp ? '800' : undefined,
+          fontSize: narrow ? '14px' : '12px', color: isAgeUp ? C.gold : C.text, fontWeight: isAgeUp ? '800' : undefined,
           paddingLeft: '10px', lineHeight: '1.4',
           textAlign: 'left',
         }}>
@@ -438,7 +441,13 @@ const StepRow = ({ step, prevRes, hideNotes, startVil, totalVil, adds }) => {
           {step.note && !hideNotes && <NoteInfo note={step.note} color={noteColor} />}
         </div>
 
-        <ResBadges step={step} prevRes={prevRes} />
+        {narrow ? (
+          <div style={{ gridColumn: '3 / -1', display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap', marginTop: '3px' }}>
+            <ResBadges step={step} prevRes={prevRes} narrow />
+          </div>
+        ) : (
+          <ResBadges step={step} prevRes={prevRes} />
+        )}
       </div>
     </>
   );
@@ -699,6 +708,7 @@ const BuildOrderDetail = () => {
   const [gameMode, setGameMode] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const { wide, scale, factor, change } = usePageSize();
+  const narrow = useNarrow();
   const gameRef = useRef(null);
 
   // Entering Game Mode: put the first age header (Dark Age) at the top of the screen
@@ -779,7 +789,7 @@ const BuildOrderDetail = () => {
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('/maps/${build.map}.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, rgba(26,28,35,0.95) 20%, rgba(26,28,35,0.6) 100%)', zIndex: 0 }} />
           
-          <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px' }}>
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px', ...(narrow && { flexWrap: 'wrap', gap: '8px' }) }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ color: C.gold, fontSize: '13px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
                 <strong style={{ fontWeight: '900', color: '#fff' }}>{build.map}</strong> <span style={{ color: '#888' }}>|</span> {build.civ} <span style={{ color: '#888' }}>|</span> {build.popCount} Vils <span style={{ color: '#888' }}>|</span> {build.strategy}
@@ -794,7 +804,7 @@ const BuildOrderDetail = () => {
         </div>
         <AgeSections build={build} hideNotes />
       </div>
-      <PageArrows contentRef={gameRef} />
+      {!narrow && <PageArrows contentRef={gameRef} />}
       </>
     );
   }
@@ -811,8 +821,8 @@ const BuildOrderDetail = () => {
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('/maps/${build.map}.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, rgba(26,28,35,0.95) 20%, rgba(26,28,35,0.5) 100%)', zIndex: 0 }} />
         
-        <div style={{ position: 'relative', zIndex: 1, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ position: 'relative', zIndex: 1, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', ...(narrow && { flexDirection: 'column', alignItems: 'stretch', gap: '10px', padding: '10px 12px' }) }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', ...(narrow && { flexWrap: 'wrap', gap: '8px 10px' }) }}>
             <Link to="/academy/build-orders"
               style={{ color: C.textMute, textDecoration: 'none', fontSize: '14px', fontWeight: 'bold' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = C.gold)}
@@ -824,7 +834,7 @@ const BuildOrderDetail = () => {
             </div>
             {renderPremiumStratIcons(build)}
             
-            <div style={{ color: C.gold, fontSize: '15px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+            <div style={{ color: C.gold, fontSize: '15px', marginLeft: '6px', textShadow: '0 2px 4px rgba(0,0,0,0.8)', ...(narrow && { order: 10, flexBasis: '100%', marginLeft: 0, fontSize: '17px', textAlign: 'left' }) }}>
               <strong style={{ fontWeight: '900', color: '#fff' }}>{build.map}</strong> <span style={{ color: C.textMute }}>|</span> {build.civ} <span style={{ color: C.textMute }}>|</span> {build.popCount} Vils <span style={{ color: C.textMute }}>|</span> {build.strategy}
             </div>
             {underConstruction(build) && (
@@ -839,7 +849,7 @@ const BuildOrderDetail = () => {
             )}
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', ...(narrow && { justifyContent: 'flex-end' }) }}>
             {userRole === 'admin' && (
               <button 
                 onClick={() => navigate('/admin/creator', { state: { editBuild: build } })}
@@ -862,7 +872,7 @@ const BuildOrderDetail = () => {
         padding: '12px', marginBottom: '12px',
         textAlign: 'left'
       }}>
-        <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.55', marginBottom: '8px' }}>
+        <div style={{ color: C.textDim, fontSize: narrow ? '14px' : '12px', lineHeight: '1.55', marginBottom: '8px' }}>
           {build.description}
         </div>
 
@@ -903,7 +913,7 @@ const BuildOrderDetail = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px',
                   backgroundColor: nc.bg, border: `1px solid ${nc.bd}`,
                 }}>{item.icon}</div>
-                <div style={{ fontSize: '11px', color: C.textDim, lineHeight: '1.45', textAlign: 'left' }}>
+                <div style={{ fontSize: narrow ? '13px' : '11px', color: C.textDim, lineHeight: '1.45', textAlign: 'left' }}>
                   <strong style={{ color: C.textMain }}>{item.title}</strong> {item.text}
                 </div>
               </div>

@@ -1,10 +1,12 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient'; // Supabase connection
+import useNarrow from '../useNarrow';
 
 const Navbar = () => {
   const [dropdown, setDropdown] = useState(null);
   const [user, setUser] = useState(null); // State that holds the user
+  const narrow = useNarrow();
 
   // Effect that listens for the user logging in or out
   useEffect(() => {
@@ -133,6 +135,8 @@ const Navbar = () => {
     e.target.style.backgroundColor = isEnter ? '#2a2d36' : 'transparent';
   };
 
+  if (narrow) return <MobileNav user={user} onLogin={handleLogin} onLogout={handleLogout} />;
+
   return (
     <nav style={navStyle}>
       {/* Logo and name */}
@@ -236,6 +240,64 @@ const Navbar = () => {
           </div>
         )}
       </div>
+    </nav>
+  );
+};
+
+// ---- Phone layout: logo, login and a menu button; the links open in a panel below ----
+const MOBILE_SECTIONS = [
+  { title: null, links: [['/', 'Home'], ['/academy/build-orders', 'Build Orders']] },
+  { title: 'Tournaments', links: [['/tournaments/current', 'Current Event'], ['/tournaments/past-events', 'Past Events'], ['/tournaments/hall-of-fame', 'Hall of Fame']] },
+  { title: 'Tools', links: [['/tools/clan-wars-vii', 'Clan Wars VII (3v3)'], ['/tools/advanced-search', 'Advanced Search']] },
+  { title: 'Legacy', links: [['/tools/leat11', 'LEAT11 Draft']] },
+  { title: 'Clan', links: [['/clan/roster', 'Roster'], ['/clan/about', 'About']] },
+];
+
+const MobileNav = ({ user, onLogin, onLogout }) => {
+  const [open, setOpen] = useState(false);
+
+  const name = user && (user.user_metadata.full_name || user.user_metadata.name || 'Guerrero');
+  const linkStyle = ({ isActive }) => ({
+    display: 'block', textAlign: 'left', padding: '12px 20px', textDecoration: 'none',
+    fontSize: '16px', color: isActive ? '#ffd700' : '#e0e0e0',
+  });
+
+  return (
+    <nav style={{ backgroundColor: '#161920', borderBottom: '1px solid #2a2d36', position: 'relative', zIndex: 1000 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px', padding: '0 12px' }}>
+        <Link to="/" onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/logo_emputors.png" alt="Emputors" style={{ height: '52px', objectFit: 'contain' }} />
+        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {!user ? (
+            <button onClick={onLogin} style={{ backgroundColor: '#5865F2', color: 'white', border: 'none', padding: '8px 14px', borderRadius: '4px', fontWeight: 'bold', fontSize: '14px' }}>Login</button>
+          ) : user.user_metadata.avatar_url ? (
+            <img src={user.user_metadata.avatar_url} alt="Avatar" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #2a2d36' }} />
+          ) : null}
+          <button
+            type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}
+            onClick={() => setOpen(o => !o)}
+            style={{ width: '42px', height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: open ? '#2a2d36' : 'transparent', border: '1px solid #2a2d36', borderRadius: '6px', color: '#e0e0e0', fontSize: '22px', lineHeight: 1, cursor: 'pointer' }}
+          >{open ? '✕' : '☰'}</button>
+        </div>
+      </div>
+
+      {open && (
+        <div style={{ borderTop: '1px solid #2a2d36', backgroundColor: '#1a1c23', paddingBottom: '8px', maxHeight: 'calc(100vh - 56px)', overflowY: 'auto' }}>
+          {MOBILE_SECTIONS.map((sec, i) => (
+            <div key={i} style={{ borderBottom: '1px solid #2a2d36', padding: '4px 0' }}>
+              {sec.title && <div style={{ textAlign: 'left', padding: '10px 20px 2px', fontSize: '12px', fontWeight: 'bold', letterSpacing: '1px', textTransform: 'uppercase', color: '#6b7280' }}>{sec.title}</div>}
+              {sec.links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'} style={linkStyle} onClick={() => setOpen(false)}>{label}</NavLink>)}
+            </div>
+          ))}
+          {user && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px 4px' }}>
+              <span style={{ color: '#e0e0e0', fontSize: '14px', fontWeight: 'bold' }}>{name}</span>
+              <button onClick={onLogout} style={{ background: 'transparent', border: '1px solid #444', borderRadius: '4px', color: '#ff6666', padding: '6px 12px', fontSize: '14px', fontWeight: 'bold' }}>Log Out</button>
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

@@ -30,7 +30,7 @@ Website of the Emputors clan (Age of Empires II). Owner and only maintainer: Jav
 | (admin) | `/admin/creator` | `pages/admin/BuildOrderCreator.jsx` | Build order editor (upsert, soft delete with `is_deleted`) | `build_orders` |
 | (admin) | `/admin/draft-plan-creator` | `pages/admin/DraftPlanCreator.jsx` | CW7 draft plan editor: per map, up to 3 roles with ordered civ priorities and essentials | `cw7_draft_plans` |
 
-Shared: `components/Navbar.jsx` (menu, Discord login), `data/iconPaths.js` (`ICON_MAP` + `iconPath()`), `data/aoeIcons.json` (game name to `/aoe/...` icon path).
+Shared: `components/Navbar.jsx` (menu, Discord login; on phones, up to 640px, it becomes a logo + menu button with the links in a panel), `useNarrow.js` (hook for that 640px phone breakpoint: mobile-only layout changes hang from it so desktop stays untouched; used by Navbar and BuildOrderDetail, where step rows put the resource counters on a second line and Game Mode hides the page arrows), `data/iconPaths.js` (`ICON_MAP` + `iconPath()`), `data/aoeIcons.json` (game name to `/aoe/...` icon path).
 
 ## Supabase
 
