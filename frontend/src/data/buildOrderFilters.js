@@ -26,3 +26,8 @@ export const showStartBadge = (n) => n !== 3 && n !== 6;
 // Builds still being worked out (tag "Under Construction"): shown with a badge
 export const UNDER_CONSTRUCTION = 'Under Construction';
 export const underConstruction = (b) => asList(b?.tags).includes(UNDER_CONSTRUCTION);
+
+// Game mode (build_orders.game_mode): '1v1' or 'Team Game'. Only Team Game gets a badge.
+export const GAME_MODES = ['1v1', 'Team Game'];
+export const TEAM_GAME = 'Team Game';
+export const gameMode = (b) => (GAME_MODES.includes(b?.game_mode) ? b.game_mode : '1v1');

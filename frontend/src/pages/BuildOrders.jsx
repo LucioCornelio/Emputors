@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { STRATEGY_GROUPS, asList, startVils, showStartBadge, underConstruction } from '../data/buildOrderFilters';
+import { STRATEGY_GROUPS, GAME_MODES, TEAM_GAME, gameMode, asList, startVils, showStartBadge, underConstruction } from '../data/buildOrderFilters';
 
 const C = {
-  card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8', orange: '#ff9f43',
+  card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8', orange: '#ff9f43', purple: '#b48cff',
   textMain: '#e0e0e0', textDim: '#a0aab5', textMute: '#888',
 };
 
@@ -62,6 +62,7 @@ const BuildOrders = () => {
           whatsNext: b.whats_next ?? b.whatsNext ?? [],
           strategyGroups: asList(b.strategy_groups),
           startVils: startVils(b),
+          gameMode: gameMode(b),
           underConstruction: underConstruction(b),
           hasVod: typeof b.video === 'string' && b.video.trim() !== '',
         }));
@@ -89,6 +90,7 @@ const BuildOrders = () => {
   const civFilter = searchParams.get('civ') || 'All';
   const mapFilter = searchParams.get('map') || 'All';
   const groupFilter = searchParams.get('group') || 'All';
+  const modeFilter = searchParams.get('mode') || 'All';
   const vodOnly = searchParams.get('vod') === '1';
   const diffFilter = searchParams.get('diff') || 'All';
   const search = searchParams.get('search') || '';
@@ -110,7 +112,7 @@ const BuildOrders = () => {
     setSearchParams(new URLSearchParams());
   };
 
-  const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || groupFilter !== 'All' || vodOnly || diffFilter !== 'All' || search !== '';
+  const hasFilters = civFilter !== 'All' || mapFilter !== 'All' || groupFilter !== 'All' || modeFilter !== 'All' || vodOnly || diffFilter !== 'All' || search !== '';
 
   // Few builds: filter on every render, no memo needed.
   const filtered = (() => {
@@ -118,11 +120,12 @@ const BuildOrders = () => {
       if (civFilter !== 'All' && b.civ !== civFilter) return false;
       if (mapFilter !== 'All' && b.map !== mapFilter) return false;
       if (groupFilter !== 'All' && !b.strategyGroups.includes(groupFilter)) return false;
+      if (modeFilter !== 'All' && b.gameMode !== modeFilter) return false;
       if (vodOnly && !b.hasVod) return false;
       if (diffFilter !== 'All' && b.difficulty !== diffFilter) return false;
       if (search) {
         const q = search.toLowerCase();
-        const haystack = `${b.title} ${b.civ} ${b.map} ${b.strategy} ${b.strategyGroups.join(' ')}`.toLowerCase();
+        const haystack = `${b.title} ${b.civ} ${b.map} ${b.strategy} ${b.gameMode} ${b.strategyGroups.join(' ')}`.toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
@@ -185,6 +188,10 @@ const BuildOrders = () => {
         <select value={groupFilter} onChange={(e) => setFilter('group', e.target.value)} style={sel}>
           <option value="All">All Strategies</option>
           {groups.map((g) => <option key={g} value={g}>{g}</option>)}
+        </select>
+        <select value={modeFilter} onChange={(e) => setFilter('mode', e.target.value)} style={sel}>
+          <option value="All">All Modes</option>
+          {GAME_MODES.map((m) => <option key={m} value={m}>{m}</option>)}
         </select>
         <select value={diffFilter} onChange={(e) => setFilter('diff', e.target.value)} style={sel}>
           <option value="All">All Levels</option>
@@ -270,6 +277,9 @@ const BuildOrders = () => {
                   <span onClick={(e) => handleTagClick(e, 'map', b.map)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: '#2a2d36', border: '1px solid #444', color: C.textMain, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.map}</span>
                   <span onClick={(e) => b.strategyGroups[0] && handleTagClick(e, 'group', b.strategyGroups[0])} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.gold}1a`, border: `1px solid ${C.gold}33`, color: C.gold, cursor: 'pointer', transition: 'filter 0.2s' }}>{b.strategy}</span>
                   <span onClick={(e) => handleTagClick(e, 'diff', b.difficulty)} {...hoverProps} style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${diffColor(b.difficulty)}1a`, border: `1px solid ${diffColor(b.difficulty)}33`, color: diffColor(b.difficulty), cursor: 'pointer', transition: 'filter 0.2s' }}>{b.difficulty}</span>
+                  {b.gameMode === TEAM_GAME && (
+                    <span onClick={(e) => handleTagClick(e, 'mode', TEAM_GAME)} {...hoverProps} title="Build for team games" style={{ padding: '2px 9px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', backgroundColor: `${C.purple}1a`, border: `1px solid ${C.purple}55`, color: C.purple, cursor: 'pointer', transition: 'filter 0.2s' }}>Team Game</span>
+                  )}
                 </div>
                 
                 <div style={{ color: C.textDim, fontSize: '12px', lineHeight: '1.5', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', textAlign: 'left', marginTop: 'auto' }}>

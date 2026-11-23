@@ -3,7 +3,7 @@ import useNarrow from '../useNarrow';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { iconPath } from '../data/iconPaths';
-import { startVils, showStartBadge, underConstruction } from '../data/buildOrderFilters';
+import { startVils, showStartBadge, underConstruction, gameMode as buildGameMode, TEAM_GAME } from '../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
@@ -840,6 +840,11 @@ const BuildOrderDetail = () => {
             {underConstruction(build) && (
               <span title="This build is still being worked out" style={{ padding: '3px 9px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(255,159,67,0.12)', border: '1px dashed rgba(255,159,67,0.6)', color: '#ff9f43', whiteSpace: 'nowrap' }}>
                 Under Construction
+              </span>
+            )}
+            {buildGameMode(build) === TEAM_GAME && (
+              <span title="Build for team games" style={{ padding: '3px 9px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', backgroundColor: 'rgba(180,140,255,0.12)', border: '1px solid rgba(180,140,255,0.4)', color: '#b48cff', whiteSpace: 'nowrap' }}>
+                Team Game
               </span>
             )}
             {showStartBadge(startVils(build)) && (

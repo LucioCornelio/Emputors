@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
-import { STRATEGY_GROUPS, asList } from '../../data/buildOrderFilters';
+import { STRATEGY_GROUPS, GAME_MODES, gameMode as readGameMode, asList } from '../../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', border: '#2a2d36', 
@@ -105,6 +105,7 @@ const BuildOrderCreator = () => {
   const [map, setMap] = useState(editBuild?.map || 'Arabia');
   const [strategy, setStrategy] = useState(editBuild?.strategy || 'Scouts');
   const [difficulty, setDifficulty] = useState(editBuild?.difficulty || 'Beginner');
+  const [gameMode, setGameMode] = useState(readGameMode(editBuild));
   const [popCount, setPopCount] = useState(editBuild?.popCount || 19);
   const [author, setAuthor] = useState(editBuild?.author || '');
   const [video, setVideo] = useState(editBuild?.video || '');
@@ -130,6 +131,7 @@ const BuildOrderCreator = () => {
       if (data.map) setMap(data.map);
       if (data.strategy) setStrategy(data.strategy);
       if (data.difficulty) setDifficulty(data.difficulty);
+      if (data.game_mode) setGameMode(readGameMode(data));
       if (data.popCount) setPopCount(data.popCount);
       if (data.video !== undefined) setVideo(data.video);
       if (data.description) setDescription(data.description);
@@ -259,7 +261,7 @@ const BuildOrderCreator = () => {
     setIsSubmitting(true);
     
     const payload = {
-      id, title, civ, map, strategy, difficulty,
+      id, title, civ, map, strategy, difficulty, game_mode: gameMode,
       pop_count: parseInt(popCount), video, description, author,
       tags: tags, 
       strategy_groups: STRATEGY_GROUPS.filter((g) => strategyGroups.includes(g)),
@@ -334,6 +336,11 @@ const BuildOrderCreator = () => {
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Difficulty</label>
             <select value={difficulty} onChange={e => setDifficulty(e.target.value)} style={inputStyle}>
               <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+            </select>
+          </div>
+          <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Game Mode</label>
+            <select value={gameMode} onChange={e => setGameMode(e.target.value)} style={inputStyle}>
+              {GAME_MODES.map(m => <option key={m}>{m}</option>)}
             </select>
           </div>
           <div><label style={{ fontSize: '11px', color: C.textDim, fontWeight: 'bold' }}>Author</label><input type="text" value={author} onChange={e => setAuthor(e.target.value)} style={inputStyle} /></div>
