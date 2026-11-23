@@ -31,3 +31,11 @@ export const underConstruction = (b) => asList(b?.tags).includes(UNDER_CONSTRUCT
 export const GAME_MODES = ['1v1', 'Team Game'];
 export const TEAM_GAME = 'Team Game';
 export const gameMode = (b) => (GAME_MODES.includes(b?.game_mode) ? b.game_mode : '1v1');
+
+// Map banner background. Builds for any map show an Age shield instead of a map:
+// the Castle Age shield only for Fast Castle builds, the Feudal Age shield for the rest.
+export const mapBackground = (b) => {
+  const map = b?.map || 'Any';
+  if (map !== 'Any') return `/maps/${map}.png`;
+  return asList(b?.strategy_groups ?? b?.strategyGroups).includes('Fast Castle') ? '/maps/Any.png' : '/maps/Any-Feudal.png';
+};

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { STRATEGY_GROUPS, GAME_MODES, TEAM_GAME, gameMode, asList, startVils, showStartBadge, underConstruction } from '../data/buildOrderFilters';
+import { STRATEGY_GROUPS, GAME_MODES, TEAM_GAME, gameMode, asList, startVils, showStartBadge, underConstruction, mapBackground } from '../data/buildOrderFilters';
 
 const C = {
   card: '#1a1c23', border: '#2a2d36', gold: '#ffd700', cyan: '#00c8c8', orange: '#ff9f43', purple: '#b48cff',
@@ -236,7 +236,7 @@ const BuildOrders = () => {
             >
               <div style={{
                 height: '70px',
-                backgroundImage: `url('/maps/${b.map}.png')`,
+                backgroundImage: `url('${mapBackground(b)}')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 position: 'absolute', top: 0, left: 0, right: 0, zIndex: 0

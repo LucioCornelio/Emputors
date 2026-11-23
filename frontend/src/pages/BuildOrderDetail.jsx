@@ -3,7 +3,7 @@ import useNarrow from '../useNarrow';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { iconPath } from '../data/iconPaths';
-import { startVils, showStartBadge, underConstruction, gameMode as buildGameMode, TEAM_GAME } from '../data/buildOrderFilters';
+import { startVils, showStartBadge, underConstruction, gameMode as buildGameMode, TEAM_GAME, mapBackground } from '../data/buildOrderFilters';
 
 const C = {
   bg: '#161920', card: '#1a1c23', cardAlt: '#1e212b',
@@ -786,7 +786,7 @@ const BuildOrderDetail = () => {
           borderRadius: '5px', border: `1px solid ${C.border}`,
           marginBottom: '8px',
         }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('/maps/${build.map}.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('${mapBackground(build)}')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, rgba(26,28,35,0.95) 20%, rgba(26,28,35,0.6) 100%)', zIndex: 0 }} />
           
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 12px', ...(narrow && { flexWrap: 'wrap', gap: '8px' }) }}>
@@ -818,7 +818,7 @@ const BuildOrderDetail = () => {
         borderRadius: '6px', border: `1px solid ${C.border}`,
         marginBottom: '10px',
       }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('/maps/${build.map}.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `url('${mapBackground(build)}')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, rgba(26,28,35,0.95) 20%, rgba(26,28,35,0.5) 100%)', zIndex: 0 }} />
         
         <div style={{ position: 'relative', zIndex: 1, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', ...(narrow && { flexDirection: 'column', alignItems: 'stretch', gap: '10px', padding: '10px 12px' }) }}>
